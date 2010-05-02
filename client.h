@@ -1,4 +1,4 @@
-/**
+/*
  * Mana Mobile
  * Copyright 2010 Thorbjørn Lindeijer
  */
@@ -42,6 +42,13 @@ public:
 signals:
     void connected();
     void disconnected();
+
+    /**
+     * Emitted when a message is received. The byte array is only valid while
+     * this signal is being emitted. If you need the data around longer, make
+     * an explicitly detached copy.
+     */
+    void messageReceived(const QByteArray &message);
 
 protected:
     void timerEvent(QTimerEvent *);

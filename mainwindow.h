@@ -1,4 +1,4 @@
-/**
+/*
  * Mana Mobile
  * Copyright 2010 Thorbjørn Lindeijer
  */
@@ -24,7 +24,11 @@ public:
 
 private slots:
     void openSettings();
+
     void login();
+    void loginFailed();
+    void loginSucceeded();
+
     void connected();
     void disconnected();
 

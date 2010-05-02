@@ -9,13 +9,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     serversettingsdialog.cpp \
     loginmanager.cpp \
-    client.cpp
+    client.cpp \
+    sha256.cpp
 
 HEADERS  += mainwindow.h \
     serversettingsdialog.h \
     loginmanager.h \
     protocol.h \
-    client.h
+    client.h \
+    sha256.h
 
 FORMS    += mainwindow.ui \
     serversettingsdialog.ui

@@ -1,4 +1,4 @@
-/**
+/*
  * Mana Mobile
  * Copyright 2010 Thorbjørn Lindeijer
  */
@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mLoginManager, SIGNAL(connected()), SLOT(connected()));
     connect(mLoginManager, SIGNAL(disconnected()), SLOT(disconnected()));
+    connect(mLoginManager, SIGNAL(loginFailed()), SLOT(loginFailed()));
+    connect(mLoginManager, SIGNAL(loginSucceeded()), SLOT(loginSucceeded()));
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +40,12 @@ void MainWindow::openSettings()
     dialog.setPort(mPort);
 
     if (dialog.exec() == QDialog::Accepted) {
+        // If the server changed while already connected, disconnect
+        if (mLoginManager->isConnected()
+            && (mHost != dialog.host() ||
+                mPort != dialog.port()))
+            mLoginManager->disconnectFromLoginServer();
+
         mHost = dialog.host();
         mPort = dialog.port();
     }
@@ -45,21 +53,34 @@ void MainWindow::openSettings()
 
 void MainWindow::login()
 {
-    mLoginManager->connectToLoginServer(mHost, mPort);
+    mUi->errorLabel->setText(QString());
     mUi->buttonLogin->setEnabled(false);
-    mUi->buttonLogin->setText(tr("Connecting..."));
+
+    if (!mLoginManager->isConnected())
+        mLoginManager->connectToLoginServer(mHost, mPort);
+    else
+        connected();
+}
+
+void MainWindow::loginFailed()
+{
+    mUi->errorLabel->setText(mLoginManager->errorMessage());
+    mUi->buttonLogin->setEnabled(true);
+}
+
+void MainWindow::loginSucceeded()
+{
+    mUi->errorLabel->setStyleSheet("color: green;");
+    mUi->errorLabel->setText(tr("Login succesful!"));
 }
 
 void MainWindow::connected()
 {
-    mUi->buttonLogin->setText(tr("Connected!"));
-
-    mLoginManager->login(mUi->usernameEdit->text(),
-                         mUi->passwordEdit->text());
+    mLoginManager->login(mUi->usernameEdit->text().trimmed(),
+                         mUi->passwordEdit->text().trimmed());
 }
 
 void MainWindow::disconnected()
 {
-    mUi->buttonLogin->setText(tr("Login"));
     mUi->buttonLogin->setEnabled(true);
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Mana Mobile
  * Copyright 2010 Thorbjørn Lindeijer
  */

@@ -1,4 +1,4 @@
-/**
+/*
  * Mana Mobile
  * Copyright 2010 Thorbjørn Lindeijer
  */
@@ -103,33 +103,35 @@ void Client::service()
     // Don't wait for events. This method is called often enough every second.
     while (enet_host_service(mClient, &event, 0) > 0)
     {
-        qDebug() << "ENet event received!";
         switch (event.type)
         {
         case ENET_EVENT_TYPE_CONNECT:
-            qDebug() << "Connected";
             emit connected();
             break;
 
-        case ENET_EVENT_TYPE_RECEIVE:
+        case ENET_EVENT_TYPE_RECEIVE: {
             printf("A packet of length %u containing %s was received on channel %u.\n",
                    event.packet->dataLength,
                    event.packet->data,
                    event.channelID);
             fflush(stdout);
 
-            /* Clean up the packet now that we're done using it. */
-            enet_packet_destroy(event.packet);
+            const QByteArray message(QByteArray::fromRawData(
+                    reinterpret_cast<char *>(event.packet->data),
+                    event.packet->dataLength));
 
+            emit messageReceived(message);
+
+            enet_packet_destroy(event.packet);
+        }
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT:
-            qDebug() << "Disconnected";
             emit disconnected();
             break;
 
         case ENET_EVENT_TYPE_NONE:
-            break; // Can never happen, but avoid compiler warning
+            break; // Can never happen, but avoids compiler warning
         }
     }
 }
