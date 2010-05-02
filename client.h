@@ -25,6 +25,8 @@
 
 #include <enet/enet.h>
 
+class MessageOut;
+
 class Client : public QObject
 {
     Q_OBJECT
@@ -52,7 +54,7 @@ public:
 
     void connectToServer(const QString &host, quint16 port);
     void disconnectFromServer();
-    void send(const QByteArray &data);
+    void send(const MessageOut &message);
 
 signals:
     void connected();

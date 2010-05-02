@@ -23,7 +23,8 @@ HEADERS  += mainwindow.h \
     loginmanager.h \
     protocol.h \
     client.h \
-    sha256.h
+    sha256.h \
+    messageout.h
 
 FORMS    += mainwindow.ui \
     serversettingsdialog.ui

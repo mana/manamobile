@@ -21,6 +21,7 @@
 #include "loginmanager.h"
 
 #include "client.h"
+#include "messageout.h"
 #include "protocol.h"
 #include "sha256.h"
 
@@ -67,16 +68,10 @@ void LoginManager::login(const QString &username, const QString &password)
     const QByteArray hashedPassword = sha256(convertedUsername
                                              + convertedPassword);
 
-    QByteArray loginMessage;
-    QDataStream stream(&loginMessage, QIODevice::WriteOnly);
-    stream << (quint16) PAMSG_LOGIN;
-    stream << (quint32) 0;
-    stream << (quint16) convertedUsername.length();
-    stream.writeRawData(convertedUsername.constData(),
-                        convertedUsername.length());
-    stream << (quint16) hashedPassword.length();
-    stream.writeRawData(hashedPassword.constData(),
-                        hashedPassword.length());
+    MessageOut loginMessage(PAMSG_LOGIN);
+    loginMessage.writeInt32(0); // client version
+    loginMessage.writeString(convertedUsername);
+    loginMessage.writeString(hashedPassword);
     mClient->send(loginMessage);
 }
 

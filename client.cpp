@@ -20,6 +20,8 @@
 
 #include "client.h"
 
+#include "messageout.h"
+
 #include <stdio.h>
 
 #include <QTimerEvent>
@@ -91,11 +93,12 @@ void Client::disconnectFromServer()
     // TODO: enet_peer_reset if no ENET_EVENT_TYPE_DISCONNECT within 3 seconds
 }
 
-void Client::send(const QByteArray &data)
+void Client::send(const MessageOut &message)
 {
     if (!mServer)
         return;
 
+    const QByteArray &data = message.data();
     ENetPacket *packet = enet_packet_create(data.constData(),
                                             data.length(),
                                             ENET_PACKET_FLAG_RELIABLE);
