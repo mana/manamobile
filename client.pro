@@ -3,6 +3,12 @@ QT       += core gui network
 TARGET = manamobile
 TEMPLATE = app
 
+# Hide build artifacts
+MOC_DIR = .moc
+UI_DIR = .uic
+RCC_DIR = .rcc
+OBJECTS_DIR = .obj
+
 include(enet/enet.pri)
 
 SOURCES += main.cpp\

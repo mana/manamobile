@@ -7,6 +7,12 @@ TARGET = enet
 DEPENDPATH += include/enet
 INCLUDEPATH += include
 
+# Hide build artifacts
+MOC_DIR = .moc
+UI_DIR = .uic
+RCC_DIR = .rcc
+OBJECTS_DIR = .obj
+
 DEFINES += HAS_GETHOSTBYADDR_R=1 \
            HAS_GETHOSTBYNAME_R=1 \
            HAS_POLL=1 \
