@@ -33,11 +33,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::openSettings()
 {
-    ServerSettingsDialog dialog;
-    dialog.exec();
+    ServerSettingsDialog dialog(this);
+    dialog.setHost(mHost);
+    dialog.setPort(mPort);
 
-    mHost = dialog.host();
-    mPort = dialog.port();
+    if (dialog.exec() == QDialog::Accepted) {
+        mHost = dialog.host();
+        mPort = dialog.port();
+    }
 }
 
 void MainWindow::login()

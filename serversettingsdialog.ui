@@ -25,11 +25,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="hostEdit">
-     <property name="text">
-      <string>server.themanaworld.org</string>
-     </property>
-    </widget>
+    <widget class="QLineEdit" name="hostEdit"/>
    </item>
    <item row="0" column="2" rowspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -58,9 +54,6 @@
      </property>
      <property name="maximum">
       <number>65535</number>
-     </property>
-     <property name="value">
-      <number>6901</number>
      </property>
     </widget>
    </item>

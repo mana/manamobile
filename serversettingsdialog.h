@@ -20,7 +20,10 @@ public:
     explicit ServerSettingsDialog(QWidget *parent = 0);
     ~ServerSettingsDialog();
 
+    void setHost(const QString &host);
     QString host() const;
+
+    void setPort(quint16 port);
     quint16 port() const;
 
 private:

@@ -18,9 +18,19 @@ ServerSettingsDialog::~ServerSettingsDialog()
     delete ui;
 }
 
+void ServerSettingsDialog::setHost(const QString &host)
+{
+    ui->hostEdit->setText(host);
+}
+
 QString ServerSettingsDialog::host() const
 {
     return ui->hostEdit->text();
+}
+
+void ServerSettingsDialog::setPort(quint16 port)
+{
+    ui->portSpinBox->setValue(port);
 }
 
 quint16 ServerSettingsDialog::port() const
