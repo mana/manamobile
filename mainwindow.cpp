@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mUi->actionAbout, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(mUi->actionSettings, SIGNAL(triggered()), SLOT(openSettings()));
+    connect(mUi->actionFullScreen, SIGNAL(triggered()), SLOT(showFullScreen()));
     connect(mUi->buttonLogin, SIGNAL(clicked()), SLOT(login()));
 
     connect(mLoginManager, SIGNAL(connected()), SLOT(connected()));
@@ -64,6 +65,11 @@ void MainWindow::openSettings()
         mHost = dialog.host();
         mPort = dialog.port();
     }
+}
+
+void MainWindow::fullScreen()
+{
+    setWindowState(Qt::WindowFullScreen);
 }
 
 void MainWindow::login()

@@ -140,17 +140,23 @@
     </property>
     <addaction name="actionSettings"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionFullScreen"/>
    </widget>
    <addaction name="menuMenu"/>
   </widget>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>About Qt</string>
    </property>
   </action>
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionFullScreen">
+   <property name="text">
+    <string>Full Screen</string>
    </property>
   </action>
  </widget>

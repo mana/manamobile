@@ -39,6 +39,7 @@ public:
 
 private slots:
     void openSettings();
+    void fullScreen();
 
     void login();
     void loginFailed();
