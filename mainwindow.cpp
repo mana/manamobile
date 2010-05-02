@@ -13,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mUi(new Ui::MainWindow),
     mLoginManager(new LoginManager(this)),
-    mHost("server.themanaworld.org"),
-    mPort(6901)
+    mHost("testing.manasource.org"),
+    mPort(9601)
 {
     mUi->setupUi(this);
 

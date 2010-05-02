@@ -3,8 +3,12 @@
  * Copyright 2010 Thorbjørn Lindeijer
  */
 
-#include <QtGui/QApplication>
 #include "mainwindow.h"
+
+#include <enet/enet.h>
+
+#include <QApplication>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +16,14 @@ int main(int argc, char *argv[])
 
     a.setApplicationName("Mana Mobile");
     a.setOrganizationDomain("manasource.org");
+
+    if (enet_initialize() != 0)
+    {
+        QMessageBox::critical(0, a.applicationName(),
+                              "An error occurred while initializing ENet.\n");
+        return 1;
+    }
+    atexit(enet_deinitialize);
 
     MainWindow w;
 #if defined(Q_WS_S60)

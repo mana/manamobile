@@ -7,11 +7,13 @@
 #define LOGINMANAGER_H
 
 #include <QObject>
-#include <QTcpSocket>
+
+class Client;
 
 class LoginManager : public QObject
 {
     Q_OBJECT
+
 public:
     explicit LoginManager(QObject *parent = 0);
 
@@ -19,19 +21,16 @@ public:
 
     void login(const QString &username, const QString &password);
 
-
 signals:
     void connected();
     void disconnected();
 
 private slots:
-    void onConnected();
-    void onStateChanged(QAbstractSocket::SocketState state);
     void onReadyRead();
 
 private:
-    QTcpSocket *mSocket;
     QByteArray mInputBuffer;
+    Client *mClient;
 };
 
 #endif // LOGINMANAGER_H
