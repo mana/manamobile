@@ -1,0 +1,6 @@
+.moc/
+.obj/
+.uic/
+.lib/
+Makefile*
+manamobile
