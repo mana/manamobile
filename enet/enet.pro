@@ -7,6 +7,8 @@ TARGET = enet
 DEPENDPATH += include/enet
 INCLUDEPATH += include
 
+DESTDIR=.lib
+
 # Hide build artifacts
 MOC_DIR = .moc
 UI_DIR = .uic
