@@ -108,7 +108,7 @@ void LoginManager::handleMessage(const QByteArray &message)
             case LOGIN_INVALID_VERSION:
                 mError = tr("Client version too old");
                 break;
-            case LOGIN_SERVER_FULL:
+            case LOGIN_BANNED:
                 mError = tr("Account is banned");
                 break;
             }
