@@ -1,6 +1,10 @@
 QT       += core gui network
 
 TARGET = manamobile
+
+unix:target.path = /usr/bin
+INSTALLS += target
+
 TEMPLATE = app
 
 # Hide build artifacts
