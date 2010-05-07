@@ -24,6 +24,10 @@
 #include "loginmanager.h"
 #include "serversettingsdialog.h"
 
+#include <QSettings>
+
+const char * const USERNAME_KEY = "Login/Username";
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mUi(new Ui::MainWindow),
@@ -32,6 +36,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mPort(9601)
 {
     mUi->setupUi(this);
+
+    QSettings settings;
+    mUi->usernameEdit->setText(settings.value(USERNAME_KEY).toString());
+    if (!mUi->usernameEdit->text().isEmpty())
+        mUi->passwordEdit->setFocus();
 
     connect(mUi->actionAbout, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(mUi->actionSettings, SIGNAL(triggered()), SLOT(openSettings()));
@@ -93,6 +102,9 @@ void MainWindow::loginSucceeded()
 {
     mUi->errorLabel->setStyleSheet("color: green;");
     mUi->errorLabel->setText(tr("Login succesful!"));
+
+    QSettings settings;
+    settings.setValue(USERNAME_KEY, mUi->usernameEdit->text());
 }
 
 void MainWindow::connected()
