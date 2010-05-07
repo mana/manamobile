@@ -16,21 +16,23 @@ OBJECTS_DIR = .obj
 include(enet/enet.pri)
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
+        loginwidget.cpp \
     serversettingsdialog.cpp \
     loginmanager.cpp \
     client.cpp \
-    sha256.cpp
+    sha256.cpp \
+    mainwindow.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += loginwidget.h \
     serversettingsdialog.h \
     loginmanager.h \
     protocol.h \
     client.h \
     sha256.h \
-    messageout.h
+    messageout.h \
+    mainwindow.h
 
-FORMS    += mainwindow.ui \
+FORMS    += loginwidget.ui \
     serversettingsdialog.ui
 
 CONFIG += mobility

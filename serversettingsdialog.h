@@ -21,6 +21,8 @@
 #ifndef SERVERSETTINGSDIALOG_H
 #define SERVERSETTINGSDIALOG_H
 
+#include "client.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -35,11 +37,8 @@ public:
     explicit ServerSettingsDialog(QWidget *parent = 0);
     ~ServerSettingsDialog();
 
-    void setHost(const QString &host);
-    QString host() const;
-
-    void setPort(quint16 port);
-    quint16 port() const;
+    void setServer(const ServerAddress &server);
+    ServerAddress server() const;
 
 private:
     Ui::ServerSettingsDialog *ui;

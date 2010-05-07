@@ -38,14 +38,14 @@ LoginManager::LoginManager(QObject *parent) :
             SLOT(handleMessage(QByteArray)));
 }
 
-void LoginManager::connectToLoginServer(const QString &host, quint16 port)
+void LoginManager::connectToLoginServer(const ServerAddress &server)
 {
     if (mClient->state() == Client::Connected) {
         qDebug() << "Already connected!";
         return;
     }
 
-    mClient->connectToServer(host, port);
+    mClient->connectToServer(server);
 }
 
 void LoginManager::disconnectFromLoginServer()

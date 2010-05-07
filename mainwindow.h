@@ -23,11 +23,7 @@
 
 #include <QMainWindow>
 
-namespace Ui {
-class MainWindow;
-}
-
-class LoginManager;
+class LoginWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -38,21 +34,11 @@ public:
     ~MainWindow();
 
 private slots:
+    void toggleFullScreen();
     void openSettings();
-    void fullScreen();
-
-    void login();
-    void loginFailed();
-    void loginSucceeded();
-
-    void connected();
-    void disconnected();
 
 private:
-    Ui::MainWindow *mUi;
-    LoginManager *mLoginManager;
-    QString mHost;
-    quint16 mPort;
+    LoginWidget *mLoginWidget;
 };
 
 #endif // MAINWINDOW_H

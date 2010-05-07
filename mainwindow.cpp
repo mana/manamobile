@@ -19,101 +19,44 @@
  */
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
-#include "loginmanager.h"
+#include "loginwidget.h"
 #include "serversettingsdialog.h"
 
-#include <QSettings>
+#include <QCoreApplication>
+#include <QMenuBar>
+#include <QStackedWidget>
 
-const char * const USERNAME_KEY = "Login/Username";
-
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    mUi(new Ui::MainWindow),
-    mLoginManager(new LoginManager(this)),
-    mHost("testing.manasource.org"),
-    mPort(9601)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
 {
-    mUi->setupUi(this);
+    QStackedWidget *stack = new QStackedWidget(this);
+    mLoginWidget = new LoginWidget(stack);
 
-    QSettings settings;
-    mUi->usernameEdit->setText(settings.value(USERNAME_KEY).toString());
-    if (!mUi->usernameEdit->text().isEmpty())
-        mUi->passwordEdit->setFocus();
+    stack->addWidget(mLoginWidget);
+    setCentralWidget(stack);
 
-    connect(mUi->actionAbout, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-    connect(mUi->actionSettings, SIGNAL(triggered()), SLOT(openSettings()));
-    connect(mUi->actionFullScreen, SIGNAL(triggered()), SLOT(showFullScreen()));
-    connect(mUi->buttonLogin, SIGNAL(clicked()), SLOT(login()));
-
-    connect(mLoginManager, SIGNAL(connected()), SLOT(connected()));
-    connect(mLoginManager, SIGNAL(disconnected()), SLOT(disconnected()));
-    connect(mLoginManager, SIGNAL(loginFailed()), SLOT(loginFailed()));
-    connect(mLoginManager, SIGNAL(loginSucceeded()), SLOT(loginSucceeded()));
+    QMenu *menu = new QMenu(tr("Menu"));
+    menu->addAction(tr("About Qt"), qApp, SLOT(aboutQt()));
+    menu->addAction(tr("Full Screen"), this, SLOT(toggleFullScreen()));
+    menu->addAction(tr("Settings"), this, SLOT(openSettings()));
+    menuBar()->addMenu(menu);
 }
 
 MainWindow::~MainWindow()
 {
-    delete mUi;
+}
+
+void MainWindow::toggleFullScreen()
+{
+    setWindowState(windowState() ^ Qt::WindowFullScreen);
 }
 
 void MainWindow::openSettings()
 {
     ServerSettingsDialog dialog(this);
-    dialog.setHost(mHost);
-    dialog.setPort(mPort);
+    dialog.setServer(mLoginWidget->server());
 
-    if (dialog.exec() == QDialog::Accepted) {
-        // If the server changed while already connected, disconnect
-        if (mLoginManager->isConnected()
-            && (mHost != dialog.host() ||
-                mPort != dialog.port()))
-            mLoginManager->disconnectFromLoginServer();
-
-        mHost = dialog.host();
-        mPort = dialog.port();
-    }
-}
-
-void MainWindow::fullScreen()
-{
-    setWindowState(Qt::WindowFullScreen);
-}
-
-void MainWindow::login()
-{
-    mUi->errorLabel->setText(QString());
-    mUi->buttonLogin->setEnabled(false);
-
-    if (!mLoginManager->isConnected())
-        mLoginManager->connectToLoginServer(mHost, mPort);
-    else
-        connected();
-}
-
-void MainWindow::loginFailed()
-{
-    mUi->errorLabel->setText(mLoginManager->errorMessage());
-    mUi->buttonLogin->setEnabled(true);
-}
-
-void MainWindow::loginSucceeded()
-{
-    mUi->errorLabel->setStyleSheet("color: green;");
-    mUi->errorLabel->setText(tr("Login succesful!"));
-
-    QSettings settings;
-    settings.setValue(USERNAME_KEY, mUi->usernameEdit->text());
-}
-
-void MainWindow::connected()
-{
-    mLoginManager->login(mUi->usernameEdit->text().trimmed(),
-                         mUi->passwordEdit->text().trimmed());
-}
-
-void MainWindow::disconnected()
-{
-    mUi->buttonLogin->setEnabled(true);
+    if (dialog.exec() == QDialog::Accepted)
+        mLoginWidget->setServer(dialog.server());
 }

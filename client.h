@@ -27,6 +27,25 @@
 
 class MessageOut;
 
+class ServerAddress
+{
+public:
+    QString host;
+    quint16 port;
+
+    bool equals(const ServerAddress &other) const
+    {
+        return host == other.host
+                && port == other.port;
+    }
+
+    inline bool operator ==(const ServerAddress &other) const
+    { return equals(other); }
+
+    inline bool operator !=(const ServerAddress &other) const
+    { return !equals(other); }
+};
+
 class Client : public QObject
 {
     Q_OBJECT
@@ -52,7 +71,7 @@ public:
      */
     State state() const;
 
-    void connectToServer(const QString &host, quint16 port);
+    void connectToServer(const ServerAddress &server);
     void disconnectFromServer();
     void send(const MessageOut &message);
 

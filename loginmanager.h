@@ -21,6 +21,8 @@
 #ifndef LOGINMANAGER_H
 #define LOGINMANAGER_H
 
+#include "client.h"
+
 #include <QObject>
 
 class Client;
@@ -32,7 +34,7 @@ class LoginManager : public QObject
 public:
     explicit LoginManager(QObject *parent = 0);
 
-    void connectToLoginServer(const QString &host, quint16 port);
+    void connectToLoginServer(const ServerAddress &server);
     void disconnectFromLoginServer();
     bool isConnected() const;
 

@@ -66,16 +66,16 @@ Client::State Client::state() const
     }
 }
 
-void Client::connectToServer(const QString &host, quint16 port)
+void Client::connectToServer(const ServerAddress &server)
 {
     if (mServer)
         enet_peer_disconnect_now(mServer, 0);
 
-    qDebug() << Q_FUNC_INFO << host << port;
+    qDebug() << Q_FUNC_INFO << server.host << server.port;
     ENetAddress address;
     // TODO: Make the host resolve step asynchroneous
-    enet_address_set_host(&address, host.toLatin1());
-    address.port = port;
+    enet_address_set_host(&address, server.host.toLatin1());
+    address.port = server.port;
 
     mServer = enet_host_connect(mClient, &address, 1);
     if (!mServer)

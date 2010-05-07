@@ -18,31 +18,44 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "serversettingsdialog.h"
-#include "ui_serversettingsdialog.h"
+#ifndef LOGINWIDGET_H
+#define LOGINWIDGET_H
 
-ServerSettingsDialog::ServerSettingsDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ServerSettingsDialog)
-{
-    ui->setupUi(this);
+#include "client.h"
+
+#include <QWidget>
+
+namespace Ui {
+class LoginWidget;
 }
 
-ServerSettingsDialog::~ServerSettingsDialog()
-{
-    delete ui;
-}
+class LoginManager;
 
-void ServerSettingsDialog::setServer(const ServerAddress &server)
+class LoginWidget : public QWidget
 {
-    ui->hostEdit->setText(server.host);
-    ui->portSpinBox->setValue(server.port);
-}
+    Q_OBJECT
 
-ServerAddress ServerSettingsDialog::server() const
-{
-    ServerAddress server;
-    server.host = ui->hostEdit->text();
-    server.port = ui->portSpinBox->value();
-    return server;
-}
+public:
+    explicit LoginWidget(QWidget *parent = 0);
+    ~LoginWidget();
+
+    void setServer(const ServerAddress &server);
+    const ServerAddress &server() const { return mServer; }
+
+    LoginManager *loginManager() const { return mLoginManager; }
+
+private slots:
+    void login();
+    void loginFailed();
+    void loginSucceeded();
+
+    void connected();
+    void disconnected();
+
+private:
+    Ui::LoginWidget *mUi;
+    LoginManager *mLoginManager;
+    ServerAddress mServer;
+};
+
+#endif // LOGINWIDGET_H
