@@ -20,6 +20,8 @@
 
 #include "mainwindow.h"
 
+#include "choosecharacterwidget.h"
+#include "loginmanager.h"
 #include "loginwidget.h"
 #include "serversettingsdialog.h"
 
@@ -29,18 +31,25 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , mLoginManager(new LoginManager(this))
 {
-    QStackedWidget *stack = new QStackedWidget(this);
-    mLoginWidget = new LoginWidget(stack);
+    mStack = new QStackedWidget(this);
+    mLoginWidget = new LoginWidget(mLoginManager, mStack);
+    mChooseCharacterWidget = new ChooseCharacterWidget(mLoginManager, mStack);
 
-    stack->addWidget(mLoginWidget);
-    setCentralWidget(stack);
+    mStack->addWidget(mLoginWidget);
+    mStack->addWidget(mChooseCharacterWidget);
+
+    setCentralWidget(mStack);
 
     QMenu *menu = new QMenu(tr("Menu"));
     menu->addAction(tr("About Qt"), qApp, SLOT(aboutQt()));
     menu->addAction(tr("Full Screen"), this, SLOT(toggleFullScreen()));
     menu->addAction(tr("Settings"), this, SLOT(openSettings()));
     menuBar()->addMenu(menu);
+
+    connect(mLoginWidget, SIGNAL(loginSucceeded()),
+            this, SLOT(onLoginSucceeded()));
 }
 
 MainWindow::~MainWindow()
@@ -59,4 +68,9 @@ void MainWindow::openSettings()
 
     if (dialog.exec() == QDialog::Accepted)
         mLoginWidget->setServer(dialog.server());
+}
+
+void MainWindow::onLoginSucceeded()
+{
+    mStack->setCurrentWidget(mChooseCharacterWidget);
 }

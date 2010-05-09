@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     loginmanager.cpp \
     client.cpp \
     sha256.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    choosecharacterwidget.cpp
 
 HEADERS  += loginwidget.h \
     serversettingsdialog.h \
@@ -30,10 +31,13 @@ HEADERS  += loginwidget.h \
     client.h \
     sha256.h \
     messageout.h \
-    mainwindow.h
+    mainwindow.h \
+    choosecharacterwidget.h \
+    messagein.h
 
 FORMS    += loginwidget.ui \
-    serversettingsdialog.ui
+    serversettingsdialog.ui \
+    choosecharacterwidget.ui
 
 CONFIG += mobility
 MOBILITY =

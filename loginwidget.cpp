@@ -27,10 +27,10 @@
 
 const char * const USERNAME_KEY = "Login/Username";
 
-LoginWidget::LoginWidget(QWidget *parent) :
+LoginWidget::LoginWidget(LoginManager *loginManager, QWidget *parent) :
     QWidget(parent),
     mUi(new Ui::LoginWidget),
-    mLoginManager(new LoginManager(this))
+    mLoginManager(loginManager)
 {
     mServer.host = "testing.manasource.org";
     mServer.port = 9601;
@@ -47,7 +47,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     connect(mLoginManager, SIGNAL(connected()), SLOT(connected()));
     connect(mLoginManager, SIGNAL(disconnected()), SLOT(disconnected()));
     connect(mLoginManager, SIGNAL(loginFailed()), SLOT(loginFailed()));
-    connect(mLoginManager, SIGNAL(loginSucceeded()), SLOT(loginSucceeded()));
+    connect(mLoginManager, SIGNAL(loginSucceeded()), SLOT(onLoginSucceeded()));
 }
 
 LoginWidget::~LoginWidget()
@@ -82,13 +82,16 @@ void LoginWidget::loginFailed()
     mUi->buttonLogin->setEnabled(true);
 }
 
-void LoginWidget::loginSucceeded()
+void LoginWidget::onLoginSucceeded()
 {
-    mUi->errorLabel->setStyleSheet("color: green;");
-    mUi->errorLabel->setText(tr("Login succesful!"));
+    // Clear any previously displayed error
+    mUi->errorLabel->setText(QString());
 
+    // Remember the username for next time
     QSettings settings;
     settings.setValue(USERNAME_KEY, mUi->usernameEdit->text());
+
+    emit loginSucceeded();
 }
 
 void LoginWidget::connected()

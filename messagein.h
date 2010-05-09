@@ -18,44 +18,61 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MESSAGEOUT_H
-#define MESSAGEOUT_H
+#ifndef MESSAGEIN_H
+#define MESSAGEIN_H
 
 #include <QByteArray>
 #include <QDataStream>
 
 /**
- * Makes it convenient to send outgoing messages.
+ * Makes it convenient to parse received messages.
  */
-class MessageOut
+class MessageIn
 {
 public:
-    inline MessageOut(qint16 id)
-        : mDataStream(&mData, QIODevice::WriteOnly)
+    inline MessageIn(const QByteArray &data)
+        : mData(data)
+        , mDataStream(mData)
+        , mId(readInt16())
     {
-        writeInt16(id);
     }
 
-    inline void writeInt8(qint8 value)
-    { mDataStream << value; }
+    inline qint16 id() const { return mId; }
 
-    inline void writeInt16(qint16 value)
-    { mDataStream << value; }
-
-    inline void writeInt32(qint32 value)
-    { mDataStream << value; }
-
-    inline void writeString(const QByteArray &string)
+    inline qint8 readInt8()
     {
-        writeInt16(string.length());
-        mDataStream.writeRawData(string.constData(), string.length());
+        qint8 value;
+        mDataStream >> value;
+        return value;
     }
 
-    inline const QByteArray &data() const { return mData; }
+    inline qint16 readInt16()
+    {
+        qint16 value;
+        mDataStream >> value;
+        return value;
+    }
+
+    inline qint32 readInt32()
+    {
+        qint32 value;
+        mDataStream >> value;
+        return value;
+    }
+
+    inline QByteArray readString()
+    {
+        const qint16 length = readInt16();
+        QByteArray string;
+        string.resize(length);
+        mDataStream.readRawData(string.data(), length);
+        return string;
+    }
 
 private:
     QByteArray mData;
     QDataStream mDataStream;
+    qint16 mId;
 };
 
-#endif // MESSAGEOUT_H
+#endif // MESSAGEIN_H

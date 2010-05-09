@@ -23,7 +23,11 @@
 
 #include <QMainWindow>
 
+class ChooseCharacterWidget;
+class LoginManager;
 class LoginWidget;
+
+class QStackedWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -37,8 +41,15 @@ private slots:
     void toggleFullScreen();
     void openSettings();
 
+    void onLoginSucceeded();
+
 private:
+    QStackedWidget *mStack;
+
+    LoginManager *mLoginManager;
+
     LoginWidget *mLoginWidget;
+    ChooseCharacterWidget *mChooseCharacterWidget;
 };
 
 #endif // MAINWINDOW_H

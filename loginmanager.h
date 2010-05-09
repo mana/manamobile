@@ -26,6 +26,16 @@
 #include <QObject>
 
 class Client;
+class MessageIn;
+
+class CharacterInfo
+{
+public:
+    QString name;
+    int level;
+    int money;
+    int slot;
+};
 
 class LoginManager : public QObject
 {
@@ -40,6 +50,9 @@ public:
 
     void login(const QString &username, const QString &password);
 
+    const QList<CharacterInfo> &characters() const
+    { return mCharacters; }
+
     QString errorMessage() const { return mError; }
 
 signals:
@@ -49,12 +62,20 @@ signals:
     void loginFailed();
     void loginSucceeded();
 
+    void charactersChanged();
+
 private slots:
     void handleMessage(const QByteArray &message);
 
 private:
+    void handleLoginResponse(MessageIn &message);
+    void handleCharacterInfo(MessageIn &message);
+
     QString mError;
     Client *mClient;
+
+    QString mUpdateHost;
+    QList<CharacterInfo> mCharacters;
 };
 
 #endif // LOGINMANAGER_H

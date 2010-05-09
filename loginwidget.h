@@ -36,18 +36,19 @@ class LoginWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit LoginWidget(QWidget *parent = 0);
+    explicit LoginWidget(LoginManager *loginManager, QWidget *parent = 0);
     ~LoginWidget();
 
     void setServer(const ServerAddress &server);
     const ServerAddress &server() const { return mServer; }
 
-    LoginManager *loginManager() const { return mLoginManager; }
+signals:
+    void loginSucceeded();
 
 private slots:
     void login();
     void loginFailed();
-    void loginSucceeded();
+    void onLoginSucceeded();
 
     void connected();
     void disconnected();
