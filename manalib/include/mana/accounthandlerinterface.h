@@ -1,8 +1,8 @@
 /*
- *  Mana Mobile
+ *  manalib
  *  Copyright (C) 2010  Thorbjørn Lindeijer
  *
- *  This file is part of Mana Mobile.
+ *  This file is part of manalib.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,17 +18,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHA256_H
-#define SHA256_H
+#ifndef ACCOUNTHANDLERINTERFACE_H
+#define ACCOUNTHANDLERINTERFACE_H
 
-#include <QByteArray>
+#include <string>
 
-/**
- * Returns the SHA-256 hash for the given data.
- *
- * @param data the data to create the SHA-256 hash for
- * @return the SHA-256 hash for the given data.
- */
-QByteArray sha256(const QByteArray &data);
+namespace Mana {
 
-#endif // SHA256_H
+class CharacterInfo
+{
+public:
+    std::string name;
+    int level;
+    int money;
+    int slot;
+};
+
+class AccountHandlerInterface
+{
+public:
+    virtual void connected() = 0;
+    virtual void disconnected() = 0;
+
+    virtual void loginSucceeded() = 0;
+    virtual void loginFailed(int error) = 0;
+
+    virtual void characterInfoReceived(const CharacterInfo &info) = 0;
+};
+
+} // namespace Mana
+
+#endif // ACCOUNTHANDLERINTERFACE_H

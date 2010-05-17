@@ -10,4 +10,4 @@ contains(QT_VERSION, ^4\.[0-5]\..*) {
 TEMPLATE = subdirs
 CONFIG += ordered
 
-SUBDIRS = enet client.pro
+SUBDIRS = enet manalib client.pro

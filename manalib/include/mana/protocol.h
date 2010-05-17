@@ -3,7 +3,7 @@
  *  Copyright (C) 2004-2009  The Mana World Development Team
  *  Copyright (C) 2009-2010  The Mana Developers
  *
- *  This file is part of Mana Mobile.
+ *  This file is part of manalib.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,9 +19,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MANASERV_PROTOCOL_H
-#define MANASERV_PROTOCOL_H
+#ifndef LIBMANA_PROTOCOL_H
+#define LIBMANA_PROTOCOL_H
 
+namespace Mana {
 
 /**
  * Enumerated type for communicated messages:
@@ -377,5 +378,6 @@ enum
     SPRITE_VECTOREND
 };
 
+} // namespace Mana
 
-#endif // MANASERV_PROTOCOL_H
+#endif // LIBMANA_PROTOCOL_H

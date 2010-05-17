@@ -30,17 +30,21 @@
 class CharacterModel : public QAbstractListModel
 {
 public:
+    explicit CharacterModel(QObject *parent = 0)
+        : QAbstractListModel(parent)
+    {}
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    void setCharacters(const QList<CharacterInfo> &characters)
+    void setCharacters(const QList<Mana::CharacterInfo> &characters)
     {
         mCharacters = characters;
         reset();
     }
 
 private:
-    QList<CharacterInfo> mCharacters;
+    QList<Mana::CharacterInfo> mCharacters;
 };
 
 int CharacterModel::rowCount(const QModelIndex &parent) const
@@ -51,7 +55,7 @@ int CharacterModel::rowCount(const QModelIndex &parent) const
 QVariant CharacterModel::data(const QModelIndex &index, int role) const
 {
     if (index.column() == 0 && role == Qt::DisplayRole)
-        return mCharacters.at(index.row()).name;
+        return QString::fromStdString(mCharacters.at(index.row()).name);
     return QVariant();
 }
 
@@ -61,7 +65,7 @@ ChooseCharacterWidget::ChooseCharacterWidget(LoginManager *loginManager,
     : QWidget(parent)
     , ui(new Ui::ChooseCharacterWidget)
     , mLoginManager(loginManager)
-    , mCharacterModel(new CharacterModel)
+    , mCharacterModel(new CharacterModel(this))
 {
     ui->setupUi(this);
     ui->listView->setModel(mCharacterModel);

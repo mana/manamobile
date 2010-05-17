@@ -13,27 +13,20 @@ UI_DIR = .uic
 RCC_DIR = .rcc
 OBJECTS_DIR = .obj
 
-include(enet/enet.pri)
+include(manalib/manalib.pri)
 
 SOURCES += main.cpp\
         loginwidget.cpp \
     serversettingsdialog.cpp \
     loginmanager.cpp \
-    client.cpp \
-    sha256.cpp \
     mainwindow.cpp \
     choosecharacterwidget.cpp
 
 HEADERS  += loginwidget.h \
     serversettingsdialog.h \
     loginmanager.h \
-    protocol.h \
-    client.h \
-    sha256.h \
-    messageout.h \
     mainwindow.h \
-    choosecharacterwidget.h \
-    messagein.h
+    choosecharacterwidget.h
 
 FORMS    += loginwidget.ui \
     serversettingsdialog.ui \

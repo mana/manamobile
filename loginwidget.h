@@ -21,7 +21,7 @@
 #ifndef LOGINWIDGET_H
 #define LOGINWIDGET_H
 
-#include "client.h"
+#include <mana/manaclient.h>
 
 #include <QWidget>
 
@@ -39,8 +39,8 @@ public:
     explicit LoginWidget(LoginManager *loginManager, QWidget *parent = 0);
     ~LoginWidget();
 
-    void setServer(const ServerAddress &server);
-    const ServerAddress &server() const { return mServer; }
+    void setServer(const Mana::ServerAddress &server);
+    const Mana::ServerAddress &server() const { return mServer; }
 
 signals:
     void loginSucceeded();
@@ -56,7 +56,7 @@ private slots:
 private:
     Ui::LoginWidget *mUi;
     LoginManager *mLoginManager;
-    ServerAddress mServer;
+    Mana::ServerAddress mServer;
 };
 
 #endif // LOGINWIDGET_H

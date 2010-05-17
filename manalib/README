@@ -1,0 +1,3 @@
+manalib is a Qt-less static library that is meant to be sharable between
+the SDL and Qt clients. It currently deals with the client side of the protocol
+and abstracts away the ENet dependency.

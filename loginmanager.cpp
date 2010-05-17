@@ -20,134 +20,104 @@
 
 #include "loginmanager.h"
 
-#include "client.h"
-#include "messagein.h"
-#include "messageout.h"
-#include "protocol.h"
-#include "sha256.h"
+#include <mana/accounthandlerinterface.h>
+#include <mana/protocol.h>
 
-#include <QIODevice>
+#include <QTimerEvent>
 #include <QDebug>
 
-LoginManager::LoginManager(QObject *parent) :
-    QObject(parent),
-    mClient(new Client(this))
+class AccountHandler : public Mana::AccountHandlerInterface
 {
-    connect(mClient, SIGNAL(connected()), SIGNAL(connected()));
-    connect(mClient, SIGNAL(disconnected()), SIGNAL(disconnected()));
-    connect(mClient, SIGNAL(messageReceived(QByteArray)),
-            SLOT(handleMessage(QByteArray)));
-}
+public:
+    AccountHandler(LoginManager *loginManager)
+        : lm(loginManager)
+    {}
 
-void LoginManager::connectToLoginServer(const ServerAddress &server)
-{
-    if (mClient->state() == Client::Connected) {
-        qDebug() << "Already connected!";
-        return;
+    void connected() { emit lm->connected(); }
+    void disconnected() { emit lm->disconnected(); }
+
+    void loginSucceeded() { emit lm->loginSucceeded(); }
+    void loginFailed(int error) { lm->onLoginFailed(error); }
+
+    void characterInfoReceived(const Mana::CharacterInfo &info)
+    {
+        lm->mCharacters.append(info);
+        emit lm->charactersChanged();
     }
 
-    mClient->connectToServer(server);
+private:
+    LoginManager *lm;
+};
+
+
+LoginManager::LoginManager(QObject *parent)
+    : QObject(parent)
+    , mClient(new Mana::ManaClient)
+    , mAccountHandler(new AccountHandler(this))
+    , mNetworkTrafficTimer(0)
+{
+    mClient->setAccountHandler(mAccountHandler);
+}
+
+LoginManager::~LoginManager()
+{
+    delete mClient;
+    delete mAccountHandler;
+}
+
+void LoginManager::connectToLoginServer(const Mana::ServerAddress &server)
+{
+    qDebug() << Q_FUNC_INFO << server.host.c_str() << server.port;
+    mClient->connectToAccountServer(server);
+
+    if (!mNetworkTrafficTimer)
+        mNetworkTrafficTimer = startTimer(100);
 }
 
 void LoginManager::disconnectFromLoginServer()
 {
-    mClient->disconnectFromServer();
+    mClient->disconnectFromAccountServer();
 }
 
 bool LoginManager::isConnected() const
 {
-    return mClient->state() == Client::Connected;
+    return mClient->isConnectedToAccountServer();
 }
 
 void LoginManager::login(const QString &username, const QString &password)
 {
-    if (mClient->state() != Client::Connected)
-        return;
-
-    const QByteArray convertedUsername = username.toLatin1();
-    const QByteArray convertedPassword = password.toLatin1();
-    const QByteArray hashedPassword = sha256(convertedUsername
-                                             + convertedPassword);
-
-    MessageOut loginMessage(PAMSG_LOGIN);
-    loginMessage.writeInt32(0); // client version
-    loginMessage.writeString(convertedUsername);
-    loginMessage.writeString(hashedPassword);
-    mClient->send(loginMessage);
+    qDebug() << Q_FUNC_INFO << username;
+    mClient->login(username.toStdString(), password.toStdString());
 }
 
-void LoginManager::handleMessage(const QByteArray &data)
+void LoginManager::timerEvent(QTimerEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
-    if (data.length() < 2) {
-        qDebug() << "Message too short!";
-        return;
-    }
-
-    MessageIn message(data);
-
-    switch (message.id()) {
-    case APMSG_LOGIN_RESPONSE:
-        handleLoginResponse(message);
-        break;
-    case APMSG_CHAR_INFO:
-        handleCharacterInfo(message);
-        break;
-    case XXMSG_INVALID:
-        qDebug() << "Invalid received!";
-        break;
-    default:
-        qDebug() << "Unknown message" << message.id();
-        break;
-    }
+    if (event->timerId() == mNetworkTrafficTimer)
+        mClient->handleNetworkTraffic();
 }
 
-void LoginManager::handleLoginResponse(MessageIn &message)
+void LoginManager::onLoginFailed(int error)
 {
-    const quint8 error = message.readInt8();
+    qDebug() << Q_FUNC_INFO << error;
 
     switch (error) {
-    case ERRMSG_OK:
-        emit loginSucceeded();
-        return;
-    case ERRMSG_FAILURE:
+    case Mana::ERRMSG_FAILURE:
+    default:
         mError = tr("Unknown error");
         break;
-    case ERRMSG_INVALID_ARGUMENT:
+    case Mana::ERRMSG_INVALID_ARGUMENT:
         mError = tr("Wrong user name or password");
         break;
-    case LOGIN_INVALID_TIME:
+    case Mana::LOGIN_INVALID_TIME:
         mError = tr("Tried to login too fast");
         break;
-    case LOGIN_INVALID_VERSION:
+    case Mana::LOGIN_INVALID_VERSION:
         mError = tr("Client version too old");
         break;
-    case LOGIN_BANNED:
+    case Mana::LOGIN_BANNED:
         mError = tr("Account is banned");
         break;
     }
 
     emit loginFailed();
-}
-
-void LoginManager::handleCharacterInfo(MessageIn &message)
-{
-    qDebug() << Q_FUNC_INFO;
-    CharacterInfo info;
-    info.slot = message.readInt8();
-    info.name = message.readString();
-    message.readInt8(); // gender
-    message.readInt8(); // hair style
-    message.readInt8(); // hair color
-    message.readInt16(); // level
-    message.readInt16(); // character points
-    message.readInt16(); // correction points
-    info.money = message.readInt32();
-    for (int i = 0; i < 7; i++)
-    {
-        message.readInt8(); // attribute
-    }
-    mCharacters.append(info);
-
-    emit charactersChanged();
 }

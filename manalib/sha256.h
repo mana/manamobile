@@ -1,8 +1,9 @@
 /*
- *  Mana Mobile
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  manalib
+ *  Copyright (C) 2007-2009  The Mana World Development Team
+ *  Copyright (C) 2009-2010  The Mana Developers
  *
- *  This file is part of Mana Mobile.
+ *  This file is part of manalib.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,30 +19,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVERSETTINGSDIALOG_H
-#define SERVERSETTINGSDIALOG_H
+#ifndef SHA256_H
+#define SHA256_H
 
-#include <mana/manaclient.h>
+#include <string>
 
-#include <QDialog>
+/**
+ * Returns the SHA-256 hash for the given string.
+ *
+ * @param string the string to create the SHA-256 hash for
+ * @return the SHA-256 hash for the given string.
+ */
+std::string sha256(const std::string &string);
 
-namespace Ui {
-class ServerSettingsDialog;
-}
-
-class ServerSettingsDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    explicit ServerSettingsDialog(QWidget *parent = 0);
-    ~ServerSettingsDialog();
-
-    void setServer(const Mana::ServerAddress &server);
-    Mana::ServerAddress server() const;
-
-private:
-    Ui::ServerSettingsDialog *ui;
-};
-
-#endif // SERVERSETTINGSDIALOG_H
+#endif // SHA256_H

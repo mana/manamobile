@@ -55,7 +55,7 @@ LoginWidget::~LoginWidget()
     delete mUi;
 }
 
-void LoginWidget::setServer(const ServerAddress &server)
+void LoginWidget::setServer(const Mana::ServerAddress &server)
 {
     // If the server changed while already connected, disconnect
     if (mLoginManager->isConnected()

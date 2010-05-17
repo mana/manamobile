@@ -1,8 +1,9 @@
 /*
- *  Mana Mobile
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  manalib
+ *  Copyright (C) 2008-2009  The Mana World Development Team
+ *  Copyright (C) 2009-2010  The Mana Developers
  *
- *  This file is part of Mana Mobile.
+ *  This file has been slighly modified as part of manalib.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,6 +70,10 @@
 
 #include "sha256.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <memory.h>
 
 #ifdef HAVE_STDINT_H
@@ -133,7 +138,7 @@ const unsigned int sha256_h0[8] =
     0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
 };
 
-uint32_t sha256_k[64] =
+const uint32_t sha256_k[64] =
 {
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
     0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -153,7 +158,7 @@ uint32_t sha256_k[64] =
     0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-void SHA256Init(SHA256Context *ctx)
+static void SHA256Init(SHA256Context *ctx)
 {
     for (int i = 0; i < 8; i++)
         ctx->h[i] = sha256_h0[i];
@@ -161,9 +166,9 @@ void SHA256Init(SHA256Context *ctx)
     ctx->tot_len = 0;
 }
 
-void SHA256Transform(SHA256Context *ctx,
-                     unsigned char *message,
-                     unsigned int block_nb)
+static void SHA256Transform(SHA256Context *ctx,
+                            unsigned char *message,
+                            unsigned int block_nb)
 {
     uint32_t w[64];
     uint32_t wv[8];
@@ -197,9 +202,9 @@ void SHA256Transform(SHA256Context *ctx,
     }
 }
 
-void SHA256Update(SHA256Context *ctx,
-                  unsigned char *message,
-                  unsigned int len)
+static void SHA256Update(SHA256Context *ctx,
+                         unsigned char *message,
+                         unsigned int len)
 {
     /*
     * XXX here be dragons!
@@ -237,7 +242,7 @@ void SHA256Update(SHA256Context *ctx,
     ctx->tot_len += (block_nb + 1) << 6;
 }
 
-void SHA256Final(SHA256Context *ctx, unsigned char *digest)
+static void SHA256Final(SHA256Context *ctx, unsigned char *digest)
 {
     unsigned int block_nb = (1 + ((SHA256_BLOCK_SIZE - 9) < (ctx->len % SHA256_BLOCK_SIZE)));
     unsigned int len_b = (ctx->tot_len + ctx->len) << 3;
@@ -250,7 +255,7 @@ void SHA256Final(SHA256Context *ctx, unsigned char *digest)
         UNPACK32(ctx->h[i], &digest[i << 2]);
 }
 
-QByteArray SHA256Hash(const char *src, int len)
+static std::string SHA256Hash(const char *src, int len)
 {
     // Generate the hash
     unsigned char bytehash[SHA256_DIGEST_SIZE];
@@ -260,7 +265,7 @@ QByteArray SHA256Hash(const char *src, int len)
     SHA256Final(&ctx, bytehash);
     // Convert it to hex
     const char* hxc = "0123456789abcdef";
-    QByteArray hash = "";
+    std::string hash = "";
     for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
     {
         hash += hxc[bytehash[i] / 16];
@@ -269,7 +274,7 @@ QByteArray SHA256Hash(const char *src, int len)
     return hash;
 }
 
-QByteArray sha256(const QByteArray &data)
+std::string sha256(const std::string &string)
 {
-    return SHA256Hash(data.constData(), data.length());
+    return SHA256Hash(string.c_str(), string.length());
 }

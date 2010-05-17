@@ -33,16 +33,16 @@ ServerSettingsDialog::~ServerSettingsDialog()
     delete ui;
 }
 
-void ServerSettingsDialog::setServer(const ServerAddress &server)
+void ServerSettingsDialog::setServer(const Mana::ServerAddress &server)
 {
-    ui->hostEdit->setText(server.host);
+    ui->hostEdit->setText(QString::fromStdString(server.host));
     ui->portSpinBox->setValue(server.port);
 }
 
-ServerAddress ServerSettingsDialog::server() const
+Mana::ServerAddress ServerSettingsDialog::server() const
 {
-    ServerAddress server;
-    server.host = ui->hostEdit->text();
+    Mana::ServerAddress server;
+    server.host = ui->hostEdit->text().toStdString();
     server.port = ui->portSpinBox->value();
     return server;
 }

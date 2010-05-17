@@ -21,21 +21,12 @@
 #ifndef LOGINMANAGER_H
 #define LOGINMANAGER_H
 
-#include "client.h"
+#include <mana/accounthandlerinterface.h>
+#include <mana/manaclient.h>
 
 #include <QObject>
 
-class Client;
-class MessageIn;
-
-class CharacterInfo
-{
-public:
-    QString name;
-    int level;
-    int money;
-    int slot;
-};
+class AccountHandler;
 
 class LoginManager : public QObject
 {
@@ -43,14 +34,15 @@ class LoginManager : public QObject
 
 public:
     explicit LoginManager(QObject *parent = 0);
+    ~LoginManager();
 
-    void connectToLoginServer(const ServerAddress &server);
+    void connectToLoginServer(const Mana::ServerAddress &server);
     void disconnectFromLoginServer();
     bool isConnected() const;
 
     void login(const QString &username, const QString &password);
 
-    const QList<CharacterInfo> &characters() const
+    const QList<Mana::CharacterInfo> &characters() const
     { return mCharacters; }
 
     QString errorMessage() const { return mError; }
@@ -64,18 +56,21 @@ signals:
 
     void charactersChanged();
 
-private slots:
-    void handleMessage(const QByteArray &message);
+protected:
+    void timerEvent(QTimerEvent *);
 
 private:
-    void handleLoginResponse(MessageIn &message);
-    void handleCharacterInfo(MessageIn &message);
+    friend class AccountHandler;
+
+    void onLoginFailed(int error);
 
     QString mError;
-    Client *mClient;
+    Mana::ManaClient *mClient;
+    AccountHandler *mAccountHandler;
+    int mNetworkTrafficTimer;
 
     QString mUpdateHost;
-    QList<CharacterInfo> mCharacters;
+    QList<Mana::CharacterInfo> mCharacters;
 };
 
 #endif // LOGINMANAGER_H
