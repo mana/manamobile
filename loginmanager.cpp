@@ -90,6 +90,12 @@ void LoginManager::login(const QString &username, const QString &password)
     mClient->login(username.toStdString(), password.toStdString());
 }
 
+void LoginManager::chooseCharacter(const Mana::CharacterInfo &character)
+{
+    qDebug() << Q_FUNC_INFO << character.name.c_str();
+    mClient->chooseCharacter(character);
+}
+
 void LoginManager::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == mNetworkTrafficTimer)

@@ -43,6 +43,11 @@ public:
         reset();
     }
 
+    Mana::CharacterInfo characterAt(int index)
+    {
+        return mCharacters.at(index);
+    }
+
 private:
     QList<Mana::CharacterInfo> mCharacters;
 };
@@ -72,6 +77,8 @@ ChooseCharacterWidget::ChooseCharacterWidget(LoginManager *loginManager,
 
     connect(mLoginManager, SIGNAL(charactersChanged()),
             this, SLOT(updateCharacters()));
+    connect(ui->listView, SIGNAL(activated(QModelIndex)),
+            SLOT(chooseCharacter(QModelIndex)));
 }
 
 ChooseCharacterWidget::~ChooseCharacterWidget()
@@ -82,4 +89,9 @@ ChooseCharacterWidget::~ChooseCharacterWidget()
 void ChooseCharacterWidget::updateCharacters()
 {
     mCharacterModel->setCharacters(mLoginManager->characters());
+}
+
+void ChooseCharacterWidget::chooseCharacter(const QModelIndex &index)
+{
+    mLoginManager->chooseCharacter(mCharacterModel->characterAt(index.row()));
 }

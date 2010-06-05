@@ -24,6 +24,8 @@
 
 #include <QWidget>
 
+class QModelIndex;
+
 namespace Ui {
 class ChooseCharacterWidget;
 }
@@ -42,6 +44,7 @@ public:
 
 private slots:
     void updateCharacters();
+    void chooseCharacter(const QModelIndex &index);
 
 private:
     Ui::ChooseCharacterWidget *ui;

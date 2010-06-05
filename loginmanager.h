@@ -42,6 +42,8 @@ public:
 
     void login(const QString &username, const QString &password);
 
+    void chooseCharacter(const Mana::CharacterInfo &character);
+
     const QList<Mana::CharacterInfo> &characters() const
     { return mCharacters; }
 

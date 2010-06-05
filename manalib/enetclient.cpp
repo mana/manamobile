@@ -27,9 +27,8 @@
 
 namespace Mana {
 
-ENetClient::ENetClient(ENetClientEventHandler *handler)
-    : mHandler(handler)
-    , mPeer(0)
+ENetClient::ENetClient()
+    : mPeer(0)
 {
     mHost = enet_host_create(NULL,  // create a client host
                              1,     // only allow 1 outgoing connection
@@ -62,7 +61,7 @@ void ENetClient::connect(const char *hostName, unsigned short port)
     if (!mPeer)
     {
         printf("Warning: No available peers for initiating an ENet connection.\n");
-        // Call disconnect?
+        disconnected();
     }
 }
 
@@ -98,11 +97,11 @@ void ENetClient::service()
         switch (event.type)
         {
         case ENET_EVENT_TYPE_CONNECT:
-            mHandler->connected();
+            connected();
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT:
-            mHandler->disconnected();
+            disconnected();
             mPeer = 0;
             break;
 
@@ -121,7 +120,7 @@ void ENetClient::service()
             {
                 MessageIn message(reinterpret_cast<char*>(event.packet->data),
                                   event.packet->dataLength);
-                mHandler->messageReceived(message);
+                messageReceived(message);
             }
 
             enet_packet_destroy(event.packet);

@@ -32,26 +32,15 @@ class MessageIn;
 class MessageOut;
 
 /**
- * An interface that allows responding to client events.
- */
-class ENetClientEventHandler
-{
-public:
-    virtual void connected() = 0;
-    virtual void disconnected() = 0;
-    virtual void messageReceived(MessageIn &message) = 0;
-};
-
-/**
  * A simple abstraction of an ENet based client.
+ *
+ * To create a functioning ENet based client, subclass this class and implement
+ * the virtual connected(), disconnected() and messageReceived() methods.
  */
 class ENetClient
 {
 public:
-    /**
-     * Constructor, taking the handler that will handle client events.
-     */
-    ENetClient(ENetClientEventHandler *handler);
+    ENetClient();
     ~ENetClient();
 
     /**
@@ -65,9 +54,9 @@ public:
     /**
      * Connect to the server at the given \a hostName and \a port.
      *
-     * The connect is asynchroneous. The ENetClientEventHandler will receive a
-     * call to <code>connected()</code> when a connection is established, or a
-     * call to <codE>disconnected()</code> when there was a connection error.
+     * The connect is asynchroneous. When the connection is established,
+     * <code>connected()</code> will be called, and when there was a connection
+     * error, <codE>disconnected()</code> will be called.
      */
     void connect(const char *hostName, unsigned short port);
 
@@ -89,8 +78,12 @@ public:
      */
     void service();
 
+protected:
+    virtual void connected() = 0;
+    virtual void disconnected() = 0;
+    virtual void messageReceived(MessageIn &message) = 0;
+
 private:
-    ENetClientEventHandler *mHandler;
     ENetHost *mHost;
     ENetPeer *mPeer;
 };

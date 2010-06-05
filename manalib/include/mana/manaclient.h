@@ -26,6 +26,7 @@
 namespace Mana {
 
 class AccountHandlerInterface;
+class CharacterInfo;
 class ManaClientPrivate;
 
 /**
@@ -52,7 +53,7 @@ public:
 
 /**
  * The main object representing a Mana client. Allows interacting with the
- * Mana server.
+ * different parts of the Mana server.
  */
 class ManaClient
 {
@@ -73,8 +74,12 @@ public:
     void disconnectFromAccountServer();
     bool isConnectedToAccountServer() const;
 
+    std::string updateHost() const;
+
     void login(const std::string &username,
                const std::string &password);
+
+    void chooseCharacter(const CharacterInfo &character);
 
 private:
     ManaClientPrivate *d;
