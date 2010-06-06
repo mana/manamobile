@@ -21,35 +21,52 @@
 #include "gameclient.h"
 
 #include <mana/gamehandlerinterface.h>
+#include <mana/manaclient.h>
+#include <mana/protocol.h>
 
 #include "messagein.h"
+#include "messageout.h"
 
-#include <stdio.h>
+#include <iostream>
 
 namespace Mana {
 namespace Internal {
 
-GameClient::GameClient()
+GameClient::GameClient(ManaClient *manaClient)
     : mGameHandler(0)
+    , mManaClient(manaClient)
 {
 }
 
 void GameClient::connected()
 {
-    printf("GameClient::connected\n");
-    // TODO: Send in the token
+    std::cout << "(GameClient::connected)" << std::endl;
     mGameHandler->connected();
+
+    // Send in the security token
+    MessageOut msg(PGMSG_CONNECT);
+    msg.writeString(mManaClient->token(), 32);
+    send(msg);
 }
 
 void GameClient::disconnected()
 {
-    printf("GameClient::disconnected\n");
+    std::cout << "(GameClient::disconnected)" << std::endl;
     mGameHandler->disconnected();
 }
 
 void GameClient::messageReceived(MessageIn &message)
 {
-    printf("GameClient::messageReceived %.4x\n", message.id());
+    switch (message.id()) {
+    case XXMSG_INVALID:
+        std::cerr << "(GameClient::messageReceived) Invalid received! "
+                "Did we send an invalid message?" << std::endl;
+        break;
+    default:
+        std::cout << "(GameClient::messageReceived) Unknown message "
+                << message << std::endl;
+        break;
+    }
 }
 
 } // namespace Internal

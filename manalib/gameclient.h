@@ -26,6 +26,7 @@
 namespace Mana {
 
 class GameHandlerInterface;
+class ManaClient;
 
 namespace Internal {
 
@@ -35,7 +36,7 @@ namespace Internal {
 class GameClient : public ENetClient
 {
 public:
-    GameClient();
+    GameClient(ManaClient *manaClient);
 
     void setGameHandler(GameHandlerInterface *handler)
     { mGameHandler = handler; }
@@ -47,6 +48,7 @@ protected:
 
 private:
     GameHandlerInterface *mGameHandler;
+    ManaClient *mManaClient;
 };
 
 } // namespace Internal

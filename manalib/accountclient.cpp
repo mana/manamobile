@@ -25,7 +25,7 @@
 
 #include "messagein.h"
 
-#include <stdio.h>
+#include <iostream>
 
 namespace Mana {
 namespace Internal {
@@ -53,10 +53,12 @@ void AccountClient::messageReceived(MessageIn &message)
         handleCharacterSelectResponse(message);
         break;
     case XXMSG_INVALID:
-        printf("Invalid received! Did we send an invalid message?\n");
+        std::cerr << "(AccountClient::messageReceived) Invalid received! "
+                "Did we send an invalid message?" << std::endl;
         break;
     default:
-        printf("Unknown message %.4x\n", message.id());
+        std::cout << "(AccountClient::messageReceived) Unknown message "
+                << message << std::endl;
         break;
     }
 }
@@ -66,6 +68,7 @@ void AccountClient::handleLoginResponse(MessageIn &message)
     const int error = message.readInt8();
 
     if (error == ERRMSG_OK) {
+        mUpdateHost = message.readString();
         mAccountHandler->loginSucceeded();
     } else {
         mAccountHandler->loginFailed(error);
@@ -104,8 +107,10 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
         mChatServerHost = message.readString();
         mChatServerPort = message.readInt16();
 
-        printf("Game server: %s:%d\n", mGameServerHost.c_str(), mGameServerPort);
-        printf("Chat server: %s:%d\n", mChatServerHost.c_str(), mChatServerPort);
+        std::cout << "Game server: " << mGameServerHost.c_str() << ":"
+                << mGameServerPort << std::endl;
+        std::cout << "Chat server: " << mChatServerHost.c_str() << ":"
+                << mChatServerPort << std::endl;
 
         mAccountHandler->chooseCharacterSucceeded();
     } else {

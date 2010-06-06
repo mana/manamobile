@@ -26,6 +26,7 @@
 namespace Mana {
 
 class ChatHandlerInterface;
+class ManaClient;
 
 namespace Internal {
 
@@ -35,7 +36,7 @@ namespace Internal {
 class ChatClient : public ENetClient
 {
 public:
-    ChatClient();
+    ChatClient(ManaClient *manaClient);
 
     void setChatHandler(ChatHandlerInterface *handler)
     { mChatHandler = handler; }
@@ -47,6 +48,7 @@ protected:
 
 private:
     ChatHandlerInterface *mChatHandler;
+    ManaClient *mManaClient;
 };
 
 } // namespace Internal

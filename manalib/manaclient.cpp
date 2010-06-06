@@ -36,10 +36,10 @@ namespace Mana {
 class ManaClientPrivate
 {
 public:
-    ManaClientPrivate()
+    ManaClientPrivate(ManaClient *manaClient)
         : accountClient(new AccountClient)
-        , chatClient(new ChatClient)
-        , gameClient(new GameClient)
+        , chatClient(new ChatClient(manaClient))
+        , gameClient(new GameClient(manaClient))
     {}
 
     ~ManaClientPrivate()
@@ -52,14 +52,11 @@ public:
     AccountClient *accountClient;
     ChatClient *chatClient;
     GameClient *gameClient;
-
-    std::string updateHost;
-    std::string token;
 };
 
 
 ManaClient::ManaClient()
-    : d(new ManaClientPrivate)
+    : d(new ManaClientPrivate(this))
 {
 }
 
@@ -116,12 +113,12 @@ void ManaClient::connectToGameAndChatServers()
 
 std::string ManaClient::updateHost() const
 {
-    return d->updateHost;
+    return d->accountClient->updateHost();
 }
 
 std::string ManaClient::token() const
 {
-    return d->token;
+    return d->accountClient->token();
 }
 
 void ManaClient::login(const std::string &username,

@@ -44,6 +44,7 @@ public:
     void setAccountHandler(AccountHandlerInterface *handler)
     { mAccountHandler = handler; }
 
+    std::string updateHost() const { return mUpdateHost; }
     std::string token() const { return mToken; }
     std::string gameServerHost() const { return mGameServerHost; }
     std::string chatServerHost() const { return mChatServerHost; }
@@ -62,6 +63,7 @@ private:
 
     AccountHandlerInterface *mAccountHandler;
 
+    std::string mUpdateHost;
     std::string mToken;
     std::string mGameServerHost;
     std::string mChatServerHost;

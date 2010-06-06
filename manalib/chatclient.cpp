@@ -21,33 +21,52 @@
 #include "chatclient.h"
 
 #include <mana/chathandlerinterface.h>
+#include <mana/manaclient.h>
+#include <mana/protocol.h>
 
-#include <stdio.h>
+#include "messagein.h"
+#include "messageout.h"
+
+#include <iostream>
 
 namespace Mana {
 namespace Internal {
 
-ChatClient::ChatClient()
+ChatClient::ChatClient(ManaClient *manaClient)
     : mChatHandler(0)
+    , mManaClient(manaClient)
 {
 }
 
 void ChatClient::connected()
 {
-    printf("ChatClient::connected\n");
-    // TODO: Send in the token
+    std::cout << "(ChatClient::connected)" << std::endl;
     mChatHandler->connected();
+
+    // Send in the security token
+    MessageOut msg(PCMSG_CONNECT);
+    msg.writeString(mManaClient->token(), 32);
+    send(msg);
 }
 
 void ChatClient::disconnected()
 {
-    printf("ChatClient::disconnected\n");
+    std::cout << "(ChatClient::disconnected)" << std::endl;
     mChatHandler->disconnected();
 }
 
 void ChatClient::messageReceived(MessageIn &message)
 {
-    printf("ChatClient::messageReceived\n");
+    switch (message.id()) {
+    case XXMSG_INVALID:
+        std::cerr << "(ChatClient::messageReceived) Invalid received! "
+                "Did we send an invalid message?" << std::endl;
+        break;
+    default:
+        std::cout << "(ChatClient::messageReceived) Unknown message "
+                << message << std::endl;
+        break;
+    }
 }
 
 } // namespace Internal

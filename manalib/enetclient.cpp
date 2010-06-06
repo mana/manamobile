@@ -23,7 +23,11 @@
 #include "messagein.h"
 #include "messageout.h"
 
-#include <stdio.h>
+#include <iostream>
+
+enum {
+    debug_enetclient = 0
+};
 
 namespace Mana {
 
@@ -60,7 +64,8 @@ void ENetClient::connect(const char *hostName, unsigned short port)
     mPeer = enet_host_connect(mHost, &address, 1);
     if (!mPeer)
     {
-        printf("Warning: No available peers for initiating an ENet connection.\n");
+        std::cerr << "(ENetClient::connect) Warning: No available peers for "
+                "initiating an ENet connection." << std::endl;
         disconnected();
     }
 }
@@ -74,8 +79,13 @@ void ENetClient::disconnect()
 
 void ENetClient::send(const MessageOut &message, unsigned char channel)
 {
-    if (!isConnected())
+    if (!isConnected()) {
+        std::cerr << "(ENetClient::send) Not connected!" << std::endl;
         return;
+    }
+
+    if (debug_enetclient)
+        std::cout << "(ENetClient::send) Sending " << message << std::endl;
 
     ENetPacket *packet;
     packet = enet_packet_create(message.data(),
@@ -106,20 +116,20 @@ void ENetClient::service()
             break;
 
         case ENET_EVENT_TYPE_RECEIVE:
-            printf("A packet of length %u containing %s was received on channel %u.\n",
-                   event.packet->dataLength,
-                   event.packet->data,
-                   event.channelID);
-            fflush(stdout);
-
             if (event.packet->dataLength < 2)
             {
-                printf("Warning: received a packet that was too short!");
+                std::cerr << "(ENetClient::service) Warning: received a"
+                        "packet that was too short!" << std::endl;
             }
             else
             {
                 MessageIn message(reinterpret_cast<char*>(event.packet->data),
                                   event.packet->dataLength);
+
+                if (debug_enetclient)
+                    std::cout << "(ENetClient::service) Received " << message
+                            << std::endl;
+
                 messageReceived(message);
             }
 
