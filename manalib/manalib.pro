@@ -16,6 +16,8 @@ include(../enet/enet.pri)
 HEADERS += include/mana/protocol.h \
     include/mana/manaclient.h \
     include/mana/accounthandlerinterface.h \
+    include/mana/gamehandlerinterface.h \
+    include/mana/chathandlerinterface.h \
     messagein.h \
     enetclient.h \
     messageout.h \

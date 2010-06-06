@@ -1,6 +1,6 @@
 /*
  *  Mana Mobile
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  Copyright (C) 2010, Thorbjørn Lindeijer
  *
  *  This file is part of Mana Mobile.
  *
@@ -42,7 +42,7 @@ public:
 
     void login(const QString &username, const QString &password);
 
-    void chooseCharacter(const Mana::CharacterInfo &character);
+    Mana::ManaClient *manaClient() const { return mClient; }
 
     const QList<Mana::CharacterInfo> &characters() const
     { return mCharacters; }
@@ -53,10 +53,13 @@ signals:
     void connected();
     void disconnected();
 
-    void loginFailed();
     void loginSucceeded();
+    void loginFailed();
 
     void charactersChanged();
+
+    void chooseCharacterSucceeded();
+    void chooseCharacterFailed();
 
 protected:
     void timerEvent(QTimerEvent *);
@@ -65,6 +68,8 @@ private:
     friend class AccountHandler;
 
     void onLoginFailed(int error);
+    void onChooseCharacterSucceeded();
+    void onChooseCharacterFailed(int error);
 
     QString mError;
     Mana::ManaClient *mClient;

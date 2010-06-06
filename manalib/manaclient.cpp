@@ -1,6 +1,6 @@
 /*
  *  manalib
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
  *  This file is part of manalib.
  *
@@ -54,6 +54,7 @@ public:
     GameClient *gameClient;
 
     std::string updateHost;
+    std::string token;
 };
 
 
@@ -70,6 +71,16 @@ ManaClient::~ManaClient()
 void ManaClient::setAccountHandler(AccountHandlerInterface *handler)
 {
     d->accountClient->setAccountHandler(handler);
+}
+
+void ManaClient::setGameHandler(GameHandlerInterface *handler)
+{
+    d->gameClient->setGameHandler(handler);
+}
+
+void ManaClient::setChatHandler(ChatHandlerInterface *handler)
+{
+    d->chatClient->setChatHandler(handler);
 }
 
 void ManaClient::handleNetworkTraffic()
@@ -94,9 +105,23 @@ bool ManaClient::isConnectedToAccountServer() const
     return d->accountClient->isConnected();
 }
 
+void ManaClient::connectToGameAndChatServers()
+{
+    // Try to connect to the servers received by the account client
+    d->gameClient->connect(d->accountClient->gameServerHost().c_str(),
+                           d->accountClient->gameServerPort());
+    d->chatClient->connect(d->accountClient->chatServerHost().c_str(),
+                           d->accountClient->chatServerPort());
+}
+
 std::string ManaClient::updateHost() const
 {
     return d->updateHost;
+}
+
+std::string ManaClient::token() const
+{
+    return d->token;
 }
 
 void ManaClient::login(const std::string &username,

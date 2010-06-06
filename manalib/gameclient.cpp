@@ -20,28 +20,36 @@
 
 #include "gameclient.h"
 
+#include <mana/gamehandlerinterface.h>
+
+#include "messagein.h"
+
 #include <stdio.h>
 
 namespace Mana {
 namespace Internal {
 
 GameClient::GameClient()
+    : mGameHandler(0)
 {
 }
 
 void GameClient::connected()
 {
-    printf("GameClient::connected");
+    printf("GameClient::connected\n");
+    // TODO: Send in the token
+    mGameHandler->connected();
 }
 
 void GameClient::disconnected()
 {
-    printf("GameClient::disconnected");
+    printf("GameClient::disconnected\n");
+    mGameHandler->disconnected();
 }
 
 void GameClient::messageReceived(MessageIn &message)
 {
-    printf("GameClient::messageReceived");
+    printf("GameClient::messageReceived %.4x\n", message.id());
 }
 
 } // namespace Internal

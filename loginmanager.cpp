@@ -26,6 +26,7 @@
 #include <QTimerEvent>
 #include <QDebug>
 
+// Struggling with naming conflicts between interface methods and signals
 class AccountHandler : public Mana::AccountHandlerInterface
 {
 public:
@@ -44,6 +45,12 @@ public:
         lm->mCharacters.append(info);
         emit lm->charactersChanged();
     }
+
+    void chooseCharacterSucceeded()
+    { lm->onChooseCharacterSucceeded(); }
+
+    void chooseCharacterFailed(int error)
+    { lm->onChooseCharacterFailed(error); }
 
 private:
     LoginManager *lm;
@@ -90,12 +97,6 @@ void LoginManager::login(const QString &username, const QString &password)
     mClient->login(username.toStdString(), password.toStdString());
 }
 
-void LoginManager::chooseCharacter(const Mana::CharacterInfo &character)
-{
-    qDebug() << Q_FUNC_INFO << character.name.c_str();
-    mClient->chooseCharacter(character);
-}
-
 void LoginManager::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == mNetworkTrafficTimer)
@@ -104,8 +105,6 @@ void LoginManager::timerEvent(QTimerEvent *event)
 
 void LoginManager::onLoginFailed(int error)
 {
-    qDebug() << Q_FUNC_INFO << error;
-
     switch (error) {
     case Mana::ERRMSG_FAILURE:
     default:
@@ -125,5 +124,35 @@ void LoginManager::onLoginFailed(int error)
         break;
     }
 
+    qDebug() << Q_FUNC_INFO << error << mError;
+
     emit loginFailed();
+}
+
+void LoginManager::onChooseCharacterSucceeded()
+{
+    emit chooseCharacterSucceeded();
+    mClient->connectToGameAndChatServers();
+}
+
+void LoginManager::onChooseCharacterFailed(int error)
+{
+    switch (error) {
+    default:
+        mError = tr("Unknown error");
+        break;
+    case Mana::ERRMSG_NO_LOGIN:
+        mError = tr("You don't seem to be logged in, please try again");
+        break;
+    case Mana::ERRMSG_INVALID_ARGUMENT:
+        mError = tr("No such character");
+        break;
+    case Mana::ERRMSG_FAILURE:
+        mError = tr("No game server found for the map the character is on");
+        break;
+    }
+
+    qDebug() << Q_FUNC_INFO << error << mError;
+
+    emit chooseCharacterFailed();
 }

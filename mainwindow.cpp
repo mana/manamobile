@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 
 #include "choosecharacterwidget.h"
+#include "gamewidget.h"
 #include "loginmanager.h"
 #include "loginwidget.h"
 #include "serversettingsdialog.h"
@@ -36,9 +37,11 @@ MainWindow::MainWindow(QWidget *parent)
     mStack = new QStackedWidget(this);
     mLoginWidget = new LoginWidget(mLoginManager, mStack);
     mChooseCharacterWidget = new ChooseCharacterWidget(mLoginManager, mStack);
+    mGameWidget = new GameWidget(mLoginManager->manaClient(), mStack);
 
     mStack->addWidget(mLoginWidget);
     mStack->addWidget(mChooseCharacterWidget);
+    mStack->addWidget(mGameWidget);
 
     setCentralWidget(mStack);
 
@@ -50,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(mLoginWidget, SIGNAL(loginSucceeded()),
             this, SLOT(onLoginSucceeded()));
+    connect(mChooseCharacterWidget, SIGNAL(characterChosen()),
+            this, SLOT(onCharacterChosen()));
 }
 
 MainWindow::~MainWindow()
@@ -73,4 +78,9 @@ void MainWindow::openSettings()
 void MainWindow::onLoginSucceeded()
 {
     mStack->setCurrentWidget(mChooseCharacterWidget);
+}
+
+void MainWindow::onCharacterChosen()
+{
+    mStack->setCurrentWidget(mGameWidget);
 }

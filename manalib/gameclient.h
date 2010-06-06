@@ -24,6 +24,9 @@
 #include "enetclient.h"
 
 namespace Mana {
+
+class GameHandlerInterface;
+
 namespace Internal {
 
 /**
@@ -34,10 +37,16 @@ class GameClient : public ENetClient
 public:
     GameClient();
 
+    void setGameHandler(GameHandlerInterface *handler)
+    { mGameHandler = handler; }
+
 protected:
     void connected();
     void disconnected();
     void messageReceived(MessageIn &message);
+
+private:
+    GameHandlerInterface *mGameHandler;
 };
 
 } // namespace Internal

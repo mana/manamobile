@@ -27,6 +27,8 @@ namespace Mana {
 
 class AccountHandlerInterface;
 class CharacterInfo;
+class ChatHandlerInterface;
+class GameHandlerInterface;
 class ManaClientPrivate;
 
 /**
@@ -62,6 +64,8 @@ public:
     ~ManaClient();
 
     void setAccountHandler(AccountHandlerInterface *);
+    void setGameHandler(GameHandlerInterface *);
+    void setChatHandler(ChatHandlerInterface *);
 
     /**
      * Handles incoming and outgoing network traffic. Call this method
@@ -74,7 +78,10 @@ public:
     void disconnectFromAccountServer();
     bool isConnectedToAccountServer() const;
 
+    void connectToGameAndChatServers();
+
     std::string updateHost() const;
+    std::string token() const;
 
     void login(const std::string &username,
                const std::string &password);

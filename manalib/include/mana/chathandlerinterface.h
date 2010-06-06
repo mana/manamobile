@@ -18,37 +18,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCOUNTHANDLERINTERFACE_H
-#define ACCOUNTHANDLERINTERFACE_H
-
-#include <string>
+#ifndef CHATHANDLERINTERFACE_H
+#define CHATHANDLERINTERFACE_H
 
 namespace Mana {
 
-class CharacterInfo
-{
-public:
-    std::string name;
-    int level;
-    int money;
-    int slot;
-};
-
-class AccountHandlerInterface
+class ChatHandlerInterface
 {
 public:
     virtual void connected() = 0;
     virtual void disconnected() = 0;
-
-    virtual void loginSucceeded() = 0;
-    virtual void loginFailed(int error) = 0;
-
-    virtual void characterInfoReceived(const CharacterInfo &info) = 0;
-
-    virtual void chooseCharacterSucceeded() = 0;
-    virtual void chooseCharacterFailed(int error) = 0;
 };
 
 } // namespace Mana
 
-#endif // ACCOUNTHANDLERINTERFACE_H
+#endif // CHATHANDLERINTERFACE_H

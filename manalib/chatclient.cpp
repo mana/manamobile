@@ -20,28 +20,34 @@
 
 #include "chatclient.h"
 
+#include <mana/chathandlerinterface.h>
+
 #include <stdio.h>
 
 namespace Mana {
 namespace Internal {
 
 ChatClient::ChatClient()
+    : mChatHandler(0)
 {
 }
 
 void ChatClient::connected()
 {
-    printf("ChatClient::connected");
+    printf("ChatClient::connected\n");
+    // TODO: Send in the token
+    mChatHandler->connected();
 }
 
 void ChatClient::disconnected()
 {
-    printf("ChatClient::disconnected");
+    printf("ChatClient::disconnected\n");
+    mChatHandler->disconnected();
 }
 
 void ChatClient::messageReceived(MessageIn &message)
 {
-    printf("ChatClient::messageReceived");
+    printf("ChatClient::messageReceived\n");
 }
 
 } // namespace Internal

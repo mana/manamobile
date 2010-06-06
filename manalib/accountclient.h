@@ -35,10 +35,20 @@ namespace Internal {
 class AccountClient : public ENetClient
 {
 public:
-    AccountClient() : mAccountHandler(0) {}
+    AccountClient()
+        : mAccountHandler(0)
+        , mGameServerPort(0)
+        , mChatServerPort(0)
+    {}
 
     void setAccountHandler(AccountHandlerInterface *handler)
     { mAccountHandler = handler; }
+
+    std::string token() const { return mToken; }
+    std::string gameServerHost() const { return mGameServerHost; }
+    std::string chatServerHost() const { return mChatServerHost; }
+    unsigned short gameServerPort() const { return mGameServerPort; }
+    unsigned short chatServerPort() const { return mChatServerPort; }
 
 protected:
     void connected();
@@ -51,6 +61,12 @@ private:
     void handleCharacterSelectResponse(MessageIn &message);
 
     AccountHandlerInterface *mAccountHandler;
+
+    std::string mToken;
+    std::string mGameServerHost;
+    std::string mChatServerHost;
+    unsigned short mGameServerPort;
+    unsigned short mChatServerPort;
 };
 
 } // namespace Internal

@@ -1,8 +1,8 @@
 /*
- *  manalib
+ *  Mana Mobile
  *  Copyright (C) 2010  Thorbjørn Lindeijer
  *
- *  This file is part of manalib.
+ *  This file is part of Mana Mobile.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,37 +18,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCOUNTHANDLERINTERFACE_H
-#define ACCOUNTHANDLERINTERFACE_H
+#ifndef GAMEWIDGET_H
+#define GAMEWIDGET_H
 
-#include <string>
+#include <QWidget>
 
 namespace Mana {
+class ManaClient;
+}
 
-class CharacterInfo
+class ChatHandler;
+class GameHandler;
+
+class GameWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
-    std::string name;
-    int level;
-    int money;
-    int slot;
+    explicit GameWidget(Mana::ManaClient *manaClient, QWidget *parent = 0);
+
+private:
+    GameHandler *mGameHandler;
+    ChatHandler *mChatHandler;
 };
 
-class AccountHandlerInterface
-{
-public:
-    virtual void connected() = 0;
-    virtual void disconnected() = 0;
-
-    virtual void loginSucceeded() = 0;
-    virtual void loginFailed(int error) = 0;
-
-    virtual void characterInfoReceived(const CharacterInfo &info) = 0;
-
-    virtual void chooseCharacterSucceeded() = 0;
-    virtual void chooseCharacterFailed(int error) = 0;
-};
-
-} // namespace Mana
-
-#endif // ACCOUNTHANDLERINTERFACE_H
+#endif // GAMEWIDGET_H

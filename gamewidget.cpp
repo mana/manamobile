@@ -1,8 +1,8 @@
 /*
- *  manalib
+ *  Mana Mobile
  *  Copyright (C) 2010  Thorbjørn Lindeijer
  *
- *  This file is part of manalib.
+ *  This file is part of Mana Mobile.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,37 +18,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCOUNTHANDLERINTERFACE_H
-#define ACCOUNTHANDLERINTERFACE_H
+#include "gamewidget.h"
 
-#include <string>
+#include <mana/chathandlerinterface.h>
+#include <mana/gamehandlerinterface.h>
+#include <mana/manaclient.h>
 
-namespace Mana {
-
-class CharacterInfo
+class GameHandler : public Mana::GameHandlerInterface
 {
 public:
-    std::string name;
-    int level;
-    int money;
-    int slot;
+    void connected() {}
+    void disconnected() {}
 };
 
-class AccountHandlerInterface
+class ChatHandler : public Mana::ChatHandlerInterface
 {
 public:
-    virtual void connected() = 0;
-    virtual void disconnected() = 0;
-
-    virtual void loginSucceeded() = 0;
-    virtual void loginFailed(int error) = 0;
-
-    virtual void characterInfoReceived(const CharacterInfo &info) = 0;
-
-    virtual void chooseCharacterSucceeded() = 0;
-    virtual void chooseCharacterFailed(int error) = 0;
+    void connected() {}
+    void disconnected() {}
 };
 
-} // namespace Mana
-
-#endif // ACCOUNTHANDLERINTERFACE_H
+GameWidget::GameWidget(Mana::ManaClient *manaClient, QWidget *parent)
+    : QWidget(parent)
+    , mGameHandler(new GameHandler)
+    , mChatHandler(new ChatHandler)
+{
+    manaClient->setGameHandler(mGameHandler);
+    manaClient->setChatHandler(mChatHandler);
+}

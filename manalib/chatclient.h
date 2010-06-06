@@ -24,6 +24,9 @@
 #include "enetclient.h"
 
 namespace Mana {
+
+class ChatHandlerInterface;
+
 namespace Internal {
 
 /**
@@ -34,10 +37,16 @@ class ChatClient : public ENetClient
 public:
     ChatClient();
 
+    void setChatHandler(ChatHandlerInterface *handler)
+    { mChatHandler = handler; }
+
 protected:
     void connected();
     void disconnected();
     void messageReceived(MessageIn &message);
+
+private:
+    ChatHandlerInterface *mChatHandler;
 };
 
 } // namespace Internal

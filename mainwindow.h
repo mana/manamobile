@@ -24,6 +24,7 @@
 #include <QMainWindow>
 
 class ChooseCharacterWidget;
+class GameWidget;
 class LoginManager;
 class LoginWidget;
 
@@ -42,6 +43,7 @@ private slots:
     void openSettings();
 
     void onLoginSucceeded();
+    void onCharacterChosen();
 
 private:
     QStackedWidget *mStack;
@@ -50,6 +52,7 @@ private:
 
     LoginWidget *mLoginWidget;
     ChooseCharacterWidget *mChooseCharacterWidget;
+    GameWidget *mGameWidget;
 };
 
 #endif // MAINWINDOW_H

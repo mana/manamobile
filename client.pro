@@ -20,13 +20,15 @@ SOURCES += main.cpp\
     serversettingsdialog.cpp \
     loginmanager.cpp \
     mainwindow.cpp \
-    choosecharacterwidget.cpp
+    choosecharacterwidget.cpp \
+    gamewidget.cpp
 
 HEADERS  += loginwidget.h \
     serversettingsdialog.h \
     loginmanager.h \
     mainwindow.h \
-    choosecharacterwidget.h
+    choosecharacterwidget.h \
+    gamewidget.h
 
 FORMS    += loginwidget.ui \
     serversettingsdialog.ui \

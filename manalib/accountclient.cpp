@@ -81,7 +81,7 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     message.readInt8(); // gender
     message.readInt8(); // hair style
     message.readInt8(); // hair color
-    message.readInt16(); // level
+    info.level = message.readInt16();
     message.readInt16(); // character points
     message.readInt16(); // correction points
     info.money = message.readInt32();
@@ -97,18 +97,19 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
 {
     const int error = message.readInt8();
     if (error == ERRMSG_OK) {
-        const std::string token = message.readString(32);
-        const std::string gameServerHost = message.readString();
-        const int gameServerPort = message.readInt16();
-        const std::string chatServerHost = message.readString();
-        const int chatServerPort = message.readInt16();
+        // Remember chat and game server hosts
+        mToken = message.readString(32);
+        mGameServerHost = message.readString();
+        mGameServerPort = message.readInt16();
+        mChatServerHost = message.readString();
+        mChatServerPort = message.readInt16();
 
-        printf("Game server: %s:%d\n", gameServerHost.c_str(), gameServerPort);
-        printf("Chat server: %s:%d\n", chatServerHost.c_str(), chatServerPort);
+        printf("Game server: %s:%d\n", mGameServerHost.c_str(), mGameServerPort);
+        printf("Chat server: %s:%d\n", mChatServerHost.c_str(), mChatServerPort);
 
-        // Do something
+        mAccountHandler->chooseCharacterSucceeded();
     } else {
-        // Do something
+        mAccountHandler->chooseCharacterFailed(error);
     }
 }
 
