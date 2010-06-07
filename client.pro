@@ -21,14 +21,16 @@ SOURCES += main.cpp\
     loginmanager.cpp \
     mainwindow.cpp \
     choosecharacterwidget.cpp \
-    gamewidget.cpp
+    gamewidget.cpp \
+    resourcemanager.cpp
 
 HEADERS  += loginwidget.h \
     serversettingsdialog.h \
     loginmanager.h \
     mainwindow.h \
     choosecharacterwidget.h \
-    gamewidget.h
+    gamewidget.h \
+    resourcemanager.h
 
 FORMS    += loginwidget.ui \
     serversettingsdialog.ui \

@@ -1,6 +1,6 @@
 /*
  *  Mana Mobile
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
  *  This file is part of Mana Mobile.
  *
@@ -24,6 +24,7 @@
 #include "gamewidget.h"
 #include "loginmanager.h"
 #include "loginwidget.h"
+#include "resourcemanager.h"
 #include "serversettingsdialog.h"
 
 #include <QCoreApplication>
@@ -33,6 +34,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , mLoginManager(new LoginManager(this))
+    , mResourceManager(new ResourceManager(this))
 {
     mStack = new QStackedWidget(this);
     mLoginWidget = new LoginWidget(mLoginManager, mStack);
@@ -78,6 +80,10 @@ void MainWindow::openSettings()
 void MainWindow::onLoginSucceeded()
 {
     mStack->setCurrentWidget(mChooseCharacterWidget);
+
+    const Mana::ManaClient *manaClient = mLoginManager->manaClient();
+    const QString dataUrl = QString::fromStdString(manaClient->dataUrl());
+    mResourceManager->setDataUrl(dataUrl);
 }
 
 void MainWindow::onCharacterChosen()

@@ -47,6 +47,8 @@ protected:
     void messageReceived(MessageIn &message);
 
 private:
+    void handlePlayerMapChanged(MessageIn &message);
+
     GameHandlerInterface *mGameHandler;
     ManaClient *mManaClient;
 };

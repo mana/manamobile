@@ -69,6 +69,13 @@ void AccountClient::handleLoginResponse(MessageIn &message)
 
     if (error == ERRMSG_OK) {
         mUpdateHost = message.readString();
+        std::cout << "Update host: " << mUpdateHost << std::endl;
+
+        if (message.unreadLength() > 0) {
+            mDataUrl = message.readString();
+            std::cout << "Data URL: " << mDataUrl << std::endl;
+        }
+
         mAccountHandler->loginSucceeded();
     } else {
         mAccountHandler->loginFailed(error);

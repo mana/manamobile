@@ -116,6 +116,11 @@ std::string ManaClient::updateHost() const
     return d->accountClient->updateHost();
 }
 
+std::string ManaClient::dataUrl() const
+{
+    return d->accountClient->dataUrl();
+}
+
 std::string ManaClient::token() const
 {
     return d->accountClient->token();

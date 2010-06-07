@@ -21,6 +21,8 @@
 #ifndef GAMEHANDLERINTERFACE_H
 #define GAMEHANDLERINTERFACE_H
 
+#include <string>
+
 namespace Mana {
 
 class GameHandlerInterface
@@ -28,6 +30,8 @@ class GameHandlerInterface
 public:
     virtual void connected() = 0;
     virtual void disconnected() = 0;
+
+    virtual void mapChanged(const std::string &name, int x, int y) = 0;
 };
 
 } // namespace Mana

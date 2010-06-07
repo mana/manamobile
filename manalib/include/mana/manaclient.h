@@ -81,6 +81,7 @@ public:
     void connectToGameAndChatServers();
 
     std::string updateHost() const;
+    std::string dataUrl() const;
     std::string token() const;
 
     void login(const std::string &username,

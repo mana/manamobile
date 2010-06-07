@@ -58,6 +58,9 @@ void GameClient::disconnected()
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
+    case GPMSG_PLAYER_MAP_CHANGE:
+        handlePlayerMapChanged(message);
+        break;
     case XXMSG_INVALID:
         std::cerr << "(GameClient::messageReceived) Invalid received! "
                 "Did we send an invalid message?" << std::endl;
@@ -67,6 +70,15 @@ void GameClient::messageReceived(MessageIn &message)
                 << message << std::endl;
         break;
     }
+}
+
+void GameClient::handlePlayerMapChanged(MessageIn &message)
+{
+    const std::string name = message.readString();
+    const int x = message.readInt16();
+    const int y = message.readInt16();
+
+    mGameHandler->mapChanged(name, x, y);
 }
 
 } // namespace Internal

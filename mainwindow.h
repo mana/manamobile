@@ -1,6 +1,6 @@
 /*
  *  Mana Mobile
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
  *  This file is part of Mana Mobile.
  *
@@ -27,6 +27,7 @@ class ChooseCharacterWidget;
 class GameWidget;
 class LoginManager;
 class LoginWidget;
+class ResourceManager;
 
 class QStackedWidget;
 
@@ -49,6 +50,7 @@ private:
     QStackedWidget *mStack;
 
     LoginManager *mLoginManager;
+    ResourceManager *mResourceManager;
 
     LoginWidget *mLoginWidget;
     ChooseCharacterWidget *mChooseCharacterWidget;

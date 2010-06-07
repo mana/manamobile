@@ -20,15 +20,33 @@
 
 #include "gamewidget.h"
 
+#include "resourcemanager.h"
+
 #include <mana/chathandlerinterface.h>
 #include <mana/gamehandlerinterface.h>
 #include <mana/manaclient.h>
+
+#include <QDebug>
 
 class GameHandler : public Mana::GameHandlerInterface
 {
 public:
     void connected() {}
     void disconnected() {}
+
+    void mapChanged(const std::string &name, int x, int y)
+    {
+        qDebug() << "Arrived at" << name.c_str() << x << y;
+
+        QString fileName = QLatin1String("maps/");
+        fileName += QString::fromStdString(name);
+
+        const QLatin1String mapExtension(".tmx");
+        if (!fileName.endsWith(mapExtension))
+            fileName += mapExtension;
+
+        ResourceManager::instance()->requestFile(fileName);
+    }
 };
 
 class ChatHandler : public Mana::ChatHandlerInterface
