@@ -1,8 +1,10 @@
+include(common.pri)
+
 QT       += core gui network
 
 TARGET = manamobile
 
-unix:target.path = /usr/bin
+unix:target.path = $${PREFIX}/bin
 INSTALLS += target
 
 TEMPLATE = app
@@ -14,6 +16,7 @@ RCC_DIR = .rcc
 OBJECTS_DIR = .obj
 
 include(manalib/manalib.pri)
+include(libtiled/libtiled.pri)
 
 SOURCES += main.cpp\
         loginwidget.cpp \
