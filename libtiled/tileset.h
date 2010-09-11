@@ -28,6 +28,8 @@
 #include <QList>
 #include <QString>
 
+class QImage;
+
 namespace Tiled {
 
 class Tile;
@@ -57,6 +59,8 @@ public:
         mTileHeight(tileHeight),
         mTileSpacing(tileSpacing),
         mMargin(margin),
+        mImageWidth(0),
+        mImageHeight(0),
         mColumnCount(0)
     {
     }
@@ -128,6 +132,16 @@ public:
     int columnCount() const { return mColumnCount; }
 
     /**
+     * Returns the width of the tileset image.
+     */
+    int imageWidth() const { return mImageWidth; }
+
+    /**
+     * Returns the height of the tileset image.
+     */
+    int imageHeight() const { return mImageHeight; }
+
+    /**
      * Returns the transparent color, or an invalid color if no transparent
      * color is used.
      */
@@ -140,19 +154,20 @@ public:
     void setTransparentColor(const QColor &c) { mTransparentColor = c; }
 
     /**
-     * Load this tileset from the given tileset image. This will replace
+     * Load this tileset from the given tileset \a image. This will replace
      * existing tile images in this tileset with new ones. If the new image
      * contains more tiles than exist in the tileset new tiles will be
      * appended, if there are fewer tiles the excess images will be blanked.
      *
      * The tile width and height of this tileset must be higher than 0.
      *
+     * @param image    the image to load the tiles from
      * @param fileName the file name of the image, which will be remembered
      *                 as the image source of this tileset.
-     * @return <code>true</code> if loading was succesful, otherwise
+     * @return <code>true</code> if loading was successful, otherwise
      *         returns <code>false</code>
      */
-    bool loadFromImage(const QString &fileName);
+    bool loadFromImage(const QImage &image, const QString &fileName);
 
     /**
      * Returns the file name of the external image that contains the tiles in
@@ -170,6 +185,8 @@ private:
     int mTileHeight;
     int mTileSpacing;
     int mMargin;
+    int mImageWidth;
+    int mImageHeight;
     int mColumnCount;
     QList<Tile*> mTiles;
 };

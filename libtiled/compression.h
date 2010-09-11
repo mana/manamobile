@@ -1,0 +1,64 @@
+/*
+ * compression.h
+ * Copyright 2008, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ *
+ * This file is part of Tiled.
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef COMPRESSION_H
+#define COMPRESSION_H
+
+#include "tiled_global.h"
+
+class QByteArray;
+
+namespace Tiled {
+
+enum CompressionMethod {
+    Gzip,
+    Zlib
+};
+
+/**
+ * Decompresses either zlib or gzip compressed memory. Returns a null
+ * QByteArray if decompressing failed.
+ *
+ * Needed because qUncompress does not support gzip compressed data. Also,
+ * this method does not need the expected size to be prepended to the data,
+ * but it can be passed as optional parameter.
+ *
+ * @param data         the compressed data
+ * @param expectedSize the expected size of the uncompressed data in bytes
+ * @return the uncompressed data, or a null QByteArray if decompressing failed
+ */
+QByteArray TILEDSHARED_EXPORT decompress(const QByteArray &data,
+                                         int expectedSize = 1024);
+
+/**
+ * Compresses the give data in either gzip or zlib format. Returns a null
+ * QByteArray if compression failed.
+ *
+ * Needed because qCompress does not support gzip compression.
+ *
+ * @param data the uncompressed data
+ * @return the compressed data, or a null QByteArray if compression failed
+ */
+QByteArray TILEDSHARED_EXPORT compress(const QByteArray &data,
+                                       CompressionMethod method = Gzip);
+
+} // namespace Tiled
+
+#endif // COMPRESSION_H

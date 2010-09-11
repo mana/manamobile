@@ -22,17 +22,15 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "tiled_global.h"
+#include "object.h"
 
-#include <QMap>
 #include <QPixmap>
-#include <QString>
 
 namespace Tiled {
 
 class Tileset;
 
-class TILEDSHARED_EXPORT Tile
+class TILEDSHARED_EXPORT Tile : public Object
 {
 public:
     Tile(const QPixmap &image, int id, Tileset *tileset):
@@ -71,22 +69,10 @@ public:
      */
     int height() const { return mImage.height(); }
 
-    /**
-     * Returns a pointer to the properties of this tile. This allows
-     * modification of the properties.
-     */
-    QMap<QString, QString> *properties() { return &mProperties; }
-
-    /**
-     * Returns a copy of the properties of this tile.
-     */
-    QMap<QString, QString> properties() const { return mProperties; }
-
 private:
     int mId;
     Tileset *mTileset;
     QPixmap mImage;
-    QMap<QString, QString> mProperties;
 };
 
 } // namespace Tiled

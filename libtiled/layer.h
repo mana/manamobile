@@ -22,9 +22,8 @@
 #ifndef LAYER_H
 #define LAYER_H
 
-#include "tiled_global.h"
+#include "object.h"
 
-#include <QMap>
 #include <QPixmap>
 #include <QRect>
 #include <QString>
@@ -39,18 +38,13 @@ class TileLayer;
 /**
  * A map layer.
  */
-class TILEDSHARED_EXPORT Layer
+class TILEDSHARED_EXPORT Layer : public Object
 {
 public:
     /**
      * Constructor.
      */
     Layer(const QString &name, int x, int y, int width, int height);
-
-    /**
-     * Destructor.
-     */
-    virtual ~Layer() {}
 
     /**
      * Returns the name of this layer.
@@ -141,17 +135,6 @@ public:
                         bool wrapX, bool wrapY) = 0;
 
     /**
-     * Returns a pointer to the properties of this layer. This allows
-     * modification of the properties.
-     */
-    QMap<QString, QString> *properties() { return &mProperties; }
-
-    /**
-     * Returns a copy of the properties of this layer.
-     */
-    QMap<QString, QString> properties() const { return mProperties; }
-
-    /**
      * Returns a duplicate of this layer. The caller is responsible for the
      * ownership of this newly created layer.
      */
@@ -173,7 +156,6 @@ protected:
     float mOpacity;
     bool mVisible;
     Map *mMap;
-    QMap<QString, QString> mProperties;
 };
 
 } // namespace Tiled

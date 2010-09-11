@@ -5,6 +5,9 @@ TARGET = tiled
 CONFIG += static
 DESTDIR = .lib
 
+macx:LIBS += -lz
+win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
+
 DEFINES += QT_NO_CAST_FROM_ASCII \
     QT_NO_CAST_TO_ASCII
 DEFINES += TILED_LIBRARY
@@ -15,7 +18,9 @@ SOURCES += layer.cpp \
     mapobject.cpp \
     objectgroup.cpp \
     tilelayer.cpp \
-    tileset.cpp
+    tileset.cpp \
+    mapreader.cpp \
+    properties.cpp
 HEADERS += layer.h \
     map.h \
     mapobject.h \
@@ -23,7 +28,10 @@ HEADERS += layer.h \
     tile.h \
     tiled_global.h \
     tilelayer.h \
-    tileset.h
+    tileset.h \
+    mapreader.h \
+    properties.h \
+    object.h
 mac {
     contains(QT_CONFIG, ppc):CONFIG += x86 \
         ppc
