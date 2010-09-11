@@ -6,4 +6,4 @@ win32-msvc* {
 
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
-LIBS += $$OUT_PWD/libtiled/.lib/$$LIB
+LIBS += $$OUT_PWD/../../src/libtiled/.lib/$$LIB

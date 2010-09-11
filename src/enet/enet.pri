@@ -6,4 +6,4 @@ win32-msvc* {
 }
 
 INCLUDEPATH += $$PWD/include
-LIBS += $$OUT_PWD/enet/.lib/$$LIB
+LIBS += $$OUT_PWD/../../src/enet/.lib/$$LIB

@@ -1,7 +1,8 @@
-include(common.pri)
+include(../common.pri)
 
 QT       += core gui network
 
+DESTDIR = ../../bin
 TARGET = manamobile
 
 unix:target.path = $${PREFIX}/bin
@@ -15,8 +16,8 @@ UI_DIR = .uic
 RCC_DIR = .rcc
 OBJECTS_DIR = .obj
 
-include(manalib/manalib.pri)
-include(libtiled/libtiled.pri)
+include(../manalib/manalib.pri)
+include(../libtiled/libtiled.pri)
 
 SOURCES += main.cpp\
         loginwidget.cpp \
