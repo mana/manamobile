@@ -3,4 +3,5 @@
 .uic/
 .lib/
 Makefile*
-manamobile
+bin/manamobile
+*.pro.user
