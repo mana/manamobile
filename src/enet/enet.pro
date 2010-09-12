@@ -33,4 +33,12 @@ HEADERS += include/enet/callbacks.h \
            include/enet/unix.h \
            include/enet/utility.h \
            include/enet/win32.h
-SOURCES += callbacks.c host.c list.c packet.c peer.c protocol.c unix.c win32.c
+SOURCES += callbacks.c \
+           compress.c \
+           host.c \
+           list.c \
+           packet.c \
+           peer.c \
+           protocol.c \
+           unix.c \
+           win32.c

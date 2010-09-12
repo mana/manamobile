@@ -36,6 +36,7 @@ ENetClient::ENetClient()
 {
     mHost = enet_host_create(NULL,  // create a client host
                              1,     // only allow 1 outgoing connection
+                             0,     // no channel limit
                              0, 0); // no bandwidth limits
 }
 
@@ -61,7 +62,7 @@ void ENetClient::connect(const char *hostName, unsigned short port)
     enet_address_set_host(&address, hostName);
     address.port = port;
 
-    mPeer = enet_host_connect(mHost, &address, 1);
+    mPeer = enet_host_connect(mHost, &address, 1, 0);
     if (!mPeer)
     {
         std::cerr << "(ENetClient::connect) Warning: No available peers for "

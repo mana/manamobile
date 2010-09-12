@@ -44,6 +44,9 @@
 		<Unit filename="callbacks.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="compress.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="host.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -57,9 +60,6 @@
 		<Unit filename="include\enet\utility.h" />
 		<Unit filename="include\enet\win32.h" />
 		<Unit filename="list.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="packet.c">
