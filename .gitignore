@@ -1,7 +1,9 @@
-.moc/
-.obj/
-.uic/
-.lib/
+# Build artifacts
+*.o
+ui_*.h
+moc_*.cpp
 Makefile*
-bin/manamobile
+manamobile
+
+# Qt Creator artifacts
 *.pro.user

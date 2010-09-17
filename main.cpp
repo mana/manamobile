@@ -18,33 +18,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
-
-#include <enet/enet.h>
-
 #include <QApplication>
 #include <QMessageBox>
 
+#include <enet/enet.h>
+
+#include "qmlapplicationviewer.h"
+
+
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
-    a.setApplicationName("Mana Mobile");
-    a.setOrganizationDomain("manasource.org");
+    app.setApplicationName("Mana Mobile");
+    app.setOrganizationDomain("manasource.org");
 
     if (enet_initialize() != 0)
     {
-        QMessageBox::critical(0, a.applicationName(),
+        QMessageBox::critical(0, app.applicationName(),
                               "An error occurred while initializing ENet.\n");
         return 1;
     }
     atexit(enet_deinitialize);
 
-    MainWindow w;
-#if defined(Q_WS_S60)
-    w.showMaximized();
+    QmlApplicationViewer viewer;
+    viewer.setOrientation(QmlApplicationViewer::Auto);
+    viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
+
+#ifdef Q_OS_SYMBIAN
+    viewer.showFullScreen();
+#elif defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6)
+    viewer.showMaximized();
 #else
-    w.show();
+    viewer.show();
 #endif
-    return a.exec();
+    return app.exec();
 }
