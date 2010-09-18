@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::Auto);
     viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
+    viewer.setWindowTitle(app.applicationName());
 
 #ifdef Q_OS_SYMBIAN
     viewer.showFullScreen();
