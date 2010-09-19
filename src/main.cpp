@@ -22,6 +22,10 @@
 #include <QMessageBox>
 #include <qdeclarative.h>
 
+#ifndef QT_NO_OPENGL
+#include <QGLWidget>
+#endif
+
 #include <enet/enet.h>
 
 #include "qmlapplicationviewer.h"
@@ -51,6 +55,9 @@ int main(int argc, char *argv[])
     registerTypes();
 
     QmlApplicationViewer viewer;
+#ifndef QT_NO_OPENGL
+    viewer.setViewport(new QGLWidget);
+#endif
     viewer.setOrientation(QmlApplicationViewer::Auto);
     viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
     viewer.setWindowTitle(app.applicationName());

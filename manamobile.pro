@@ -26,6 +26,7 @@ symbian:ICON = symbianicon.svg
 #DEFINES += QMLOBSERVER
 
 QT += network
+contains(QT_CONFIG, opengl): QT += opengl
 
 include(libs/enet/enet.pri)
 include(libs/libmana/libmana.pri)
