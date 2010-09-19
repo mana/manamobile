@@ -34,7 +34,7 @@ BorderImage {
     states: [
         State {
             name: "pressed"
-            when: mouseArea.containsMouse && mouseArea.pressed
+            when: enabled && mouseArea.containsMouse && mouseArea.pressed
             PropertyChanges {
                 target: button
                 source: "images/buttonpress.png"
@@ -47,7 +47,7 @@ BorderImage {
         },
         State {
             name: "hovered"
-            when: mouseArea.containsMouse && !mouseArea.pressed
+            when: enabled && mouseArea.containsMouse && !mouseArea.pressed
             PropertyChanges {
                 target: button
                 source: "images/buttonhi.png"
