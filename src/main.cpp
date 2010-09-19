@@ -20,11 +20,18 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <qdeclarative.h>
 
 #include <enet/enet.h>
 
 #include "qmlapplicationviewer.h"
 
+#include "loginmanager.h"
+
+static void registerTypes()
+{
+    qmlRegisterType<LoginManager>("Mana", 1, 0, "LoginManager");
+}
 
 int main(int argc, char *argv[])
 {
@@ -40,6 +47,8 @@ int main(int argc, char *argv[])
         return 1;
     }
     atexit(enet_deinitialize);
+
+    registerTypes();
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::Auto);

@@ -27,8 +27,6 @@ symbian:ICON = symbianicon.svg
 
 QT += network
 
-SOURCES += main.cpp
-
 include(libs/enet/enet.pri)
 include(libs/libmana/libmana.pri)
 include(libs/libtiled/libtiled.pri)

@@ -34,8 +34,8 @@ public:
         : lm(loginManager)
     {}
 
-    void connected() { emit lm->connected(); }
-    void disconnected() { emit lm->disconnected(); }
+    void connected() { emit lm->connected(); emit lm->isConnectedChanged(); }
+    void disconnected() { emit lm->disconnected(); emit lm->isConnectedChanged(); }
 
     void loginSucceeded() { emit lm->loginSucceeded(); }
     void loginFailed(int error) { lm->onLoginFailed(error); }
@@ -126,6 +126,7 @@ void LoginManager::onLoginFailed(int error)
 
     qDebug() << Q_FUNC_INFO << error << mError;
 
+    emit errorChanged();
     emit loginFailed();
 }
 
@@ -154,5 +155,6 @@ void LoginManager::onChooseCharacterFailed(int error)
 
     qDebug() << Q_FUNC_INFO << error << mError;
 
+    emit errorChanged();
     emit chooseCharacterFailed();
 }

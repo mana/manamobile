@@ -104,5 +104,5 @@ void ChooseCharacterWidget::chooseCharacter(const QModelIndex &index)
 void ChooseCharacterWidget::onChooseCharacterFailed()
 {
     QMessageBox::critical(0, QCoreApplication::applicationName(),
-                          mLoginManager->errorMessage());
+                          mLoginManager->error());
 }

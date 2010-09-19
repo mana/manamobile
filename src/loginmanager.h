@@ -32,29 +32,42 @@ class LoginManager : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool connected READ isConnected NOTIFY isConnectedChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+
 public:
     explicit LoginManager(QObject *parent = 0);
     ~LoginManager();
 
+    Q_INVOKABLE void connectToLoginServer(const QString &host,
+                                          unsigned short port)
+    {
+        connectToLoginServer(Mana::ServerAddress(host.toStdString(), port));
+    }
+
     void connectToLoginServer(const Mana::ServerAddress &server);
-    void disconnectFromLoginServer();
+    Q_INVOKABLE void disconnectFromLoginServer();
+
     bool isConnected() const;
 
-    void login(const QString &username, const QString &password);
+    Q_INVOKABLE void login(const QString &username, const QString &password);
 
     Mana::ManaClient *manaClient() const { return mClient; }
 
     const QList<Mana::CharacterInfo> &characters() const
     { return mCharacters; }
 
-    QString errorMessage() const { return mError; }
+    QString error() const { return mError; }
 
 signals:
     void connected();
     void disconnected();
+    void isConnectedChanged();
 
     void loginSucceeded();
     void loginFailed();
+
+    void errorChanged();
 
     void charactersChanged();
 

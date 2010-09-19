@@ -40,6 +40,15 @@ public:
     std::string host;
     unsigned short port;
 
+    ServerAddress()
+        : port(0)
+    {}
+
+    ServerAddress(const std::string &host, unsigned short port)
+        : host(host)
+        , port(port)
+    {}
+
     bool equals(const ServerAddress &other) const
     {
         return host == other.host

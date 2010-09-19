@@ -78,7 +78,7 @@ void LoginWidget::login()
 
 void LoginWidget::loginFailed()
 {
-    mUi->errorLabel->setText(mLoginManager->errorMessage());
+    mUi->errorLabel->setText(mLoginManager->error());
     mUi->buttonLogin->setEnabled(true);
 }
 

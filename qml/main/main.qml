@@ -1,10 +1,42 @@
 import Qt 4.7
+import Mana 1.0
 
 Rectangle {
     id: window
     color: "#fffcf2"
     width: 800
     height: 480
+
+    state: "login"
+
+    property bool connecting: false
+    property bool loggingIn: false
+    property bool loggedIn: false
+    property string errorMessage: ""
+
+    Component.onCompleted: {
+        connecting = true
+        loginManager.connectToLoginServer("dev.themanaworld.org", 9601)
+    }
+
+    LoginManager {
+        id: loginManager
+
+        onLoginSucceeded: {
+            print("Logged in!")
+            loggedIn = true
+            loggingIn = false
+            state = "chooseCharacter"
+        }
+        onLoginFailed: {
+            errorMessage = loginManager.error
+            loggingIn = false
+        }
+        onConnectedChanged: {
+            if (connected)
+                window.connecting = false
+        }
+    }
 
     Image {
         x: -width * 0.1
@@ -15,38 +47,61 @@ Rectangle {
         opacity: 0.5
     }
 
-    Column {
-        id: column
-        anchors.verticalCenter: parent.verticalCenter
-        x: parent.width * 0.5
-        spacing: 10
-
-        Text {
-            text: qsTr("Username:")
-        }
-        LineEdit {
-            id: nameEdit
-            width: window.width * 0.3
-            focus: true
-        }
-
-        Text {
-            text: qsTr("Password:")
-        }
-        LineEdit {
-            id: passwordEdit
-            width: nameEdit.width
-            echoMode: TextInput.Password
-        }
+    ProgressIndicator {
+        anchors.right: window.right
+        anchors.bottom: window.bottom
+        anchors.margins: 10
+        running: connecting || loggingIn
     }
 
-    Button {
-        text: "Login"
-        anchors.top: column.bottom
-        anchors.topMargin: 20
-        anchors.right: column.right
-        onClicked: {
-            print("Login clicked!")
-        }
+    LoginPage {
+        id: loginPage
+        width: parent.width
+        height: parent.height
     }
+    CharacterPage {
+        id: characterPage
+        width: parent.width
+        height: parent.height
+        opacity: 0
+        x: width / 4
+    }
+
+    states: [
+        State {
+            name: "login"
+        },
+        State {
+            name: "chooseCharacter"
+            PropertyChanges {
+                target: loginPage
+                x: -loginPage.width / 4
+                opacity: 0
+            }
+            PropertyChanges {
+                target: characterPage
+                x: 0
+                opacity: 1
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            SequentialAnimation {
+                NumberAnimation {
+                    target: loginPage
+                    properties: "x,opacity"
+                    duration: 500
+                    easing.type: Easing.InQuad
+                }
+                NumberAnimation {
+                    target: characterPage
+                    properties: "x,opacity"
+                    duration: 500
+                    easing.type: Easing.OutQuad
+                }
+            }
+        }
+    ]
 }

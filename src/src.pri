@@ -1,4 +1,5 @@
-SOURCES += $$PWD/loginwidget.cpp \
+SOURCES += $$PWD/main.cpp \
+    $$PWD/loginwidget.cpp \
     $$PWD/serversettingsdialog.cpp \
     $$PWD/loginmanager.cpp \
     $$PWD/mainwindow.cpp \
