@@ -1,4 +1,4 @@
-// checksum 0xd58 version 65542
+// checksum 0x39ee version 0x10007
 #ifndef QMLAPPLICATIONVIEWER_H
 #define QMLAPPLICATIONVIEWER_H
 
@@ -19,7 +19,7 @@ public:
     void setMainQmlFile(const QString &file);
     void addImportPath(const QString &path);
     void setOrientation(Orientation orientation);
-    void setLoadDummyData(bool loadDummyData);
+    void show();
 
 private:
     class QmlApplicationViewerPrivate *m_d;

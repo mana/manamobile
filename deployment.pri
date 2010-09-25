@@ -1,4 +1,4 @@
-# checksum 0x347a version 65542
+# checksum 0x347a version 0x10007
 # This file should not be edited.
 # Following versions of Qt Creator might offer new version.
 

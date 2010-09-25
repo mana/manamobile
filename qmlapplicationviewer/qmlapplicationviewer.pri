@@ -1,4 +1,4 @@
-# checksum 0xc49f version 65542
+# checksum 0x2686 version 0x10007
 # This file should not be edited.
 # Following versions of Qt Creator might offer new version.
 
@@ -9,14 +9,23 @@ HEADERS += $$PWD/qmlapplicationviewer.h
 INCLUDEPATH += $$PWD
 
 contains(DEFINES, QMLOBSERVER) {
+    DEFINES *= QMLJSDEBUGGER
+}
+contains(DEFINES, QMLJSDEBUGGER) {
     CONFIG(debug, debug|release) {
-        isEmpty(QMLOBSERVER_PATH) {
-            warning(QMLOBSERVER_PATH was not set. QMLOBSERVER not activated.)
-            DEFINES -= QMLOBSERVER
+        isEmpty(QMLJSDEBUGGER_PATH) {
+            warning()
+            warning(Debugging QML requires the qmljsdebugger library that ships with Qt Creator.)
+            warning(Please specify its location on the qmake command line, e.g.)
+            warning(  qmake -r QMLJSDEBUGGER_PATH=$CREATORDIR/share/qtcreator/qmljsdebugger)
+            warning()
+
+            error(QMLJSDEBUGGER defined, but no QMLJSDEBUGGER_PATH set on command line. Aborting.)
+            DEFINES -= QMLJSDEBUGGER
         } else {
-            include($$QMLOBSERVER_PATH/qmljsdebugger-lib.pri)
+            include($$QMLJSDEBUGGER_PATH/qmljsdebugger-lib.pri)
         }
     } else {
-        DEFINES -= QMLOBSERVER
+        DEFINES -= QMLJSDEBUGGER
     }
 }

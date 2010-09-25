@@ -62,12 +62,6 @@ int main(int argc, char *argv[])
     viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
     viewer.setWindowTitle(app.applicationName());
 
-#ifdef Q_OS_SYMBIAN
-    viewer.showFullScreen();
-#elif defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6)
-    viewer.showMaximized();
-#else
     viewer.show();
-#endif
     return app.exec();
 }

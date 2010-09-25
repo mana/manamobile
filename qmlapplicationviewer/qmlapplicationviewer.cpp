@@ -1,4 +1,4 @@
-// checksum 0x308d version 65542
+// checksum 0xdf1f version 0x10007
 #include "qmlapplicationviewer.h"
 
 #include <QtCore/QCoreApplication>
@@ -8,6 +8,9 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeContext>
 
+#if defined(QMLJSDEBUGGER)
+#include <jsdebuggeragent.h>
+#endif
 #if defined(QMLOBSERVER)
 #include <qdeclarativeviewobserver.h>
 #endif
@@ -51,8 +54,11 @@ QmlApplicationViewer::QmlApplicationViewer(QWidget *parent) :
 {
     connect(engine(), SIGNAL(quit()), SLOT(close()));
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
+#ifdef QMLJSDEBUGGER
+    new QmlJSDebugger::JSDebuggerAgent(engine());
+#endif
 #ifdef QMLOBSERVER
-    new QmlObserver::QDeclarativeViewObserver(this, parent);
+    new QmlJSDebugger::QDeclarativeViewObserver(this, parent);
 #endif
 }
 
@@ -109,23 +115,13 @@ void QmlApplicationViewer::setOrientation(Orientation orientation)
 #endif // Q_OS_SYMBIAN
 }
 
-void QmlApplicationViewer::setLoadDummyData(bool loadDummyData)
+void QmlApplicationViewer::show()
 {
-    if (loadDummyData) {
-        const QFileInfo mainQmlFileInfo(m_d->mainQmlFile);
-        const QDir dir(mainQmlFileInfo.absolutePath() + QLatin1String("/dummydata"),
-                 QLatin1String("*.qml"));
-        foreach (const QFileInfo &qmlFile, dir.entryInfoList()) {
-            QFile f(qmlFile.absoluteFilePath());
-            if (f.open(QIODevice::ReadOnly)) {
-                QDeclarativeComponent comp(engine());
-                comp.setData(f.readAll(), QUrl());
-                QObject *dummyData = comp.create();
-                if (dummyData) {
-                    rootContext()->setContextProperty(qmlFile.baseName(), dummyData);
-                    dummyData->setParent(this);
-                }
-            }
-        }
-    }
+#ifdef Q_OS_SYMBIAN
+    showFullScreen();
+#elif defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6)
+    showMaximized();
+#else
+    QDeclarativeView::show();
+#endif
 }
