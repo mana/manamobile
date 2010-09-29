@@ -1,7 +1,7 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-macx:LIBS += -lz
+!win32:LIBS += -lz
 win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
 
 SOURCES += $$PWD/layer.cpp \
