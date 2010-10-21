@@ -48,24 +48,21 @@ static void logZlibError(int error)
 
 QByteArray Tiled::decompress(const QByteArray &data, int expectedSize)
 {
-    int bufferSize = expectedSize;
-    int ret;
+    QByteArray out(expectedSize, Qt::Uninitialized);
     z_stream strm;
-    char *out = (char *) malloc(bufferSize);
 
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
     strm.next_in = (Bytef *) data.data();
     strm.avail_in = data.length();
-    strm.next_out = (Bytef *) out;
-    strm.avail_out = bufferSize;
+    strm.next_out = (Bytef *) out.data();
+    strm.avail_out = out.size();
 
-    ret = inflateInit2(&strm, 15 + 32);
+    int ret = inflateInit2(&strm, 15 + 32);
 
     if (ret != Z_OK) {
         logZlibError(ret);
-        free(out);
         return QByteArray();
     }
 
@@ -80,45 +77,34 @@ QByteArray Tiled::decompress(const QByteArray &data, int expectedSize)
             case Z_MEM_ERROR:
                 inflateEnd(&strm);
                 logZlibError(ret);
-                free(out);
                 return QByteArray();
         }
 
         if (ret != Z_STREAM_END) {
-            out = (char *) realloc(out, bufferSize * 2);
+            int oldSize = out.size();
+            out.resize(out.size() * 2);
 
-            if (!out) {
-                inflateEnd(&strm);
-                logZlibError(Z_MEM_ERROR);
-                free(out);
-                return QByteArray();
-            }
-
-            strm.next_out = (Bytef *)(out + bufferSize);
-            strm.avail_out = bufferSize;
-            bufferSize *= 2;
+            strm.next_out = (Bytef *)(out.data() + oldSize);
+            strm.avail_out = oldSize;
         }
     }
     while (ret != Z_STREAM_END);
 
     if (strm.avail_in != 0) {
         logZlibError(Z_DATA_ERROR);
-        free(out);
         return QByteArray();
     }
 
-    const int outLength = bufferSize - strm.avail_out;
+    const int outLength = out.size() - strm.avail_out;
     inflateEnd(&strm);
 
-    QByteArray outByteArray(out, outLength);
-    free(out);
-    return outByteArray;
+    out.resize(outLength);
+    return out;
 }
 
 QByteArray Tiled::compress(const QByteArray &data, CompressionMethod method)
 {
-    int bufferSize = 1024;
-    char *out = (char *) malloc(bufferSize);
+    QByteArray out(1024, Qt::Uninitialized);
     int err;
     z_stream strm;
     strm.zalloc = Z_NULL;
@@ -126,8 +112,8 @@ QByteArray Tiled::compress(const QByteArray &data, CompressionMethod method)
     strm.opaque = Z_NULL;
     strm.next_in = (Bytef *) data.data();
     strm.avail_in = data.length();
-    strm.next_out = (Bytef *) out;
-    strm.avail_out = bufferSize;
+    strm.next_out = (Bytef *) out.data();
+    strm.avail_out = out.size();
 
     const int windowBits = (method == Gzip) ? 15 + 16 : 15;
 
@@ -144,10 +130,11 @@ QByteArray Tiled::compress(const QByteArray &data, CompressionMethod method)
 
         if (err == Z_OK) {
             // More output space needed
-            out = (char *) realloc(out, bufferSize * 2);
-            strm.next_out = (Bytef *)(out + bufferSize);
-            strm.avail_out = bufferSize;
-            bufferSize *= 2;
+            int oldSize = out.size();
+            out.resize(out.size() * 2);
+
+            strm.next_out = (Bytef *)(out.data() + oldSize);
+            strm.avail_out = oldSize;
         }
     } while (err == Z_OK);
 
@@ -157,10 +144,9 @@ QByteArray Tiled::compress(const QByteArray &data, CompressionMethod method)
         return QByteArray();
     }
 
-    const int outLength = bufferSize - strm.avail_out;
+    const int outLength = out.size() - strm.avail_out;
     deflateEnd(&strm);
 
-    QByteArray outByteArray(out, outLength);
-    free(out);
-    return outByteArray;
+    out.resize(outLength);
+    return out;
 }
