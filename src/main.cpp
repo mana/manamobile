@@ -30,11 +30,15 @@
 
 #include "qmlapplicationviewer.h"
 
+#include "characterlistmodel.h"
 #include "loginmanager.h"
 
 static void registerTypes()
 {
     qmlRegisterType<LoginManager>("Mana", 1, 0, "LoginManager");
+    qmlRegisterUncreatableType<CharacterListModel>(
+                "Mana", 1, 0, "CharacterListModel",
+                QLatin1String("Use LoginManager.characterListModel"));
 }
 
 int main(int argc, char *argv[])

@@ -20,6 +20,8 @@
 
 #include "loginmanager.h"
 
+#include "characterlistmodel.h"
+
 #include <mana/accounthandlerinterface.h>
 #include <mana/protocol.h>
 
@@ -43,6 +45,7 @@ public:
     void characterInfoReceived(const Mana::CharacterInfo &info)
     {
         lm->mCharacters.append(info);
+        lm->mCharacterListModel->setCharacters(lm->mCharacters);
         emit lm->charactersChanged();
     }
 
@@ -62,6 +65,7 @@ LoginManager::LoginManager(QObject *parent)
     , mClient(new Mana::ManaClient)
     , mAccountHandler(new AccountHandler(this))
     , mNetworkTrafficTimer(0)
+    , mCharacterListModel(new CharacterListModel(this))
 {
     mClient->setAccountHandler(mAccountHandler);
 }

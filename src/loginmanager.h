@@ -27,6 +27,7 @@
 #include <QObject>
 
 class AccountHandler;
+class CharacterListModel;
 
 class LoginManager : public QObject
 {
@@ -34,6 +35,8 @@ class LoginManager : public QObject
 
     Q_PROPERTY(bool connected READ isConnected NOTIFY isConnectedChanged)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+    Q_PROPERTY(CharacterListModel *characterListModel READ characterListModel
+               CONSTANT)
 
 public:
     explicit LoginManager(QObject *parent = 0);
@@ -56,6 +59,9 @@ public:
 
     const QList<Mana::CharacterInfo> &characters() const
     { return mCharacters; }
+
+    CharacterListModel *characterListModel() const
+    { return mCharacterListModel; }
 
     QString error() const { return mError; }
 
@@ -91,6 +97,7 @@ private:
 
     QString mUpdateHost;
     QList<Mana::CharacterInfo> mCharacters;
+    CharacterListModel *mCharacterListModel;
 };
 
 #endif // LOGINMANAGER_H
