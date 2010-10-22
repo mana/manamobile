@@ -21,6 +21,7 @@
 #include "loginmanager.h"
 
 #include "characterlistmodel.h"
+#include "resourcemanager.h"
 
 #include <mana/accounthandlerinterface.h>
 #include <mana/protocol.h>
@@ -39,7 +40,12 @@ public:
     void connected() { emit lm->connected(); emit lm->isConnectedChanged(); }
     void disconnected() { emit lm->disconnected(); emit lm->isConnectedChanged(); }
 
-    void loginSucceeded() { emit lm->loginSucceeded(); }
+    void loginSucceeded() {
+        const QString dataUrl = QString::fromStdString(lm->mClient->dataUrl());
+        lm->mResourceManager->setDataUrl(dataUrl);
+        emit lm->loginSucceeded();
+    }
+
     void loginFailed(int error) { lm->onLoginFailed(error); }
 
     void characterInfoReceived(const Mana::CharacterInfo &info)
@@ -64,6 +70,7 @@ LoginManager::LoginManager(QObject *parent)
     : QObject(parent)
     , mClient(new Mana::ManaClient)
     , mAccountHandler(new AccountHandler(this))
+    , mResourceManager(new ResourceManager(this))
     , mNetworkTrafficTimer(0)
     , mCharacterListModel(new CharacterListModel(this))
 {

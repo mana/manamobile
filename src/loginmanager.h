@@ -28,6 +28,7 @@
 
 class AccountHandler;
 class CharacterListModel;
+class ResourceManager;
 
 class LoginManager : public QObject
 {
@@ -93,6 +94,7 @@ private:
     QString mError;
     Mana::ManaClient *mClient;
     AccountHandler *mAccountHandler;
+    ResourceManager *mResourceManager;
     int mNetworkTrafficTimer;
 
     QString mUpdateHost;
