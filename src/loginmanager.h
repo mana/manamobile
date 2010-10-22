@@ -28,7 +28,6 @@
 
 class AccountHandler;
 class CharacterListModel;
-class ResourceManager;
 
 class LoginManager : public QObject
 {
@@ -40,26 +39,18 @@ class LoginManager : public QObject
                CONSTANT)
 
 public:
-    explicit LoginManager(QObject *parent = 0);
+    explicit LoginManager(Mana::ManaClient *client, QObject *parent = 0);
     ~LoginManager();
 
     Q_INVOKABLE void connectToLoginServer(const QString &host,
-                                          unsigned short port)
-    {
-        connectToLoginServer(Mana::ServerAddress(host.toStdString(), port));
-    }
+                                          unsigned short port);
 
-    void connectToLoginServer(const Mana::ServerAddress &server);
     Q_INVOKABLE void disconnectFromLoginServer();
 
     bool isConnected() const;
 
     Q_INVOKABLE void login(const QString &username, const QString &password);
-
-    Mana::ManaClient *manaClient() const { return mClient; }
-
-    const QList<Mana::CharacterInfo> &characters() const
-    { return mCharacters; }
+    Q_INVOKABLE void chooseCharacter(int index);
 
     CharacterListModel *characterListModel() const
     { return mCharacterListModel; }
@@ -94,10 +85,8 @@ private:
     QString mError;
     Mana::ManaClient *mClient;
     AccountHandler *mAccountHandler;
-    ResourceManager *mResourceManager;
     int mNetworkTrafficTimer;
 
-    QString mUpdateHost;
     QList<Mana::CharacterInfo> mCharacters;
     CharacterListModel *mCharacterListModel;
 };

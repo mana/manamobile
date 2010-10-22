@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QDeclarativeContext>
 #include <qdeclarative.h>
 
 #ifndef QT_NO_OPENGL
@@ -32,13 +33,15 @@
 
 #include "characterlistmodel.h"
 #include "loginmanager.h"
+#include "root.h"
 
 static void registerTypes()
 {
-    qmlRegisterType<LoginManager>("Mana", 1, 0, "LoginManager");
+    qmlRegisterUncreatableType<LoginManager>("Mana", 1, 0, "LoginManager",
+                                             "Use global loginManager");
     qmlRegisterUncreatableType<CharacterListModel>(
                 "Mana", 1, 0, "CharacterListModel",
-                QLatin1String("Use LoginManager.characterListModel"));
+                "Use loginManager.characterListModel");
 }
 
 int main(int argc, char *argv[])
@@ -47,6 +50,7 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("Mana Mobile");
     app.setOrganizationDomain("manasource.org");
+    app.setApplicationVersion("0.1");
 
     if (enet_initialize() != 0)
     {
@@ -63,9 +67,13 @@ int main(int argc, char *argv[])
     viewer.setViewport(new QGLWidget);
 #endif
     viewer.setOrientation(QmlApplicationViewer::Auto);
-    viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
     viewer.setWindowTitle(app.applicationName());
 
+    Root *root = new Root(&viewer);
+    viewer.rootContext()->setContextObject(root);
+
+    viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
     viewer.show();
+
     return app.exec();
 }

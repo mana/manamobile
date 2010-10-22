@@ -20,6 +20,11 @@ Item {
         delegate: Text {
             text: model.name + " (money: " + model.money + ", level: "
                   + model.level + ")";
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: loginManager.chooseCharacter(model.index)
+            }
         }
 
         Rectangle {

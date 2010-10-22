@@ -19,8 +19,8 @@ Rectangle {
         loginManager.connectToLoginServer("dev.themanaworld.org", 9601)
     }
 
-    LoginManager {
-        id: loginManager
+    Connections {
+        target: loginManager;
 
         onLoginSucceeded: {
             print("Logged in!")
@@ -33,7 +33,7 @@ Rectangle {
             loggingIn = false
         }
         onConnectedChanged: {
-            if (connected)
+            if (loginManager.connected)
                 window.connecting = false
         }
     }

@@ -22,6 +22,8 @@
 
 #include "characterlistmodel.h"
 #include "resourcemanager.h"
+#include "root.h"
+#include "safeassert.h"
 
 #include <mana/accounthandlerinterface.h>
 #include <mana/protocol.h>
@@ -41,8 +43,10 @@ public:
     void disconnected() { emit lm->disconnected(); emit lm->isConnectedChanged(); }
 
     void loginSucceeded() {
+        // Communicate the data url to the resource manager
         const QString dataUrl = QString::fromStdString(lm->mClient->dataUrl());
-        lm->mResourceManager->setDataUrl(dataUrl);
+        Root::instance()->resourceManager()->setDataUrl(dataUrl);
+
         emit lm->loginSucceeded();
     }
 
@@ -66,11 +70,10 @@ private:
 };
 
 
-LoginManager::LoginManager(QObject *parent)
+LoginManager::LoginManager(Mana::ManaClient *client, QObject *parent)
     : QObject(parent)
-    , mClient(new Mana::ManaClient)
+    , mClient(client)
     , mAccountHandler(new AccountHandler(this))
-    , mResourceManager(new ResourceManager(this))
     , mNetworkTrafficTimer(0)
     , mCharacterListModel(new CharacterListModel(this))
 {
@@ -79,14 +82,15 @@ LoginManager::LoginManager(QObject *parent)
 
 LoginManager::~LoginManager()
 {
-    delete mClient;
     delete mAccountHandler;
 }
 
-void LoginManager::connectToLoginServer(const Mana::ServerAddress &server)
+void LoginManager::connectToLoginServer(const QString &host,
+                                        unsigned short port)
 {
-    qDebug() << Q_FUNC_INFO << server.host.c_str() << server.port;
-    mClient->connectToAccountServer(server);
+    qDebug() << Q_FUNC_INFO << host << port;
+    mClient->connectToAccountServer(Mana::ServerAddress(host.toStdString(),
+                                                        port));
 
     if (!mNetworkTrafficTimer)
         mNetworkTrafficTimer = startTimer(100);
@@ -106,6 +110,14 @@ void LoginManager::login(const QString &username, const QString &password)
 {
     qDebug() << Q_FUNC_INFO << username;
     mClient->login(username.toStdString(), password.toStdString());
+}
+
+void LoginManager::chooseCharacter(int index)
+{
+    SAFE_ASSERT(index > 0 || index < mCharacters.size(), return);
+
+    qDebug() << Q_FUNC_INFO << index;
+    mClient->chooseCharacter(mCharacters.at(index));
 }
 
 void LoginManager::timerEvent(QTimerEvent *event)
