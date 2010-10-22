@@ -34,6 +34,5 @@ include(libs/libtiled/libtiled.pri)
 include(src/src.pri)
 
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
-include(deployment.pri)
 
 qtcAddDeployment()

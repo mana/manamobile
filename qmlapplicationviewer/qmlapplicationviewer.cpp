@@ -1,4 +1,4 @@
-// checksum 0xdf1f version 0x10007
+// checksum 0x4534 version 0x10009
 #include "qmlapplicationviewer.h"
 
 #include <QtCore/QCoreApplication>
@@ -8,10 +8,10 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeContext>
 
-#if defined(QMLJSDEBUGGER)
+#if defined(QMLJSDEBUGGER) && !defined(NO_JSDEBUGGER)
 #include <jsdebuggeragent.h>
 #endif
-#if defined(QMLOBSERVER)
+#if defined(QMLJSDEBUGGER) && !defined(NO_QMLOBSERVER)
 #include <qdeclarativeviewobserver.h>
 #endif
 
@@ -54,10 +54,10 @@ QmlApplicationViewer::QmlApplicationViewer(QWidget *parent) :
 {
     connect(engine(), SIGNAL(quit()), SLOT(close()));
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
-#ifdef QMLJSDEBUGGER
+#if defined(QMLJSDEBUGGER) && !defined(NO_JSDEBUGGER)
     new QmlJSDebugger::JSDebuggerAgent(engine());
 #endif
-#ifdef QMLOBSERVER
+#if defined(QMLJSDEBUGGER) && !defined(NO_QMLOBSERVER)
     new QmlJSDebugger::QDeclarativeViewObserver(this, parent);
 #endif
 }
