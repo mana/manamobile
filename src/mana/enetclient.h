@@ -94,7 +94,7 @@ public:
     /**
      * Send and receive network packets.
      */
-    void service();
+    Q_INVOKABLE void service();
 
 signals:
     void connected();

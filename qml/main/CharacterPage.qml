@@ -33,25 +33,4 @@ Item {
             border.color: "black";
         }
     }
-
-    Connections {
-        target: accountClient;
-        onChooseCharacterSucceeded: {
-            // Connect to chat and game servers
-            chatClient.connect(accountClient.chatServerHost,
-                               accountClient.chatServerPort);
-            gameClient.connect(accountClient.gameServerHost,
-                               accountClient.gameServerPort);
-        }
-    }
-
-    // Send in the token when connections have been established
-    Connections {
-        target: chatClient;
-        onConnected: chatClient.sendToken(accountClient.token);
-    }
-    Connections {
-        target: gameClient;
-        onConnected: gameClient.sendToken(accountClient.token);
-    }
 }

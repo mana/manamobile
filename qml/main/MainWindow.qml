@@ -4,8 +4,6 @@ import Mana 1.0
 Rectangle {
     id: window
     color: "#fffcf2"
-    width: 800
-    height: 480
 
     state: "login"
 
@@ -27,7 +25,6 @@ Rectangle {
             loggedIn = true
             loggingIn = false
             state = "chooseCharacter"
-            resourceManager.dataUrl = accountClient.dataUrl;
         }
         onLoginFailed: {
             window.errorMessage = errorMessage;

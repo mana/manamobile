@@ -37,7 +37,6 @@
 #include "mana/gameclient.h"
 
 #include "resourcemanager.h"
-#include "root.h"
 
 static void registerTypes()
 {
@@ -46,16 +45,13 @@ static void registerTypes()
 //    qmlRegisterUncreatableType<Mana::ENetClient>(
 //                "Mana", 1, 0, "ENetClient", genericError);
 
-    qmlRegisterUncreatableType<Mana::AccountClient>(
-                "Mana", 1, 0, "AccountClient", "Use global accountClient");
-    qmlRegisterUncreatableType<Mana::ChatClient>(
-                "Mana", 1, 0, "ChatClient", "Use global chatClient");
-    qmlRegisterUncreatableType<Mana::GameClient>(
-                "Mana", 1, 0, "GameClient", "Use global gameClient");
+    qmlRegisterType<Mana::AccountClient>("Mana", 1, 0, "AccountClient");
+    qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
+    qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
 
     qmlRegisterUncreatableType<Mana::CharacterListModel>(
                 "Mana", 1, 0, "CharacterListModel",
-                "Use accountClient.characterListModel");
+                "Use AccountClient.characterListModel");
 
     qmlRegisterUncreatableType<ResourceManager>(
                 "Mana", 1, 0, "ResourceManager", "Use global resourceManager");
@@ -86,10 +82,10 @@ int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::Auto);
     viewer.setWindowTitle(app.applicationName());
 
-    Root *root = new Root(&viewer);
-    viewer.rootContext()->setContextObject(root);
+    ResourceManager *resourceManager = new ResourceManager(&viewer);
+    viewer.rootContext()->setContextProperty("resourceManager", resourceManager);
 
-    viewer.setMainQmlFile(QLatin1String("qml/main/main.qml"));
+    viewer.setMainQmlFile(QLatin1String("qml/main/Root.qml"));
     viewer.show();
 
     return app.exec();

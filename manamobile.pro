@@ -40,7 +40,6 @@ include(src/enet/enet.pri)
 SOURCES += src/main.cpp \
     src/resourcemanager.cpp \
     src/mana/characterlistmodel.cpp \
-    src/root.cpp \
     src/tiled/compression.cpp \
     src/tiled/isometricrenderer.cpp \
     src/tiled/layer.cpp \
@@ -64,7 +63,6 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/resourcemanager.h \
     src/mana/characterlistmodel.h \
-    src/root.h \
     src/safeassert.h \
     src/tiled/compression.h \
     src/tiled/isometricrenderer.h \
