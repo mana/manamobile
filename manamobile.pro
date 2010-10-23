@@ -38,11 +38,9 @@ else:LIBS += -lz
 include(src/enet/enet.pri)
 
 SOURCES += src/main.cpp \
-    src/accounthandler.cpp \
     src/resourcemanager.cpp \
-    src/characterlistmodel.cpp \
+    src/mana/characterlistmodel.cpp \
     src/root.cpp \
-    src/gamehandler.cpp \
     src/tiled/compression.cpp \
     src/tiled/isometricrenderer.cpp \
     src/tiled/layer.cpp \
@@ -64,12 +62,10 @@ SOURCES += src/main.cpp \
     src/mana/sha256.cpp
 
 HEADERS += \
-    src/accounthandler.h \
     src/resourcemanager.h \
-    src/characterlistmodel.h \
+    src/mana/characterlistmodel.h \
     src/root.h \
     src/safeassert.h \
-    src/gamehandler.h \
     src/tiled/compression.h \
     src/tiled/isometricrenderer.h \
     src/tiled/layer.h \

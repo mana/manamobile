@@ -16,14 +16,14 @@ Item {
         height: window.height * 0.3;
         anchors.top: title.bottom;
         anchors.topMargin: 10;
-        model: accountHandler.characterListModel;
+        model: accountClient.characterListModel;
         delegate: Text {
             text: model.name + " (money: " + model.money + ", level: "
                   + model.level + ")";
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: accountHandler.chooseCharacter(model.index)
+                onClicked: accountClient.chooseCharacter(model.index)
             }
         }
 

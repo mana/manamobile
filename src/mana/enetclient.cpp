@@ -152,7 +152,6 @@ void ENetClient::service()
 
 void ENetClient::setState(State state)
 {
-    qDebug() << Q_FUNC_INFO << state;
     if (mState == state)
         return;
 
@@ -162,7 +161,6 @@ void ENetClient::setState(State state)
 
 void ENetClient::startConnecting(const QHostInfo &hostInfo)
 {
-    qDebug() << Q_FUNC_INFO;
     if (mState != HostLookup)
         return;
 

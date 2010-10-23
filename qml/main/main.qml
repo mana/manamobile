@@ -20,21 +20,21 @@ Rectangle {
     }
 
     Connections {
-        target: accountHandler;
+        target: accountClient;
 
         onLoginSucceeded: {
             print("Logged in!")
             loggedIn = true
             loggingIn = false
             state = "chooseCharacter"
+            resourceManager.dataUrl = accountClient.dataUrl;
         }
         onLoginFailed: {
-            errorMessage = accountHandler.error
+            window.errorMessage = errorMessage;
             loggingIn = false
         }
-        onConnectedChanged: {
-            if (accountHandler.connected)
-                window.connecting = false
+        onConnected: {
+            window.connecting = false;
         }
     }
 

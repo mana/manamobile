@@ -29,8 +29,6 @@ class ChatClient;
 class GameClient;
 }
 
-class GameHandler;
-class AccountHandler;
 class ResourceManager;
 
 /**
@@ -46,7 +44,7 @@ class Root : public QObject
     Q_PROPERTY(Mana::AccountClient *accountClient READ accountClient CONSTANT)
     Q_PROPERTY(Mana::ChatClient *chatClient READ chatClient CONSTANT)
     Q_PROPERTY(Mana::GameClient *gameClient READ gameClient CONSTANT)
-    Q_PROPERTY(AccountHandler *accountHandler READ accountHandler CONSTANT)
+    Q_PROPERTY(ResourceManager *resourceManager READ resourceManager CONSTANT)
 
 public:
     explicit Root(QObject *parent = 0);
@@ -58,8 +56,6 @@ public:
     Mana::ChatClient *chatClient() const { return mChatClient; }
     Mana::GameClient *gameClient() const { return mGameClient; }
 
-    AccountHandler *accountHandler() const { return mAccountHandler; }
-    GameHandler *gameHandler() const { return mGameHandler; }
     ResourceManager *resourceManager() const { return mResourceManager; }
 
 protected:
@@ -72,8 +68,6 @@ private:
     Mana::ChatClient *mChatClient;
     Mana::GameClient *mGameClient;
 
-    AccountHandler *mAccountHandler;
-    GameHandler *mGameHandler;
     ResourceManager *mResourceManager;
 
     static Root *mInstance;

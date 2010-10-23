@@ -25,6 +25,8 @@
 
 namespace Mana {
 
+class CharacterListModel;
+
 class CharacterInfo
 {
 public:
@@ -48,13 +50,10 @@ class AccountClient : public ENetClient
     Q_PROPERTY(quint16 chatServerPort READ chatServerPort NOTIFY chatServerPortChanged)
     Q_PROPERTY(QString gameServerHost READ gameServerHost NOTIFY gameServerHostChanged)
     Q_PROPERTY(quint16 gameServerPort READ gameServerPort NOTIFY gameServerPortChanged)
+    Q_PROPERTY(Mana::CharacterListModel *characterListModel READ characterListModel CONSTANT)
 
 public:
-    AccountClient(QObject *parent = 0)
-        : ENetClient(parent)
-        , mGameServerPort(0)
-        , mChatServerPort(0)
-    {}
+    AccountClient(QObject *parent = 0);
 
     QString updateHost() const { return mUpdateHost; }
     QString dataUrl() const { return mDataUrl; }
@@ -64,17 +63,20 @@ public:
     QString chatServerHost() const { return mChatServerHost; }
     quint16 chatServerPort() const { return mChatServerPort; }
 
+    CharacterListModel *characterListModel() const
+    { return mCharacterListModel; }
+
     Q_INVOKABLE void login(const QString &username, const QString &password);
-    void chooseCharacter(const CharacterInfo &character);
+    Q_INVOKABLE void chooseCharacter(int index);
 
 signals:
     void loginSucceeded();
-    void loginFailed(int error);
+    void loginFailed(int error, const QString &errorMessage);
 
     void characterInfoReceived(const Mana::CharacterInfo &info);
 
     void chooseCharacterSucceeded();
-    void chooseCharacterFailed(int error);
+    void chooseCharacterFailed(int error, const QString &errorMessage);
 
     void updateHostChanged();
     void dataUrlChanged();
@@ -92,6 +94,9 @@ private:
     void handleCharacterInfo(MessageIn &message);
     void handleCharacterSelectResponse(MessageIn &message);
 
+    static QString loginErrorMessage(int error);
+    static QString chooseCharacterErrorMessage(int error);
+
     QString mUpdateHost;
     QString mDataUrl;
     QString mToken;
@@ -99,6 +104,9 @@ private:
     QString mChatServerHost;
     quint16 mGameServerPort;
     quint16 mChatServerPort;
+    QList<Mana::CharacterInfo> mCharacters;
+
+    CharacterListModel *mCharacterListModel;
 };
 
 } // namespace Mana

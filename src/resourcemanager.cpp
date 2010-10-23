@@ -56,6 +56,15 @@ ResourceManager::ResourceManager(QObject *parent) :
     mInstance = this;
 }
 
+void ResourceManager::setDataUrl(const QString &url)
+{
+    if (mDataUrl == url)
+        return;
+
+    mDataUrl = url;
+    emit dataUrlChanged();
+}
+
 PendingResource *ResourceManager::requestFile(const QString &fileName)
 {
     qDebug() << Q_FUNC_INFO << fileName;

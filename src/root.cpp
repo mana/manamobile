@@ -20,13 +20,11 @@
 
 #include "root.h"
 
-#include "accounthandler.h"
-#include "gamehandler.h"
 #include "resourcemanager.h"
 
-#include <mana/accountclient.h>
-#include <mana/chatclient.h>
-#include <mana/gameclient.h>
+#include "mana/accountclient.h"
+#include "mana/chatclient.h"
+#include "mana/gameclient.h"
 
 #include <QTimerEvent>
 
@@ -37,8 +35,6 @@ Root::Root(QObject *parent)
     , mAccountClient(new Mana::AccountClient(this))
     , mChatClient(new Mana::ChatClient(this))
     , mGameClient(new Mana::GameClient(this))
-    , mAccountHandler(new AccountHandler(mAccountClient, this))
-    , mGameHandler(new GameHandler(mGameClient, this))
     , mResourceManager(new ResourceManager(this))
 {
     Q_ASSERT(!mInstance);

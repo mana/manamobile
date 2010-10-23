@@ -20,14 +20,24 @@
 
 #include "accountclient.h"
 
+#include "characterlistmodel.h"
 #include "messagein.h"
 #include "messageout.h"
 #include "protocol.h"
 #include "sha256.h"
 
+#include <safeassert.h>
+
 #include <iostream>
 
 namespace Mana {
+
+AccountClient::AccountClient(QObject *parent)
+    : ENetClient(parent)
+    , mGameServerPort(0)
+    , mChatServerPort(0)
+    , mCharacterListModel(new CharacterListModel(this))
+{}
 
 void AccountClient::login(const QString &username,
                           const QString &password)
@@ -44,8 +54,12 @@ void AccountClient::login(const QString &username,
     send(loginMessage);
 }
 
-void AccountClient::chooseCharacter(const CharacterInfo &character)
+void AccountClient::chooseCharacter(int index)
 {
+    SAFE_ASSERT(index >= 0 && index < mCharacters.size(), return);
+
+    const CharacterInfo &character = mCharacters.at(index);
+
     MessageOut m(PAMSG_CHAR_SELECT);
     m.writeInt8(character.slot);
     send(m);
@@ -93,7 +107,7 @@ void AccountClient::handleLoginResponse(MessageIn &message)
 
         emit loginSucceeded();
     } else {
-        emit loginFailed(error);
+        emit loginFailed(error, loginErrorMessage(error));
     }
 }
 
@@ -114,6 +128,9 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     {
         message.readInt8(); // attribute
     }
+
+    mCharacters.append(info);
+    mCharacterListModel->setCharacters(mCharacters);
 
     emit characterInfoReceived(info);
 }
@@ -142,7 +159,38 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
 
         emit chooseCharacterSucceeded();
     } else {
-        emit chooseCharacterFailed(error);
+        emit chooseCharacterFailed(error, chooseCharacterErrorMessage(error));
+    }
+}
+
+QString AccountClient::loginErrorMessage(int error)
+{
+    switch (error) {
+    case Mana::ERRMSG_FAILURE:
+    default:
+        return tr("Unknown error");
+    case Mana::ERRMSG_INVALID_ARGUMENT:
+        return tr("Wrong user name or password");
+    case Mana::LOGIN_INVALID_TIME:
+        return tr("Tried to login too fast");
+    case Mana::LOGIN_INVALID_VERSION:
+        return tr("Client version too old");
+    case Mana::LOGIN_BANNED:
+        return tr("Account is banned");
+    }
+}
+
+QString AccountClient::chooseCharacterErrorMessage(int error)
+{
+    switch (error) {
+    default:
+        return tr("Unknown error");
+    case Mana::ERRMSG_NO_LOGIN:
+        return tr("You don't seem to be logged in, please try again");
+    case Mana::ERRMSG_INVALID_ARGUMENT:
+        return tr("No such character");
+    case Mana::ERRMSG_FAILURE:
+        return tr("No game server found for the map the character is on");
     }
 }
 

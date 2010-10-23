@@ -18,34 +18,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gamehandler.h"
+#ifndef CHARACTERLISTMODEL_H
+#define CHARACTERLISTMODEL_H
 
-#include "resourcemanager.h"
+#include "accountclient.h"
 
-#include <QDebug>
+#include <QAbstractListModel>
 
-GameHandler::GameHandler(Mana::GameClient *gameGlient, QObject *parent)
-    : QObject(parent)
-    , mGameClient(gameGlient)
+namespace Mana {
+
+class CharacterListModel : public QAbstractListModel
 {
-    connect(mGameClient, SIGNAL(mapChanged(QString,int,int)),
-            this, SLOT(changeMap(QString,int,int)));
-}
+    Q_OBJECT
 
-GameHandler::~GameHandler()
-{
-}
+public:
+    enum CharacterRoles {
+        Name = Qt::DisplayRole,
+        Level = Qt::UserRole,
+        Money
+    };
 
-void GameHandler::changeMap(const QString &name, int x, int y)
-{
-    qDebug() << "Arrived at" << name << x << y;
+    explicit CharacterListModel(QObject *parent = 0);
 
-    QString fileName = QLatin1String("maps/");
-    fileName += name;
+    int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
 
-    const QLatin1String mapExtension(".tmx");
-    if (!fileName.endsWith(mapExtension))
-        fileName += mapExtension;
+    void setCharacters(const QList<CharacterInfo> &characters);
 
-    ResourceManager::instance()->requestFile(fileName);
-}
+private:
+    QList<CharacterInfo> mCharacters;
+};
+
+} // namespace Mana
+
+#endif // CHARACTERLISTMODEL_H

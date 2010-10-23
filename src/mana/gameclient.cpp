@@ -20,10 +20,9 @@
 
 #include "gameclient.h"
 
-#include <mana/protocol.h>
-
 #include "messagein.h"
 #include "messageout.h"
+#include "protocol.h"
 
 #include <iostream>
 
@@ -65,8 +64,16 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     const int x = message.readInt16();
     const int y = message.readInt16();
 
-    mCurrentMap = name;
-    emit mapChanged(name, x, y);
+    qDebug() << "Arrived at" << name << x << y;
+
+    mCurrentMap = QLatin1String("maps/");
+    mCurrentMap += name;
+
+    const QLatin1String mapExtension(".tmx");
+    if (!mCurrentMap.endsWith(mapExtension))
+        mCurrentMap += mapExtension;
+
+    emit mapChanged(mCurrentMap, x, y);
 }
 
 } // namespace Mana

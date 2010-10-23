@@ -55,15 +55,20 @@ class ResourceManager : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString dataUrl READ dataUrl WRITE setDataUrl NOTIFY dataUrlChanged)
+
 public:
     explicit ResourceManager(QObject *parent = 0);
 
     static ResourceManager *instance() { return mInstance; }
 
-    void setDataUrl(const QString &url)
-    { mDataUrl = url; }
+    QString dataUrl() const { return mDataUrl; }
+    void setDataUrl(const QString &url);
 
     PendingResource *requestFile(const QString &fileName);
+
+signals:
+    void dataUrlChanged();
 
 private:
     QString mDataUrl;

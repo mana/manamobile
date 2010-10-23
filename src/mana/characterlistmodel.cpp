@@ -20,6 +20,8 @@
 
 #include "characterlistmodel.h"
 
+using namespace Mana;
+
 CharacterListModel::CharacterListModel(QObject *parent) :
     QAbstractListModel(parent)
 {

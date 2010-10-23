@@ -29,14 +29,14 @@
 
 #include <enet/enet.h>
 
-#include <mana/accountclient.h>
-#include <mana/chatclient.h>
-#include <mana/gameclient.h>
-
 #include "qmlapplicationviewer.h"
 
-#include "characterlistmodel.h"
-#include "accounthandler.h"
+#include "mana/accountclient.h"
+#include "mana/characterlistmodel.h"
+#include "mana/chatclient.h"
+#include "mana/gameclient.h"
+
+#include "resourcemanager.h"
 #include "root.h"
 
 static void registerTypes()
@@ -53,11 +53,12 @@ static void registerTypes()
     qmlRegisterUncreatableType<Mana::GameClient>(
                 "Mana", 1, 0, "GameClient", "Use global gameClient");
 
-    qmlRegisterUncreatableType<AccountHandler>(
-                "Mana", 1, 0, "AccountHandler", "Use global accountHandler");
-    qmlRegisterUncreatableType<CharacterListModel>(
+    qmlRegisterUncreatableType<Mana::CharacterListModel>(
                 "Mana", 1, 0, "CharacterListModel",
-                "Use accountHandler.characterListModel");
+                "Use accountClient.characterListModel");
+
+    qmlRegisterUncreatableType<ResourceManager>(
+                "Mana", 1, 0, "ResourceManager", "Use global resourceManager");
 }
 
 int main(int argc, char *argv[])

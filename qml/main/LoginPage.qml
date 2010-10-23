@@ -1,4 +1,5 @@
 import Qt 4.7
+import Mana 1.0
 
 Item {
     Text {
@@ -62,7 +63,7 @@ Item {
         anchors.topMargin: 20
         anchors.right: column.right
 
-        enabled: accountHandler.connected && !loggingIn && !loggedIn
+        enabled: accountClient.state == AccountClient.Connected && !loggingIn && !loggedIn
 
         onClicked: {
             print("Logging in as " + nameEdit.text + "...")
