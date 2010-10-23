@@ -255,7 +255,7 @@ static void SHA256Final(SHA256Context *ctx, unsigned char *digest)
         UNPACK32(ctx->h[i], &digest[i << 2]);
 }
 
-static std::string SHA256Hash(const char *src, int len)
+static QByteArray SHA256Hash(const char *src, int len)
 {
     // Generate the hash
     unsigned char bytehash[SHA256_DIGEST_SIZE];
@@ -265,7 +265,7 @@ static std::string SHA256Hash(const char *src, int len)
     SHA256Final(&ctx, bytehash);
     // Convert it to hex
     const char* hxc = "0123456789abcdef";
-    std::string hash = "";
+    QByteArray hash = "";
     for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
     {
         hash += hxc[bytehash[i] / 16];
@@ -274,7 +274,7 @@ static std::string SHA256Hash(const char *src, int len)
     return hash;
 }
 
-std::string sha256(const std::string &string)
+QByteArray sha256(const QByteArray &data)
 {
-    return SHA256Hash(string.c_str(), string.length());
+    return SHA256Hash(data.constData(), data.length());
 }

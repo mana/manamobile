@@ -41,7 +41,7 @@ QVariant CharacterListModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Name:
-        return QString::fromUtf8(character.name.c_str());
+        return character.name;
     case Level:
         return character.level;
     case Money:

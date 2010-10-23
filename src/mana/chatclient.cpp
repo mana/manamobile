@@ -20,8 +20,6 @@
 
 #include "chatclient.h"
 
-#include <mana/chathandlerinterface.h>
-#include <mana/manaclient.h>
 #include <mana/protocol.h>
 
 #include "messagein.h"
@@ -30,29 +28,18 @@
 #include <iostream>
 
 namespace Mana {
-namespace Internal {
 
-ChatClient::ChatClient(ManaClient *manaClient)
-    : mChatHandler(0)
-    , mManaClient(manaClient)
+ChatClient::ChatClient(QObject *parent)
+    : ENetClient(parent)
 {
 }
 
-void ChatClient::connected()
+void ChatClient::sendToken(const QString &token)
 {
-    std::cout << "(ChatClient::connected)" << std::endl;
-    mChatHandler->connected();
-
     // Send in the security token
     MessageOut msg(PCMSG_CONNECT);
-    msg.writeString(mManaClient->token(), 32);
+    msg.writeString(token, 32);
     send(msg);
-}
-
-void ChatClient::disconnected()
-{
-    std::cout << "(ChatClient::disconnected)" << std::endl;
-    mChatHandler->disconnected();
 }
 
 void ChatClient::messageReceived(MessageIn &message)
@@ -69,5 +56,4 @@ void ChatClient::messageReceived(MessageIn &message)
     }
 }
 
-} // namespace Internal
 } // namespace Mana

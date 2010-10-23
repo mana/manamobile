@@ -24,11 +24,13 @@
 #include <QObject>
 
 namespace Mana {
-class ManaClient;
+class AccountClient;
+class ChatClient;
+class GameClient;
 }
 
 class GameHandler;
-class LoginManager;
+class AccountHandler;
 class ResourceManager;
 
 /**
@@ -41,7 +43,10 @@ class Root : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(LoginManager *loginManager READ loginManager CONSTANT)
+    Q_PROPERTY(Mana::AccountClient *accountClient READ accountClient CONSTANT)
+    Q_PROPERTY(Mana::ChatClient *chatClient READ chatClient CONSTANT)
+    Q_PROPERTY(Mana::GameClient *gameClient READ gameClient CONSTANT)
+    Q_PROPERTY(AccountHandler *accountHandler READ accountHandler CONSTANT)
 
 public:
     explicit Root(QObject *parent = 0);
@@ -49,14 +54,25 @@ public:
 
     static Root *instance() { return mInstance; }
 
-    LoginManager *loginManager() const { return mLoginManager; }
+    Mana::AccountClient *accountClient() const { return mAccountClient; }
+    Mana::ChatClient *chatClient() const { return mChatClient; }
+    Mana::GameClient *gameClient() const { return mGameClient; }
+
+    AccountHandler *accountHandler() const { return mAccountHandler; }
     GameHandler *gameHandler() const { return mGameHandler; }
     ResourceManager *resourceManager() const { return mResourceManager; }
 
-private:
-    Mana::ManaClient *mClient;
+protected:
+    void timerEvent(QTimerEvent *);
 
-    LoginManager *mLoginManager;
+private:
+    int mNetworkTrafficTimer;
+
+    Mana::AccountClient *mAccountClient;
+    Mana::ChatClient *mChatClient;
+    Mana::GameClient *mGameClient;
+
+    AccountHandler *mAccountHandler;
     GameHandler *mGameHandler;
     ResourceManager *mResourceManager;
 

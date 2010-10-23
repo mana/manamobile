@@ -21,7 +21,7 @@
 #ifndef CHARACTERLISTMODEL_H
 #define CHARACTERLISTMODEL_H
 
-#include <mana/accounthandlerinterface.h>
+#include <mana/accountclient.h>
 
 #include <QAbstractListModel>
 

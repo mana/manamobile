@@ -16,11 +16,11 @@ Rectangle {
 
     Component.onCompleted: {
         connecting = true
-        loginManager.connectToLoginServer("dev.themanaworld.org", 9601)
+        accountClient.connect("dev.themanaworld.org", 9601)
     }
 
     Connections {
-        target: loginManager;
+        target: accountHandler;
 
         onLoginSucceeded: {
             print("Logged in!")
@@ -29,11 +29,11 @@ Rectangle {
             state = "chooseCharacter"
         }
         onLoginFailed: {
-            errorMessage = loginManager.error
+            errorMessage = accountHandler.error
             loggingIn = false
         }
         onConnectedChanged: {
-            if (loginManager.connected)
+            if (accountHandler.connected)
                 window.connecting = false
         }
     }

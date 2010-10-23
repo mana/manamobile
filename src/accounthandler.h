@@ -18,18 +18,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOGINMANAGER_H
-#define LOGINMANAGER_H
+#ifndef ACCOUNTHANDLER_H
+#define ACCOUNTHANDLER_H
 
-#include <mana/accounthandlerinterface.h>
-#include <mana/manaclient.h>
+#include <mana/accountclient.h>
 
 #include <QObject>
 
-class AccountHandler;
 class CharacterListModel;
 
-class LoginManager : public QObject
+class AccountHandler : public QObject
 {
     Q_OBJECT
 
@@ -39,17 +37,11 @@ class LoginManager : public QObject
                CONSTANT)
 
 public:
-    explicit LoginManager(Mana::ManaClient *client, QObject *parent = 0);
-    ~LoginManager();
-
-    Q_INVOKABLE void connectToLoginServer(const QString &host,
-                                          unsigned short port);
-
-    Q_INVOKABLE void disconnectFromLoginServer();
+    explicit AccountHandler(Mana::AccountClient *client, QObject *parent = 0);
+    ~AccountHandler();
 
     bool isConnected() const;
 
-    Q_INVOKABLE void login(const QString &username, const QString &password);
     Q_INVOKABLE void chooseCharacter(int index);
 
     CharacterListModel *characterListModel() const
@@ -72,23 +64,18 @@ signals:
     void chooseCharacterSucceeded();
     void chooseCharacterFailed();
 
-protected:
-    void timerEvent(QTimerEvent *);
+private slots:
+    void onLoginSucceeded();
+    void onLoginFailed(int error);
+    void onChooseCharacterFailed(int error);
+    void onCharacterInfoReceived(const Mana::CharacterInfo &info);
 
 private:
-    friend class AccountHandler;
-
-    void onLoginFailed(int error);
-    void onChooseCharacterSucceeded();
-    void onChooseCharacterFailed(int error);
-
     QString mError;
-    Mana::ManaClient *mClient;
-    AccountHandler *mAccountHandler;
-    int mNetworkTrafficTimer;
+    Mana::AccountClient *mAccountClient;
 
     QList<Mana::CharacterInfo> mCharacters;
     CharacterListModel *mCharacterListModel;
 };
 
-#endif // LOGINMANAGER_H
+#endif // ACCOUNTHANDLER_H

@@ -20,27 +20,46 @@
 
 #include "root.h"
 
+#include "accounthandler.h"
 #include "gamehandler.h"
-#include "loginmanager.h"
 #include "resourcemanager.h"
 
-#include <mana/manaclient.h>
+#include <mana/accountclient.h>
+#include <mana/chatclient.h>
+#include <mana/gameclient.h>
+
+#include <QTimerEvent>
 
 Root *Root::mInstance;
 
 Root::Root(QObject *parent)
     : QObject(parent)
-    , mClient(new Mana::ManaClient)
-    , mLoginManager(new LoginManager(mClient, this))
-    , mGameHandler(new GameHandler(mClient, this))
+    , mAccountClient(new Mana::AccountClient(this))
+    , mChatClient(new Mana::ChatClient(this))
+    , mGameClient(new Mana::GameClient(this))
+    , mAccountHandler(new AccountHandler(mAccountClient, this))
+    , mGameHandler(new GameHandler(mGameClient, this))
     , mResourceManager(new ResourceManager(this))
 {
     Q_ASSERT(!mInstance);
     mInstance = this;
+
+    mNetworkTrafficTimer = startTimer(100);
 }
 
 Root::~Root()
 {
-    delete mClient;
+    delete mAccountClient;
+    delete mChatClient;
+    delete mGameClient;
     mInstance = 0;
+}
+
+void Root::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == mNetworkTrafficTimer) {
+        mAccountClient->service();
+        mChatClient->service();
+        mGameClient->service();
+    }
 }

@@ -22,17 +22,79 @@ symbian:TARGET.UID3 = 0xE5aedbec
 
 symbian:ICON = symbianicon.svg
 
-# Define to enable the Qml Observer in debug mode
-#DEFINES += QMLOBSERVER
+# Define QMLJSDEBUGGER to allow debugging of QML
+# (This might significantly increase build time)
+# DEFINES += QMLJSDEBUGGER
 
 QT += network
 contains(QT_CONFIG, opengl): QT += opengl
 
-include(libs/enet/enet.pri)
-include(libs/libmana/libmana.pri)
-include(libs/libtiled/libtiled.pri)
-include(src/src.pri)
+INCLUDEPATH += src
 
+win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
+else:LIBS += -lz
+
+# The .cpp file which was generated for your project. Feel free to hack it.
+include(src/enet/enet.pri)
+
+SOURCES += src/main.cpp \
+    src/accounthandler.cpp \
+    src/resourcemanager.cpp \
+    src/characterlistmodel.cpp \
+    src/root.cpp \
+    src/gamehandler.cpp \
+    src/tiled/compression.cpp \
+    src/tiled/isometricrenderer.cpp \
+    src/tiled/layer.cpp \
+    src/tiled/map.cpp \
+    src/tiled/mapobject.cpp \
+    src/tiled/mapreader.cpp \
+    src/tiled/mapwriter.cpp \
+    src/tiled/objectgroup.cpp \
+    src/tiled/orthogonalrenderer.cpp \
+    src/tiled/properties.cpp \
+    src/tiled/tilelayer.cpp \
+    src/tiled/tileset.cpp \
+    src/mana/accountclient.cpp \
+    src/mana/chatclient.cpp \
+    src/mana/enetclient.cpp \
+    src/mana/gameclient.cpp \
+    src/mana/messagein.cpp \
+    src/mana/messageout.cpp \
+    src/mana/sha256.cpp
+
+HEADERS += \
+    src/accounthandler.h \
+    src/resourcemanager.h \
+    src/characterlistmodel.h \
+    src/root.h \
+    src/safeassert.h \
+    src/gamehandler.h \
+    src/tiled/compression.h \
+    src/tiled/isometricrenderer.h \
+    src/tiled/layer.h \
+    src/tiled/map.h \
+    src/tiled/mapobject.h \
+    src/tiled/mapreader.h \
+    src/tiled/maprenderer.h \
+    src/tiled/mapwriter.h \
+    src/tiled/object.h \
+    src/tiled/objectgroup.h \
+    src/tiled/orthogonalrenderer.h \
+    src/tiled/properties.h \
+    src/tiled/tile.h \
+    src/tiled/tiled_global.h \
+    src/tiled/tilelayer.h \
+    src/tiled/tileset.h \
+    src/mana/accountclient.h \
+    src/mana/chatclient.h \
+    src/mana/enetclient.h \
+    src/mana/gameclient.h \
+    src/mana/messagein.h \
+    src/mana/messageout.h \
+    src/mana/protocol.h \
+    src/mana/sha256.h
+
+# Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
-
 qtcAddDeployment()

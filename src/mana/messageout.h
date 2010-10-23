@@ -24,6 +24,9 @@
 
 #include <iosfwd>
 
+#include <QString>
+#include <QDebug>
+
 namespace Mana {
 
 /**
@@ -65,7 +68,9 @@ public:
      * Writes a string. If a fixed length is not given (-1), it is stored
      * as a short at the start of the string.
      */
-    void writeString(const std::string &string, int length = -1);
+    void writeString(const QByteArray &string, int length = -1);
+    void writeString(const QString &string, int length = -1)
+    { writeString(string.toUtf8(), length); }
 
     /**
      * Returns the content of the message.
@@ -91,8 +96,8 @@ private:
     /**
      * Streams message ID and length to the given output stream.
      */
-    friend std::ostream& operator <<(std::ostream &os,
-                                     const MessageOut &msg);
+    friend std::ostream& operator <<(std::ostream &os, const MessageOut &msg);
+    friend QDebug operator <<(QDebug debug, const MessageOut &msg);
 };
 
 } // namespace Mana

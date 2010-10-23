@@ -22,51 +22,30 @@
 
 #include "resourcemanager.h"
 
-#include <mana/gamehandlerinterface.h>
-#include <mana/chathandlerinterface.h>
-
 #include <QDebug>
 
-class GameHandlerImpl : public Mana::GameHandlerInterface
-{
-public:
-    void connected() {}
-    void disconnected() {}
-
-    void mapChanged(const std::string &name, int x, int y)
-    {
-        qDebug() << "Arrived at" << name.c_str() << x << y;
-
-        QString fileName = QLatin1String("maps/");
-        fileName += QString::fromStdString(name);
-
-        const QLatin1String mapExtension(".tmx");
-        if (!fileName.endsWith(mapExtension))
-            fileName += mapExtension;
-
-        ResourceManager::instance()->requestFile(fileName);
-    }
-};
-
-class ChatHandlerImpl : public Mana::ChatHandlerInterface
-{
-public:
-    void connected() {}
-    void disconnected() {}
-};
-
-
-GameHandler::GameHandler(Mana::ManaClient *client, QObject *parent)
+GameHandler::GameHandler(Mana::GameClient *gameGlient, QObject *parent)
     : QObject(parent)
-    , mGameHandler(new GameHandlerImpl)
-    , mChatHandler(new ChatHandlerImpl)
+    , mGameClient(gameGlient)
 {
-    client->setGameHandler(mGameHandler);
-    client->setChatHandler(mChatHandler);
+    connect(mGameClient, SIGNAL(mapChanged(QString,int,int)),
+            this, SLOT(changeMap(QString,int,int)));
 }
 
 GameHandler::~GameHandler()
 {
-    delete mGameHandler;
-    delete mChatHandler;
+}
+
+void GameHandler::changeMap(const QString &name, int x, int y)
+{
+    qDebug() << "Arrived at" << name << x << y;
+
+    QString fileName = QLatin1String("maps/");
+    fileName += name;
+
+    const QLatin1String mapExtension(".tmx");
+    if (!fileName.endsWith(mapExtension))
+        fileName += mapExtension;
+
+    ResourceManager::instance()->requestFile(fileName);
 }

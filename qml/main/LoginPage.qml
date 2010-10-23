@@ -62,13 +62,13 @@ Item {
         anchors.topMargin: 20
         anchors.right: column.right
 
-        enabled: loginManager.connected && !loggingIn && !loggedIn
+        enabled: accountHandler.connected && !loggingIn && !loggedIn
 
         onClicked: {
             print("Logging in as " + nameEdit.text + "...")
             loggingIn = true
             errorMessage = ""
-            loginManager.login(nameEdit.text, passwordEdit.text)
+            accountClient.login(nameEdit.text, passwordEdit.text)
         }
     }
 }

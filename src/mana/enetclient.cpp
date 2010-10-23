@@ -23,7 +23,9 @@
 #include "messagein.h"
 #include "messageout.h"
 
-#include <iostream>
+#include <QHostAddress>
+#include <QHostInfo>
+#include <QtEndian>
 
 enum {
     debug_enetclient = 0
@@ -31,8 +33,11 @@ enum {
 
 namespace Mana {
 
-ENetClient::ENetClient()
-    : mPeer(0)
+ENetClient::ENetClient(QObject *parent)
+    : QObject(parent)
+    , mPeer(0)
+    , mState(Disconnected)
+    , mPort(0)
 {
     mHost = enet_host_create(NULL,  // create a client host
                              1,     // only allow 1 outgoing connection
@@ -46,47 +51,48 @@ ENetClient::~ENetClient()
         enet_host_destroy(mHost);
 }
 
-bool ENetClient::isConnected() const
-{
-    return mPeer && mPeer->state == ENET_PEER_STATE_CONNECTED;
-}
-
-void ENetClient::connect(const char *hostName, unsigned short port)
+void ENetClient::connect(const QString &hostName, quint16 port)
 {
     // Force a quick disconnect if a server is already connected
-    if (mPeer)
+    if (mPeer) {
         enet_peer_disconnect_now(mPeer, 0);
-
-    ENetAddress address;
-    // TODO: Make the host resolve step asynchroneous
-    enet_address_set_host(&address, hostName);
-    address.port = port;
-
-    mPeer = enet_host_connect(mHost, &address, 1, 0);
-    if (!mPeer)
-    {
-        std::cerr << "(ENetClient::connect) Warning: No available peers for "
-                "initiating an ENet connection." << std::endl;
-        disconnected();
+        mPeer = 0;
     }
+
+    mPort = port;
+    qDebug() << Q_FUNC_INFO << hostName << mPort;
+
+    QHostAddress address;
+    if (address.setAddress(hostName)) {
+        // No need to lookup host
+        QHostInfo hostInfo;
+        hostInfo.setAddresses(QList<QHostAddress>() << address);
+        startConnecting(hostInfo);
+    }
+
+    setState(HostLookup);
+    QHostInfo::lookupHost(hostName, this, SLOT(startConnecting(QHostInfo)));
 }
 
 void ENetClient::disconnect()
 {
-    if (mPeer)
-        enet_peer_disconnect(mPeer, 0);
+    if (!mPeer)
+        return;
+
+    enet_peer_disconnect(mPeer, 0);
+    setState(Disconnecting);
     // TODO: enet_peer_reset if no ENET_EVENT_TYPE_DISCONNECT within 3 seconds
 }
 
 void ENetClient::send(const MessageOut &message, unsigned char channel)
 {
-    if (!isConnected()) {
-        std::cerr << "(ENetClient::send) Not connected!" << std::endl;
+    if (mState != Connected) {
+        qWarning() << "(ENetClient::send) Not connected!";
         return;
     }
 
     if (debug_enetclient)
-        std::cout << "(ENetClient::send) Sending " << message << std::endl;
+        qDebug() << "(ENetClient::send) Sending " << message;
 
     ENetPacket *packet;
     packet = enet_packet_create(message.data(),
@@ -108,19 +114,21 @@ void ENetClient::service()
         switch (event.type)
         {
         case ENET_EVENT_TYPE_CONNECT:
-            connected();
+            setState(Connected);
+            emit connected();
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT:
-            disconnected();
             mPeer = 0;
+            setState(Disconnected);
+            emit disconnected();
             break;
 
         case ENET_EVENT_TYPE_RECEIVE:
             if (event.packet->dataLength < 2)
             {
-                std::cerr << "(ENetClient::service) Warning: received a"
-                        "packet that was too short!" << std::endl;
+                qWarning() << "(ENetClient::service) Warning: received a"
+                        "packet that was too short!";
             }
             else
             {
@@ -128,8 +136,7 @@ void ENetClient::service()
                                   event.packet->dataLength);
 
                 if (debug_enetclient)
-                    std::cout << "(ENetClient::service) Received " << message
-                            << std::endl;
+                    qDebug() << "(ENetClient::service) Received " << message;
 
                 messageReceived(message);
             }
@@ -140,6 +147,47 @@ void ENetClient::service()
         case ENET_EVENT_TYPE_NONE:
             break; // Can never happen, but avoids compiler warning
         }
+    }
+}
+
+void ENetClient::setState(State state)
+{
+    qDebug() << Q_FUNC_INFO << state;
+    if (mState == state)
+        return;
+
+    mState = state;
+    emit stateChanged(mState);
+}
+
+void ENetClient::startConnecting(const QHostInfo &hostInfo)
+{
+    qDebug() << Q_FUNC_INFO;
+    if (mState != HostLookup)
+        return;
+
+    const QList<QHostAddress> addresses = hostInfo.addresses();
+    if (addresses.isEmpty()) {
+        // TODO: Have a host lookup error for this case
+        setState(Disconnected);
+        return;
+    }
+
+    // TODO: Support hosts with multiple IP addresses?
+    const QHostAddress &address = addresses.first();
+
+    ENetAddress enetAddress;
+    enetAddress.host = qToBigEndian(address.toIPv4Address());
+    enetAddress.port = mPort;
+
+    mPeer = enet_host_connect(mHost, &enetAddress, 1, 0);
+    if (!mPeer) {
+        qWarning() << "(ENetClient::connect) Warning: No available peers for "
+                    "initiating an ENet connection.";
+        setState(Disconnected);
+        emit disconnected();
+    } else {
+        setState(Connecting);
     }
 }
 

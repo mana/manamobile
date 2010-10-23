@@ -21,9 +21,11 @@
 #ifndef ENETCLIENT_H
 #define ENETCLIENT_H
 
-#include <string>
+#include <QObject>
 
 #include <enet/enet.h>
+
+class QHostInfo;
 
 namespace Mana {
 
@@ -35,12 +37,26 @@ class MessageOut;
  * A simple abstraction of an ENet based client.
  *
  * To create a functioning ENet based client, subclass this class and implement
- * the virtual connected(), disconnected() and messageReceived() methods.
+ * the virtual messageReceived() method.
  */
-class ENetClient
+class ENetClient : public QObject
 {
+    Q_OBJECT
+
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
+
+    Q_ENUMS(State)
+
 public:
-    ENetClient();
+    enum State {
+        Disconnected,
+        HostLookup,
+        Connecting,
+        Connected,
+        Disconnecting
+    };
+
+    ENetClient(QObject *parent = 0);
     ~ENetClient();
 
     /**
@@ -49,7 +65,9 @@ public:
      */
     bool isNull() const { return mHost == 0; }
 
-    bool isConnected() const;
+    State state() const { return mState; }
+
+    bool isConnected() const { return mState == Connected; }
 
     /**
      * Connect to the server at the given \a hostName and \a port.
@@ -58,14 +76,14 @@ public:
      * <code>connected()</code> will be called, and when there was a connection
      * error, <codE>disconnected()</code> will be called.
      */
-    void connect(const char *hostName, unsigned short port);
+    Q_INVOKABLE void connect(const QString &hostName, quint16 port);
 
     /**
      * Disconnect from the currently connected server.
      *
      * The disconnect is asynchroneous.
      */
-    void disconnect();
+    Q_INVOKABLE void disconnect();
 
     /**
      * Sends the given \a message to the server over the given \a channel
@@ -78,14 +96,25 @@ public:
      */
     void service();
 
+signals:
+    void connected();
+    void disconnected();
+
+    void stateChanged(ENetClient::State state);
+
 protected:
-    virtual void connected() = 0;
-    virtual void disconnected() = 0;
     virtual void messageReceived(MessageIn &message) = 0;
 
+private slots:
+    void startConnecting(const QHostInfo &hostInfo);
+
 private:
+    void setState(State state);
+
     ENetHost *mHost;
     ENetPeer *mPeer;
+    State mState;
+    quint16 mPort;
 };
 
 } // namespace Mana

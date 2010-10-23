@@ -24,6 +24,9 @@
 
 #include <iosfwd>
 
+#include <QString>
+#include <QDebug>
+
 namespace Mana {
 
 /**
@@ -56,7 +59,7 @@ public:
      * that the length of the string is stored in a short at the
      * start of the string.
      */
-    std::string readString(int length = -1);
+    QString readString(int length = -1);
 
     /**
      * Returns the length of unread data.
@@ -77,8 +80,8 @@ private:
     /**
      * Streams message ID and length to the given output stream.
      */
-    friend std::ostream &operator <<(std::ostream &os,
-                                     const MessageIn &msg);
+    friend std::ostream &operator <<(std::ostream &os, const MessageIn &msg);
+    friend QDebug operator <<(QDebug debug, const MessageIn &msg);
 };
 
 } // namespace Mana

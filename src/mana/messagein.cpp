@@ -26,6 +26,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 namespace Mana {
@@ -76,7 +77,7 @@ int MessageIn::readInt32()
     return value;
 }
 
-std::string MessageIn::readString(int length)
+QString MessageIn::readString(int length)
 {
     // Get string length
     if (length == -1)
@@ -86,14 +87,14 @@ std::string MessageIn::readString(int length)
     if (length < 0 || mPos + length > mLength)
     {
         mPos = mLength + 1;
-        return std::string();
+        return QString();
     }
 
     // Read the string
     const char *stringBeg = mData + mPos;
-    const char *stringEnd = (const char *)memchr(stringBeg, '\0', length);
-    std::string readString(stringBeg,
-            stringEnd ? stringEnd - stringBeg : length);
+    const char *stringEnd = (const char *) memchr(stringBeg, '\0', length);
+    const int stringLength = stringEnd ? stringEnd - stringBeg : length;
+    const QString readString = QString::fromUtf8(stringBeg, stringLength);
     mPos += length;
 
     return readString;
@@ -105,6 +106,13 @@ std::ostream &operator <<(std::ostream &os, const MessageIn &msg)
        << std::setfill('0') << msg.id()
        << std::dec << " (" << msg.length() << " B)";
     return os;
+}
+
+QDebug operator <<(QDebug debug, const MessageIn &msg)
+{
+    std::stringstream ss;
+    ss << msg;
+    return debug << ss.str().c_str();
 }
 
 } // namespace Mana

@@ -16,14 +16,14 @@ Item {
         height: window.height * 0.3;
         anchors.top: title.bottom;
         anchors.topMargin: 10;
-        model: loginManager.characterListModel;
+        model: accountHandler.characterListModel;
         delegate: Text {
             text: model.name + " (money: " + model.money + ", level: "
                   + model.level + ")";
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: loginManager.chooseCharacter(model.index)
+                onClicked: accountHandler.chooseCharacter(model.index)
             }
         }
 
@@ -32,5 +32,26 @@ Item {
             color: "transparent";
             border.color: "black";
         }
+    }
+
+    Connections {
+        target: accountClient;
+        onChooseCharacterSucceeded: {
+            // Connect to chat and game servers
+            chatClient.connect(accountClient.chatServerHost,
+                               accountClient.chatServerPort);
+            gameClient.connect(accountClient.gameServerHost,
+                               accountClient.gameServerPort);
+        }
+    }
+
+    // Send in the token when connections have been established
+    Connections {
+        target: chatClient;
+        onConnected: chatClient.sendToken(accountClient.token);
+    }
+    Connections {
+        target: gameClient;
+        onConnected: gameClient.sendToken(accountClient.token);
     }
 }

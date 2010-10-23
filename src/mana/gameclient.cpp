@@ -20,8 +20,6 @@
 
 #include "gameclient.h"
 
-#include <mana/gamehandlerinterface.h>
-#include <mana/manaclient.h>
 #include <mana/protocol.h>
 
 #include "messagein.h"
@@ -30,29 +28,18 @@
 #include <iostream>
 
 namespace Mana {
-namespace Internal {
 
-GameClient::GameClient(ManaClient *manaClient)
-    : mGameHandler(0)
-    , mManaClient(manaClient)
+GameClient::GameClient(QObject *parent)
+    : ENetClient(parent)
 {
 }
 
-void GameClient::connected()
+void GameClient::sendToken(const QString &token)
 {
-    std::cout << "(GameClient::connected)" << std::endl;
-    mGameHandler->connected();
-
     // Send in the security token
     MessageOut msg(PGMSG_CONNECT);
-    msg.writeString(mManaClient->token(), 32);
+    msg.writeString(token, 32);
     send(msg);
-}
-
-void GameClient::disconnected()
-{
-    std::cout << "(GameClient::disconnected)" << std::endl;
-    mGameHandler->disconnected();
 }
 
 void GameClient::messageReceived(MessageIn &message)
@@ -74,12 +61,12 @@ void GameClient::messageReceived(MessageIn &message)
 
 void GameClient::handlePlayerMapChanged(MessageIn &message)
 {
-    const std::string name = message.readString();
+    const QString name = message.readString();
     const int x = message.readInt16();
     const int y = message.readInt16();
 
-    mGameHandler->mapChanged(name, x, y);
+    mCurrentMap = name;
+    emit mapChanged(name, x, y);
 }
 
-} // namespace Internal
 } // namespace Mana

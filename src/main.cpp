@@ -29,19 +29,35 @@
 
 #include <enet/enet.h>
 
+#include <mana/accountclient.h>
+#include <mana/chatclient.h>
+#include <mana/gameclient.h>
+
 #include "qmlapplicationviewer.h"
 
 #include "characterlistmodel.h"
-#include "loginmanager.h"
+#include "accounthandler.h"
 #include "root.h"
 
 static void registerTypes()
 {
-    qmlRegisterUncreatableType<LoginManager>("Mana", 1, 0, "LoginManager",
-                                             "Use global loginManager");
+//    const char * const genericError = "Type can't be instanciated manually";
+
+//    qmlRegisterUncreatableType<Mana::ENetClient>(
+//                "Mana", 1, 0, "ENetClient", genericError);
+
+    qmlRegisterUncreatableType<Mana::AccountClient>(
+                "Mana", 1, 0, "AccountClient", "Use global accountClient");
+    qmlRegisterUncreatableType<Mana::ChatClient>(
+                "Mana", 1, 0, "ChatClient", "Use global chatClient");
+    qmlRegisterUncreatableType<Mana::GameClient>(
+                "Mana", 1, 0, "GameClient", "Use global gameClient");
+
+    qmlRegisterUncreatableType<AccountHandler>(
+                "Mana", 1, 0, "AccountHandler", "Use global accountHandler");
     qmlRegisterUncreatableType<CharacterListModel>(
                 "Mana", 1, 0, "CharacterListModel",
-                "Use loginManager.characterListModel");
+                "Use accountHandler.characterListModel");
 }
 
 int main(int argc, char *argv[])

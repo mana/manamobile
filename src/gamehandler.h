@@ -21,28 +21,25 @@
 #ifndef GAMEHANDLER_H
 #define GAMEHANDLER_H
 
-#include <mana/manaclient.h>
+#include <mana/gameclient.h>
 
 #include <QObject>
-
-class ChatHandlerImpl;
-class GameHandlerImpl;
 
 class GameHandler : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit GameHandler(Mana::ManaClient *client, QObject *parent = 0);
+    explicit GameHandler(Mana::GameClient *gameClient, QObject *parent = 0);
     ~GameHandler();
 
 signals:
 
-public slots:
+private slots:
+    void changeMap(const QString &name, int x, int y);
 
 private:
-    GameHandlerImpl *mGameHandler;
-    ChatHandlerImpl *mChatHandler;
+    Mana::GameClient *mGameClient;
 };
 
 #endif // GAMEHANDLER_H

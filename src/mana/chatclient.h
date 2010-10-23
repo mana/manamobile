@@ -18,42 +18,31 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAMECLIENT_H
-#define GAMECLIENT_H
+#ifndef CHATCLIENT_H
+#define CHATCLIENT_H
 
 #include "enetclient.h"
 
 namespace Mana {
 
-class GameHandlerInterface;
 class ManaClient;
 
-namespace Internal {
-
 /**
- * The game client allows interacting with the game server.
+ * The chat client allows interacting with the chat server.
  */
-class GameClient : public ENetClient
+class ChatClient : public ENetClient
 {
-public:
-    GameClient(ManaClient *manaClient);
+    Q_OBJECT
 
-    void setGameHandler(GameHandlerInterface *handler)
-    { mGameHandler = handler; }
+public:
+    ChatClient(QObject *parent = 0);
+
+    Q_INVOKABLE void sendToken(const QString &token);
 
 protected:
-    void connected();
-    void disconnected();
     void messageReceived(MessageIn &message);
-
-private:
-    void handlePlayerMapChanged(MessageIn &message);
-
-    GameHandlerInterface *mGameHandler;
-    ManaClient *mManaClient;
 };
 
-} // namespace Internal
 } // namespace Mana
 
-#endif // GAMECLIENT_H
+#endif // CHATCLIENT_H

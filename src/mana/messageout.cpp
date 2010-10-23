@@ -26,6 +26,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 /** Initial amount of bytes allocated for the messageout data buffer. */
@@ -111,7 +112,7 @@ void MessageOut::writeCoordinates(int x, int y)
     mPos += 3;
 }
 
-void MessageOut::writeString(const std::string &string, int length)
+void MessageOut::writeString(const QByteArray &string, int length)
 {
     int stringLength = string.length();
     if (length < 0)
@@ -128,7 +129,7 @@ void MessageOut::writeString(const std::string &string, int length)
     expand(mPos + length);
 
     // Write the actual string
-    memcpy(mData + mPos, string.c_str(), stringLength);
+    memcpy(mData + mPos, string.constData(), stringLength);
 
     if (length > stringLength)
     {
@@ -153,6 +154,13 @@ std::ostream &operator <<(std::ostream &os, const MessageOut &msg)
            << std::dec << " (" << msg.length() << " B)";
     }
     return os;
+}
+
+QDebug operator <<(QDebug debug, const MessageOut &msg)
+{
+    std::stringstream ss;
+    ss << msg;
+    return debug << ss.str().c_str();
 }
 
 } // namespace Mana

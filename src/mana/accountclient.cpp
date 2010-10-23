@@ -20,24 +20,35 @@
 
 #include "accountclient.h"
 
-#include <mana/accounthandlerinterface.h>
-#include <mana/protocol.h>
-
 #include "messagein.h"
+#include "messageout.h"
+#include "protocol.h"
+#include "sha256.h"
 
 #include <iostream>
 
 namespace Mana {
-namespace Internal {
 
-void AccountClient::connected()
+void AccountClient::login(const QString &username,
+                          const QString &password)
 {
-    mAccountHandler->connected();
+    QByteArray combination;
+    combination += username.toUtf8();
+    combination += password.toUtf8();
+    const QByteArray hash = sha256(combination);
+
+    MessageOut loginMessage(PAMSG_LOGIN);
+    loginMessage.writeInt32(0); // client version
+    loginMessage.writeString(username);
+    loginMessage.writeString(hash);
+    send(loginMessage);
 }
 
-void AccountClient::disconnected()
+void AccountClient::chooseCharacter(const CharacterInfo &character)
 {
-    mAccountHandler->disconnected();
+    MessageOut m(PAMSG_CHAR_SELECT);
+    m.writeInt8(character.slot);
+    send(m);
 }
 
 void AccountClient::messageReceived(MessageIn &message)
@@ -53,12 +64,12 @@ void AccountClient::messageReceived(MessageIn &message)
         handleCharacterSelectResponse(message);
         break;
     case XXMSG_INVALID:
-        std::cerr << "(AccountClient::messageReceived) Invalid received! "
-                "Did we send an invalid message?" << std::endl;
+        qWarning() << "(AccountClient::messageReceived) Invalid received! "
+                "Did we send an invalid message?";
         break;
     default:
-        std::cout << "(AccountClient::messageReceived) Unknown message "
-                << message << std::endl;
+        qDebug() << "(AccountClient::messageReceived) Unknown message "
+                << message;
         break;
     }
 }
@@ -69,16 +80,20 @@ void AccountClient::handleLoginResponse(MessageIn &message)
 
     if (error == ERRMSG_OK) {
         mUpdateHost = message.readString();
-        std::cout << "Update host: " << mUpdateHost << std::endl;
+        emit updateHostChanged();
+
+        qDebug() << "Update host: " << mUpdateHost;
 
         if (message.unreadLength() > 0) {
             mDataUrl = message.readString();
-            std::cout << "Data URL: " << mDataUrl << std::endl;
+            emit dataUrlChanged();
+
+            qDebug() << "Data URL: " << mDataUrl;
         }
 
-        mAccountHandler->loginSucceeded();
+        emit loginSucceeded();
     } else {
-        mAccountHandler->loginFailed(error);
+        emit loginFailed(error);
     }
 }
 
@@ -100,7 +115,7 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
         message.readInt8(); // attribute
     }
 
-    mAccountHandler->characterInfoReceived(info);
+    emit characterInfoReceived(info);
 }
 
 void AccountClient::handleCharacterSelectResponse(MessageIn &message)
@@ -114,16 +129,21 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
         mChatServerHost = message.readString();
         mChatServerPort = message.readInt16();
 
-        std::cout << "Game server: " << mGameServerHost.c_str() << ":"
-                << mGameServerPort << std::endl;
-        std::cout << "Chat server: " << mChatServerHost.c_str() << ":"
-                << mChatServerPort << std::endl;
+        emit tokenChanged();
+        emit gameServerHostChanged();
+        emit gameServerPortChanged();
+        emit chatServerHostChanged();
+        emit chatServerPortChanged();
 
-        mAccountHandler->chooseCharacterSucceeded();
+        qDebug() << "Game server: " << mGameServerHost << ":"
+                << mGameServerPort;
+        qDebug() << "Chat server: " << mChatServerHost << ":"
+                << mChatServerPort;
+
+        emit chooseCharacterSucceeded();
     } else {
-        mAccountHandler->chooseCharacterFailed(error);
+        emit chooseCharacterFailed(error);
     }
 }
 
-} // namespace Internal
 } // namespace Mana

@@ -1,6 +1,7 @@
 /*
  *  manalib
- *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  Copyright (C) 2007-2009  The Mana World Development Team
+ *  Copyright (C) 2009-2010  The Mana Developers
  *
  *  This file is part of manalib.
  *
@@ -18,18 +19,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CHATHANDLERINTERFACE_H
-#define CHATHANDLERINTERFACE_H
+#ifndef SHA256_H
+#define SHA256_H
 
-namespace Mana {
+#include <QByteArray>
 
-class ChatHandlerInterface
-{
-public:
-    virtual void connected() = 0;
-    virtual void disconnected() = 0;
-};
+/**
+ * Returns the SHA-256 hash for the given data.
+ *
+ * @param data the string to create the SHA-256 hash for
+ * @return the SHA-256 hash for the given data.
+ */
+QByteArray sha256(const QByteArray &data);
 
-} // namespace Mana
-
-#endif // CHATHANDLERINTERFACE_H
+#endif // SHA256_H
