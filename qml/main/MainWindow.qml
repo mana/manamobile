@@ -11,7 +11,6 @@ Rectangle {
     property bool loggingIn: false
     property bool loggedIn: false
     property bool characterChosen: false
-    property string errorMessage: ""
 
     Component.onCompleted: {
         connecting = true
@@ -28,7 +27,6 @@ Rectangle {
             state = "chooseCharacter"
         }
         onLoginFailed: {
-            window.errorMessage = errorMessage;
             loggingIn = false
         }
         onConnected: {

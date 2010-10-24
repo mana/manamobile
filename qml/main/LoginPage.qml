@@ -2,33 +2,11 @@ import Qt 4.7
 import Mana 1.0
 
 Item {
-    Text {
-        id: errorLabel
+    ErrorLabel {
+        id: errorLabel;
         anchors.bottom: column.top
         anchors.bottomMargin: 20
         anchors.left: column.left
-
-        text: errorMessage
-        color: "red"
-        font.bold: true
-
-        onTextChanged: {
-            scaleAnimation.running = true
-        }
-
-        ParallelAnimation {
-            id: scaleAnimation
-            NumberAnimation {
-                target: errorLabel;
-                property: "scale"; from: 2; to: 1;
-                easing.type: Easing.OutQuad
-            }
-            NumberAnimation {
-                target: errorLabel;
-                property: "opacity"; from: 0; to: 1;
-                easing.type: Easing.OutQuad
-            }
-        }
     }
 
     Column {
@@ -68,8 +46,15 @@ Item {
         onClicked: {
             print("Logging in as " + nameEdit.text + "...")
             loggingIn = true
-            errorMessage = ""
+            errorLabel.clear()
             accountClient.login(nameEdit.text, passwordEdit.text)
+        }
+    }
+
+    Connections {
+        target: accountClient;
+        onLoginFailed: {
+            errorLabel.showError(errorMessage);
         }
     }
 }
