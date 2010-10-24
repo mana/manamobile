@@ -10,6 +10,7 @@ Rectangle {
     property bool connecting: false
     property bool loggingIn: false
     property bool loggedIn: false
+    property bool characterChosen: false
     property string errorMessage: ""
 
     Component.onCompleted: {
@@ -49,6 +50,7 @@ Rectangle {
         anchors.bottom: window.bottom
         anchors.margins: 10
         running: connecting || loggingIn
+                 || (characterChosen && window.state != "game")
     }
 
     LoginPage {
@@ -58,6 +60,13 @@ Rectangle {
     }
     CharacterPage {
         id: characterPage
+        width: parent.width
+        height: parent.height
+        opacity: 0
+        x: width / 4
+    }
+    GamePage {
+        id: gamePage
         width: parent.width
         height: parent.height
         opacity: 0
@@ -80,6 +89,21 @@ Rectangle {
                 x: 0
                 opacity: 1
             }
+        },
+        State {
+            name: "game"
+            when: chatClient.authenticated && gameClient.authenticated
+            extend: "chooseCharacter"
+            PropertyChanges {
+                target: characterPage
+                x: -characterPage.width / 4
+                opacity: 0
+            }
+            PropertyChanges {
+                target: gamePage
+                x: 0
+                opacity: 1
+            }
         }
     ]
 
@@ -87,16 +111,9 @@ Rectangle {
         Transition {
             SequentialAnimation {
                 NumberAnimation {
-                    target: loginPage
                     properties: "x,opacity"
                     duration: 500
-                    easing.type: Easing.InQuad
-                }
-                NumberAnimation {
-                    target: characterPage
-                    properties: "x,opacity"
-                    duration: 500
-                    easing.type: Easing.OutQuad
+                    easing.type: Easing.InOutQuad
                 }
             }
         }

@@ -30,10 +30,11 @@ namespace Mana {
 
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
+    , mAuthenticated(false)
 {
 }
 
-void GameClient::sendToken(const QString &token)
+void GameClient::authenticate(const QString &token)
 {
     // Send in the security token
     MessageOut msg(PGMSG_CONNECT);
@@ -44,16 +45,38 @@ void GameClient::sendToken(const QString &token)
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
+    case GPMSG_CONNECT_RESPONSE:
+        handleAuthenticationResponse(message);
+        break;
     case GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
         break;
     case XXMSG_INVALID:
-        std::cerr << "(GameClient::messageReceived) Invalid received! "
-                "Did we send an invalid message?" << std::endl;
+        qWarning() << "(GameClient::messageReceived) Invalid received! "
+                      "Did we send an invalid message?";
         break;
     default:
-        std::cout << "(GameClient::messageReceived) Unknown message "
-                << message << std::endl;
+        qDebug() << "(GameClient::messageReceived) Unknown message "
+                  << message;
+        break;
+    }
+}
+
+void GameClient::handleAuthenticationResponse(MessageIn &message)
+{
+    switch (message.readInt8()) {
+    default:
+        emit authenticationFailed(tr("Unknown error"));
+        break;
+    case ERRMSG_SERVER_FULL:
+        emit authenticationFailed(tr("The server is full"));
+        disconnect();
+        break;
+    case ERRMSG_OK:
+        if (!mAuthenticated) {
+            mAuthenticated = true;
+            emit authenticatedChanged();
+        }
         break;
     }
 }

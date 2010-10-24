@@ -34,13 +34,27 @@ class ChatClient : public ENetClient
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
+
 public:
     ChatClient(QObject *parent = 0);
 
-    Q_INVOKABLE void sendToken(const QString &token);
+    bool authenticated() const { return mAuthenticated; }
+
+    Q_INVOKABLE void authenticate(const QString &token);
+
+signals:
+    void authenticationFailed(const QString &errorMessage);
+
+    void authenticatedChanged();
 
 protected:
     void messageReceived(MessageIn &message);
+
+private:
+    void handleAuthenticationResponse(MessageIn &message);
+
+    bool mAuthenticated;
 };
 
 } // namespace Mana

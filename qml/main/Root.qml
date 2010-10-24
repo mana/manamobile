@@ -9,7 +9,7 @@ Rectangle {
         id: accountClient
 
         onLoginSucceeded: {
-            resourceManager.dataUrl = accountClient.dataUrl;
+            resourceManager.dataUrl = dataUrl;
         }
         onChooseCharacterSucceeded: {
             // Connect to chat and game servers
@@ -19,11 +19,11 @@ Rectangle {
     }
     Mana.ChatClient {
         id: chatClient
-        onConnected: sendToken(accountClient.token);
+        onConnected: authenticate(accountClient.token);
     }
     Mana.GameClient {
         id: gameClient
-        onConnected: sendToken(accountClient.token);
+        onConnected: authenticate(accountClient.token);
     }
 
     Timer {

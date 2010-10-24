@@ -23,7 +23,13 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: accountClient.chooseCharacter(model.index)
+                onClicked:  {
+                    if (window.characterChosen)
+                        return;
+
+                    window.characterChosen = true;
+                    accountClient.chooseCharacter(model.index);
+                }
             }
         }
 
@@ -31,6 +37,13 @@ Item {
             anchors.fill: parent;
             color: "transparent";
             border.color: "black";
+        }
+    }
+
+    Connections {
+        target: accountClient;
+        onChooseCharacterFailed: {
+            window.characterChosen = false;
         }
     }
 }

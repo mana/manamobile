@@ -32,24 +32,31 @@ class GameClient : public ENetClient
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
 
 public:
     GameClient(QObject *parent = 0);
 
+    bool authenticated() const { return mAuthenticated; }
     QString currentMap() const { return mCurrentMap; }
 
-    Q_INVOKABLE void sendToken(const QString &token);
+    Q_INVOKABLE void authenticate(const QString &token);
 
 signals:
+    void authenticationFailed(const QString &errorMessage);
+
+    void authenticatedChanged();
     void mapChanged(const QString &name, int x, int y);
 
 protected:
     void messageReceived(MessageIn &message);
 
 private:
+    void handleAuthenticationResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
 
+    bool mAuthenticated;
     QString mCurrentMap;
 };
 
