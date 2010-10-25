@@ -91,7 +91,8 @@ HEADERS += \
     src/mana/protocol.h \
     src/mana/sha256.h \
     src/mapitem.h \
-    src/tilelayeritem.h
+    src/tilelayeritem.h \
+    src/durationlogger.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
