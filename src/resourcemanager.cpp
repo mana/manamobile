@@ -21,6 +21,7 @@
 #include "resourcemanager.h"
 
 #include <QUrl>
+#include <QNetworkConfigurationManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QDebug>
@@ -30,6 +31,13 @@ ResourceManager *ResourceManager::mInstance;
 ResourceManager::ResourceManager(QObject *parent) :
     QObject(parent)
 {
+    // TODO: This takes about 400 ms on my system. Doing it here prevents
+    // experiencing this hickup later on when the the network access manager is
+    // used for the first time. Even on startup it's ugly though, so hopefully
+    // there's a way to avoid it completely...
+    QNetworkConfigurationManager manager;
+    mNetworkAccessManager.setConfiguration(manager.defaultConfiguration());
+
     Q_ASSERT(!mInstance);
     mInstance = this;
 }
