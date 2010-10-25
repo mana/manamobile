@@ -127,6 +127,19 @@ public:
     int tileCount() const { return mTiles.size(); }
 
     /**
+     * Resizes this tileset, making sure the number of tiles equals
+     * \a tileCount.
+     *
+     * When the tileset is currently larger, existing tiles will
+     * be dropped. When it is smaller, the new tiles will be created with a
+     * null pixmap.
+     *
+     * \warning This function is basically only meant to be used by the
+     *          MapReader when operating in lazy mode.
+     */
+    void resize(int tileCount);
+
+    /**
      * Returns the number of tile columns in the tileset image.
      */
     int columnCount() const { return mColumnCount; }
@@ -175,6 +188,15 @@ public:
      * tileset image.
      */
     const QString &imageSource() const { return mImageSource; }
+
+    /**
+     * Sets the file name of the external image that contains the tiles in this
+     * tilesets, without actually loading the image.
+     *
+     * \warning This function is basically only meant to be used by the
+     *          MapReader when operating in lazy mode.
+     */
+    void setImageSource(const QString &source) { mImageSource = source; }
 
 private:
     QString mName;

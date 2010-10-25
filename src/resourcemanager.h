@@ -24,30 +24,6 @@
 #include <QNetworkAccessManager>
 
 /**
- * This class represents a resource that has been requested but may still need
- * to be downloaded.
- */
-class PendingResource : public QObject
-{
-    Q_OBJECT
-
-public:
-    PendingResource(QNetworkReply *reply);
-
-signals:
-    void progress(int percentage);
-    void finished();
-    void error();
-
-private slots:
-    void onProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onFinished();
-
-private:
-    QNetworkReply *mReply;
-};
-
-/**
  * This is meant to be a convenient abstraction on top of QNetworkAccessManager
  * for retrieving and managing resources.
  */
@@ -65,7 +41,7 @@ public:
     QString dataUrl() const { return mDataUrl; }
     void setDataUrl(const QString &url);
 
-    PendingResource *requestFile(const QString &fileName);
+    QNetworkReply *requestFile(const QString &fileName);
 
 signals:
     void dataUrlChanged();

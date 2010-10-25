@@ -23,12 +23,11 @@
 #define TILE_H
 
 #include "object.h"
+#include "tileset.h"
 
 #include <QPixmap>
 
 namespace Tiled {
-
-class Tileset;
 
 class TILEDSHARED_EXPORT Tile : public Object
 {
@@ -59,15 +58,19 @@ public:
      */
     void setImage(const QPixmap &image) { mImage = image; }
 
+    // TODO: Methods below now returns tileset's tile width, which is a
+    // temporary hack to work around problems with lazy-loaded tiles leading to
+    // not updating the max tile size of the layer properly.
+
     /**
      * Returns the width of this tile.
      */
-    int width() const { return mImage.width(); }
+    int width() const { return mTileset->tileWidth(); }
 
     /**
      * Returns the height of this tile.
      */
-    int height() const { return mImage.height(); }
+    int height() const { return mTileset->tileHeight(); }
 
 private:
     int mId;

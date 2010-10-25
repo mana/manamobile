@@ -49,6 +49,7 @@ class MapReaderPrivate
 
 public:
     MapReaderPrivate(MapReader *mapReader):
+        mLazy(false),
         p(mapReader),
         mMap(0),
         mReadingExternalTileset(false)
@@ -60,6 +61,8 @@ public:
     bool openFile(QFile *file);
 
     QString errorString() const;
+
+    bool mLazy;
 
 private:
     bool readNextStartElement();
@@ -298,12 +301,19 @@ Tileset *MapReaderPrivate::readTileset()
         }
     } else { // External tileset
         const QString absoluteSource = p->resolveReference(source, mPath);
-        QString error;
-        tileset = p->readExternalTileset(absoluteSource, &error);
 
-        if (!tileset) {
-            xml.raiseError(tr("Error while loading tileset '%1': %2")
-                           .arg(absoluteSource, error));
+        if (mLazy) {
+            // Don't load it right now, but remember the source
+            tileset = new Tileset(QString(), 0, 0);
+            tileset->setFileName(absoluteSource);
+        } else {
+            QString error;
+            tileset = p->readExternalTileset(absoluteSource, &error);
+
+            if (!tileset) {
+                xml.raiseError(tr("Error while loading tileset '%1': %2")
+                               .arg(absoluteSource, error));
+            }
         }
 
         skipCurrentElement();
@@ -321,6 +331,12 @@ void MapReaderPrivate::readTilesetTile(Tileset *tileset)
 
     const QXmlStreamAttributes atts = xml.attributes();
     const int id = atts.value(QLatin1String("id")).toString().toInt();
+
+    // In lazy mode we don't know in advance how many tiles a certain tileset
+    // will have. Make sure the tileset is at least big enough to hold the
+    // properties for all tiles.
+    if (mLazy && id >= tileset->tileCount())
+        tileset->resize(id + 1);
 
     if (id < 0 || id >= tileset->tileCount()) {
         xml.raiseError(tr("Invalid tile ID: %1").arg(id));
@@ -355,9 +371,15 @@ void MapReaderPrivate::readTilesetImage(Tileset *tileset)
 
     source = p->resolveReference(source, mPath);
 
-    const QImage tilesetImage = p->readExternalImage(source);
-    if (!tileset->loadFromImage(tilesetImage, source))
-        xml.raiseError(tr("Error loading tileset image:\n'%1'").arg(source));
+    if (mLazy) {
+        // Don't load the image right now, but remember the source
+        tileset->setImageSource(source);
+    } else {
+        const QImage tilesetImage = p->readExternalImage(source);
+        if (!tileset->loadFromImage(tilesetImage, source))
+            xml.raiseError(tr("Error loading tileset image:\n'%1'")
+                           .arg(source));
+    }
 
     skipCurrentElement();
 }
@@ -561,7 +583,10 @@ Tile *MapReaderPrivate::tileForGid(int gid, bool &ok)
         QMap<int, Tileset*>::const_iterator i = mGidsToTileset.upperBound(gid);
         --i; // Navigate one tileset back since upper bound finds the next
         const int tileId = gid - i.key();
-        const Tileset *tileset = i.value();
+        Tileset *tileset = i.value();
+
+        if (mLazy && tileset->tileCount() <= tileId)
+            tileset->resize(tileId + 1);
 
         result = tileset ? tileset->tileAt(tileId) : 0;
         ok = true;
@@ -733,6 +758,16 @@ Tileset *MapReader::readTileset(const QString &fileName)
         tileset->setFileName(fileName);
 
     return tileset;
+}
+
+void MapReader::setLazy(bool lazy)
+{
+    d->mLazy = lazy;
+}
+
+bool MapReader::isLazy() const
+{
+    return d->mLazy;
 }
 
 QString MapReader::errorString() const

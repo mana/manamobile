@@ -36,6 +36,19 @@ Tile *Tileset::tileAt(int id) const
     return (id < mTiles.size()) ? mTiles.at(id) : 0;
 }
 
+void Tileset::resize(int tileCount)
+{
+    mTiles.reserve(tileCount);
+
+    // Create empty tiles when necessary
+    while (mTiles.size() < tileCount)
+        mTiles.append(new Tile(QPixmap(), mTiles.size(), this));
+
+    // Delete tiles when necessary
+    while (mTiles.size() > tileCount)
+        delete mTiles.takeLast();
+}
+
 bool Tileset::loadFromImage(const QImage &image, const QString &fileName)
 {
     Q_ASSERT(mTileWidth > 0 && mTileHeight > 0);

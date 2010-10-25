@@ -58,7 +58,9 @@ SOURCES += src/main.cpp \
     src/mana/gameclient.cpp \
     src/mana/messagein.cpp \
     src/mana/messageout.cpp \
-    src/mana/sha256.cpp
+    src/mana/sha256.cpp \
+    src/mapitem.cpp \
+    src/tilelayeritem.cpp
 
 HEADERS += \
     src/resourcemanager.h \
@@ -87,7 +89,9 @@ HEADERS += \
     src/mana/messagein.h \
     src/mana/messageout.h \
     src/mana/protocol.h \
-    src/mana/sha256.h
+    src/mana/sha256.h \
+    src/mapitem.h \
+    src/tilelayeritem.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

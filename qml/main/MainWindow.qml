@@ -7,15 +7,9 @@ Rectangle {
 
     state: "login"
 
-    property bool connecting: false
     property bool loggingIn: false
     property bool loggedIn: false
     property bool characterChosen: false
-
-    Component.onCompleted: {
-        connecting = true
-        accountClient.connect("dev.themanaworld.org", 9601)
-    }
 
     Connections {
         target: accountClient;
@@ -28,9 +22,6 @@ Rectangle {
         }
         onLoginFailed: {
             loggingIn = false
-        }
-        onConnected: {
-            window.connecting = false;
         }
     }
 
@@ -47,7 +38,7 @@ Rectangle {
         anchors.right: window.right
         anchors.bottom: window.bottom
         anchors.margins: 10
-        running: connecting || loggingIn
+        running: accountClient.state == AccountClient.Connecting || loggingIn
                  || (characterChosen && window.state != "game")
     }
 

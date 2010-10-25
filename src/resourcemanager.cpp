@@ -27,28 +27,6 @@
 
 ResourceManager *ResourceManager::mInstance;
 
-PendingResource::PendingResource(QNetworkReply *reply)
-    : mReply(reply)
-{
-    connect(mReply, SIGNAL(finished()), SIGNAL(finished()));
-    connect(mReply, SIGNAL(finished()), SLOT(onFinished()));
-    connect(mReply, SIGNAL(error(QNetworkReply::NetworkError)),
-            SIGNAL(error()));
-    connect(mReply, SIGNAL(downloadProgress(qint64,qint64)),
-            SLOT(onProgress(qint64,qint64)));
-}
-
-void PendingResource::onProgress(qint64 bytesReceived, qint64 bytesTotal)
-{
-    qDebug() << Q_FUNC_INFO << (int) ((double) bytesReceived / bytesTotal * 100);
-    emit progress((int) ((double) bytesReceived / bytesTotal * 100));
-}
-
-void PendingResource::onFinished()
-{
-    qDebug() << Q_FUNC_INFO << mReply->url() << mReply->errorString();
-}
-
 ResourceManager::ResourceManager(QObject *parent) :
     QObject(parent)
 {
@@ -65,12 +43,11 @@ void ResourceManager::setDataUrl(const QString &url)
     emit dataUrlChanged();
 }
 
-PendingResource *ResourceManager::requestFile(const QString &fileName)
+QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 {
     qDebug() << Q_FUNC_INFO << fileName;
 
     const QNetworkRequest request(mDataUrl + fileName);
     QNetworkReply *reply = mNetworkAccessManager.get(request);
-    PendingResource *pendingResource = new PendingResource(reply);
-    return pendingResource;
+    return reply;
 }

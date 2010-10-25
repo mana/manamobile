@@ -36,6 +36,7 @@
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
 
+#include "mapitem.h"
 #include "resourcemanager.h"
 
 static void registerTypes()
@@ -55,6 +56,8 @@ static void registerTypes()
 
     qmlRegisterUncreatableType<ResourceManager>(
                 "Mana", 1, 0, "ResourceManager", "Use global resourceManager");
+
+    qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
 }
 
 int main(int argc, char *argv[])

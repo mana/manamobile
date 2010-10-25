@@ -83,6 +83,26 @@ public:
     Tileset *readTileset(const QString &fileName);
 
     /**
+     * Sets whether this map reader is lazy. By default a map reader is not
+     * lazy.
+     *
+     * A lazy map reader will not attempt to load any external tilesets or
+     * images found in the map. Instead it will only create the necessary
+     * structures for holding all the map information. The external tilesets
+     * and images can be resolved later.
+     *
+     * Note that this also means that no errors about invalid tile ids will be
+     * given, since a lazy reader has no way to know whether an id is invalid.
+     */
+    void setLazy(bool lazy);
+
+    /**
+     * Returns whether this map reader is lazy.
+     * @see setLazy
+     */
+    bool isLazy() const;
+
+    /**
      * Returns the error message for the last occurred error.
      */
     QString errorString() const;

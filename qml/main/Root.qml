@@ -5,6 +5,11 @@ Rectangle {
     width: 800
     height: 480
 
+    // Connect to the default server
+    Component.onCompleted: {
+        accountClient.connect("testing.manasource.org", 9601)
+    }
+
     Mana.AccountClient {
         id: accountClient
 
