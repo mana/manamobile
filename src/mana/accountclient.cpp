@@ -100,6 +100,9 @@ void AccountClient::handleLoginResponse(MessageIn &message)
 
         if (message.unreadLength() > 0) {
             mDataUrl = message.readString();
+            if (!mDataUrl.isEmpty() && !mDataUrl.endsWith(QLatin1Char('/')))
+                mDataUrl += QLatin1Char('/');
+
             emit dataUrlChanged();
 
             qDebug() << "Data URL: " << mDataUrl;
