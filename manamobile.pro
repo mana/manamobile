@@ -31,6 +31,10 @@ contains(QT_CONFIG, opengl): QT += opengl
 
 INCLUDEPATH += src
 
+# Pretend we're building the Tiled library to make sure it doesn't try to
+# mark the Tiled classes as being imported.
+DEFINES += TILED_LIBRARY
+
 win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
 else:LIBS += -lz
 
