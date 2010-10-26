@@ -12,6 +12,8 @@ DEFINES += HAS_GETHOSTBYADDR_R=1 \
            HAS_MSGHDR_FLAGS=1 \
            HAS_SOCKLEN_T=1
 
+win32:LIBS += -lws2_32 -lwinmm
+
 HEADERS += $$PWD/include/enet/callbacks.h \
            $$PWD/include/enet/enet.h \
            $$PWD/include/enet/list.h \
