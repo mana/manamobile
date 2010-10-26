@@ -30,6 +30,7 @@ FocusScope {
 
         focus: true
 
+        selectByMouse: true
         passwordCharacter: "●"
     }
 }
