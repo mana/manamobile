@@ -80,10 +80,17 @@ public:
     { return mCharacterListModel; }
 
     Q_INVOKABLE void requestRegistrationInfo();
+    Q_INVOKABLE void registerAccount(const QString &username,
+                                     const QString &password,
+                                     const QString &email,
+                                     const QString &captchaResponse);
     Q_INVOKABLE void login(const QString &username, const QString &password);
     Q_INVOKABLE void chooseCharacter(int index);
 
 signals:
+    void registrationSucceeded();
+    void registrationFailed(int error, const QString &errorMessage);
+
     void loginSucceeded();
     void loginFailed(int error, const QString &errorMessage);
 
@@ -110,11 +117,15 @@ protected:
     void messageReceived(MessageIn &message);
 
 private:
+    void readUpdateHost(MessageIn &message);
+
     void handleRegistrationInfo(MessageIn &message);
+    void handleRegisterResponse(MessageIn &message);
     void handleLoginResponse(MessageIn &message);
     void handleCharacterInfo(MessageIn &message);
     void handleCharacterSelectResponse(MessageIn &message);
 
+    static QString registrationErrorMessage(int error);
     static QString loginErrorMessage(int error);
     static QString chooseCharacterErrorMessage(int error);
 

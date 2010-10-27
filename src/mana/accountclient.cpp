@@ -47,18 +47,36 @@ void AccountClient::requestRegistrationInfo()
     send(MessageOut(PAMSG_REQUEST_REGISTER_INFO));
 }
 
-void AccountClient::login(const QString &username,
-                          const QString &password)
+static QByteArray passwordHash(const QString &username,
+                               const QString &password)
 {
     QByteArray combination;
     combination += username.toUtf8();
     combination += password.toUtf8();
-    const QByteArray hash = sha256(combination);
+    return sha256(combination);
+}
 
+void AccountClient::registerAccount(const QString &username,
+                                    const QString &password,
+                                    const QString &email,
+                                    const QString &captchaResponse)
+{
+    MessageOut registerMessage(PAMSG_REGISTER);
+    registerMessage.writeInt32(0); // client version
+    registerMessage.writeString(username);
+    registerMessage.writeString(passwordHash(username, password));
+    registerMessage.writeString(email);
+    registerMessage.writeString(captchaResponse);
+    send(registerMessage);
+}
+
+void AccountClient::login(const QString &username,
+                          const QString &password)
+{
     MessageOut loginMessage(PAMSG_LOGIN);
     loginMessage.writeInt32(0); // client version
     loginMessage.writeString(username);
-    loginMessage.writeString(hash);
+    loginMessage.writeString(passwordHash(username, password));
     send(loginMessage);
 }
 
@@ -78,6 +96,9 @@ void AccountClient::messageReceived(MessageIn &message)
     switch (message.id()) {
     case APMSG_REGISTER_INFO_RESPONSE:
         handleRegistrationInfo(message);
+        break;
+    case APMSG_REGISTER_RESPONSE:
+        handleRegisterResponse(message);
         break;
     case APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
@@ -99,6 +120,19 @@ void AccountClient::messageReceived(MessageIn &message)
     }
 }
 
+void AccountClient::readUpdateHost(MessageIn &message)
+{
+    mUpdateHost = message.readString();
+    emit updateHostChanged();
+
+    mDataUrl = message.readString();
+    if (!mDataUrl.isEmpty()) {
+        if (!mDataUrl.endsWith(QLatin1Char('/')))
+            mDataUrl += QLatin1Char('/');
+        emit dataUrlChanged();
+    }
+}
+
 void AccountClient::handleRegistrationInfo(MessageIn &message)
 {
     mRegistrationAllowed = message.readInt8();
@@ -114,26 +148,24 @@ void AccountClient::handleRegistrationInfo(MessageIn &message)
     emit captchaInstructionsChanged();
 }
 
+void AccountClient::handleRegisterResponse(MessageIn &message)
+{
+    const int error = message.readInt8();
+
+    if (error == ERRMSG_OK) {
+        readUpdateHost(message);
+        emit registrationSucceeded();
+    } else {
+        emit registrationFailed(error, registrationErrorMessage(error));
+    }
+}
+
 void AccountClient::handleLoginResponse(MessageIn &message)
 {
     const int error = message.readInt8();
 
     if (error == ERRMSG_OK) {
-        mUpdateHost = message.readString();
-        emit updateHostChanged();
-
-        qDebug() << "Update host: " << mUpdateHost;
-
-        if (message.unreadLength() > 0) {
-            mDataUrl = message.readString();
-            if (!mDataUrl.isEmpty() && !mDataUrl.endsWith(QLatin1Char('/')))
-                mDataUrl += QLatin1Char('/');
-
-            emit dataUrlChanged();
-
-            qDebug() << "Data URL: " << mDataUrl;
-        }
-
+        readUpdateHost(message);
         emit loginSucceeded();
     } else {
         emit loginFailed(error, loginErrorMessage(error));
@@ -189,6 +221,25 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
         emit chooseCharacterSucceeded();
     } else {
         emit chooseCharacterFailed(error, chooseCharacterErrorMessage(error));
+    }
+}
+
+QString AccountClient::registrationErrorMessage(int error)
+{
+    switch (error) {
+    case REGISTER_INVALID_VERSION:
+        return tr("Client version is too old");
+    case ERRMSG_INVALID_ARGUMENT:
+        return tr("Wrong username, password or email address");
+    case REGISTER_EXISTS_USERNAME:
+        return tr("Username already exists");
+    case REGISTER_EXISTS_EMAIL:
+        return tr("Email address already exists");
+    case REGISTER_CAPTCHA_WRONG:
+        return tr("You took too long with the captcha or your "
+                  "response was incorrect");
+    default:
+        return tr("Unknown error");
     }
 }
 
