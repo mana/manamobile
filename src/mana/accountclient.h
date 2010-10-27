@@ -84,12 +84,17 @@ public:
                                      const QString &password,
                                      const QString &email,
                                      const QString &captchaResponse);
+    Q_INVOKABLE void unregisterAccount(const QString &username,
+                                       const QString &password);
     Q_INVOKABLE void login(const QString &username, const QString &password);
     Q_INVOKABLE void chooseCharacter(int index);
 
 signals:
     void registrationSucceeded();
     void registrationFailed(int error, const QString &errorMessage);
+
+    void unregisterSucceeded();
+    void unregisterFailed(int error, const QString &errorMessage);
 
     void loginSucceeded();
     void loginFailed(int error, const QString &errorMessage);
@@ -121,6 +126,7 @@ private:
 
     void handleRegistrationInfo(MessageIn &message);
     void handleRegisterResponse(MessageIn &message);
+    void handleUnregisterResponse(MessageIn &message);
     void handleLoginResponse(MessageIn &message);
     void handleCharacterInfo(MessageIn &message);
     void handleCharacterSelectResponse(MessageIn &message);

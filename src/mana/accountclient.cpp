@@ -70,6 +70,15 @@ void AccountClient::registerAccount(const QString &username,
     send(registerMessage);
 }
 
+void AccountClient::unregisterAccount(const QString &username,
+                                      const QString &password)
+{
+    MessageOut unregisterMessage(PAMSG_UNREGISTER);
+    unregisterMessage.writeString(username);
+    unregisterMessage.writeString(passwordHash(username, password));
+    send(unregisterMessage);
+}
+
 void AccountClient::login(const QString &username,
                           const QString &password)
 {
@@ -99,6 +108,9 @@ void AccountClient::messageReceived(MessageIn &message)
         break;
     case APMSG_REGISTER_RESPONSE:
         handleRegisterResponse(message);
+        break;
+    case APMSG_UNREGISTER_RESPONSE:
+        handleUnregisterResponse(message);
         break;
     case APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
@@ -158,6 +170,17 @@ void AccountClient::handleRegisterResponse(MessageIn &message)
     } else {
         emit registrationFailed(error, registrationErrorMessage(error));
     }
+}
+
+void AccountClient::handleUnregisterResponse(MessageIn &message)
+{
+    const int error = message.readInt8();
+
+    if (error == ERRMSG_OK)
+        emit unregisterSucceeded();
+    else
+        // Unregister error messages are same as login error messages
+        emit unregisterFailed(error, loginErrorMessage(error));
 }
 
 void AccountClient::handleLoginResponse(MessageIn &message)
