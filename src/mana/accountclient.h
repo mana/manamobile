@@ -94,6 +94,10 @@ public:
                                      const QList<int> &stats);
     Q_INVOKABLE void deleteCharacter(int index);
     Q_INVOKABLE void chooseCharacter(int index);
+    Q_INVOKABLE void changeEmail(const QString &email);
+    Q_INVOKABLE void changePassword(const QString &username,
+                                    const QString &oldPassword,
+                                    const QString &newPassword);
 
 signals:
     void registrationSucceeded();
@@ -115,6 +119,12 @@ signals:
 
     void chooseCharacterSucceeded();
     void chooseCharacterFailed(int error, const QString &errorMessage);
+
+    void emailChangeSucceeded();
+    void emailChangeFailed(int error, const QString &errorMessage);
+
+    void passwordChangeSucceeded();
+    void passwordChangeFailed(int error, const QString &errorMessage);
 
     void registrationAllowedChanged();
     void minimumNameLengthChanged();
@@ -144,12 +154,16 @@ private:
     void handleCharacterDeleteResponse(MessageIn &message);
     void handleCharacterInfo(MessageIn &message);
     void handleCharacterSelectResponse(MessageIn &message);
+    void handleEmailChangeResponse(MessageIn &message);
+    void handlePasswordChangeResponse(MessageIn &message);
 
     static QString standardErrorMessage(int error);
     static QString registrationErrorMessage(int error);
     static QString loginErrorMessage(int error);
     static QString createCharacterErrorMessage(int error);
     static QString chooseCharacterErrorMessage(int error);
+    static QString emailChangeErrorMessage(int error);
+    static QString passwordChangeErrorMessage(int error);
 
     bool mRegistrationAllowed;
     int mMinimumNameLength;

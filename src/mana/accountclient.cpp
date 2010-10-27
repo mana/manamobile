@@ -127,6 +127,23 @@ void AccountClient::chooseCharacter(int index)
     send(m);
 }
 
+void AccountClient::changeEmail(const QString &email)
+{
+    MessageOut msg(PAMSG_EMAIL_CHANGE);
+    msg.writeString(email);
+    send(msg);
+}
+
+void AccountClient::changePassword(const QString &username,
+                                   const QString &oldPassword,
+                                   const QString &newPassword)
+{
+    MessageOut msg(PAMSG_PASSWORD_CHANGE);
+    msg.writeString(passwordHash(username, oldPassword));
+    msg.writeString(passwordHash(username, newPassword));
+    send(msg);
+}
+
 void AccountClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -153,6 +170,12 @@ void AccountClient::messageReceived(MessageIn &message)
         break;
     case APMSG_CHAR_SELECT_RESPONSE:
         handleCharacterSelectResponse(message);
+        break;
+    case APMSG_EMAIL_CHANGE_RESPONSE:
+        handleEmailChangeResponse(message);
+        break;
+    case APMSG_PASSWORD_CHANGE_RESPONSE:
+        handlePasswordChangeResponse(message);
         break;
     case XXMSG_INVALID:
         qWarning() << "(AccountClient::messageReceived) Invalid received! "
@@ -309,6 +332,24 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
     }
 }
 
+void AccountClient::handleEmailChangeResponse(MessageIn &message)
+{
+    const int error = message.readInt8();
+    if (error == ERRMSG_OK)
+        emit emailChangeSucceeded();
+    else
+        emit emailChangeFailed(error, emailChangeErrorMessage(error));
+}
+
+void AccountClient::handlePasswordChangeResponse(MessageIn &message)
+{
+    const int error = message.readInt8();
+    if (error == ERRMSG_OK)
+        emit passwordChangeSucceeded();
+    else
+        emit passwordChangeFailed(error, passwordChangeErrorMessage(error));
+}
+
 QString AccountClient::standardErrorMessage(int error)
 {
     switch (error) {
@@ -387,6 +428,32 @@ QString AccountClient::chooseCharacterErrorMessage(int error)
         return tr("No such character");
     case ERRMSG_FAILURE:
         return tr("No game server found for the map the character is on");
+    default:
+        return standardErrorMessage(error);
+    }
+}
+
+QString AccountClient::emailChangeErrorMessage(int error)
+{
+    switch (error) {
+    case ERRMSG_INVALID_ARGUMENT:
+        return tr("New email address incorrect");
+    case ERRMSG_FAILURE:
+        return tr("Old email address incorrect");
+    case ERRMSG_EMAIL_ALREADY_EXISTS:
+        return tr("The new email address already exists");
+    default:
+        return standardErrorMessage(error);
+    }
+}
+
+QString AccountClient::passwordChangeErrorMessage(int error)
+{
+    switch (error) {
+    case ERRMSG_INVALID_ARGUMENT:
+        return tr("New password incorrect");
+    case ERRMSG_FAILURE:
+        return tr("Old password incorrect");
     default:
         return standardErrorMessage(error);
     }
