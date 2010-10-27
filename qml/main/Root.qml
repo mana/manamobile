@@ -13,6 +13,7 @@ Rectangle {
     Mana.AccountClient {
         id: accountClient
 
+        onConnected: requestRegistrationInfo();
         onLoginSucceeded: {
             resourceManager.dataUrl = dataUrl;
         }

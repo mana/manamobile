@@ -43,6 +43,12 @@ class AccountClient : public ENetClient
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool registrationAllowed READ registrationAllowed NOTIFY registrationAllowedChanged)
+    Q_PROPERTY(int minimumNameLength READ minimumNameLength NOTIFY minimumNameLengthChanged)
+    Q_PROPERTY(int maximumNameLength READ maximumNameLength NOTIFY maximumNameLengthChanged)
+    Q_PROPERTY(QString captchaUrl READ captchaUrl NOTIFY captchaUrlChanged)
+    Q_PROPERTY(QString captchaInstructions READ captchaInstructions NOTIFY captchaInstructionsChanged)
+
     Q_PROPERTY(QString updateHost READ updateHost NOTIFY updateHostChanged)
     Q_PROPERTY(QString dataUrl READ dataUrl NOTIFY dataUrlChanged)
     Q_PROPERTY(QString token READ token NOTIFY tokenChanged)
@@ -50,10 +56,17 @@ class AccountClient : public ENetClient
     Q_PROPERTY(quint16 chatServerPort READ chatServerPort NOTIFY chatServerPortChanged)
     Q_PROPERTY(QString gameServerHost READ gameServerHost NOTIFY gameServerHostChanged)
     Q_PROPERTY(quint16 gameServerPort READ gameServerPort NOTIFY gameServerPortChanged)
+
     Q_PROPERTY(Mana::CharacterListModel *characterListModel READ characterListModel CONSTANT)
 
 public:
     AccountClient(QObject *parent = 0);
+
+    bool registrationAllowed() const { return mRegistrationAllowed; }
+    int minimumNameLength() const { return mMinimumNameLength; }
+    int maximumNameLength() const { return mMaximumNameLength; }
+    QString captchaUrl() const { return mCaptchaUrl; }
+    QString captchaInstructions() const { return mCaptchaInstructions; }
 
     QString updateHost() const { return mUpdateHost; }
     QString dataUrl() const { return mDataUrl; }
@@ -66,6 +79,7 @@ public:
     CharacterListModel *characterListModel() const
     { return mCharacterListModel; }
 
+    Q_INVOKABLE void requestRegistrationInfo();
     Q_INVOKABLE void login(const QString &username, const QString &password);
     Q_INVOKABLE void chooseCharacter(int index);
 
@@ -77,6 +91,12 @@ signals:
 
     void chooseCharacterSucceeded();
     void chooseCharacterFailed(int error, const QString &errorMessage);
+
+    void registrationAllowedChanged();
+    void minimumNameLengthChanged();
+    void maximumNameLengthChanged();
+    void captchaUrlChanged();
+    void captchaInstructionsChanged();
 
     void updateHostChanged();
     void dataUrlChanged();
@@ -90,12 +110,19 @@ protected:
     void messageReceived(MessageIn &message);
 
 private:
+    void handleRegistrationInfo(MessageIn &message);
     void handleLoginResponse(MessageIn &message);
     void handleCharacterInfo(MessageIn &message);
     void handleCharacterSelectResponse(MessageIn &message);
 
     static QString loginErrorMessage(int error);
     static QString chooseCharacterErrorMessage(int error);
+
+    bool mRegistrationAllowed;
+    int mMinimumNameLength;
+    int mMaximumNameLength;
+    QString mCaptchaUrl;
+    QString mCaptchaInstructions;
 
     QString mUpdateHost;
     QString mDataUrl;
@@ -104,6 +131,7 @@ private:
     QString mChatServerHost;
     quint16 mGameServerPort;
     quint16 mChatServerPort;
+
     QList<Mana::CharacterInfo> mCharacters;
 
     CharacterListModel *mCharacterListModel;

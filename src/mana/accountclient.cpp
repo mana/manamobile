@@ -34,10 +34,18 @@ namespace Mana {
 
 AccountClient::AccountClient(QObject *parent)
     : ENetClient(parent)
+    , mRegistrationAllowed(false)
+    , mMinimumNameLength(2)
+    , mMaximumNameLength(16)
     , mGameServerPort(0)
     , mChatServerPort(0)
     , mCharacterListModel(new CharacterListModel(this))
 {}
+
+void AccountClient::requestRegistrationInfo()
+{
+    send(MessageOut(PAMSG_REQUEST_REGISTER_INFO));
+}
 
 void AccountClient::login(const QString &username,
                           const QString &password)
@@ -68,6 +76,9 @@ void AccountClient::chooseCharacter(int index)
 void AccountClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
+    case APMSG_REGISTER_INFO_RESPONSE:
+        handleRegistrationInfo(message);
+        break;
     case APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
         break;
@@ -86,6 +97,21 @@ void AccountClient::messageReceived(MessageIn &message)
                 << message;
         break;
     }
+}
+
+void AccountClient::handleRegistrationInfo(MessageIn &message)
+{
+    mRegistrationAllowed = message.readInt8();
+    mMinimumNameLength = message.readInt8();
+    mMaximumNameLength = message.readInt8();
+    mCaptchaUrl = message.readString();
+    mCaptchaInstructions = message.readString();
+
+    emit registrationAllowedChanged();
+    emit minimumNameLengthChanged();
+    emit maximumNameLengthChanged();
+    emit captchaUrlChanged();
+    emit captchaInstructionsChanged();
 }
 
 void AccountClient::handleLoginResponse(MessageIn &message)
