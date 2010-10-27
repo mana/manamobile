@@ -246,16 +246,16 @@ QString AccountClient::registrationErrorMessage(int error)
 QString AccountClient::loginErrorMessage(int error)
 {
     switch (error) {
-    case Mana::ERRMSG_FAILURE:
+    case ERRMSG_FAILURE:
     default:
         return tr("Unknown error");
-    case Mana::ERRMSG_INVALID_ARGUMENT:
+    case ERRMSG_INVALID_ARGUMENT:
         return tr("Wrong user name or password");
-    case Mana::LOGIN_INVALID_TIME:
+    case LOGIN_INVALID_TIME:
         return tr("Tried to login too fast");
-    case Mana::LOGIN_INVALID_VERSION:
+    case LOGIN_INVALID_VERSION:
         return tr("Client version too old");
-    case Mana::LOGIN_BANNED:
+    case LOGIN_BANNED:
         return tr("Account is banned");
     }
 }
@@ -265,11 +265,11 @@ QString AccountClient::chooseCharacterErrorMessage(int error)
     switch (error) {
     default:
         return tr("Unknown error");
-    case Mana::ERRMSG_NO_LOGIN:
+    case ERRMSG_NO_LOGIN:
         return tr("You don't seem to be logged in, please try again");
-    case Mana::ERRMSG_INVALID_ARGUMENT:
+    case ERRMSG_INVALID_ARGUMENT:
         return tr("No such character");
-    case Mana::ERRMSG_FAILURE:
+    case ERRMSG_FAILURE:
         return tr("No game server found for the map the character is on");
     }
 }
