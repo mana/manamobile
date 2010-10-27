@@ -40,6 +40,7 @@ AccountClient::AccountClient(QObject *parent)
     , mGameServerPort(0)
     , mChatServerPort(0)
     , mCharacterListModel(new CharacterListModel(this))
+    , mDeleteIndex(-1)
 {}
 
 void AccountClient::requestRegistrationInfo()
@@ -89,10 +90,36 @@ void AccountClient::login(const QString &username,
     send(loginMessage);
 }
 
+void AccountClient::createCharacter(const QString &name,
+                                    bool gender,
+                                    int hairStyle, int hairColor,
+                                    const QList<int> &stats)
+{
+    MessageOut createMessage(PAMSG_CHAR_CREATE);
+    createMessage.writeString(name);
+    createMessage.writeInt8(hairStyle);
+    createMessage.writeInt8(hairColor);
+    createMessage.writeInt8(gender);
+    foreach (int stat, stats)
+        createMessage.writeInt16(stat);
+    send(createMessage);
+}
+
+void AccountClient::deleteCharacter(int index)
+{
+    SAFE_ASSERT(index >= 0 && index < mCharacters.size(), return);
+    const CharacterInfo &character = mCharacters.at(index);
+
+    mDeleteIndex = index;
+
+    MessageOut m(PAMSG_CHAR_DELETE);
+    m.writeInt8(character.slot);
+    send(m);
+}
+
 void AccountClient::chooseCharacter(int index)
 {
     SAFE_ASSERT(index >= 0 && index < mCharacters.size(), return);
-
     const CharacterInfo &character = mCharacters.at(index);
 
     MessageOut m(PAMSG_CHAR_SELECT);
@@ -114,6 +141,12 @@ void AccountClient::messageReceived(MessageIn &message)
         break;
     case APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
+        break;
+    case APMSG_CHAR_CREATE_RESPONSE:
+        handleCharacterCreateResponse(message);
+        break;
+    case APMSG_CHAR_DELETE_RESPONSE:
+        handleCharacterDeleteResponse(message);
         break;
     case APMSG_CHAR_INFO:
         handleCharacterInfo(message);
@@ -195,6 +228,35 @@ void AccountClient::handleLoginResponse(MessageIn &message)
     }
 }
 
+void AccountClient::handleCharacterCreateResponse(MessageIn &message)
+{
+    const int error = message.readInt8();
+
+    if (error == ERRMSG_OK)
+        emit createCharacterSucceeded();
+    else
+        emit createCharacterFailed(error, createCharacterErrorMessage(error));
+}
+
+void AccountClient::handleCharacterDeleteResponse(MessageIn &message)
+{
+    SAFE_ASSERT(mDeleteIndex >= 0 && mDeleteIndex <= mCharacters.size(),
+                return);
+
+    const int error = message.readInt8();
+
+    if (error == ERRMSG_OK) {
+        mCharacters.removeAt(mDeleteIndex);
+        mCharacterListModel->setCharacters(mCharacters);
+        emit deleteCharacterSucceeded();
+    } else {
+        // Delete error messages are same as choose character error messages
+        emit deleteCharacterFailed(error, chooseCharacterErrorMessage(error));
+    }
+
+    mDeleteIndex = -1;
+}
+
 void AccountClient::handleCharacterInfo(MessageIn &message)
 {
     CharacterInfo info;
@@ -247,6 +309,16 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
     }
 }
 
+QString AccountClient::standardErrorMessage(int error)
+{
+    switch (error) {
+    case ERRMSG_NO_LOGIN:
+        return tr("You don't seem to be logged in, please try again");
+    default:
+        return tr("Unknown error");
+    }
+}
+
 QString AccountClient::registrationErrorMessage(int error)
 {
     switch (error) {
@@ -262,16 +334,13 @@ QString AccountClient::registrationErrorMessage(int error)
         return tr("You took too long with the captcha or your "
                   "response was incorrect");
     default:
-        return tr("Unknown error");
+        return standardErrorMessage(error);
     }
 }
 
 QString AccountClient::loginErrorMessage(int error)
 {
     switch (error) {
-    case ERRMSG_FAILURE:
-    default:
-        return tr("Unknown error");
     case ERRMSG_INVALID_ARGUMENT:
         return tr("Wrong user name or password");
     case LOGIN_INVALID_TIME:
@@ -280,20 +349,46 @@ QString AccountClient::loginErrorMessage(int error)
         return tr("Client version too old");
     case LOGIN_BANNED:
         return tr("Account is banned");
+    default:
+        return standardErrorMessage(error);
+    }
+}
+
+QString AccountClient::createCharacterErrorMessage(int error)
+{
+    switch (error) {
+    case CREATE_TOO_MUCH_CHARACTERS:
+        return tr("No empty slot");
+    case ERRMSG_INVALID_ARGUMENT:
+        return tr("Invalid name");
+    case CREATE_EXISTS_NAME:
+        return tr("Character's name already exists");
+    case CREATE_INVALID_HAIRSTYLE:
+        return tr("Invalid hairstyle");
+    case CREATE_INVALID_HAIRCOLOR:
+        return tr("Invalid hair color");
+    case CREATE_INVALID_GENDER:
+        return tr("Invalid gender");
+    case CREATE_ATTRIBUTES_TOO_HIGH:
+        return tr("Character's stats are too high");
+    case CREATE_ATTRIBUTES_TOO_LOW:
+        return tr("Character's stats are too low");
+    case CREATE_ATTRIBUTES_OUT_OF_RANGE:
+        return tr("At least one stat is out of the permitted range");
+    default:
+        return standardErrorMessage(error);
     }
 }
 
 QString AccountClient::chooseCharacterErrorMessage(int error)
 {
     switch (error) {
-    default:
-        return tr("Unknown error");
-    case ERRMSG_NO_LOGIN:
-        return tr("You don't seem to be logged in, please try again");
     case ERRMSG_INVALID_ARGUMENT:
         return tr("No such character");
     case ERRMSG_FAILURE:
         return tr("No game server found for the map the character is on");
+    default:
+        return standardErrorMessage(error);
     }
 }
 

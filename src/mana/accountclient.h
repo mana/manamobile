@@ -87,6 +87,12 @@ public:
     Q_INVOKABLE void unregisterAccount(const QString &username,
                                        const QString &password);
     Q_INVOKABLE void login(const QString &username, const QString &password);
+    Q_INVOKABLE void createCharacter(const QString &name,
+                                     bool gender,
+                                     int hairStyle,
+                                     int hairColor,
+                                     const QList<int> &stats);
+    Q_INVOKABLE void deleteCharacter(int index);
     Q_INVOKABLE void chooseCharacter(int index);
 
 signals:
@@ -98,6 +104,12 @@ signals:
 
     void loginSucceeded();
     void loginFailed(int error, const QString &errorMessage);
+
+    void createCharacterSucceeded();
+    void createCharacterFailed(int error, const QString &errorMessage);
+
+    void deleteCharacterSucceeded();
+    void deleteCharacterFailed(int error, const QString &errorMessage);
 
     void characterInfoReceived(const Mana::CharacterInfo &info);
 
@@ -128,11 +140,15 @@ private:
     void handleRegisterResponse(MessageIn &message);
     void handleUnregisterResponse(MessageIn &message);
     void handleLoginResponse(MessageIn &message);
+    void handleCharacterCreateResponse(MessageIn &message);
+    void handleCharacterDeleteResponse(MessageIn &message);
     void handleCharacterInfo(MessageIn &message);
     void handleCharacterSelectResponse(MessageIn &message);
 
+    static QString standardErrorMessage(int error);
     static QString registrationErrorMessage(int error);
     static QString loginErrorMessage(int error);
+    static QString createCharacterErrorMessage(int error);
     static QString chooseCharacterErrorMessage(int error);
 
     bool mRegistrationAllowed;
@@ -152,6 +168,8 @@ private:
     QList<Mana::CharacterInfo> mCharacters;
 
     CharacterListModel *mCharacterListModel;
+
+    int mDeleteIndex;
 };
 
 } // namespace Mana
