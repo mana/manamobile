@@ -69,6 +69,8 @@ void AccountClient::registerAccount(const QString &username,
     registerMessage.writeString(email);
     registerMessage.writeString(captchaResponse);
     send(registerMessage);
+
+    mPendingUsername = username;
 }
 
 void AccountClient::unregisterAccount(const QString &username,
@@ -88,6 +90,8 @@ void AccountClient::login(const QString &username,
     loginMessage.writeString(username);
     loginMessage.writeString(passwordHash(username, password));
     send(loginMessage);
+
+    mPendingUsername = username;
 }
 
 void AccountClient::createCharacter(const QString &name,
@@ -125,6 +129,8 @@ void AccountClient::chooseCharacter(int index)
     MessageOut m(PAMSG_CHAR_SELECT);
     m.writeInt8(character.slot);
     send(m);
+
+    mPendingPlayerName = character.name;
 }
 
 void AccountClient::changeEmail(const QString &email)
@@ -134,13 +140,12 @@ void AccountClient::changeEmail(const QString &email)
     send(msg);
 }
 
-void AccountClient::changePassword(const QString &username,
-                                   const QString &oldPassword,
+void AccountClient::changePassword(const QString &oldPassword,
                                    const QString &newPassword)
 {
     MessageOut msg(PAMSG_PASSWORD_CHANGE);
-    msg.writeString(passwordHash(username, oldPassword));
-    msg.writeString(passwordHash(username, newPassword));
+    msg.writeString(passwordHash(mUsername, oldPassword));
+    msg.writeString(passwordHash(mUsername, newPassword));
     send(msg);
 }
 
@@ -222,6 +227,10 @@ void AccountClient::handleRegisterResponse(MessageIn &message)
 
     if (error == ERRMSG_OK) {
         readUpdateHost(message);
+        if (mUsername != mPendingUsername) {
+            mUsername = mPendingUsername;
+            emit usernameChanged();
+        }
         emit registrationSucceeded();
     } else {
         emit registrationFailed(error, registrationErrorMessage(error));
@@ -245,6 +254,10 @@ void AccountClient::handleLoginResponse(MessageIn &message)
 
     if (error == ERRMSG_OK) {
         readUpdateHost(message);
+        if (mUsername != mPendingUsername) {
+            mUsername = mPendingUsername;
+            emit usernameChanged();
+        }
         emit loginSucceeded();
     } else {
         emit loginFailed(error, loginErrorMessage(error));
@@ -326,6 +339,10 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
         qDebug() << "Chat server: " << mChatServerHost << ":"
                 << mChatServerPort;
 
+        if (mPlayerName != mPendingPlayerName) {
+            mPlayerName = mPendingPlayerName;
+            emit playerNameChanged();
+        }
         emit chooseCharacterSucceeded();
     } else {
         emit chooseCharacterFailed(error, chooseCharacterErrorMessage(error));

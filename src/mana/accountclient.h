@@ -57,6 +57,9 @@ class AccountClient : public ENetClient
     Q_PROPERTY(QString gameServerHost READ gameServerHost NOTIFY gameServerHostChanged)
     Q_PROPERTY(quint16 gameServerPort READ gameServerPort NOTIFY gameServerPortChanged)
 
+    Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
+    Q_PROPERTY(QString playerName READ playerName NOTIFY playerNameChanged)
+
     Q_PROPERTY(Mana::CharacterListModel *characterListModel READ characterListModel CONSTANT)
 
 public:
@@ -75,6 +78,9 @@ public:
     quint16 gameServerPort() const { return mGameServerPort; }
     QString chatServerHost() const { return mChatServerHost; }
     quint16 chatServerPort() const { return mChatServerPort; }
+
+    QString username() const { return mUsername; }
+    QString playerName() const { return mPlayerName; }
 
     CharacterListModel *characterListModel() const
     { return mCharacterListModel; }
@@ -95,8 +101,7 @@ public:
     Q_INVOKABLE void deleteCharacter(int index);
     Q_INVOKABLE void chooseCharacter(int index);
     Q_INVOKABLE void changeEmail(const QString &email);
-    Q_INVOKABLE void changePassword(const QString &username,
-                                    const QString &oldPassword,
+    Q_INVOKABLE void changePassword(const QString &oldPassword,
                                     const QString &newPassword);
 
 signals:
@@ -140,6 +145,9 @@ signals:
     void gameServerHostChanged();
     void gameServerPortChanged();
 
+    void usernameChanged();
+    void playerNameChanged();
+
 protected:
     void messageReceived(MessageIn &message);
 
@@ -179,11 +187,16 @@ private:
     quint16 mGameServerPort;
     quint16 mChatServerPort;
 
+    QString mUsername;
+    QString mPlayerName;
+
     QList<Mana::CharacterInfo> mCharacters;
 
     CharacterListModel *mCharacterListModel;
 
     int mDeleteIndex;
+    QString mPendingUsername;
+    QString mPendingPlayerName;
 };
 
 } // namespace Mana

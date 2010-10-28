@@ -1,6 +1,16 @@
 import Qt 4.7
 
 Item {
+    Text {
+        x: 10; y: x;
+        text: {
+            if (accountClient.username != "")
+                "Logged in as " + accountClient.username;
+            else
+                "Not logged in!";
+        }
+    }
+
     ErrorLabel {
         id: errorLabel;
 
