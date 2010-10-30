@@ -214,11 +214,7 @@ void AccountClient::handleRegistrationInfo(MessageIn &message)
     mCaptchaUrl = message.readString();
     mCaptchaInstructions = message.readString();
 
-    emit registrationAllowedChanged();
-    emit minimumNameLengthChanged();
-    emit maximumNameLengthChanged();
-    emit captchaUrlChanged();
-    emit captchaInstructionsChanged();
+    emit registrationInfoChanged();
 }
 
 void AccountClient::handleRegisterResponse(MessageIn &message)
@@ -329,10 +325,8 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
         mChatServerPort = message.readInt16();
 
         emit tokenChanged();
-        emit gameServerHostChanged();
-        emit gameServerPortChanged();
-        emit chatServerHostChanged();
-        emit chatServerPortChanged();
+        emit gameServerChanged();
+        emit chatServerChanged();
 
         qDebug() << "Game server: " << mGameServerHost << ":"
                 << mGameServerPort;

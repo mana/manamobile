@@ -43,19 +43,19 @@ class AccountClient : public ENetClient
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool registrationAllowed READ registrationAllowed NOTIFY registrationAllowedChanged)
-    Q_PROPERTY(int minimumNameLength READ minimumNameLength NOTIFY minimumNameLengthChanged)
-    Q_PROPERTY(int maximumNameLength READ maximumNameLength NOTIFY maximumNameLengthChanged)
-    Q_PROPERTY(QString captchaUrl READ captchaUrl NOTIFY captchaUrlChanged)
-    Q_PROPERTY(QString captchaInstructions READ captchaInstructions NOTIFY captchaInstructionsChanged)
+    Q_PROPERTY(bool registrationAllowed READ registrationAllowed NOTIFY registrationInfoChanged)
+    Q_PROPERTY(int minimumNameLength READ minimumNameLength NOTIFY registrationInfoChanged)
+    Q_PROPERTY(int maximumNameLength READ maximumNameLength NOTIFY registrationInfoChanged)
+    Q_PROPERTY(QString captchaUrl READ captchaUrl NOTIFY registrationInfoChanged)
+    Q_PROPERTY(QString captchaInstructions READ captchaInstructions NOTIFY registrationInfoChanged)
 
     Q_PROPERTY(QString updateHost READ updateHost NOTIFY updateHostChanged)
     Q_PROPERTY(QString dataUrl READ dataUrl NOTIFY dataUrlChanged)
     Q_PROPERTY(QString token READ token NOTIFY tokenChanged)
-    Q_PROPERTY(QString chatServerHost READ chatServerHost NOTIFY chatServerHostChanged)
-    Q_PROPERTY(quint16 chatServerPort READ chatServerPort NOTIFY chatServerPortChanged)
-    Q_PROPERTY(QString gameServerHost READ gameServerHost NOTIFY gameServerHostChanged)
-    Q_PROPERTY(quint16 gameServerPort READ gameServerPort NOTIFY gameServerPortChanged)
+    Q_PROPERTY(QString chatServerHost READ chatServerHost NOTIFY chatServerChanged)
+    Q_PROPERTY(quint16 chatServerPort READ chatServerPort NOTIFY chatServerChanged)
+    Q_PROPERTY(QString gameServerHost READ gameServerHost NOTIFY gameServerChanged)
+    Q_PROPERTY(quint16 gameServerPort READ gameServerPort NOTIFY gameServerChanged)
 
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(QString playerName READ playerName NOTIFY playerNameChanged)
@@ -131,19 +131,13 @@ signals:
     void passwordChangeSucceeded();
     void passwordChangeFailed(int error, const QString &errorMessage);
 
-    void registrationAllowedChanged();
-    void minimumNameLengthChanged();
-    void maximumNameLengthChanged();
-    void captchaUrlChanged();
-    void captchaInstructionsChanged();
+    void registrationInfoChanged();
 
     void updateHostChanged();
     void dataUrlChanged();
     void tokenChanged();
-    void chatServerHostChanged();
-    void chatServerPortChanged();
-    void gameServerHostChanged();
-    void gameServerPortChanged();
+    void chatServerChanged();
+    void gameServerChanged();
 
     void usernameChanged();
     void playerNameChanged();
