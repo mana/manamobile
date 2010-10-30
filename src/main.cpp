@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("Mana Mobile");
     app.setOrganizationDomain("manasource.org");
+    app.setOrganizationName(QLatin1String("mana"));
     app.setApplicationVersion("0.1");
 
     if (enet_initialize() != 0)

@@ -20,8 +20,10 @@
 
 #include "resourcemanager.h"
 
+#include <QDesktopServices>
 #include <QUrl>
 #include <QNetworkConfigurationManager>
+#include <QNetworkDiskCache>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QDebug>
@@ -37,6 +39,21 @@ ResourceManager::ResourceManager(QObject *parent) :
     // there's a way to avoid it completely...
     QNetworkConfigurationManager manager;
     mNetworkAccessManager.setConfiguration(manager.defaultConfiguration());
+
+    // Use a disk cache to avoid re-downloading data all the time
+    QString cacheLocation =
+            QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+
+    if (!cacheLocation.isEmpty()) {
+        cacheLocation += QLatin1String("/httpCache");
+
+        QNetworkDiskCache *diskCache = new QNetworkDiskCache(this);
+        diskCache->setCacheDirectory(cacheLocation);
+        mNetworkAccessManager.setCache(diskCache);
+    } else {
+        qWarning() << "CacheLocation is not supported on this platform, "
+                      "no disk cache is used!";
+    }
 
     Q_ASSERT(!mInstance);
     mInstance = this;
