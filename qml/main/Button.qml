@@ -8,6 +8,8 @@ BorderImage {
 
     property alias text: label.text
     property alias enabled: mouseArea.enabled
+    property variant tabTarget: KeyNavigation.down;
+    property variant backtabTarget: KeyNavigation.up;
 
     signal clicked
 
@@ -18,6 +20,10 @@ BorderImage {
     border.top: 4
     border.right: 4
     border.left: 4
+
+    Keys.onSpacePressed: button.clicked();
+    Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
+    Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
 
     Text {
         id: label

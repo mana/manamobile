@@ -22,6 +22,9 @@ Item {
             id: nameEdit
             width: window.width * 0.3
             focus: true
+
+            KeyNavigation.down: passwordEdit;
+            backtabTarget: loginButton;
         }
 
         Text {
@@ -31,6 +34,9 @@ Item {
             id: passwordEdit
             width: nameEdit.width
             echoMode: TextInput.Password
+
+            KeyNavigation.up: nameEdit;
+            KeyNavigation.down: loginButton;
         }
     }
 
@@ -41,14 +47,21 @@ Item {
         anchors.topMargin: 20
         anchors.right: column.right
 
+        KeyNavigation.up: passwordEdit;
+        tabTarget: nameEdit;
+
         enabled: accountClient.state == AccountClient.Connected && !loggingIn && !loggedIn
 
-        onClicked: {
-            print("Logging in as " + nameEdit.text + "...")
-            loggingIn = true
-            errorLabel.clear()
-            accountClient.login(nameEdit.text, passwordEdit.text)
-        }
+        onClicked: login();
+    }
+
+    Keys.onReturnPressed: login();
+
+    function login() {
+        print("Logging in as " + nameEdit.text + "...")
+        loggingIn = true
+        errorLabel.clear()
+        accountClient.login(nameEdit.text, passwordEdit.text)
     }
 
     Connections {

@@ -11,6 +11,20 @@ Item {
         }
     }
 
+    function chooseCharacter(index) {
+        if (window.characterChosen)
+            return;
+
+        window.characterChosen = true;
+        errorLabel.clear()
+        accountClient.chooseCharacter(index);
+    }
+
+    Keys.onReturnPressed: {
+        if (characterList.currentIndex >= 0)
+            chooseCharacter(characterList.currentIndex);
+    }
+
     ErrorLabel {
         id: errorLabel;
 
@@ -32,6 +46,7 @@ Item {
 
         ListView {
             id: characterList;
+            focus: window.state == "chooseCharacter";
 
             width: window.width * 0.3;
             height: window.height * 0.3;
@@ -42,15 +57,19 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked:  {
-                        if (window.characterChosen)
-                            return;
-
-                        window.characterChosen = true;
-                        errorLabel.clear()
-                        accountClient.chooseCharacter(model.index);
-                    }
+                    onClicked: chooseCharacter(model.index);
                 }
+            }
+            highlight: Rectangle {
+                color: "black";
+                opacity: 0.2;
+                width: characterList.width;
+            }
+
+            onCountChanged: {
+                // Select first item when possible
+                if (currentIndex == -1 && count > 0)
+                    currentIndex = 0;
             }
 
             Rectangle {

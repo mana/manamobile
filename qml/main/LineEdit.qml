@@ -6,8 +6,15 @@ import Qt 4.7
 FocusScope {
     property alias text: textInput.text
     property alias echoMode: textInput.echoMode
+    property variant tabTarget: KeyNavigation.down;
+    property variant backtabTarget: KeyNavigation.up;
 
     height: textInput.height + 4 + 5
+
+    Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
+    Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
+
+    onActiveFocusChanged: textInput.selectAll();
 
     BorderImage {
         anchors.fill: parent
