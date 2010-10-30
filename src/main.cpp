@@ -32,6 +32,7 @@
 #include "qmlapplicationviewer.h"
 
 #include "mana/accountclient.h"
+#include "mana/beinglistmodel.h"
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
@@ -41,21 +42,15 @@
 
 static void registerTypes()
 {
-//    const char * const genericError = "Type can't be instanciated manually";
-
-//    qmlRegisterUncreatableType<Mana::ENetClient>(
-//                "Mana", 1, 0, "ENetClient", genericError);
-
     qmlRegisterType<Mana::AccountClient>("Mana", 1, 0, "AccountClient");
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
 
-    qmlRegisterUncreatableType<Mana::CharacterListModel>(
-                "Mana", 1, 0, "CharacterListModel",
-                "Use AccountClient.characterListModel");
+    qmlRegisterType<Mana::CharacterListModel>();
+    qmlRegisterType<Mana::BeingListModel>();
+    qmlRegisterType<Mana::Being>();
 
-    qmlRegisterUncreatableType<ResourceManager>(
-                "Mana", 1, 0, "ResourceManager", "Use global resourceManager");
+    qmlRegisterType<ResourceManager>();
 
     qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
 }

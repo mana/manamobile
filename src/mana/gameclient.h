@@ -25,8 +25,15 @@
 
 namespace Mana {
 
+class Being;
+class BeingListModel;
+class BeingManager;
+
 /**
  * The game client allows interacting with the game server.
+ *
+ * The player name should be set so that the game server can identify who the
+ * current player is.
  */
 class GameClient : public ENetClient
 {
@@ -34,20 +41,34 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
+    Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
+    Q_PROPERTY(Mana::Being *player READ player NOTIFY playerChanged)
+
+    Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
 public:
     GameClient(QObject *parent = 0);
+    ~GameClient();
 
     bool authenticated() const { return mAuthenticated; }
     QString currentMap() const { return mCurrentMap; }
+    BeingListModel *beingListModel() const;
+    Being *player() const;
+
+    QString playerName() const;
+    void setPlayerName(const QString &name);
 
     Q_INVOKABLE void authenticate(const QString &token);
+    Q_INVOKABLE void walkTo(int x, int y);
 
 signals:
     void authenticationFailed(const QString &errorMessage);
 
     void authenticatedChanged();
     void mapChanged(const QString &name, int x, int y);
+    void playerChanged();
+
+    void playerNameChanged();
 
 protected:
     void messageReceived(MessageIn &message);
@@ -58,6 +79,8 @@ private:
 
     bool mAuthenticated;
     QString mCurrentMap;
+
+    BeingManager *mBeingManager;
 };
 
 } // namespace Mana

@@ -20,6 +20,7 @@
 
 #include "gameclient.h"
 
+#include "beingmanager.h"
 #include "messagein.h"
 #include "messageout.h"
 #include "protocol.h"
@@ -31,7 +32,38 @@ namespace Mana {
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
+    , mBeingManager(new BeingManager(this))
 {
+    QObject::connect(mBeingManager, SIGNAL(playerChanged()),
+                     this, SIGNAL(playerChanged()));
+}
+
+GameClient::~GameClient()
+{
+}
+
+BeingListModel *GameClient::beingListModel() const
+{
+    return mBeingManager->beingListModel();
+}
+
+Being *GameClient::player() const
+{
+    return mBeingManager->player();
+}
+
+QString GameClient::playerName() const
+{
+    return mBeingManager->playerName();
+}
+
+void GameClient::setPlayerName(const QString &name)
+{
+    if (mBeingManager->playerName() == name)
+        return;
+
+    mBeingManager->setPlayerName(name);
+    emit playerNameChanged();
 }
 
 void GameClient::authenticate(const QString &token)
@@ -42,6 +74,14 @@ void GameClient::authenticate(const QString &token)
     send(msg);
 }
 
+void GameClient::walkTo(int x, int y)
+{
+    MessageOut message(PGMSG_WALK);
+    message.writeInt16(x);
+    message.writeInt16(y);
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -50,6 +90,15 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
+        break;
+    case GPMSG_BEING_ENTER:
+        mBeingManager->handleBeingEnter(message);
+        break;
+    case GPMSG_BEING_LEAVE:
+        mBeingManager->handleBeingLeave(message);
+        break;
+    case GPMSG_BEINGS_MOVE:
+        mBeingManager->handleBeingsMove(message);
         break;
     case XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "

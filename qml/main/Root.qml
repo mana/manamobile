@@ -29,6 +29,7 @@ Rectangle {
     }
     Mana.GameClient {
         id: gameClient
+        playerName: accountClient.playerName;
         onConnected: authenticate(accountClient.token);
     }
 
