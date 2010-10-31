@@ -11,6 +11,7 @@ Image {
     source: "images/progress-indicator.png"
     opacity: 0
     scale: 4
+    smooth: true;
 
     NumberAnimation {
         id: rotateAnimation

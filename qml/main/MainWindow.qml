@@ -30,6 +30,8 @@ Rectangle {
         y: parent.height - height * 0.9
         sourceSize: Qt.size(parent.width / 2,
                             parent.width / 2)
+        width: sourceSize.width;
+        height: sourceSize.height;
         source: "images/mana.svg"
         opacity: 0.5
     }

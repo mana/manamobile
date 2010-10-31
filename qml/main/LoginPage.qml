@@ -12,47 +12,45 @@ Item {
     Column {
         id: column
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 10;
         x: parent.width * 0.5
         spacing: 10
 
-        Text {
-            text: qsTr("Username:")
-        }
         LineEdit {
             id: nameEdit
-            width: window.width * 0.3
+            width: window.width * 0.4
             focus: true
+            labelText: qsTr("Username");
 
             KeyNavigation.down: passwordEdit;
             backtabTarget: loginButton;
         }
 
-        Text {
-            text: qsTr("Password:")
-        }
         LineEdit {
             id: passwordEdit
             width: nameEdit.width
+            labelText: qsTr("Password");
             echoMode: TextInput.Password
 
             KeyNavigation.up: nameEdit;
             KeyNavigation.down: loginButton;
         }
-    }
 
-    Button {
-        id: loginButton
-        text: "Login"
-        anchors.top: column.bottom
-        anchors.topMargin: 20
-        anchors.right: column.right
+        Item { height: 1; width: 1; } // spacer
 
-        KeyNavigation.up: passwordEdit;
-        tabTarget: nameEdit;
+        Button {
+            id: loginButton;
+            text: qsTr("Login");
+            anchors.right: column.right;
 
-        enabled: accountClient.state == AccountClient.Connected && !loggingIn && !loggedIn
+            KeyNavigation.up: passwordEdit;
+            tabTarget: nameEdit;
 
-        onClicked: login();
+            enabled: accountClient.state == AccountClient.Connected &&
+                     !loggingIn && !loggedIn;
+
+            onClicked: login();
+        }
     }
 
     Keys.onReturnPressed: login();

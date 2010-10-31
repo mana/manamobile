@@ -10,24 +10,35 @@ BorderImage {
     property alias enabled: mouseArea.enabled
     property variant tabTarget: KeyNavigation.down;
     property variant backtabTarget: KeyNavigation.up;
+    property string baseName: "images/bigbutton";
 
     signal clicked
 
-    width: label.width + 7 + 7
+    width: Math.max(label.width + 20 + 20, 200);
 
-    source: "images/button.png"
-    border.bottom: 4
-    border.top: 4
-    border.right: 4
-    border.left: 4
+    source: baseName + ".png";
+    border.bottom: 20;
+    border.top: 26;
+    border.right: 100;
+    border.left: 100;
 
     Keys.onSpacePressed: button.clicked();
     Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
     Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
 
     Text {
+        text: label.text;
+        x: label.x + 1;
+        y: label.y + 1;
+        font: label.font;
+        color: "white";
+        opacity: 0.7;
+    }
+    Text {
         id: label
         anchors.centerIn: parent
+        font.pixelSize: 35;
+        opacity: 0.8;
     }
 
     MouseArea {
@@ -43,7 +54,7 @@ BorderImage {
             when: enabled && mouseArea.containsMouse && mouseArea.pressed
             PropertyChanges {
                 target: button
-                source: "images/buttonpress.png"
+                source: baseName + "_pressed.png";
             }
             PropertyChanges {
                 target: label
@@ -53,10 +64,11 @@ BorderImage {
         },
         State {
             name: "hovered"
-            when: enabled && mouseArea.containsMouse && !mouseArea.pressed
+            when: enabled && ((mouseArea.containsMouse && !mouseArea.pressed) ||
+                              button.activeFocus);
             PropertyChanges {
                 target: button
-                source: "images/buttonhi.png"
+                source: baseName + "_hovered.png";
             }
         },
         State {
@@ -64,7 +76,11 @@ BorderImage {
             when: !enabled
             PropertyChanges {
                 target: button
-                source: "images/button_disabled.png"
+                source: baseName + "_disabled.png";
+            }
+            PropertyChanges {
+                target: label;
+                opacity: 0.7;
             }
         }
     ]
