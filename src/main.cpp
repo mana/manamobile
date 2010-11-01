@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     ResourceManager *resourceManager = new ResourceManager(&viewer);
     viewer.rootContext()->setContextProperty("resourceManager", resourceManager);
 
-    viewer.setMainQmlFile(QLatin1String("qml/main/Root.qml"));
+    viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
     viewer.show();
 
     return app.exec();

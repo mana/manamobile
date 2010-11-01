@@ -1,14 +1,21 @@
 import Qt 4.7
 import Mana 1.0 as Mana
 
-Rectangle {
-    width: 800
-    height: 480
+/**
+ * This is the base component of a QML based Mana client. It sets up the
+ * account, chat and game clients and provides access to them.
+ */
+Item {
+    property string serverHost: "testing.manasource.org";
+    property int serverPort: 9601;
 
-    // Connect to the default server
-    Component.onCompleted: {
-        accountClient.connect("testing.manasource.org", 9601)
-    }
+    // Make the clients globally available
+    property alias accountClient: accountClient;
+    property alias chatClient: chatClient;
+    property alias gameClient: gameClient;
+
+    // Connect to the default server on startup
+    Component.onCompleted: accountClient.connect(serverHost, serverPort);
 
     Mana.AccountClient {
         id: accountClient
@@ -44,9 +51,5 @@ Rectangle {
             chatClient.service();
             gameClient.service();
         }
-    }
-
-    MainWindow {
-        anchors.fill: parent
     }
 }
