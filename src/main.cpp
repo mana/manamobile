@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
 
 #if defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6) || defined(Q_OS_SYMBIAN)
-    viewer.showMaximized();
+    viewer.showFullScreen();
 #else
     viewer.show();
 #endif
