@@ -11,19 +11,18 @@ Item {
         }
     }
 
-    function chooseCharacter(index) {
+    function chooseCharacter() {
         if (window.characterChosen)
+            return;
+        if (characterList.currentIndex < 0)
             return;
 
         window.characterChosen = true;
         errorLabel.clear()
-        accountClient.chooseCharacter(index);
+        accountClient.chooseCharacter(characterList.currentIndex);
     }
 
-    Keys.onReturnPressed: {
-        if (characterList.currentIndex >= 0)
-            chooseCharacter(characterList.currentIndex);
-    }
+    Keys.onReturnPressed: chooseCharacter();
 
     ErrorLabel {
         id: errorLabel;
@@ -57,7 +56,10 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: chooseCharacter(model.index);
+                    onClicked: {
+                        characterList.currentIndex = model.index;
+                        chooseCharacter();
+                    }
                 }
             }
             highlight: Rectangle {
