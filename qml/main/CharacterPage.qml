@@ -23,6 +23,7 @@ Item {
     }
 
     Keys.onReturnPressed: chooseCharacter();
+    Keys.onEnterPressed: chooseCharacter();
 
     ErrorLabel {
         id: errorLabel;

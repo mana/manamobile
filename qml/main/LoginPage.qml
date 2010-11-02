@@ -107,12 +107,15 @@ Item {
         }
     }
 
-    Keys.onReturnPressed: {
+    function registerOrLogin() {
         if (loginPage.state == "register")
             register();
         else
             login();
     }
+
+    Keys.onReturnPressed: registerOrLogin();
+    Keys.onEnterPressed: registerOrLogin();
 
     Connections {
         target: accountClient;
