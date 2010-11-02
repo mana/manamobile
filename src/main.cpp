@@ -78,14 +78,19 @@ int main(int argc, char *argv[])
 #ifndef QT_NO_OPENGL
     viewer.setViewport(new QGLWidget);
 #endif
-    viewer.setOrientation(QmlApplicationViewer::Auto);
+    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setWindowTitle(app.applicationName());
 
     ResourceManager *resourceManager = new ResourceManager(&viewer);
     viewer.rootContext()->setContextProperty("resourceManager", resourceManager);
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
+
+#if defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6) || defined(Q_OS_SYMBIAN)
+    viewer.showMaximized();
+#else
     viewer.show();
+#endif
 
     return app.exec();
 }
