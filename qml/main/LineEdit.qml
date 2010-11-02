@@ -34,7 +34,23 @@ FocusScope {
         y: textInput.y;
         color: "darkGray";
         font: textInput.font;
-        visible: textInput.text == "";
+
+        states: [
+            State {
+                name: "labelHidden";
+                when: textInput.text != "";
+                PropertyChanges { target: label; opacity: 0; }
+            }
+        ]
+        transitions: [
+            Transition {
+                from: "labelHidden";
+                NumberAnimation {
+                    property: "opacity";
+                    easing.type: Easing.InOutQuad;
+                }
+            }
+        ]
     }
 
     TextInput {
