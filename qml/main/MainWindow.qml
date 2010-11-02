@@ -11,25 +11,26 @@ Rectangle {
     property bool loggedIn: false
     property bool characterChosen: false
 
+    function authenticated() {
+        loggedIn = true
+        loggingIn = false
+        state = "chooseCharacter"
+    }
+
     Connections {
         target: accountClient;
 
-        onLoginSucceeded: {
-            print("Logged in!")
-            loggedIn = true
-            loggingIn = false
-            state = "chooseCharacter"
-        }
-        onLoginFailed: {
-            loggingIn = false
-        }
+        onLoginSucceeded: authenticated();
+        onRegistrationSucceeded: authenticated();
+        onLoginFailed: loggingIn = false;
+        onRegistrationFailed: loggingIn = false;
     }
 
     Image {
         x: -width * 0.1
         y: parent.height - height * 0.9
-        sourceSize: Qt.size(parent.width / 2,
-                            parent.width / 2)
+        sourceSize: Qt.size(parent.width / 2.2,
+                            parent.width / 2.2)
         width: sourceSize.width;
         height: sourceSize.height;
         source: "images/mana.svg"

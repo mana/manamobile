@@ -21,9 +21,8 @@ Item {
         id: accountClient
 
         onConnected: requestRegistrationInfo();
-        onLoginSucceeded: {
-            resourceManager.dataUrl = dataUrl;
-        }
+        onLoginSucceeded: resourceManager.dataUrl = dataUrl;
+        onRegistrationSucceeded: resourceManager.dataUrl = dataUrl;
         onChooseCharacterSucceeded: {
             // Connect to chat and game servers
             chatClient.connect(chatServerHost, chatServerPort);

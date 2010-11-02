@@ -19,6 +19,25 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient4013">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4015" />
+      <stop
+         id="stop4021"
+         offset="0.01486856"
+         style="stop-color:#8b8791;stop-opacity:0.47999999;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0.80800003;"
+         offset="0.04603013"
+         id="stop4023" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4017" />
+    </linearGradient>
+    <linearGradient
        inkscape:collect="always"
        id="linearGradient4904">
       <stop
@@ -274,6 +293,16 @@
        y1="721.05377"
        x2="380.52087"
        y2="752.59583" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4013"
+       id="linearGradient4019"
+       x1="370"
+       y1="405"
+       x2="370"
+       y2="500"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0025063,0,0,1.2,1.0025063,477.56218)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -283,8 +312,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="366.38037"
-     inkscape:cy="284.20075"
+     inkscape:cx="382.38972"
+     inkscape:cy="228.67433"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -765,5 +794,35 @@
        id="rect5299"
        style="opacity:0.5;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5305)"
        clip-path="url(#clipPath5334)" />
+    <rect
+       style="opacity:0.6;fill:url(#linearGradient4019);fill-opacity:1;stroke:none"
+       id="rect3243"
+       width="800"
+       height="90"
+       x="0"
+       y="962.36218"
+       ry="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="21"
+       y="1031.3622"
+       id="text4039"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4041"
+         x="21"
+         y="1031.3622">Don't have an account yet?</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4043"
+       y="1030.3618"
+       x="20.000219"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         y="1030.3618"
+         x="20.000219"
+         id="tspan4045"
+         sodipodi:role="line">Don't have an account yet?</tspan></text>
   </g>
 </svg>

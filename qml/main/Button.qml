@@ -8,13 +8,14 @@ BorderImage {
 
     property alias text: label.text
     property alias enabled: mouseArea.enabled
-    property variant tabTarget: KeyNavigation.down;
-    property variant backtabTarget: KeyNavigation.up;
+    property variant tabTarget: KeyNavigation.right || KeyNavigation.down;
+    property variant backtabTarget: KeyNavigation.left || KeyNavigation.up;
     property string baseName: "images/bigbutton";
 
     signal clicked
 
     width: Math.max(label.width + 20 + 20, 200);
+    anchors.margins: 5;
 
     source: baseName + ".png";
     border.bottom: 20;
@@ -26,11 +27,8 @@ BorderImage {
     Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
     Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
 
-    Text {
-        text: label.text;
-        x: label.x + 1;
-        y: label.y + 1;
-        font: label.font;
+    TextShadow {
+        target: label;
         color: "white";
         opacity: 0.7;
     }
@@ -44,6 +42,7 @@ BorderImage {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+        anchors.bottomMargin: -5;
         hoverEnabled: true
         onClicked: button.clicked()
     }

@@ -11,6 +11,7 @@ FocusScope {
     property variant backtabTarget: KeyNavigation.up;
 
     height: 70;
+    anchors.margins: 5;
 
     Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
     Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
