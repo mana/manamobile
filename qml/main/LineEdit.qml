@@ -16,7 +16,10 @@ FocusScope {
     Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
     Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
 
-    onActiveFocusChanged: textInput.selectAll();
+    onActiveFocusChanged: {
+        if (activeFocus)
+            textInput.selectAll();
+    }
 
     BorderImage {
         anchors.fill: parent

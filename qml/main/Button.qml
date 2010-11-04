@@ -23,7 +23,19 @@ BorderImage {
     border.right: 100;
     border.left: 100;
 
-    Keys.onSpacePressed: button.clicked();
+    QtObject {
+        id: priv;
+        property bool spaceDown: false;
+    }
+
+    Keys.onReleased: {
+        if (event.key == Qt.Key_Space && !event.isAutoRepeat) {
+            button.clicked();
+            priv.spaceDown = false;
+            event.accepted = true;
+        }
+    }
+    Keys.onSpacePressed: priv.spaceDown = true;
     Keys.onTabPressed: if (tabTarget) tabTarget.focus = true;
     Keys.onBacktabPressed: if (backtabTarget) backtabTarget.focus = true;
 
@@ -50,7 +62,8 @@ BorderImage {
     states: [
         State {
             name: "pressed"
-            when: enabled && mouseArea.containsMouse && mouseArea.pressed
+            when: enabled && ((mouseArea.containsMouse && mouseArea.pressed) ||
+                              priv.spaceDown);
             PropertyChanges {
                 target: button
                 source: baseName + "_pressed.png";
