@@ -100,6 +100,9 @@ void GameClient::messageReceived(MessageIn &message)
     case GPMSG_BEINGS_MOVE:
         mBeingManager->handleBeingsMove(message);
         break;
+    case GPMSG_BEING_ACTION_CHANGE:
+        mBeingManager->handleBeingActionChange(message);
+        break;
     case XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "
                       "Did we send an invalid message?";

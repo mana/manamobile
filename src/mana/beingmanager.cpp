@@ -34,6 +34,7 @@ Being::Being(int type, int id)
     : mType(type)
     , mId(id)
     , mWalkSpeed(0.0)
+    , mAction(Stand)
 {
 }
 
@@ -137,6 +138,16 @@ void BeingManager::handleBeingsMove(MessageIn &message)
 
         being->setServerPosition(QPointF(sx, sy));
     }
+}
+
+void BeingManager::handleBeingActionChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const Being::Action action = (Being::Action) message.readInt8();
+    const int beingIndex = mBeingListModel->indexOfBeing(id);
+    Being *being = mBeingListModel->beingAt(beingIndex);
+    if (being)
+        being->setAction(action);
 }
 
 void BeingManager::timerEvent(QTimerEvent *event)
