@@ -22,11 +22,13 @@
 
 using namespace Mana;
 
-Being::Being(int type, int id)
+Being::Being(int type, int id, QPointF position)
     : mType(type)
     , mId(id)
     , mWalkSpeed(0.0)
     , mAction(Stand)
+    , mPosition(position)
+    , mServerPosition(position)
 {
 }
 

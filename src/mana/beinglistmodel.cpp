@@ -75,8 +75,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     const int x = message.readInt16();
     const int y = message.readInt16();
 
-    Being *being = new Being(type, id);
-    being->setPosition(QPointF(x, y));
+    Being *being = new Being(type, id, QPointF(x, y));
 
     if (being->type() == OBJECT_PLAYER) {
         being->setName(message.readString());
@@ -169,7 +168,7 @@ void BeingListModel::timerEvent(QTimerEvent *event)
         const qreal walkSpeed = being->walkSpeed();
         QVector2D direction(target - pos);
 
-        if (direction.lengthSquared() + 1 < walkSpeed * walkSpeed) {
+        if (direction.lengthSquared() < walkSpeed * walkSpeed) {
             being->setPosition(target);
             notifyBeingChanged(i);
             continue;

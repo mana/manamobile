@@ -50,7 +50,7 @@ public:
         Hurt
     };
 
-    Being(int type, int id);
+    Being(int type, int id, QPointF position);
 
     int type() const { return mType; }
     int id() const { return mId; }
