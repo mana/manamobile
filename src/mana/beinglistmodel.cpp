@@ -146,9 +146,12 @@ void BeingListModel::handleBeingActionChange(MessageIn &message)
 void BeingListModel::handleBeingSay(MessageIn &message)
 {
     const int id = message.readInt16();
-    if (Being *being = beingById(id)) {
+    const int index = indexOfBeing(id);
+
+    if (index != -1) {
         const QString text = message.readString();
-        being->say(text);
+        mBeings.at(index)->say(text);
+        notifyBeingChanged(index);
     }
 }
 
