@@ -21,11 +21,12 @@
 #ifndef BEINGLISTMODEL_H
 #define BEINGLISTMODEL_H
 
-#include "beingmanager.h"
-
 #include <QAbstractListModel>
 
 namespace Mana {
+
+class Being;
+class MessageIn;
 
 class BeingListModel : public QAbstractListModel
 {
@@ -44,17 +45,38 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
+    QString playerName() const { return mPlayerName; }
+    void setPlayerName(const QString &name) { mPlayerName = name; }
+
+    Being *player() const { return mPlayerBeing; }
+
+    void handleBeingEnter(MessageIn &message);
+    void handleBeingLeave(MessageIn &message);
+    void handleBeingsMove(MessageIn &message);
+    void handleBeingActionChange(MessageIn &message);
+
+signals:
+    void playerChanged();
+
+protected:
+    void timerEvent(QTimerEvent *);
+
+private:
     Being *beingAt(int index) const { return mBeings.at(index); }
+    Being *beingById(int id) const;
     void addBeing(Being *being);
     void removeBeing(int id);
     int indexOfBeing(int id) const;
     void notifyBeingChanged(int index);
     const QList<Being*> &beings() const { return mBeings; }
 
-private:
     QList<Being*> mBeings;
+
+    int mBeingUpdateTimer;
+    QString mPlayerName;
+    Being *mPlayerBeing;
 };
 
 } // namespace Mana
 
-#endif // BEINGLISTMODEL_H
+#endif // BEINGLISTMODEL

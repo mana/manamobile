@@ -18,16 +18,13 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BEINGMANAGER_H
-#define BEINGMANAGER_H
+#ifndef BEING_H
+#define BEING_H
 
-#include <QHash>
+#include <QObject>
 #include <QPointF>
 
 namespace Mana {
-
-class BeingListModel;
-class MessageIn;
 
 /**
  * Class representing a being.
@@ -88,39 +85,6 @@ private:
     QString mName;
 };
 
-class BeingManager : public QObject
-{
-    Q_OBJECT
-
-public:
-    BeingManager(QObject *parent = 0);
-
-    QString playerName() const { return mPlayerName; }
-    void setPlayerName(const QString &name) { mPlayerName = name; }
-
-    Being *player() const { return mPlayerBeing; }
-
-    BeingListModel *beingListModel() const { return mBeingListModel; }
-
-    void handleBeingEnter(MessageIn &message);
-    void handleBeingLeave(MessageIn &message);
-    void handleBeingsMove(MessageIn &message);
-    void handleBeingActionChange(MessageIn &message);
-
-signals:
-    void playerChanged();
-
-protected:
-    void timerEvent(QTimerEvent *);
-
-private:
-    BeingListModel *mBeingListModel;
-
-    int mBeingUpdateTimer;
-    QString mPlayerName;
-    Being *mPlayerBeing;
-};
-
 } // namespace Mana
 
-#endif // BEINGMANAGER_H
+#endif // BEING_H

@@ -71,8 +71,8 @@ SOURCES += src/main.cpp \
     src/mana/sha256.cpp \
     src/mapitem.cpp \
     src/tilelayeritem.cpp \
-    src/mana/beingmanager.cpp \
-    src/mana/beinglistmodel.cpp
+    src/mana/beinglistmodel.cpp \
+    src/mana/being.cpp
 
 HEADERS += \
     src/resourcemanager.h \
@@ -105,8 +105,8 @@ HEADERS += \
     src/mapitem.h \
     src/tilelayeritem.h \
     src/durationlogger.h \
-    src/mana/beingmanager.h \
-    src/mana/beinglistmodel.h
+    src/mana/beinglistmodel.h \
+    src/mana/being.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

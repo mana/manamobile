@@ -20,7 +20,7 @@
 
 #include "gameclient.h"
 
-#include "beingmanager.h"
+#include "beinglistmodel.h"
 #include "messagein.h"
 #include "messageout.h"
 #include "protocol.h"
@@ -32,9 +32,9 @@ namespace Mana {
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
-    , mBeingManager(new BeingManager(this))
+    , mBeingListModel(new BeingListModel(this))
 {
-    QObject::connect(mBeingManager, SIGNAL(playerChanged()),
+    QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
                      this, SIGNAL(playerChanged()));
 }
 
@@ -44,25 +44,25 @@ GameClient::~GameClient()
 
 BeingListModel *GameClient::beingListModel() const
 {
-    return mBeingManager->beingListModel();
+    return mBeingListModel;
 }
 
 Being *GameClient::player() const
 {
-    return mBeingManager->player();
+    return mBeingListModel->player();
 }
 
 QString GameClient::playerName() const
 {
-    return mBeingManager->playerName();
+    return mBeingListModel->playerName();
 }
 
 void GameClient::setPlayerName(const QString &name)
 {
-    if (mBeingManager->playerName() == name)
+    if (mBeingListModel->playerName() == name)
         return;
 
-    mBeingManager->setPlayerName(name);
+    mBeingListModel->setPlayerName(name);
     emit playerNameChanged();
 }
 
@@ -92,16 +92,16 @@ void GameClient::messageReceived(MessageIn &message)
         handlePlayerMapChanged(message);
         break;
     case GPMSG_BEING_ENTER:
-        mBeingManager->handleBeingEnter(message);
+        mBeingListModel->handleBeingEnter(message);
         break;
     case GPMSG_BEING_LEAVE:
-        mBeingManager->handleBeingLeave(message);
+        mBeingListModel->handleBeingLeave(message);
         break;
     case GPMSG_BEINGS_MOVE:
-        mBeingManager->handleBeingsMove(message);
+        mBeingListModel->handleBeingsMove(message);
         break;
     case GPMSG_BEING_ACTION_CHANGE:
-        mBeingManager->handleBeingActionChange(message);
+        mBeingListModel->handleBeingActionChange(message);
         break;
     case XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "

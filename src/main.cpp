@@ -32,6 +32,7 @@
 #include "qmlapplicationviewer.h"
 
 #include "mana/accountclient.h"
+#include "mana/being.h"
 #include "mana/beinglistmodel.h"
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"

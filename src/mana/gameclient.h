@@ -27,7 +27,6 @@ namespace Mana {
 
 class Being;
 class BeingListModel;
-class BeingManager;
 
 /**
  * The game client allows interacting with the game server.
@@ -80,7 +79,7 @@ private:
     bool mAuthenticated;
     QString mCurrentMap;
 
-    BeingManager *mBeingManager;
+    BeingListModel *mBeingListModel;
 };
 
 } // namespace Mana
