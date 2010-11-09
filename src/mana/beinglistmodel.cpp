@@ -36,6 +36,7 @@ BeingListModel::BeingListModel(QObject *parent)
 {
     QHash<int, QByteArray> roleNames;
     roleNames.insert(BeingName, "name");
+    roleNames.insert(BeingChatMessage, "chatMessage");
     roleNames.insert(BeingX, "x");
     roleNames.insert(BeingY, "y");
     setRoleNames(roleNames);
@@ -55,6 +56,8 @@ QVariant BeingListModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case BeingName:
         return being->name();
+    case BeingChatMessage:
+        return being->chatMessage();
     case BeingX:
         return being->x();
     case BeingY:
@@ -138,6 +141,15 @@ void BeingListModel::handleBeingActionChange(MessageIn &message)
     if (Being *being = beingById(id)) {
         const Being::Action action = (Being::Action) message.readInt8();
         being->setAction(action);
+    }
+}
+
+void BeingListModel::handleBeingSay(MessageIn &message)
+{
+    const int id = message.readInt16();
+    if (Being *being = beingById(id)) {
+        const QString text = message.readString();
+        being->say(text);
     }
 }
 

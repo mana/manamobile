@@ -82,6 +82,13 @@ void GameClient::walkTo(int x, int y)
     send(message);
 }
 
+void GameClient::say(const QString &text)
+{
+    MessageOut message(PGMSG_SAY);
+    message.writeString(text);
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -102,6 +109,9 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_BEING_ACTION_CHANGE:
         mBeingListModel->handleBeingActionChange(message);
+        break;
+    case GPMSG_SAY:
+        mBeingListModel->handleBeingSay(message);
         break;
     case XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "

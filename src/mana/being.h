@@ -38,6 +38,7 @@ class Being : public QObject
     Q_PROPERTY(int x READ x NOTIFY positionChanged)
     Q_PROPERTY(int y READ y NOTIFY positionChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString chatMessage READ chatMessage NOTIFY chatMessageChanged)
 
 public:
     enum Action {
@@ -59,6 +60,8 @@ public:
     QString name() const { return mName; }
     void setName(const QString &name);
 
+    QString chatMessage() const { return mChatMessage; }
+
     qreal walkSpeed() const { return mWalkSpeed; }
     void setWalkSpeed(qreal walkSpeed) { mWalkSpeed = walkSpeed; }
 
@@ -71,9 +74,12 @@ public:
     QPointF serverPosition() const { return mServerPosition; }
     void setServerPosition(QPointF position);
 
+    void say(const QString &text);
+
 signals:
     void positionChanged();
     void nameChanged();
+    void chatMessageChanged();
 
 private:
     int mType;
@@ -83,6 +89,7 @@ private:
     QPointF mPosition;
     QPointF mServerPosition;
     QString mName;
+    QString mChatMessage;
 };
 
 } // namespace Mana

@@ -36,7 +36,8 @@ class BeingListModel : public QAbstractListModel
 public:
     enum BeingRoles {
         BeingName = Qt::DisplayRole,
-        BeingX = Qt::UserRole,
+        BeingChatMessage = Qt::UserRole,
+        BeingX,
         BeingY
     };
 
@@ -54,6 +55,7 @@ public:
     void handleBeingLeave(MessageIn &message);
     void handleBeingsMove(MessageIn &message);
     void handleBeingActionChange(MessageIn &message);
+    void handleBeingSay(MessageIn &message);
 
 signals:
     void playerChanged();

@@ -52,3 +52,9 @@ void Being::setName(const QString &name)
     mName = name;
     emit nameChanged();
 }
+
+void Being::say(const QString &text)
+{
+    mChatMessage = text;
+    emit chatMessageChanged();
+}

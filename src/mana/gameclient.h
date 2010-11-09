@@ -59,6 +59,7 @@ public:
 
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
+    Q_INVOKABLE void say(const QString &text);
 
 signals:
     void authenticationFailed(const QString &errorMessage);

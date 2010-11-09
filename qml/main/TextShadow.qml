@@ -11,4 +11,5 @@ Text {
     x: target.x + 1;
     y: target.y + 1;
     font: target.font;
+    opacity: target.opacity;
 }

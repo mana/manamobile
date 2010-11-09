@@ -2,10 +2,12 @@ import Qt 4.7
 import Tiled 1.0
 
 Rectangle {
+    id: gamePage;
     width: 640;
     height: 480;
 
     color: "black";
+    focus: window.state == "game";
 
     MouseArea {
         id: walkMouseArea;
@@ -67,6 +69,36 @@ Rectangle {
                 z: y;
 
                 Rectangle {
+                    anchors.fill: chat;
+                    anchors.margins: -4;
+                    radius: 10;
+                    color: Qt.rgba(0, 0, 0, 0.2);
+                    opacity: chat.opacity;
+                }
+                TextShadow { target: chat; }
+                Text {
+                    id: chat;
+                    anchors.bottom: sprite.top;
+                    anchors.bottomMargin: 10;
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    text: model.chatMessage;
+                    color: "white";
+                    opacity: 0;
+
+                    onTextChanged: {
+                        opacity = 1;
+                        chatAnimation.start();
+                    }
+
+                    SequentialAnimation {
+                        id: chatAnimation;
+                        PauseAnimation { duration: Math.min(10000, 2500 + chat.text.length * 50); }
+                        NumberAnimation { target: chat; property: "opacity"; to: 0; }
+                    }
+                }
+
+                Rectangle {
+                    id: sprite;
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.bottom: parent.bottom;
                     color: "blue";
@@ -100,5 +132,72 @@ Rectangle {
         anchors.left: parent.left;
         anchors.margins: 2;
         text: "Current map: " + gameClient.currentMap;
+    }
+
+    Keys.onReturnPressed: chatBar.open();
+    Keys.onEnterPressed: chatBar.open();
+    Keys.onPressed: {
+        if (event.text.length) {
+            chatBar.open();
+            chatInput.text += event.text;
+        }
+    }
+
+    FocusScope {
+        id: chatBar;
+
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        anchors.bottom: parent.bottom;
+
+        Keys.onReturnPressed: sayText();
+        Keys.onEnterPressed: sayText();
+
+        function open() {
+            chatInput.focus = true;
+            chatBar.focus = true;
+        }
+
+        function sayText() {
+            if (chatInput.text != "") {
+                gameClient.say(chatInput.text);
+                chatInput.text = "";
+            }
+            gamePage.focus = true;
+        }
+
+        LineEdit {
+            id: chatInput;
+            anchors.left: parent.left;
+            anchors.right: sayButton.left;
+            tabTarget: sayButton;
+
+            states: [
+                State {
+                    name: "opened";
+                    when: chatBar.activeFocus;
+                    PropertyChanges {
+                        target: chatInput;
+                        y: -chatInput.height - 5;
+                    }
+                }
+            ]
+            transitions: [
+                Transition {
+                    NumberAnimation {
+                        property: "y";
+                        easing.type: Easing.InOutQuad;
+                    }
+                }
+            ]
+        }
+        Button {
+            id: sayButton;
+            anchors.right: parent.right;
+            anchors.verticalCenter: chatInput.verticalCenter;
+            text: "Say";
+            onClicked: chatBar.sayText();
+            KeyNavigation.left: chatInput;
+        }
     }
 }
