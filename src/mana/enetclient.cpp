@@ -62,16 +62,20 @@ void ENetClient::connect(const QString &hostName, quint16 port)
     mPort = port;
     qDebug() << Q_FUNC_INFO << hostName << mPort;
 
+    setState(HostLookup);
+
     QHostAddress address;
-    if (address.setAddress(hostName)) {
+    if (address.setAddress(hostName) &&
+        address.protocol() == QAbstractSocket::IPv4Protocol) {
         // No need to lookup host
         QHostInfo hostInfo;
         hostInfo.setAddresses(QList<QHostAddress>() << address);
         startConnecting(hostInfo);
     }
-
-    setState(HostLookup);
-    QHostInfo::lookupHost(hostName, this, SLOT(startConnecting(QHostInfo)));
+    else {
+        QHostInfo::lookupHost(hostName, this,
+                              SLOT(startConnecting(QHostInfo)));
+    }
 }
 
 void ENetClient::disconnect()
@@ -171,12 +175,22 @@ void ENetClient::startConnecting(const QHostInfo &hostInfo)
         return;
     }
 
-    // TODO: Support hosts with multiple IP addresses?
-    const QHostAddress &address = addresses.first();
-
     ENetAddress enetAddress;
-    enetAddress.host = qToBigEndian(address.toIPv4Address());
+    enetAddress.host = 0;
     enetAddress.port = mPort;
+
+    foreach (const QHostAddress &address, addresses) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol) {
+            enetAddress.host = qToBigEndian(address.toIPv4Address());
+            break;
+        }
+    }
+
+    if (!enetAddress.host) {
+        qDebug() << "No IPv4 host address found.";
+        setState(Disconnected);
+        return;
+    }
 
     mPeer = enet_host_connect(mHost, &enetAddress, 1, 0);
     if (!mPeer) {
