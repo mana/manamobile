@@ -1,5 +1,5 @@
 import Qt 4.7
-import Mana 1.0 as Mana
+import Mana 1.0
 
 /**
  * This is the base component of a QML based Mana client. It sets up the
@@ -9,17 +9,7 @@ Item {
     property string serverHost: "testing.manasource.org";
     property int serverPort: 9601;
 
-    // Make the clients globally available
-    property alias accountClient: accountClient;
-    property alias chatClient: chatClient;
-    property alias gameClient: gameClient;
-
-    // Connect to the default server on startup
-    Component.onCompleted: accountClient.connect(serverHost, serverPort);
-
-    Mana.AccountClient {
-        id: accountClient
-
+    property variant accountClient: AccountClient {
         onConnected: requestRegistrationInfo();
         onLoginSucceeded: resourceManager.dataUrl = dataUrl;
         onRegistrationSucceeded: resourceManager.dataUrl = dataUrl;
@@ -29,15 +19,16 @@ Item {
             gameClient.connect(gameServerHost, gameServerPort);
         }
     }
-    Mana.ChatClient {
-        id: chatClient
+    property variant chatClient: ChatClient {
         onConnected: authenticate(accountClient.token);
     }
-    Mana.GameClient {
-        id: gameClient
+    property variant gameClient: GameClient {
         playerName: accountClient.playerName;
         onConnected: authenticate(accountClient.token);
     }
+
+    // Connect to the default server on startup
+    Component.onCompleted: accountClient.connect(serverHost, serverPort);
 
     Timer {
         id: networkTimer
