@@ -53,6 +53,10 @@ Rectangle {
         contentWidth: map.width;
         contentHeight: map.height;
 
+        // Smoothly animate the camera
+        Behavior on contentX { SpringAnimation { spring: 3; damping: 1 } }
+        Behavior on contentY { SpringAnimation { spring: 3; damping: 1 } }
+
         TileMap {
             id: map;
             source: gameClient.currentMap;
