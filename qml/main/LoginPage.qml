@@ -29,14 +29,16 @@ Item {
         y: parent.height * 0.1;
         x: parent.width * 0.45;
 
-        ErrorLabel {
-            id: errorLabel;
+        Text {
+            id: serverNameDisplay;
             anchors.horizontalCenter: nameEdit.horizontalCenter;
+            text: serverName;
+            font.pixelSize: 35;
         }
         LineEdit {
             id: nameEdit;
             width: window.width * 0.5;
-            anchors.top: errorLabel.bottom;
+            anchors.top: serverNameDisplay.bottom;
             focus: true;
             labelText: qsTr("Username");
 
@@ -78,6 +80,7 @@ Item {
             tabTarget: cancelButton;
         }
         Item {
+            id: buttons;
             width: loginButton.width + loginButton.x;
             anchors.top: passwordConfirmEdit.bottom;
             anchors.topMargin: 20;
@@ -104,6 +107,11 @@ Item {
 
                 onClicked: login();
             }
+        }
+        ErrorLabel {
+            id: errorLabel;
+            anchors.top: buttons.bottom;
+            anchors.horizontalCenter: nameEdit.horizontalCenter;
         }
     }
 

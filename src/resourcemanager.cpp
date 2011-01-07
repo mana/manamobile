@@ -21,7 +21,6 @@
 #include "resourcemanager.h"
 
 #include <QDesktopServices>
-#include <QUrl>
 #include <QNetworkConfigurationManager>
 #include <QNetworkDiskCache>
 #include <QNetworkReply>

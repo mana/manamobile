@@ -44,6 +44,7 @@ class ENetClient : public QObject
     Q_OBJECT
 
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
+    Q_PROPERTY(bool connected READ isConnected NOTIFY stateChanged)
 
     Q_ENUMS(State)
 

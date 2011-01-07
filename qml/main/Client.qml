@@ -6,8 +6,7 @@ import Mana 1.0
  * account, chat and game clients and provides access to them.
  */
 Item {
-    property string serverHost: "testing.manasource.org";
-    property int serverPort: 9601;
+    property string serverName: "ManaSource!";
 
     property variant accountClient: AccountClient {
         onConnected: requestRegistrationInfo();
@@ -27,8 +26,9 @@ Item {
         onConnected: authenticate(accountClient.token);
     }
 
-    // Connect to the default server on startup
-    Component.onCompleted: accountClient.connect(serverHost, serverPort);
+    function connect(serverHost, serverPort) {
+        accountClient.connect(serverHost, serverPort);
+    }
 
     Timer {
         id: networkTimer

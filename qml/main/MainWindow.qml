@@ -5,7 +5,7 @@ Rectangle {
     id: window
     color: "#fffcf2"
 
-    state: "login"
+    state: "serverSelect"
 
     property bool loggingIn: false
     property bool loggedIn: false
@@ -45,10 +45,19 @@ Rectangle {
                  || (characterChosen && window.state != "game")
     }
 
+    ServerPage {
+        id: serverPage
+        width: parent.width
+        height: parent.width
+        opacity: 0
+        x: width / 4
+    }
     LoginPage {
         id: loginPage
         width: parent.width
         height: parent.height
+        opacity: 0
+        x: width / 4
     }
     CharacterPage {
         id: characterPage
@@ -67,7 +76,26 @@ Rectangle {
 
     states: [
         State {
+            name: "serverSelect"
+            PropertyChanges {
+                target: serverPage
+                x: 0
+                opacity: 1
+            }
+        },
+        State {
             name: "login"
+            when: accountClient.connected && !characterChosen
+            PropertyChanges {
+                target: serverPage
+                x: -serverPage.width / 4
+                opacity: 0
+            }
+            PropertyChanges {
+                target: loginPage
+                x: 0
+                opacity: 1
+            }
         },
         State {
             name: "chooseCharacter"
