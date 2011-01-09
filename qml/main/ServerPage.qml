@@ -4,95 +4,139 @@ import Mana 1.0
 Item {
     id: serverPage;
     property bool serverChosen: false;
+    anchors.fill: parent;
 
-    Column {
-        id: column;
+    Text {
+        id: title;
         x: window.width / 3;
-        y: 0;
-        width: window.width * 2;
-        spacing: 10;
+        y: 5;
+        width: window.width * 2 / 3 - 5;
+        text: qsTr("Choose a server...");
+        font.pixelSize: 35;
+    }
 
-        Text {
-            id: title;
-            text: qsTr("Choose a server...");
-            font.pixelSize: 35;
+    Item {
+        anchors { left: title.left; right: parent.right; top: title.bottom;
+                    bottom: parent.bottom; margins: 5; }
+        height: window.height / 2;
+
+        BorderImage {
+            anchors.fill: parent
+
+            source: "images/deepbox.png"
+            border.bottom: 5;
+            border.top: 5;
+            border.right: 5;
+            border.left: 5;
         }
 
+        Flickable {
+            anchors { fill: parent; margins: 3; }
+            clip: true;
+            contentWidth: width;
+            contentHeight: flickColumn.height;
+            pressDelay: 1000;
+
+            Column {
+                id: flickColumn;
+                width: parent.width;
+
+                Repeater {
+                    //anchors.fill: parent;
+                    model: serverListModel;
+                    delegate: serverListEntry;
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: networkTimer;
+        interval: 100;
+        running: true;
+        repeat: true;
+    }
+
+    Component {
+        id: serverListEntry
         Item {
-            anchors { left: parent.left; right: parent.right; }
-            height: window.height / 2;
+            id: serverListEntryItem;
+            height: container.height;
+            width: flickColumn.width - 4;
+            property string entryTitle: name == "" ? hostname : name;
+            property bool canSee: false;
 
-            BorderImage {
-                anchors.fill: parent
+            Row {
+                id: container;
+                x: 1;
+                spacing: 2;
 
-                source: "images/deepbox.png"
-                border.bottom: 5;
-                border.top: 5;
-                border.right: 5;
-                border.left: 5;
+                Rectangle {
+                    id: status;
+                    width: 32;
+                    height: 32;
+                    y: nameLabel.y + 5;
+
+                    color: canSee ? "green" : "red";
+                }
+
+                Column {
+                    spacing: 1;
+                    Text {
+                        id: nameLabel;
+                        text: entryTitle;
+                        font.pointSize: 12;
+                    }
+
+                    Text {
+                        id: addressLabel;
+                        text: hostname + ":" + port;
+                        color: "midnightblue";
+                        font.pointSize: 9;
+                        z: 5
+                    }
+                }
             }
 
-            ListView {
-                id: serverList;
-                focus: window.state == "chooseServer";
-                anchors { fill: parent; margins: 3; }
-
-                model: serverListModel;
-                delegate: Item {
-                    height: row.height + 2;
-                    Row {
-                        id: row;
-                        x: 1;
-                        spacing: 2;
-
-                        Rectangle {
-                            width: 20;
-                            height: 20;
-
-                            // TODO Query the server for status
-                            color: "green";
-                        }
-
-                        Text {
-                            text: name;
-                        }
-                    }
-
-                    MouseArea {
-                        anchors.fill: row
-                        onClicked: {
-                            if (!serverPage.serverChosen) {
-                                serverPage.serverChosen = true;
-                                serverList.currentIndex = model.index;
-                                serverName = name == "" ? hostname : name;
-                                connect(hostname, port);
-                            }
-                        }
-                    }
+            MouseArea {
+                anchors.fill: parent;
+                enabled: !serverPage.serverChosen;
+                onClicked: {
+                    serverPage.serverChosen = true;
+                    serverName = entryTitle;
+                    accountClient.connect(hostname, port);
                 }
-                highlight: Rectangle {
-                    color: "black";
-                    opacity: 0.2;
-                    width: serverList.width;
+            }
+
+            AccountClient {
+                id: client;
+                onConnected: {
+                    canSee = true;
+                    disconnect();
                 }
+            }
 
-                onCountChanged: {
-                    // Select first item when possible
-                    if (currentIndex == -1 && count > 0)
-                        currentIndex = 0;
-                }
+            Component.onCompleted: {
+                client.connect(hostname, port);
+            }
 
-                XmlListModel {
-                    id: serverListModel;
-                    source: "http://manasource.org/serverlist.xml";
-                    query: "/serverlist/server[lower-case(@type)='manaserv']";
-
-                    XmlRole { name: "name"; query: "@name/string()" }
-                    XmlRole { name: "hostname"; query: "connection/@hostname/string()" }
-                    XmlRole { name: "port"; query: "connection/@port/number()" }
-                    XmlRole { name: "description"; query: "description/string()" }
+            Connections {
+                target: networkTimer;
+                onTriggered: {
+                    client.service();
                 }
             }
         }
+    }
+
+    XmlListModel {
+        id: serverListModel;
+        source: "http://manasource.org/serverlist.xml";
+        query: "/serverlist/server[lower-case(@type)='manaserv']";
+
+        XmlRole { name: "name"; query: "@name/string()"; }
+        XmlRole { name: "hostname"; query: "connection/@hostname/string()"; }
+        XmlRole { name: "port"; query: "connection/@port/number()"; }
+        XmlRole { name: "description"; query: "description/string()"; }
     }
 }

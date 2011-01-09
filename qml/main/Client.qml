@@ -26,10 +26,6 @@ Item {
         onConnected: authenticate(accountClient.token);
     }
 
-    function connect(serverHost, serverPort) {
-        accountClient.connect(serverHost, serverPort);
-    }
-
     Timer {
         id: networkTimer
         interval: 100
