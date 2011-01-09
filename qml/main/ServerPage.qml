@@ -112,8 +112,16 @@ Item {
                 id: client;
                 onConnected: {
                     canSee = true;
-                    disconnect();
+
+                    // A direct disconnect here messes things up
+                    disconnectTimer.start();
                 }
+            }
+
+            Timer {
+                id: disconnectTimer
+                interval: 1
+                onTriggered: client.disconnect();
             }
 
             Component.onCompleted: {
