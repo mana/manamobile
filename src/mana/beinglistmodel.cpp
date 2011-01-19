@@ -77,7 +77,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
 
     Being *being = new Being(type, id, QPointF(x, y));
 
-    if (being->type() == OBJECT_PLAYER) {
+    if (being->type() == OBJECT_CHARACTER) {
         being->setName(message.readString());
 
         // Match the being by name to see whether it's the current player
