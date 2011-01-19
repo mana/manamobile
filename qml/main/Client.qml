@@ -10,7 +10,10 @@ Item {
 
     property variant accountClient: AccountClient {
         onConnected: requestRegistrationInfo();
-        onLoginSucceeded: resourceManager.dataUrl = dataUrl;
+        onLoginSucceeded: {
+            resourceManager.dataUrl = dataUrl;
+            itemDB.load();
+        }
         onRegistrationSucceeded: resourceManager.dataUrl = dataUrl;
         onChooseCharacterSucceeded: {
             // Connect to chat and game servers

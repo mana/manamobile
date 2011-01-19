@@ -38,6 +38,8 @@
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
 
+#include "mana/resource/itemdb.h"
+
 #include "mapitem.h"
 #include "resourcemanager.h"
 
@@ -52,6 +54,8 @@ static void registerTypes()
     qmlRegisterType<Mana::Being>();
 
     qmlRegisterType<ResourceManager>();
+    qmlRegisterType<Mana::ItemDB>();
+    qmlRegisterType<Mana::ItemInfo>();
 
     qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
 }
@@ -83,7 +87,11 @@ int main(int argc, char *argv[])
     viewer.setWindowTitle(app.applicationName());
 
     ResourceManager *resourceManager = new ResourceManager(&viewer);
-    viewer.rootContext()->setContextProperty("resourceManager", resourceManager);
+    Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
+
+    QDeclarativeContext *context = viewer.rootContext();
+    context->setContextProperty("resourceManager", resourceManager);
+    context->setContextProperty("itemDB", itemDB);
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
 

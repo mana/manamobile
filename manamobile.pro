@@ -72,7 +72,9 @@ SOURCES += src/main.cpp \
     src/mapitem.cpp \
     src/tilelayeritem.cpp \
     src/mana/beinglistmodel.cpp \
-    src/mana/being.cpp
+    src/mana/being.cpp \
+    src/mana/resource/itemdb.cpp \
+    src/mana/resource/spritedef.cpp
 
 HEADERS += \
     src/resourcemanager.h \
@@ -106,7 +108,10 @@ HEADERS += \
     src/tilelayeritem.h \
     src/durationlogger.h \
     src/mana/beinglistmodel.h \
-    src/mana/being.h
+    src/mana/being.h \
+    src/mana/resource/itemdb.h \
+    src/mana/resource/spritedef.h \
+    src/mana/xmlreader.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
