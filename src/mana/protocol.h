@@ -24,6 +24,8 @@
 
 namespace Mana {
 
+enum { PROTOCOL_VERSION = 1 };
+
 /**
  * Enumerated type for communicated messages:
  *

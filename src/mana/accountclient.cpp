@@ -63,7 +63,7 @@ void AccountClient::registerAccount(const QString &username,
                                     const QString &captchaResponse)
 {
     MessageOut registerMessage(PAMSG_REGISTER);
-    registerMessage.writeInt32(0); // client version
+    registerMessage.writeInt32(PROTOCOL_VERSION);
     registerMessage.writeString(username);
     registerMessage.writeString(passwordHash(username, password));
     registerMessage.writeString(email);
@@ -86,7 +86,7 @@ void AccountClient::login(const QString &username,
                           const QString &password)
 {
     MessageOut loginMessage(PAMSG_LOGIN);
-    loginMessage.writeInt32(0); // client version
+    loginMessage.writeInt32(PROTOCOL_VERSION);
     loginMessage.writeString(username);
     loginMessage.writeString(passwordHash(username, password));
     send(loginMessage);
