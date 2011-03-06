@@ -28,8 +28,6 @@
 
 #include <safeassert.h>
 
-#include <iostream>
-
 namespace Mana {
 
 AccountClient::AccountClient(QObject *parent)
