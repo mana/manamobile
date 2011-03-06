@@ -74,7 +74,8 @@ SOURCES += src/main.cpp \
     src/mana/beinglistmodel.cpp \
     src/mana/being.cpp \
     src/mana/resource/itemdb.cpp \
-    src/mana/resource/spritedef.cpp
+    src/mana/resource/spritedef.cpp \
+    src/mana/settings.cpp
 
 HEADERS += \
     src/resourcemanager.h \
@@ -111,7 +112,8 @@ HEADERS += \
     src/mana/being.h \
     src/mana/resource/itemdb.h \
     src/mana/resource/spritedef.h \
-    src/mana/xmlreader.h
+    src/mana/xmlreader.h \
+    src/mana/settings.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

@@ -3,11 +3,13 @@ import Mana 1.0
 
 Item {
     id: loginPage;
+    Settings { id: settings }
 
     function login() {
         print("Logging in as " + nameEdit.text + "...");
         loggingIn = true;
         errorLabel.clear();
+        settings.setValue("username", nameEdit.text)
         accountClient.login(nameEdit.text, passwordEdit.text);
     }
 
@@ -41,6 +43,8 @@ Item {
             anchors.top: serverNameDisplay.bottom;
             focus: true;
             labelText: qsTr("Username");
+
+            Component.onCompleted: text = settings.value("username", "");
 
             KeyNavigation.down: passwordEdit;
             backtabTarget: loginButton;

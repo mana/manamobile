@@ -43,11 +43,14 @@
 #include "mapitem.h"
 #include "resourcemanager.h"
 
+#include "mana/settings.h"
+
 static void registerTypes()
 {
     qmlRegisterType<Mana::AccountClient>("Mana", 1, 0, "AccountClient");
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
+    qmlRegisterType<Mana::Settings>("Mana", 1, 0, "Settings");
 
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();
