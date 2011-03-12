@@ -95,7 +95,7 @@ void BeingListModel::handleBeingLeave(MessageIn &message)
 {
     const int id = message.readInt16();
 
-    if (mPlayerBeing->id() == id) {
+    if (mPlayerBeing && mPlayerBeing->id() == id) {
         mPlayerBeing = 0;
         emit playerChanged();
     }
