@@ -301,10 +301,15 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     info.level = message.readInt16();
     message.readInt16(); // character points
     message.readInt16(); // correction points
-    info.money = message.readInt32();
-    for (int i = 0; i < 7; i++)
-    {
-        message.readInt8(); // attribute
+
+    while (message.unreadLength() > 0) {
+        const unsigned id = message.readInt32();
+
+        AttributeValue value;
+        value.base = message.readInt32() / 256.0;
+        value.modified = message.readInt32() / 256.0;
+
+        info.attributes.insert(id, value);
     }
 
     mCharacters.append(info);

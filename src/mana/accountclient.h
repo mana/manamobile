@@ -23,17 +23,26 @@
 
 #include "enetclient.h"
 
+#include <QMap>
+
 namespace Mana {
 
 class CharacterListModel;
+
+struct AttributeValue {
+    double base;
+    double modified;
+};
 
 class CharacterInfo
 {
 public:
     QString name;
     int level;
-    int money;
     int slot;
+
+    typedef QMap<unsigned, AttributeValue > AttributeMap;
+    AttributeMap attributes;
 };
 
 /**

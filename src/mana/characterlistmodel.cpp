@@ -22,6 +22,9 @@
 
 using namespace Mana;
 
+// See defines.h in manaserv repository
+enum Attributes { ATTR_GP = 18 };
+
 CharacterListModel::CharacterListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -47,7 +50,7 @@ QVariant CharacterListModel::data(const QModelIndex &index, int role) const
     case Level:
         return character.level;
     case Money:
-        return character.money;
+        return character.attributes.value(ATTR_GP).modified;
     }
 
     return QVariant();
