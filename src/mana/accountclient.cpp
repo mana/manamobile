@@ -37,6 +37,7 @@ AccountClient::AccountClient(QObject *parent)
     , mMaximumNameLength(16)
     , mGameServerPort(0)
     , mChatServerPort(0)
+    , mMaxCharacters(0)
     , mCharacterListModel(new CharacterListModel(this))
     , mDeleteIndex(-1)
 {}
@@ -191,17 +192,18 @@ void AccountClient::messageReceived(MessageIn &message)
     }
 }
 
-void AccountClient::readUpdateHost(MessageIn &message)
+void AccountClient::readServerInfo(MessageIn &message)
 {
     mUpdateHost = message.readString();
-    emit updateHostChanged();
-
     mDataUrl = message.readString();
+    mMaxCharacters = message.readInt8();
+
     if (!mDataUrl.isEmpty()) {
         if (!mDataUrl.endsWith(QLatin1Char('/')))
             mDataUrl += QLatin1Char('/');
-        emit dataUrlChanged();
     }
+
+    emit serverInfoChanged();
 }
 
 void AccountClient::handleRegistrationInfo(MessageIn &message)
@@ -220,7 +222,7 @@ void AccountClient::handleRegisterResponse(MessageIn &message)
     const int error = message.readInt8();
 
     if (error == ERRMSG_OK) {
-        readUpdateHost(message);
+        readServerInfo(message);
         if (mUsername != mPendingUsername) {
             mUsername = mPendingUsername;
             emit usernameChanged();
@@ -247,7 +249,7 @@ void AccountClient::handleLoginResponse(MessageIn &message)
     const int error = message.readInt8();
 
     if (error == ERRMSG_OK) {
-        readUpdateHost(message);
+        readServerInfo(message);
         if (mUsername != mPendingUsername) {
             mUsername = mPendingUsername;
             emit usernameChanged();

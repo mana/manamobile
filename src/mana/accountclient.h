@@ -49,8 +49,8 @@ class AccountClient : public ENetClient
     Q_PROPERTY(QString captchaUrl READ captchaUrl NOTIFY registrationInfoChanged)
     Q_PROPERTY(QString captchaInstructions READ captchaInstructions NOTIFY registrationInfoChanged)
 
-    Q_PROPERTY(QString updateHost READ updateHost NOTIFY updateHostChanged)
-    Q_PROPERTY(QString dataUrl READ dataUrl NOTIFY dataUrlChanged)
+    Q_PROPERTY(QString updateHost READ updateHost NOTIFY serverInfoChanged)
+    Q_PROPERTY(QString dataUrl READ dataUrl NOTIFY serverInfoChanged)
     Q_PROPERTY(QString token READ token NOTIFY tokenChanged)
     Q_PROPERTY(QString chatServerHost READ chatServerHost NOTIFY chatServerChanged)
     Q_PROPERTY(quint16 chatServerPort READ chatServerPort NOTIFY chatServerChanged)
@@ -60,6 +60,7 @@ class AccountClient : public ENetClient
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(QString playerName READ playerName NOTIFY playerNameChanged)
 
+    Q_PROPERTY(int maxCharacters READ maxCharacters NOTIFY serverInfoChanged)
     Q_PROPERTY(Mana::CharacterListModel *characterListModel READ characterListModel CONSTANT)
 
 public:
@@ -81,6 +82,8 @@ public:
 
     QString username() const { return mUsername; }
     QString playerName() const { return mPlayerName; }
+
+    int maxCharacters() const { return mMaxCharacters; }
 
     CharacterListModel *characterListModel() const
     { return mCharacterListModel; }
@@ -133,8 +136,7 @@ signals:
 
     void registrationInfoChanged();
 
-    void updateHostChanged();
-    void dataUrlChanged();
+    void serverInfoChanged();
     void tokenChanged();
     void chatServerChanged();
     void gameServerChanged();
@@ -146,7 +148,7 @@ protected:
     void messageReceived(MessageIn &message);
 
 private:
-    void readUpdateHost(MessageIn &message);
+    void readServerInfo(MessageIn &message);
 
     void handleRegistrationInfo(MessageIn &message);
     void handleRegisterResponse(MessageIn &message);
@@ -184,6 +186,7 @@ private:
     QString mUsername;
     QString mPlayerName;
 
+    int mMaxCharacters;
     QList<Mana::CharacterInfo> mCharacters;
 
     CharacterListModel *mCharacterListModel;
