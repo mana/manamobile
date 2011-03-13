@@ -74,6 +74,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     message.readInt8(); // action
     const int x = message.readInt16();
     const int y = message.readInt16();
+    message.readInt8(); // direction
 
     Being *being = new Being(type, id, QPointF(x, y));
 

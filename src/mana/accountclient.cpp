@@ -414,6 +414,8 @@ QString AccountClient::loginErrorMessage(int error)
 QString AccountClient::createCharacterErrorMessage(int error)
 {
     switch (error) {
+    case CREATE_INVALID_SLOT:
+        return tr("Invalid slot");
     case CREATE_TOO_MUCH_CHARACTERS:
         return tr("No empty slot");
     case ERRMSG_INVALID_ARGUMENT:

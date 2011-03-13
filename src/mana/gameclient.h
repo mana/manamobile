@@ -70,6 +70,8 @@ signals:
 
     void playerNameChanged();
 
+    void kicked();
+
 protected:
     void messageReceived(MessageIn &message);
 

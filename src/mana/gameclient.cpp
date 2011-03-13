@@ -134,6 +134,9 @@ void GameClient::handleAuthenticationResponse(MessageIn &message)
         emit authenticationFailed(tr("The server is full"));
         disconnect();
         break;
+    case ERRMSG_ADMINISTRATIVE_LOGOFF:
+        emit kicked();
+        break;
     case ERRMSG_OK:
         if (!mAuthenticated) {
             mAuthenticated = true;
