@@ -44,7 +44,11 @@ Item {
             focus: true;
             labelText: qsTr("Username");
 
-            Component.onCompleted: text = settings.value("username", "");
+            Component.onCompleted: {
+                text = settings.value("username", "");
+                if (text !== "")
+                    passwordEdit.focus = true;
+            }
 
             KeyNavigation.down: passwordEdit;
             backtabTarget: loginButton;
