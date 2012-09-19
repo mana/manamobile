@@ -104,7 +104,9 @@ public:
                                      const QString &captchaResponse);
     Q_INVOKABLE void unregisterAccount(const QString &username,
                                        const QString &password);
-    Q_INVOKABLE void login(const QString &username, const QString &password);
+    Q_INVOKABLE void login(const QString &username,
+                           const QString &password);
+
     Q_INVOKABLE void createCharacter(const QString &name,
                                      bool gender,
                                      int hairStyle,
@@ -159,6 +161,10 @@ protected:
 private:
     void readServerInfo(MessageIn &message);
 
+    void login(const QString &username,
+               const QString &password,
+               const QString &salt);
+
     void handleRegistrationInfo(MessageIn &message);
     void handleRegisterResponse(MessageIn &message);
     void handleUnregisterResponse(MessageIn &message);
@@ -169,6 +175,7 @@ private:
     void handleCharacterSelectResponse(MessageIn &message);
     void handleEmailChangeResponse(MessageIn &message);
     void handlePasswordChangeResponse(MessageIn &message);
+    void handleSaltResponse(MessageIn &message);
 
     static QString standardErrorMessage(int error);
     static QString registrationErrorMessage(int error);
@@ -202,6 +209,7 @@ private:
 
     int mDeleteIndex;
     QString mPendingUsername;
+    QString mPendingPassword;
     QString mPendingPlayerName;
 };
 

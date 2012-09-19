@@ -56,6 +56,16 @@ static QByteArray passwordHash(const QString &username,
     return sha256(combination);
 }
 
+static QByteArray passwordSaltedHash(const QString &username,
+                                     const QString &password,
+                                     const QString &salt)
+{
+    QByteArray combination;
+    combination += username.toUtf8();
+    combination += password.toUtf8();
+    return sha256(sha256(sha256(combination)).append(salt.toUtf8()));
+}
+
 void AccountClient::registerAccount(const QString &username,
                                     const QString &password,
                                     const QString &email,
@@ -84,13 +94,24 @@ void AccountClient::unregisterAccount(const QString &username,
 void AccountClient::login(const QString &username,
                           const QString &password)
 {
+    MessageOut saltMessage(PAMSG_LOGIN_RNDTRGR);
+    saltMessage.writeString(username);
+
+    send(saltMessage);
+
+    mPendingUsername = username;
+    mPendingPassword = password;
+}
+
+void AccountClient::login(const QString &username,
+                          const QString &password,
+                          const QString &salt)
+{
     MessageOut loginMessage(PAMSG_LOGIN);
     loginMessage.writeInt32(PROTOCOL_VERSION);
     loginMessage.writeString(username);
-    loginMessage.writeString(passwordHash(username, password));
+    loginMessage.writeString(passwordSaltedHash(username, password, salt));
     send(loginMessage);
-
-    mPendingUsername = username;
 }
 
 void AccountClient::createCharacter(const QString &name,
@@ -162,6 +183,9 @@ void AccountClient::messageReceived(MessageIn &message)
         break;
     case APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
+        break;
+    case APMSG_LOGIN_RNDTRGR_RESPONSE:
+        handleSaltResponse(message);
         break;
     case APMSG_CHAR_CREATE_RESPONSE:
         handleCharacterCreateResponse(message);
@@ -364,6 +388,13 @@ void AccountClient::handlePasswordChangeResponse(MessageIn &message)
         emit passwordChangeSucceeded();
     else
         emit passwordChangeFailed(error, passwordChangeErrorMessage(error));
+}
+
+void AccountClient::handleSaltResponse(MessageIn &message)
+{
+    // login with the recieved hash
+    login(mPendingUsername, mPendingPassword, message.readString());
+    mPendingPassword.clear();
 }
 
 QString AccountClient::standardErrorMessage(int error)
