@@ -62,6 +62,13 @@ public:
     QString readString(int length = -1);
 
     /**
+     * Reads a byte array. If a length is not given (-1), it is assumed
+     * that the length of the array is stored in a short at the
+     * start of the array.
+     */
+    QByteArray readByteArray(int length = -1);
+
+    /**
      * Returns the length of unread data.
      */
     int unreadLength() const { return mLength - mPos; }

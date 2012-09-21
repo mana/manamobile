@@ -100,6 +100,27 @@ QString MessageIn::readString(int length)
     return readString;
 }
 
+QByteArray MessageIn::readByteArray(int length)
+{
+    // Get array length
+    if (length == -1)
+        length = readInt16();
+
+    // Make sure the lenght isn't erroneous
+    if (length < 0 || mPos + length > mLength)
+    {
+        mPos = mLength + 1;
+        return QByteArray();
+    }
+
+    // Read the byte array
+    const char *arrayBegin = mData + mPos;
+    const QByteArray array(arrayBegin, length);
+    mPos += length;
+
+    return array;
+}
+
 std::ostream &operator <<(std::ostream &os, const MessageIn &msg)
 {
     os << std::setw(6) << std::hex << std::showbase << std::internal
