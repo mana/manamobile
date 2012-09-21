@@ -58,12 +58,12 @@ static QByteArray passwordHash(const QString &username,
 
 static QByteArray passwordSaltedHash(const QString &username,
                                      const QString &password,
-                                     const QString &salt)
+                                     const QByteArray &salt)
 {
     QByteArray combination;
     combination += username.toUtf8();
     combination += password.toUtf8();
-    return sha256(sha256(sha256(combination)).append(salt.toUtf8()));
+    return sha256(sha256(sha256(combination)).append(salt));
 }
 
 void AccountClient::registerAccount(const QString &username,
@@ -105,7 +105,7 @@ void AccountClient::login(const QString &username,
 
 void AccountClient::login(const QString &username,
                           const QString &password,
-                          const QString &salt)
+                          const QByteArray &salt)
 {
     MessageOut loginMessage(PAMSG_LOGIN);
     loginMessage.writeInt32(PROTOCOL_VERSION);
@@ -393,7 +393,7 @@ void AccountClient::handlePasswordChangeResponse(MessageIn &message)
 void AccountClient::handleSaltResponse(MessageIn &message)
 {
     // login with the recieved hash
-    login(mPendingUsername, mPendingPassword, message.readString());
+    login(mPendingUsername, mPendingPassword, message.readByteArray());
     mPendingPassword.clear();
 }
 

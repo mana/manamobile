@@ -163,7 +163,7 @@ private:
 
     void login(const QString &username,
                const QString &password,
-               const QString &salt);
+               const QByteArray &salt);
 
     void handleRegistrationInfo(MessageIn &message);
     void handleRegisterResponse(MessageIn &message);
