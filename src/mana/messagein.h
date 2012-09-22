@@ -27,6 +27,8 @@
 #include <QString>
 #include <QDebug>
 
+#include "protocol.h"
+
 namespace Mana {
 
 /**
@@ -74,9 +76,12 @@ public:
     int unreadLength() const { return mLength - mPos; }
 
 private:
+    bool readValueType(Mana::ValueType type);
+
     const char *mData;          /**< Packet data */
     int mLength;                /**< Length of data in bytes */
     unsigned short mId;         /**< The message ID. */
+    bool mDebugMode;            /**< Includes debugging information. */
 
     /**
      * Actual position in the packet. From 0 to packet->length. A value
@@ -87,7 +92,6 @@ private:
     /**
      * Streams message ID and length to the given output stream.
      */
-    friend std::ostream &operator <<(std::ostream &os, const MessageIn &msg);
     friend QDebug operator <<(QDebug debug, const MessageIn &msg);
 };
 

@@ -45,12 +45,17 @@ MessageOut::MessageOut():
 }
 
 MessageOut::MessageOut(int id):
-    mPos(0)
+    mData(0),
+    mPos(0),
+    mDataSize(0),
+    mDebugMode(false)
 {
-    mData = (char*) malloc(INITIAL_DATA_CAPACITY);
-    mDataSize = INITIAL_DATA_CAPACITY;
+    bool debug = true;
+    if (debug)
+        id |= Mana::XXMSG_DEBUG_FLAG;
 
     writeInt16(id);
+    mDebugMode = debug;
 }
 
 MessageOut::~MessageOut()
@@ -67,20 +72,15 @@ void MessageOut::clear()
 
 void MessageOut::expand(size_t bytes)
 {
-    if (bytes > mDataSize)
-    {
-        do
-        {
-            mDataSize *= CAPACITY_GROW_FACTOR;
-        }
-        while (bytes > mDataSize);
-
-        mData = (char*) realloc(mData, mDataSize);
-    }
+    mData = (char*)realloc(mData, mPos + bytes);
+    mDataSize = mPos + bytes;
 }
 
 void MessageOut::writeInt8(int value)
 {
+    if (mDebugMode)
+        writeValueType(Mana::Int8);
+
     expand(mPos + 1);
     mData[mPos] = value;
     mPos += 1;
@@ -88,6 +88,9 @@ void MessageOut::writeInt8(int value)
 
 void MessageOut::writeInt16(int value)
 {
+    if (mDebugMode)
+        writeValueType(Mana::Int16);
+
     expand(mPos + 2);
     uint16_t t = ENET_HOST_TO_NET_16(value);
     memcpy(mData + mPos, &t, 2);
@@ -96,24 +99,23 @@ void MessageOut::writeInt16(int value)
 
 void MessageOut::writeInt32(int value)
 {
+    if (mDebugMode)
+        writeValueType(Mana::Int32);
+
     expand(mPos + 4);
     uint32_t t = ENET_HOST_TO_NET_32(value);
     memcpy(mData + mPos, &t, 4);
     mPos += 4;
 }
 
-void MessageOut::writeCoordinates(int x, int y)
-{
-    expand(mPos + 3);
-    char *p = mData + mPos;
-    p[0] = x & 0x00FF;
-    p[1] = ((x & 0x0700) >> 8) | ((y & 0x001F) << 3);
-    p[2] = (y & 0x07E0) >> 5;
-    mPos += 3;
-}
-
 void MessageOut::writeString(const QByteArray &string, int length)
 {
+    if (mDebugMode)
+    {
+        writeValueType(Mana::String);
+        writeInt16(length);
+    }
+
     int stringLength = string.length();
     if (length < 0)
     {
@@ -161,6 +163,13 @@ QDebug operator <<(QDebug debug, const MessageOut &msg)
     std::stringstream ss;
     ss << msg;
     return debug << ss.str().c_str();
+}
+
+void MessageOut::writeValueType(Mana::ValueType type)
+{
+    expand(1);
+    mData[mPos] = type;
+    mPos += 1;
 }
 
 } // namespace Mana
