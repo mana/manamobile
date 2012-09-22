@@ -56,7 +56,7 @@ int MessageIn::readInt16()
     int value = -1;
     if (mPos + 2 <= mLength)
     {
-        uint16_t t;
+        quint16 t;
         memcpy(&t, mData + mPos, 2);
         value = (unsigned short) ENET_NET_TO_HOST_16(t);
     }
@@ -69,7 +69,7 @@ int MessageIn::readInt32()
     int value = -1;
     if (mPos + 4 <= mLength)
     {
-        uint32_t t;
+        quint32 t;
         memcpy(&t, mData + mPos, 4);
         value = ENET_NET_TO_HOST_32(t);
     }

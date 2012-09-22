@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <enet/enet.h>
+
 #include <QApplication>
 #include <QMessageBox>
 #include <QDeclarativeContext>
@@ -26,8 +28,6 @@
 #ifndef QT_NO_OPENGL
 #include <QGLWidget>
 #endif
-
-#include <enet/enet.h>
 
 #include "qmlapplicationviewer.h"
 

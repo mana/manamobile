@@ -38,11 +38,13 @@ DEFINES += TILED_LIBRARY
 win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
 else:LIBS += -lz
 
-# Silence compile warnings in ENet code
-# (this effectively excludes those two types of warnings for C code)
-CONFIG += warn_off
-QMAKE_CFLAGS += -Wall -W -Wno-switch -Wno-unknown-pragmas
-QMAKE_CXXFLAGS += -Wall -W
+!win32-msvc2010 {
+    # Silence compile warnings in ENet code
+    # (this effectively excludes those two types of warnings for C code)
+    CONFIG += warn_off
+    QMAKE_CFLAGS += -Wall -W -Wno-switch -Wno-unknown-pragmas
+    QMAKE_CXXFLAGS += -Wall -W
+}
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 include(src/enet/enet.pri)
