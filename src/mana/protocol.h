@@ -27,6 +27,18 @@ namespace Mana {
 enum { PROTOCOL_VERSION = 1 };
 
 /**
+ * The type of a value in a message. Prepended before each value when the
+ * protocol is running in debug mode.
+ */
+enum ValueType {
+    Int8,
+    Int16,
+    Int32,
+    String,
+    Double
+};
+
+/**
  * Enumerated type for communicated messages:
  *
  * - PAMSG_*: from client to account server
@@ -249,7 +261,9 @@ enum {
     CGMSG_STORE_POST_RESPONSE   = 0x05A6, // D id, B error
     GAMSG_TRANSACTION           = 0x0600, // D character id, D action, S message
 
-    XXMSG_INVALID = 0x7FFF
+
+    XXMSG_DEBUG_FLAG            = 0x8000, // Message in debug mode
+    XXMSG_INVALID               = 0x7FFF
 };
 
 // Generic return values

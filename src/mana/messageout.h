@@ -27,6 +27,8 @@
 #include <QString>
 #include <QDebug>
 
+#include "protocol.h"
+
 namespace Mana {
 
 /**
@@ -37,32 +39,16 @@ class MessageOut
 public:
     /**
      * Constructor.
-     */
-    MessageOut();
-
-    /**
-     * Constructor that takes a message ID.
+     *
+     * @param id the message ID
      */
     MessageOut(int id);
 
-    /**
-     * Destructor.
-     */
     ~MessageOut();
-
-    /**
-     * Clears current message.
-     */
-    void clear();
 
     void writeInt8(int value);     /**< Writes an integer on one byte. */
     void writeInt16(int value);    /**< Writes an integer on two bytes. */
     void writeInt32(int value);    /**< Writes an integer on four bytes. */
-
-    /**
-     * Writes a 3-byte block containing tile-based coordinates.
-     */
-    void writeCoordinates(int x, int y);
 
     /**
      * Writes a string. If a fixed length is not given (-1), it is stored
@@ -82,6 +68,15 @@ public:
      */
     unsigned int length() const { return mPos; }
 
+    /**
+     * Sets whether the debug mode is enabled. In debug mode, the internal
+     * data of the message is annotated so that the message contents can
+     * be printed.
+     *
+     * Debug mode is disabled by default.
+     */
+    static void setDebugModeEnabled(bool enabled);
+
 private:
     /**
      * Ensures the capacity of the data buffer is large enough to hold the
@@ -89,9 +84,12 @@ private:
      */
     void expand(size_t size);
 
+    void writeValueType(Mana::ValueType type);
+
     char *mData;                         /**< Data building up. */
     unsigned int mPos;                   /**< Position in the data. */
     unsigned int mDataSize;              /**< Allocated datasize. */
+    bool mDebugMode;            /**< Include debugging information. */
 
     /**
      * Streams message ID and length to the given output stream.

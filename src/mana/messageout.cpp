@@ -20,6 +20,7 @@
  */
 
 #include "messageout.h"
+#include "messagein.h"
 
 #include <enet/enet.h>
 
@@ -35,34 +36,27 @@ const unsigned int INITIAL_DATA_CAPACITY = 16;
 /** Factor by which the messageout data buffer is increased when too small. */
 const unsigned int CAPACITY_GROW_FACTOR = 2;
 
+static bool debugModeEnabled = false;
+
 namespace Mana {
 
-MessageOut::MessageOut():
-    mPos(0)
-{
-    mData = (char*) malloc(INITIAL_DATA_CAPACITY);
-    mDataSize = INITIAL_DATA_CAPACITY;
-}
-
 MessageOut::MessageOut(int id):
-    mPos(0)
+    mPos(0),
+    mDebugMode(false)
 {
     mData = (char*) malloc(INITIAL_DATA_CAPACITY);
     mDataSize = INITIAL_DATA_CAPACITY;
+
+    if (debugModeEnabled)
+        id |= XXMSG_DEBUG_FLAG;
 
     writeInt16(id);
+    mDebugMode = debugModeEnabled;
 }
 
 MessageOut::~MessageOut()
 {
     free(mData);
-}
-
-void MessageOut::clear()
-{
-    mData = (char *) realloc(mData, INITIAL_DATA_CAPACITY);
-    mDataSize = INITIAL_DATA_CAPACITY;
-    mPos = 0;
 }
 
 void MessageOut::expand(size_t bytes)
@@ -81,6 +75,9 @@ void MessageOut::expand(size_t bytes)
 
 void MessageOut::writeInt8(int value)
 {
+    if (mDebugMode)
+        writeValueType(Int8);
+
     expand(mPos + 1);
     mData[mPos] = value;
     mPos += 1;
@@ -88,6 +85,9 @@ void MessageOut::writeInt8(int value)
 
 void MessageOut::writeInt16(int value)
 {
+    if (mDebugMode)
+        writeValueType(Int16);
+
     expand(mPos + 2);
     uint16_t t = ENET_HOST_TO_NET_16(value);
     memcpy(mData + mPos, &t, 2);
@@ -96,24 +96,23 @@ void MessageOut::writeInt16(int value)
 
 void MessageOut::writeInt32(int value)
 {
+    if (mDebugMode)
+        writeValueType(Int32);
+
     expand(mPos + 4);
     uint32_t t = ENET_HOST_TO_NET_32(value);
     memcpy(mData + mPos, &t, 4);
     mPos += 4;
 }
 
-void MessageOut::writeCoordinates(int x, int y)
-{
-    expand(mPos + 3);
-    char *p = mData + mPos;
-    p[0] = x & 0x00FF;
-    p[1] = ((x & 0x0700) >> 8) | ((y & 0x001F) << 3);
-    p[2] = (y & 0x07E0) >> 5;
-    mPos += 3;
-}
-
 void MessageOut::writeString(const QByteArray &string, int length)
 {
+    if (mDebugMode)
+    {
+        writeValueType(String);
+        writeInt16(length);
+    }
+
     int stringLength = string.length();
     if (length < 0)
     {
@@ -139,14 +138,20 @@ void MessageOut::writeString(const QByteArray &string, int length)
     mPos += length;
 }
 
-std::ostream &operator <<(std::ostream &os, const MessageOut &msg)
+void MessageOut::writeValueType(ValueType type)
+{
+    expand(mPos + 1);
+    mData[mPos] = type;
+    mPos += 1;
+}
+
+std::ostream&
+operator <<(std::ostream &os, const MessageOut &msg)
 {
     if (msg.length() >= 2)
     {
-        unsigned short id = ENET_NET_TO_HOST_16(*(short*) msg.mData);
-        os << std::setw(6) << std::hex << std::showbase << std::internal
-           << std::setfill('0') << id
-           << std::dec << " (" << msg.length() << " B)";
+        MessageIn m(msg.mData, msg.mPos);
+        os << m;
     }
     else
     {
@@ -161,6 +166,11 @@ QDebug operator <<(QDebug debug, const MessageOut &msg)
     std::stringstream ss;
     ss << msg;
     return debug << ss.str().c_str();
+}
+
+void MessageOut::setDebugModeEnabled(bool enabled)
+{
+    debugModeEnabled = enabled;
 }
 
 } // namespace Mana
