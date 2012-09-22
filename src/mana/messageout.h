@@ -27,6 +27,8 @@
 #include <QString>
 #include <QDebug>
 
+#include "protocol.h"
+
 namespace Mana {
 
 /**
@@ -60,11 +62,6 @@ public:
     void writeInt32(int value);    /**< Writes an integer on four bytes. */
 
     /**
-     * Writes a 3-byte block containing tile-based coordinates.
-     */
-    void writeCoordinates(int x, int y);
-
-    /**
      * Writes a string. If a fixed length is not given (-1), it is stored
      * as a short at the start of the string.
      */
@@ -89,9 +86,12 @@ private:
      */
     void expand(size_t size);
 
+    void writeValueType(Mana::ValueType type);
+
     char *mData;                         /**< Data building up. */
     unsigned int mPos;                   /**< Position in the data. */
     unsigned int mDataSize;              /**< Allocated datasize. */
+    bool mDebugMode;            /**< Include debugging information. */
 
     /**
      * Streams message ID and length to the given output stream.
