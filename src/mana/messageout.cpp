@@ -89,7 +89,7 @@ void MessageOut::writeInt16(int value)
         writeValueType(Int16);
 
     expand(mPos + 2);
-    uint16_t t = ENET_HOST_TO_NET_16(value);
+    quint16 t = ENET_HOST_TO_NET_16(value);
     memcpy(mData + mPos, &t, 2);
     mPos += 2;
 }
@@ -100,7 +100,7 @@ void MessageOut::writeInt32(int value)
         writeValueType(Int32);
 
     expand(mPos + 4);
-    uint32_t t = ENET_HOST_TO_NET_32(value);
+    quint32 t = ENET_HOST_TO_NET_32(value);
     memcpy(mData + mPos, &t, 4);
     mPos += 4;
 }

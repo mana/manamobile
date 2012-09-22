@@ -85,7 +85,7 @@ int MessageIn::readInt16()
 
     ASSERT_IF (mPos + 2 <= mLength)
     {
-        uint16_t t;
+        quint16 t;
         memcpy(&t, mData + mPos, 2);
         value = (short) ENET_NET_TO_HOST_16(t);
     }
@@ -107,7 +107,7 @@ int MessageIn::readInt32()
 
     ASSERT_IF (mPos + 4 <= mLength)
     {
-        uint32_t t;
+        quint32 t;
         memcpy(&t, mData + mPos, 4);
         value = ENET_NET_TO_HOST_32(t);
     }
