@@ -53,15 +53,19 @@ SOURCES += src/main.cpp \
     src/resourcemanager.cpp \
     src/mana/characterlistmodel.cpp \
     src/tiled/compression.cpp \
+    src/tiled/gidmapper.cpp \
+    src/tiled/imagelayer.cpp \
     src/tiled/isometricrenderer.cpp \
     src/tiled/layer.cpp \
     src/tiled/map.cpp \
     src/tiled/mapobject.cpp \
     src/tiled/mapreader.cpp \
+    src/tiled/maprenderer.cpp \
     src/tiled/mapwriter.cpp \
     src/tiled/objectgroup.cpp \
     src/tiled/orthogonalrenderer.cpp \
     src/tiled/properties.cpp \
+    src/tiled/staggeredrenderer.cpp \
     src/tiled/tilelayer.cpp \
     src/tiled/tileset.cpp \
     src/mana/accountclient.cpp \
@@ -84,17 +88,23 @@ HEADERS += \
     src/mana/characterlistmodel.h \
     src/safeassert.h \
     src/tiled/compression.h \
+    src/tiled/gidmapper.h \
+    src/tiled/imagelayer.h \
     src/tiled/isometricrenderer.h \
     src/tiled/layer.h \
     src/tiled/map.h \
     src/tiled/mapobject.h \
     src/tiled/mapreader.h \
+    src/tiled/mapreaderinterface.h \
     src/tiled/maprenderer.h \
     src/tiled/mapwriter.h \
+    src/tiled/mapwriterinterface.h \
     src/tiled/object.h \
     src/tiled/objectgroup.h \
     src/tiled/orthogonalrenderer.h \
     src/tiled/properties.h \
+    src/tiled/staggeredrenderer.h \
+    src/tiled/terrain.h \
     src/tiled/tile.h \
     src/tiled/tiled_global.h \
     src/tiled/tilelayer.h \

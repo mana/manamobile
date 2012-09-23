@@ -1,6 +1,6 @@
 /*
- * object.h
- * Copyright 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * maprenderer.cpp
+ * Copyright 2011, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
  * This file is part of libtiled.
  *
@@ -26,60 +26,37 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#include "maprenderer.h"
 
-#include "properties.h"
+#include <QVector2D>
 
-namespace Tiled {
+using namespace Tiled;
+
+void MapRenderer::setFlag(RenderFlag flag, bool enabled)
+{
+    if (enabled)
+        mFlags |= flag;
+    else
+        mFlags &= ~flag;
+}
 
 /**
- * The base class for anything that can hold properties.
+ * Converts a line running from \a start to \a end to a polygon which
+ * extends 5 pixels from the line in all directions.
  */
-class TILEDSHARED_EXPORT Object
+QPolygonF MapRenderer::lineToPolygon(const QPointF &start, const QPointF &end)
 {
-public:
-    /**
-     * Virtual destructor.
-     */
-    virtual ~Object() {}
+    QPointF direction = QVector2D(end - start).normalized().toPointF();
+    QPointF perpendicular(-direction.y(), direction.x());
 
-    /**
-     * Returns the properties of this object.
-     */
-    const Properties &properties() const { return mProperties; }
+    const qreal thickness = 5.0f; // 5 pixels on each side
+    direction *= thickness;
+    perpendicular *= thickness;
 
-    /**
-     * Replaces all existing properties with a new set of properties.
-     */
-    void setProperties(const Properties &properties)
-    { mProperties = properties; }
-
-    /**
-     * Merges \a properties with the existing properties. Properties with the
-     * same name will be overridden.
-     *
-     * \sa Properties::merge
-     */
-    void mergeProperties(const Properties &properties)
-    { mProperties.merge(properties); }
-
-    /**
-     * Returns the value of the object's \a name property.
-     */
-    QString property(const QString &name) const
-    { return mProperties.value(name); }
-
-    /**
-     * Sets the value of the object's \a name property to \a value.
-     */
-    void setProperty(const QString &name, const QString &value)
-    { mProperties.insert(name, value); }
-
-private:
-    Properties mProperties;
-};
-
-} // namespace Tiled
-
-#endif // OBJECT_H
+    QPolygonF polygon(4);
+    polygon[0] = start + perpendicular - direction;
+    polygon[1] = start - perpendicular - direction;
+    polygon[2] = end - perpendicular + direction;
+    polygon[3] = end + perpendicular + direction;
+    return polygon;
+}

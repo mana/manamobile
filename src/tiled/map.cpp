@@ -4,25 +4,34 @@
  * Copyright 2008, Roderic Morris <roderic@ccs.neu.edu>
  * Copyright 2010, Andrew G. Crowell <overkill9999@gmail.com>
  *
- * This file is part of Tiled.
+ * This file is part of libtiled.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ *    2. Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "map.h"
 
 #include "layer.h"
+#include "objectgroup.h"
 #include "tile.h"
 #include "tilelayer.h"
 #include "tileset.h"
@@ -35,8 +44,7 @@ Map::Map(Orientation orientation,
     mWidth(width),
     mHeight(height),
     mTileWidth(tileWidth),
-    mTileHeight(tileHeight),
-    mMaxTileSize(tileWidth, tileHeight)
+    mTileHeight(tileHeight)
 {
 }
 
@@ -45,30 +53,61 @@ Map::~Map()
     qDeleteAll(mLayers);
 }
 
-void Map::adjustMaxTileSize(const QSize &size)
+static QMargins maxMargins(const QMargins &a,
+                           const QMargins &b)
 {
-    if (size.width() > mMaxTileSize.width())
-        mMaxTileSize.setWidth(size.width());
-    if (size.height() > mMaxTileSize.height())
-        mMaxTileSize.setHeight(size.height());
+    return QMargins(qMax(a.left(), b.left()),
+                    qMax(a.top(), b.top()),
+                    qMax(a.right(), b.right()),
+                    qMax(a.bottom(), b.bottom()));
 }
 
-int Map::tileLayerCount() const
+void Map::adjustDrawMargins(const QMargins &margins)
+{
+    // The TileLayer includes the maximum tile size in its draw margins. So
+    // we need to subtract the tile size of the map, since that part does not
+    // contribute to additional margin.
+    mDrawMargins = maxMargins(QMargins(margins.left(),
+                                       margins.top() - mTileHeight,
+                                       margins.right() - mTileWidth,
+                                       margins.bottom()),
+                              mDrawMargins);
+}
+
+int Map::layerCount(Layer::Type type) const
 {
     int count = 0;
     foreach (Layer *layer, mLayers)
-       if (layer->asTileLayer())
+       if (layer->type() == type)
            count++;
     return count;
 }
 
-int Map::objectGroupCount() const
+QList<Layer*> Map::layers(Layer::Type type) const
 {
-    int count = 0;
+    QList<Layer*> layers;
     foreach (Layer *layer, mLayers)
-        if (layer->asObjectGroup())
-           count++;
-    return count;
+        if (layer->type() == type)
+            layers.append(layer);
+    return layers;
+}
+
+QList<ObjectGroup*> Map::objectGroups() const
+{
+    QList<ObjectGroup*> layers;
+    foreach (Layer *layer, mLayers)
+        if (ObjectGroup *og = layer->asObjectGroup())
+            layers.append(og);
+    return layers;
+}
+
+QList<TileLayer*> Map::tileLayers() const
+{
+    QList<TileLayer*> layers;
+    foreach (Layer *layer, mLayers)
+        if (TileLayer *tl = layer->asTileLayer())
+            layers.append(tl);
+    return layers;
 }
 
 void Map::addLayer(Layer *layer)
@@ -77,10 +116,11 @@ void Map::addLayer(Layer *layer)
     mLayers.append(layer);
 }
 
-int Map::indexOfLayer(const QString &layerName) const
+int Map::indexOfLayer(const QString &layerName, uint layertypes) const
 {
     for (int index = 0; index < mLayers.size(); index++)
-        if (layerAt(index)->name() == layerName)
+        if (layerAt(index)->name() == layerName
+                && (layertypes & layerAt(index)->type()))
             return index;
 
     return -1;
@@ -97,7 +137,7 @@ void Map::adoptLayer(Layer *layer)
     layer->setMap(this);
 
     if (TileLayer *tileLayer = dynamic_cast<TileLayer*>(layer))
-        adjustMaxTileSize(tileLayer->maxTileSize());
+        adjustDrawMargins(tileLayer->drawMargins());
 }
 
 Layer *Map::takeLayerAt(int index)
@@ -133,19 +173,16 @@ void Map::replaceTileset(Tileset *oldTileset, Tileset *newTileset)
     Q_ASSERT(index != -1);
 
     foreach (Layer *layer, mLayers)
-        if (TileLayer *tileLayer = layer->asTileLayer())
-            tileLayer->replaceReferencesToTileset(oldTileset, newTileset);
+        layer->replaceReferencesToTileset(oldTileset, newTileset);
 
-    mTilesets.removeAt(index);
-    mTilesets.insert(index, newTileset);
+    mTilesets.replace(index, newTileset);
 }
 
 bool Map::isTilesetUsed(Tileset *tileset) const
 {
     foreach (const Layer *layer, mLayers)
-        if (const TileLayer *tileLayer = dynamic_cast<const TileLayer*>(layer))
-            if (tileLayer->referencesTileset(tileset))
-                return true;
+        if (layer->referencesTileset(tileset))
+            return true;
 
     return false;
 }
@@ -153,10 +190,50 @@ bool Map::isTilesetUsed(Tileset *tileset) const
 Map *Map::clone() const
 {
     Map *o = new Map(mOrientation, mWidth, mHeight, mTileWidth, mTileHeight);
-    o->mMaxTileSize = mMaxTileSize;
-    foreach (Layer *layer, mLayers)
+    o->mDrawMargins = mDrawMargins;
+    foreach (const Layer *layer, mLayers)
         o->addLayer(layer->clone());
     o->mTilesets = mTilesets;
     o->setProperties(properties());
     return o;
+}
+
+
+QString Tiled::orientationToString(Map::Orientation orientation)
+{
+    switch (orientation) {
+    default:
+    case Map::Unknown:
+        return QLatin1String("unknown");
+        break;
+    case Map::Orthogonal:
+        return QLatin1String("orthogonal");
+        break;
+    case Map::Isometric:
+        return QLatin1String("isometric");
+        break;
+    case Map::Staggered:
+        return QLatin1String("staggered");
+        break;
+    }
+}
+
+Map::Orientation Tiled::orientationFromString(const QString &string)
+{
+    Map::Orientation orientation = Map::Unknown;
+    if (string == QLatin1String("orthogonal")) {
+        orientation = Map::Orthogonal;
+    } else if (string == QLatin1String("isometric")) {
+        orientation = Map::Isometric;
+    } else if (string == QLatin1String("staggered")) {
+        orientation = Map::Staggered;
+    }
+    return orientation;
+}
+
+Map *Map::fromLayer(Layer *layer)
+{
+    Map *result = new Map(Unknown, layer->width(), layer->height(), 0, 0);
+    result->addLayer(layer);
+    return result;
 }

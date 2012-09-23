@@ -4,33 +4,43 @@
  * Copyright 2008, Roderic Morris <roderic@ccs.neu.edu>
  * Copyright 2010, Andrew G. Crowell <overkill9999@gmail.com>
  *
- * This file is part of Tiled.
+ * This file is part of libtiled.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ *    2. Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef MAP_H
 #define MAP_H
 
+#include "layer.h"
 #include "object.h"
 
+#include <QColor>
 #include <QList>
+#include <QMargins>
 #include <QSize>
 
 namespace Tiled {
 
-class Layer;
 class Tile;
 class Tileset;
 class ObjectGroup;
@@ -51,14 +61,14 @@ public:
      * aligned on an isometric projected grid. A Hexagonal map uses hexagon
      * shaped tiles that fit into each other by shifting every other row.
      *
-     * Only Orthogonal and Isometric maps are supported by this version of
-     * Tiled.
+     * Only Orthogonal, Isometric and Staggered maps are supported by this
+     * version of Tiled.
      */
     enum Orientation {
         Unknown,
         Orthogonal,
         Isometric,
-        Hexagonal
+        Staggered
     };
 
     /**
@@ -120,26 +130,18 @@ public:
     int tileHeight() const { return mTileHeight; }
 
     /**
-     * Returns the maximum tile size used by tile layers of this map.
-     * @see TileLayer::extraTileSize()
+     * Adjusts the draw margins to be at least as big as the given margins.
+     * Called from tile layers when their tiles change.
      */
-    QSize maxTileSize() const { return mMaxTileSize; }
+    void adjustDrawMargins(const QMargins &margins);
 
     /**
-     * Adjusts the maximum tile size to be at least as much as the given
-     * size. Called from tile layers when their maximum tile size increases.
-     */
-    void adjustMaxTileSize(const QSize &size);
-
-    /**
-     * Convenience method for getting the extra tile size, which is the number
-     * of pixels that tiles may extend beyond the size of the tile grid.
+     * Returns the margins that have to be taken into account when figuring
+     * out which part of the map to repaint after changing some tiles.
      *
-     * @see maxTileSize()
+     * @see TileLayer::drawMargins
      */
-    QSize extraTileSize() const
-    { return QSize(mMaxTileSize.width() - mTileWidth,
-                   mMaxTileSize.height() - mTileHeight); }
+    QMargins drawMargins() const { return mDrawMargins; }
 
     /**
      * Returns the number of layers of this map.
@@ -149,15 +151,18 @@ public:
 
     /**
      * Convenience function that returns the number of layers of this map that
-     * are tile layers.
+     * match the given \a type.
      */
-    int tileLayerCount() const;
+    int layerCount(Layer::Type type) const;
 
-    /**
-     * Convenience function that returns the number of layers of this map that
-     * are object groups.
-     */
-    int objectGroupCount() const;
+    int tileLayerCount() const
+    { return layerCount(Layer::TileLayerType); }
+
+    int objectGroupCount() const
+    { return layerCount(Layer::ObjectGroupType); }
+
+    int imageLayerCount() const
+    { return layerCount(Layer::ImageLayerType); }
 
     /**
      * Returns the layer at the specified index.
@@ -171,6 +176,10 @@ public:
      */
     const QList<Layer*> &layers() const { return mLayers; }
 
+    QList<Layer*> layers(Layer::Type type) const;
+    QList<ObjectGroup*> objectGroups() const;
+    QList<TileLayer*> tileLayers() const;
+
     /**
      * Adds a layer to this map.
      */
@@ -179,8 +188,12 @@ public:
     /**
      * Returns the index of the layer given by \a layerName, or -1 if no
      * layer with that name is found.
+     *
+     * The second optional parameter specifies the layer types which are
+     * searched.
      */
-    int indexOfLayer(const QString &layerName) const;
+    int indexOfLayer(const QString &layerName,
+                     uint layerTypes = Layer::AnyLayerType) const;
 
     /**
      * Adds a layer to this map, inserting it at the given index.
@@ -236,12 +249,32 @@ public:
     const QList<Tileset*> &tilesets() const { return mTilesets; }
 
     /**
+     * Returns the background color of this map.
+     */
+    const QColor &backgroundColor() const { return mBackgroundColor; }
+
+    /**
+     * Sets the background color of this map.
+     */
+    void setBackgroundColor(QColor color) { mBackgroundColor = color; }
+
+    /**
      * Returns whether the given \a tileset is used by any tile layer of this
      * map.
      */
     bool isTilesetUsed(Tileset *tileset) const;
 
     Map *clone() const;
+
+    /**
+     * Creates a new map that contains the given \a layer. The map size will be
+     * determined by the size of the layer.
+     *
+     * The orientation defaults to Unknown and the tile width and height will
+     * default to 0. In case this map needs to be rendered, these properties
+     * will need to be properly set.
+     */
+    static Map *fromLayer(Layer *layer);
 
 private:
     void adoptLayer(Layer *layer);
@@ -251,10 +284,28 @@ private:
     int mHeight;
     int mTileWidth;
     int mTileHeight;
-    QSize mMaxTileSize;
+    QColor mBackgroundColor;
+    QMargins mDrawMargins;
     QList<Layer*> mLayers;
     QList<Tileset*> mTilesets;
 };
+
+/**
+ * Helper function that converts the map orientation to a string value. Useful
+ * for map writers.
+ *
+ * @return The map orientation as a lowercase string.
+ */
+TILEDSHARED_EXPORT QString orientationToString(Map::Orientation);
+
+/**
+ * Helper function that converts a string to a map orientation enumerator.
+ * Useful for map readers.
+ *
+ * @return The map orientation matching the given string, or Map::Unknown if
+ *         the string is unrecognized.
+ */
+TILEDSHARED_EXPORT Map::Orientation orientationFromString(const QString &);
 
 } // namespace Tiled
 

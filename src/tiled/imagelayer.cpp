@@ -1,6 +1,7 @@
 /*
- * object.h
- * Copyright 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * imagelayer.cpp
+ * Copyright 2011, Gregory Nickonov <gregory@nickonov.ru>
+ * Copyright 2012, Alexander Kuhrt <alex@qrt.de>
  *
  * This file is part of libtiled.
  *
@@ -26,60 +27,63 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#include "imagelayer.h"
+#include "map.h"
 
-#include "properties.h"
+#include <QBitmap>
 
-namespace Tiled {
+using namespace Tiled;
 
-/**
- * The base class for anything that can hold properties.
- */
-class TILEDSHARED_EXPORT Object
+ImageLayer::ImageLayer(const QString &name, int x, int y, int width, int height):
+    Layer(ImageLayerType, name, x, y, width, height)
 {
-public:
-    /**
-     * Virtual destructor.
-     */
-    virtual ~Object() {}
+}
 
-    /**
-     * Returns the properties of this object.
-     */
-    const Properties &properties() const { return mProperties; }
+ImageLayer::~ImageLayer()
+{
+}
 
-    /**
-     * Replaces all existing properties with a new set of properties.
-     */
-    void setProperties(const Properties &properties)
-    { mProperties = properties; }
+void ImageLayer::resetImage()
+{
+    mImage = QPixmap();
+    mImageSource.clear();
+}
 
-    /**
-     * Merges \a properties with the existing properties. Properties with the
-     * same name will be overridden.
-     *
-     * \sa Properties::merge
-     */
-    void mergeProperties(const Properties &properties)
-    { mProperties.merge(properties); }
+bool ImageLayer::loadFromImage(const QImage &image, const QString &fileName)
+{
+    if (image.isNull())
+        return false;
 
-    /**
-     * Returns the value of the object's \a name property.
-     */
-    QString property(const QString &name) const
-    { return mProperties.value(name); }
+    mImage = QPixmap::fromImage(image);
 
-    /**
-     * Sets the value of the object's \a name property to \a value.
-     */
-    void setProperty(const QString &name, const QString &value)
-    { mProperties.insert(name, value); }
+    if (mTransparentColor.isValid()) {
+        const QImage mask = image.createMaskFromColor(mTransparentColor.rgb());
+        mImage.setMask(QBitmap::fromImage(mask));
+    }
 
-private:
-    Properties mProperties;
-};
+    mImageSource = fileName;
 
-} // namespace Tiled
+    return true;
+}
 
-#endif // OBJECT_H
+bool ImageLayer::isEmpty() const
+{
+    return mImage.isNull();
+}
+
+Layer *ImageLayer::clone() const
+{
+    return initializeClone(new ImageLayer(mName, mX, mY, mWidth, mHeight));
+}
+
+ImageLayer *ImageLayer::initializeClone(ImageLayer *clone) const
+{
+    Layer::initializeClone(clone);
+
+    clone->mImageSource = mImageSource;
+    clone->mTransparentColor = mTransparentColor;
+    clone->mImage = mImage;
+
+    return clone;
+}
+

@@ -3,20 +3,28 @@
  * Copyright 2008-2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  * Copyright 2009, Jeff Bland <jeff@teamphobic.com>
  *
- * This file is part of Tiled.
+ * This file is part of libtiled.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ *    2. Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef LAYER_H
@@ -26,14 +34,17 @@
 
 #include <QPixmap>
 #include <QRect>
+#include <QSet>
 #include <QString>
 #include <QVector>
 
 namespace Tiled {
 
 class Map;
+class ImageLayer;
 class ObjectGroup;
 class TileLayer;
+class Tileset;
 
 /**
  * A map layer.
@@ -41,10 +52,23 @@ class TileLayer;
 class TILEDSHARED_EXPORT Layer : public Object
 {
 public:
+    enum Type {
+        TileLayerType   = 0x01,
+        ObjectGroupType = 0x02,
+        ImageLayerType  = 0x04,
+        AnyLayerType    = 0xFF
+    };
+
     /**
      * Constructor.
      */
-    Layer(const QString &name, int x, int y, int width, int height);
+    Layer(Type type, const QString &name, int x, int y,
+          int width, int height);
+
+    /**
+     * Returns the type of this layer.
+     */
+    Type type() const { return mType; }
 
     /**
      * Returns the name of this layer.
@@ -108,6 +132,17 @@ public:
     void setY(int y) { mY = y; }
 
     /**
+     * Returns the position of this layer (in tiles).
+     */
+    QPoint position() const { return QPoint(mX, mY); }
+
+    /**
+     * Sets the position of this layer (in tiles).
+     */
+    void setPosition(QPoint pos) { setPosition(pos.x(), pos.y()); }
+    void setPosition(int x, int y) { mX = x; mY = y; }
+
+    /**
      * Returns the width of this layer.
      */
     int width() const { return mWidth; }
@@ -122,6 +157,25 @@ public:
      */
     QRect bounds() const { return QRect(mX, mY, mWidth, mHeight); }
 
+    virtual bool isEmpty() const = 0;
+
+    /**
+     * Computes and returns the set of tilesets used by this layer.
+     */
+    virtual QSet<Tileset*> usedTilesets() const = 0;
+
+    /**
+     * Returns whether this layer is referencing the given tileset.
+     */
+    virtual bool referencesTileset(const Tileset *tileset) const = 0;
+
+    /**
+     * Replaces all references to tiles from \a oldTileset with tiles from
+     * \a newTileset.
+     */
+    virtual void replaceReferencesToTileset(Tileset *oldTileset,
+                                            Tileset *newTileset) = 0;
+
     /**
      * Resizes this layer to \a size, while shifting its contents by \a offset.
      * Note that the position of the layer remains unaffected.
@@ -135,6 +189,20 @@ public:
                         bool wrapX, bool wrapY) = 0;
 
     /**
+     * Returns whether this layer can merge together with the \a other layer.
+     */
+    virtual bool canMergeWith(Layer *other) const = 0;
+
+    /**
+     * Returns a newly allocated layer that is the result of merging this layer
+     * with the \a other layer. Where relevant, the other layer is considered
+     * to be on top of this one.
+     *
+     * Should only be called when canMergeWith returns true.
+     */
+    virtual Layer *mergedWith(Layer *other) const = 0;
+
+    /**
      * Returns a duplicate of this layer. The caller is responsible for the
      * ownership of this newly created layer.
      */
@@ -142,13 +210,20 @@ public:
 
     // These functions allow checking whether this Layer is an instance of the
     // given subclass without relying on a dynamic_cast.
-    virtual TileLayer *asTileLayer() { return 0; }
-    virtual ObjectGroup *asObjectGroup() { return 0; }
+    bool isTileLayer() const { return mType == TileLayerType; }
+    bool isObjectGroup() const { return mType == ObjectGroupType; }
+    bool isImageLayer() const { return mType == ImageLayerType; }
+
+    // These actually return this layer cast to one of its subclasses.
+    TileLayer *asTileLayer();
+    ObjectGroup *asObjectGroup();
+    ImageLayer *asImageLayer();
 
 protected:
     Layer *initializeClone(Layer *clone) const;
 
     QString mName;
+    Type mType;
     int mX;
     int mY;
     int mWidth;

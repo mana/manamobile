@@ -4,20 +4,28 @@
  * Copyright 2008, Roderic Morris <roderic@ccs.neu.edu>
  * Copyright 2009, Jeff Bland <jeff@teamphobic.com>
  *
- * This file is part of Tiled.
+ * This file is part of libtiled.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ *    2. Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef MAPOBJECT_H
@@ -25,7 +33,7 @@
 
 #include "object.h"
 
-#include <QPointF>
+#include <QPolygonF>
 #include <QSizeF>
 #include <QString>
 #include <QRectF>
@@ -48,6 +56,18 @@ class TILEDSHARED_EXPORT MapObject : public Object
 {
 public:
     /**
+     * Enumerates the different object shapes. Rectangle is the default shape.
+     * When a polygon is set, the shape determines whether it should be
+     * interpreted as a filled polygon or a line.
+     */
+    enum Shape {
+        Rectangle,
+        Polygon,
+        Polyline,
+        Ellipse
+    };
+
+    /**
      * Default constructor.
      */
     MapObject();
@@ -56,8 +76,8 @@ public:
      * Constructor.
      */
     MapObject(const QString &name, const QString &type,
-              qreal x, qreal y,
-              qreal width, qreal height);
+              const QPointF &pos,
+              const QSizeF &size);
 
     /**
      * Destructor.
@@ -74,6 +94,17 @@ public:
      * Sets the name of this object.
      */
     void setName(const QString &name) { mName = name; }
+
+    /**
+     * Returns the type of this object. The type usually says something about
+     * how the object is meant to be interpreted by the engine.
+     */
+    const QString &type() const { return mType; }
+
+    /**
+     * Sets the type of this object.
+     */
+    void setType(const QString &type) { mType = type; }
 
     /**
      * Returns the position of this object.
@@ -139,24 +170,39 @@ public:
     void setHeight(qreal height) { mSize.setHeight(height); }
 
     /**
+     * Sets the polygon associated with this object. The polygon is only used
+     * when the object shape is set to either Polygon or Polyline.
+     *
+     * \sa setShape()
+     */
+    void setPolygon(const QPolygonF &polygon) { mPolygon = polygon; }
+
+    /**
+     * Returns the polygon associated with this object. Returns an empty
+     * polygon when no polygon is associated with this object.
+     */
+    const QPolygonF &polygon() const { return mPolygon; }
+
+    /**
+     * Sets the shape of the object.
+     */
+    void setShape(Shape shape) { mShape = shape; }
+
+    /**
+     * Returns the shape of the object.
+     */
+    Shape shape() const { return mShape; }
+
+    /**
      * Shortcut to getting a QRectF from position() and size().
      */
     QRectF bounds() const { return QRectF(mPos, mSize); }
 
     /**
-     * Returns the type of this object. The type usually says something about
-     * how the object is meant to be interpreted by the engine.
-     */
-    const QString &type() const { return mType; }
-
-    /**
-     * Sets the type of this object.
-     */
-    void setType(const QString &type) { mType = type; }
-
-    /**
      * Sets the tile that is associated with this object. The object will
      * display as the tile image.
+     *
+     * \warning The object shape is ignored for tile objects!
      */
     void setTile(Tile *tile) { mTile = tile; }
 
@@ -183,13 +229,19 @@ public:
      */
     MapObject *clone() const;
 
+    bool isVisible() const { return mVisible; }
+    void setVisible(bool visible) { mVisible = visible; }
+
 private:
     QString mName;
+    QString mType;
     QPointF mPos;
     QSizeF mSize;
-    QString mType;
+    QPolygonF mPolygon;
+    Shape mShape;
     Tile *mTile;
     ObjectGroup *mObjectGroup;
+    bool mVisible;
 };
 
 } // namespace Tiled

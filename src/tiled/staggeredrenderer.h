@@ -1,6 +1,6 @@
 /*
- * orthogonalrenderer.h
- * Copyright 2009-2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * staggeredrenderer.h
+ * Copyright 2011, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
  * This file is part of libtiled.
  *
@@ -26,21 +26,57 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ORTHOGONALRENDERER_H
-#define ORTHOGONALRENDERER_H
+#ifndef STAGGEREDRENDERER_H
+#define STAGGEREDRENDERER_H
 
 #include "maprenderer.h"
 
 namespace Tiled {
 
 /**
- * The orthogonal map renderer. This is the most basic map renderer,
- * dealing with maps that use rectangular tiles.
+ * A staggered isometric renderer.
+ *
+ * This renderer is meant to be used with isometric tiles, but rather than
+ * doing a true isometric projection the tiles are shifted in order to fit
+ * together. This has the advantage that the map has a rectangular shape.
+ *
+ * Only one variation of staggered map rendering is supported at the moment,
+ * namely shifting the uneven rows to the right.
+ *
+ * Objects are handled the same way as the OrthogonalRenderer, though they
+ * snap at half the tile width and height.
+ *
+ * At the moment, several Tiled features will not work correctly with this
+ * renderer. This is due to the way the shifting messes with the coordinate
+ * system. List of known issues:
+ *
+ *   Fill tool:
+ *
+ *     Doesn't work properly cause its assumptions about neighboring are
+ *     broken by this renderer.
+ *
+ *   Stamp tool:
+ *
+ *     A stamp only makes sense if it's placed at an even y offset from
+ *     where it was created. When moved by an uneven y offset, the rows
+ *     that are shifted swap, messing up the stamp.
+ *
+ *     The circle and line drawing modes of the stamp tool won't work
+ *     properly due to the irregular coordinate system.
+ *
+ *   Rectangular select tool:
+ *
+ *     This one will appear to behave somewhat erratic.
+ *
+ *   Map resize and offset actions:
+ *
+ *     Similar problem as with stamps when offsetting at an uneven y offset.
+ *
  */
-class TILEDSHARED_EXPORT OrthogonalRenderer : public MapRenderer
+class TILEDSHARED_EXPORT StaggeredRenderer : public MapRenderer
 {
 public:
-    OrthogonalRenderer(const Map *map) : MapRenderer(map) {}
+    StaggeredRenderer(const Map *map) : MapRenderer(map) {}
 
     QSize mapSize() const;
 
@@ -68,12 +104,21 @@ public:
                         const ImageLayer *layer,
                         const QRectF &exposed = QRectF()) const;
 
+    using MapRenderer::pixelToTileCoords;
     QPointF pixelToTileCoords(qreal x, qreal y) const;
 
     using MapRenderer::tileToPixelCoords;
     QPointF tileToPixelCoords(qreal x, qreal y) const;
+
+    // Functions specific to this type of renderer
+    QPoint topLeft(int x, int y) const;
+    QPoint topRight(int x, int y) const;
+    QPoint bottomLeft(int x, int y) const;
+    QPoint bottomRight(int x, int y) const;
+
+    QPolygonF tileToPolygon(int x, int y) const;
 };
 
 } // namespace Tiled
 
-#endif // ORTHOGONALRENDERER_H
+#endif // STAGGEREDRENDERER_H

@@ -1,21 +1,29 @@
 /*
  * maprenderer.h
- * Copyright 2009-2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * Copyright 2009-2011, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
- * This file is part of Tiled.
+ * This file is part of libtiled.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ *    2. Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef MAPRENDERER_H
@@ -31,6 +39,13 @@ class Layer;
 class Map;
 class MapObject;
 class TileLayer;
+class ImageLayer;
+
+enum RenderFlag {
+    ShowTileObjectOutlines = 0x1
+};
+
+Q_DECLARE_FLAGS(RenderFlags, RenderFlag)
 
 /**
  * This interface is used for rendering tile layers and retrieving associated
@@ -74,7 +89,8 @@ public:
      * Draws the tile grid in the specified \a rect using the given
      * \a painter.
      */
-    virtual void drawGrid(QPainter *painter, const QRectF &rect) const = 0;
+    virtual void drawGrid(QPainter *painter, const QRectF &rect,
+                          QColor gridColor = Qt::black) const = 0;
 
     /**
      * Draws the given \a layer using the given \a painter.
@@ -104,6 +120,13 @@ public:
                                const QColor &color) const = 0;
 
     /**
+     * Draws the given image \a layer using the given \a painter.
+     */
+    virtual void drawImageLayer(QPainter *painter,
+                                const ImageLayer *layer,
+                                const QRectF &exposed = QRectF()) const = 0;
+
+    /**
      * Returns the tile coordinates matching the given pixel position.
      */
     virtual QPointF pixelToTileCoords(qreal x, qreal y) const = 0;
@@ -119,6 +142,23 @@ public:
     inline QPointF tileToPixelCoords(const QPointF &point) const
     { return tileToPixelCoords(point.x(), point.y()); }
 
+    QPolygonF tileToPixelCoords(const QPolygonF &polygon) const
+    {
+        QPolygonF screenPolygon(polygon.size());
+        for (int i = polygon.size() - 1; i >= 0; --i)
+            screenPolygon[i] = tileToPixelCoords(polygon[i]);
+        return screenPolygon;
+    }
+
+    void setFlag(RenderFlag flag, bool enabled = true);
+    bool testFlag(RenderFlag flag) const
+    { return mFlags.testFlag(flag); }
+
+    RenderFlags flags() const { return mFlags; }
+    void setFlags(RenderFlags flags) { mFlags = flags; }
+
+    static QPolygonF lineToPolygon(const QPointF &start, const QPointF &end);
+
 protected:
     /**
      * Returns the map this renderer is associated with.
@@ -127,8 +167,12 @@ protected:
 
 private:
     const Map *mMap;
+
+    RenderFlags mFlags;
 };
 
 } // namespace Tiled
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Tiled::RenderFlags)
 
 #endif // MAPRENDERER_H

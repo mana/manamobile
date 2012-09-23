@@ -3,36 +3,48 @@
  * Copyright 2008-2009, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  * Copyrigth 2009, Edward Hutchins <eah1@yahoo.com>
  *
- * This file is part of Tiled.
+ * This file is part of libtiled.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- * more details.
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ *    2. Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef TILESET_H
 #define TILESET_H
 
-#include "tiled_global.h"
+#include "object.h"
 
 #include <QColor>
 #include <QList>
+#include <QVector>
+#include <QPoint>
 #include <QString>
+#include <QPixmap>
 
 class QImage;
 
 namespace Tiled {
 
 class Tile;
+class Terrain;
 
 /**
  * A tileset, representing a set of tiles.
@@ -40,7 +52,7 @@ class Tile;
  * This class currently only supports loading tiles from a tileset image, using
  * loadFromImage(). There is no way to add or remove arbitrary tiles.
  */
-class TILEDSHARED_EXPORT Tileset
+class TILEDSHARED_EXPORT Tileset : public Object
 {
 public:
     /**
@@ -63,6 +75,8 @@ public:
         mImageHeight(0),
         mColumnCount(0)
     {
+        Q_ASSERT(tileSpacing >= 0);
+        Q_ASSERT(margin >= 0);
     }
 
     /**
@@ -97,12 +111,12 @@ public:
     bool isExternal() const { return !mFileName.isEmpty(); }
 
     /**
-     * Returns the width of the tiles in this tileset.
+     * Returns the maximum width of the tiles in this tileset.
      */
     int tileWidth() const { return mTileWidth; }
 
     /**
-     * Returns the height of the tiles in this tileset.
+     * Returns the maximum height of the tiles in this tileset.
      */
     int tileHeight() const { return mTileHeight; }
 
@@ -117,7 +131,20 @@ public:
     int margin() const { return mMargin; }
 
     /**
+     * Returns the offset that is applied when drawing the tiles in this
+     * tileset.
+     */
+    QPoint tileOffset() const { return mTileOffset; }
+
+    /**
+     * @see tileOffset
+     */
+    void setTileOffset(QPoint offset) { mTileOffset = offset; }
+
+    /**
      * Returns the tile for the given tile ID.
+     * The tile ID is local to this tileset, which means the IDs are in range
+     * [0, tileCount() - 1].
      */
     Tile *tileAt(int id) const;
 
@@ -183,6 +210,12 @@ public:
     bool loadFromImage(const QImage &image, const QString &fileName);
 
     /**
+     * This checks if there is a similar tileset in the given list.
+     * It is needed for replacing this tileset by its similar copy.
+     */
+    Tileset *findSimilarTileset(const QList<Tileset*> &tilesets) const;
+
+    /**
      * Returns the file name of the external image that contains the tiles in
      * this tileset. Is an empty string when this tileset doesn't have a
      * tileset image.
@@ -198,7 +231,60 @@ public:
      */
     void setImageSource(const QString &source) { mImageSource = source; }
 
+    /**
+     * Returns the column count that this tileset would have if the tileset
+     * image would have the given \a width. This takes into account the tile
+     * size, margin and spacing.
+     */
+    int columnCountForWidth(int width) const;
+
+    /**
+     * Returns the number of terrain types in this tileset.
+     */
+    int terrainCount() const { return mTerrainTypes.size(); }
+
+    /**
+     * Returns the number of tiles in this tileset.
+     */
+    Terrain *terrain(int terrain) const { return terrain >= 0 ? mTerrainTypes[terrain] : NULL; }
+
+    /**
+     * Add a new terrain type.
+     */
+    void addTerrain(Terrain *terrain);
+
+    /**
+     * Calculates the transition distance matrix for all terrain types.
+     */
+    void calculateTerrainDistances();
+
+    /**
+     * Returns the transition penalty(/distance) between 2 terrains. -1 if no transition is possible.
+     */
+    int terrainTransitionPenalty(int terrainType0, int terrainType1);
+
+    /**
+     * Add a new tile to the end of the tileset
+     */
+    void addTile(const QPixmap &image);
+
+    /**
+     * Set a tile's image
+     */
+    void setTileImage(int index, const QPixmap &image);
+
 private:
+    /**
+     * Detaches from the external image. Should be called everytime the tileset
+     * is changed.
+     */
+    void detachExternalImage();
+
+    /**
+     * Sets tile size to the maximum size
+     */
+    void updateTileSize();
+
     QString mName;
     QString mFileName;
     QString mImageSource;
@@ -207,10 +293,12 @@ private:
     int mTileHeight;
     int mTileSpacing;
     int mMargin;
+    QPoint mTileOffset;
     int mImageWidth;
     int mImageHeight;
     int mColumnCount;
     QList<Tile*> mTiles;
+    QList<Terrain*> mTerrainTypes;
 };
 
 } // namespace Tiled
