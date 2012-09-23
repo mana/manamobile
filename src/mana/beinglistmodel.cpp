@@ -106,16 +106,27 @@ void BeingListModel::handleBeingLeave(MessageIn &message)
 
 void BeingListModel::handleBeingsMove(MessageIn &message)
 {
-    while (message.unreadLength()) {
+    while (message.unreadLength() > 0) {
         const int id = message.readInt16();
         const int flags = message.readInt8();
 
-        if (!(flags & MOVING_POSITION))
+        if ((!flags & (MOVING_POSITION | MOVING_DESTINATION)))
             continue;
 
-        const int sx = message.readInt16();
-        const int sy = message.readInt16();
-        const int speed = message.readInt8();
+        int dx = 0, dy = 0, speed = 0;
+
+        if (flags & MOVING_POSITION)
+        {
+            message.readInt16(); // unused previous x position
+            message.readInt16(); // unused previous y position
+        }
+
+        if (flags & MOVING_DESTINATION)
+        {
+            dx = message.readInt16();
+            dy = message.readInt16();
+            speed = message.readInt8();
+        }
 
         Being *being = beingById(id);
         if (!being)
@@ -131,7 +142,8 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
             being->setWalkSpeed(pixelsPerTimerEvent);
         }
 
-        being->setServerPosition(QPointF(sx, sy));
+        if (flags & MOVING_DESTINATION)
+            being->setServerPosition(QPointF(dx, dy));
     }
 }
 
