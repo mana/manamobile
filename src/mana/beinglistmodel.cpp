@@ -24,6 +24,8 @@
 #include "messagein.h"
 #include "protocol.h"
 
+#include <safeassert.h>
+
 #include <QTimerEvent>
 #include <QVector2D>
 #include <QDebug>
@@ -215,6 +217,8 @@ void BeingListModel::addBeing(Being *being)
 void BeingListModel::removeBeing(int id)
 {
     const int index = indexOfBeing(id);
+    SAFE_ASSERT(index == -1, return);
+
     beginRemoveRows(QModelIndex(), index, index);
     delete mBeings.takeAt(index);
     endRemoveRows();
