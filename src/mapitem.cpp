@@ -212,8 +212,10 @@ void MapItem::imageFinished()
     foreach (Tileset *tileset, mMap->tilesets()) {
         // TODO: Replace hack with a proper way of identifying whether the
         // request matches the tileset.
-        if (requestedUrl.endsWith(tileset->imageSource()))
+        if (!tileset->imageSource().isEmpty() &&
+                requestedUrl.endsWith(tileset->imageSource())) {
             tileset->loadFromImage(image, tileset->imageSource());
+        }
     }
 
     // Trigger a repaint of the tile layer items
