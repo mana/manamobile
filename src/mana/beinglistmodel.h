@@ -53,6 +53,7 @@ public:
 
     void handleBeingEnter(MessageIn &message);
     void handleBeingLeave(MessageIn &message);
+    void handleBeingDirChange(MessageIn &message);
     void handleBeingsMove(MessageIn &message);
     void handleBeingActionChange(MessageIn &message);
     void handleBeingSay(MessageIn &message);

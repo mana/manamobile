@@ -37,6 +37,7 @@ class Being : public QObject
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(int x READ x NOTIFY positionChanged)
     Q_PROPERTY(int y READ y NOTIFY positionChanged)
+    Q_PROPERTY(int direction READ direction NOTIFY directionChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString chatMessage READ chatMessage NOTIFY chatMessageChanged)
 
@@ -56,6 +57,9 @@ public:
     int id() const { return mId; }
     int x() const { return mPosition.x(); }
     int y() const { return mPosition.y(); }
+
+    int direction() const { return mDirection; }
+    void setDirection(int direction);
 
     QString name() const { return mName; }
     void setName(const QString &name);
@@ -78,6 +82,7 @@ public:
 
 signals:
     void positionChanged();
+    void directionChanged();
     void nameChanged();
     void chatMessageChanged();
 
@@ -87,6 +92,7 @@ private:
     qreal mWalkSpeed;
     Action mAction;
     QPointF mPosition;
+    int mDirection;
     QPointF mServerPosition;
     QString mName;
     QString mChatMessage;

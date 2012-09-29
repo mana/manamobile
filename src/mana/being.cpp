@@ -46,6 +46,15 @@ void Being::setServerPosition(QPointF position)
     mServerPosition = position;
 }
 
+void Being::setDirection(int direction)
+{
+    if (mDirection == direction)
+        return;
+
+    mDirection = direction;
+    emit directionChanged();
+}
+
 void Being::setName(const QString &name)
 {
     if (mName == name)

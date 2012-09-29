@@ -106,6 +106,17 @@ void BeingListModel::handleBeingLeave(MessageIn &message)
     removeBeing(id);
 }
 
+void BeingListModel::handleBeingDirChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const int index = indexOfBeing(id);
+    const int dir = message.readInt8();
+    SAFE_ASSERT(index != -1, return);
+
+    Being *being = mBeings.at(index);
+    being->setDirection(dir);
+}
+
 void BeingListModel::handleBeingsMove(MessageIn &message)
 {
     while (message.unreadLength() > 0) {
@@ -217,7 +228,7 @@ void BeingListModel::addBeing(Being *being)
 void BeingListModel::removeBeing(int id)
 {
     const int index = indexOfBeing(id);
-    SAFE_ASSERT(index == -1, return);
+    SAFE_ASSERT(index != -1, return);
 
     beginRemoveRows(QModelIndex(), index, index);
     delete mBeings.takeAt(index);
