@@ -123,7 +123,7 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
         const int id = message.readInt16();
         const int flags = message.readInt8();
 
-        if ((!flags & (MOVING_POSITION | MOVING_DESTINATION)))
+        if (!(flags & (MOVING_POSITION | MOVING_DESTINATION)))
             continue;
 
         int dx = 0, dy = 0, speed = 0;
