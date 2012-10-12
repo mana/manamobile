@@ -106,6 +106,7 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_BEING_DIR_CHANGE:
         mBeingListModel->handleBeingDirChange(message);
+        break;
     case GPMSG_BEINGS_MOVE:
         mBeingListModel->handleBeingsMove(message);
         break;
