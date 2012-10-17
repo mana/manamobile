@@ -91,7 +91,7 @@ Rectangle {
 
                     onTextChanged: {
                         opacity = 1;
-                        chatAnimation.start();
+                        chatAnimation.restart();
                     }
 
                     SequentialAnimation {
