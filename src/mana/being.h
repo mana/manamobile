@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QPointF>
+#include <QMetaType>
 
 namespace Mana {
 
@@ -99,5 +100,7 @@ private:
 };
 
 } // namespace Mana
+
+Q_DECLARE_METATYPE(Mana::Being*)
 
 #endif // BEING_H

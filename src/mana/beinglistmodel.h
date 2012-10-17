@@ -35,10 +35,7 @@ class BeingListModel : public QAbstractListModel
 
 public:
     enum BeingRoles {
-        BeingName = Qt::DisplayRole,
-        BeingChatMessage = Qt::UserRole,
-        BeingX,
-        BeingY
+        BeingRole = Qt::UserRole
     };
 
     explicit BeingListModel(QObject *parent = 0);
@@ -70,7 +67,6 @@ private:
     void addBeing(Being *being);
     void removeBeing(int id);
     int indexOfBeing(int id) const;
-    void notifyBeingChanged(int index);
     const QList<Being*> &beings() const { return mBeings; }
 
     QList<Being*> mBeings;

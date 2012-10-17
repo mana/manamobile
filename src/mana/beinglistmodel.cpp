@@ -37,10 +37,7 @@ BeingListModel::BeingListModel(QObject *parent)
     , mPlayerBeing(0)
 {
     QHash<int, QByteArray> roleNames;
-    roleNames.insert(BeingName, "name");
-    roleNames.insert(BeingChatMessage, "chatMessage");
-    roleNames.insert(BeingX, "x");
-    roleNames.insert(BeingY, "y");
+    roleNames.insert(BeingRole, "being");
     setRoleNames(roleNames);
 
     mBeingUpdateTimer = startTimer(16);
@@ -53,20 +50,12 @@ int BeingListModel::rowCount(const QModelIndex &parent) const
 
 QVariant BeingListModel::data(const QModelIndex &index, int role) const
 {
-    const Being *being = mBeings.at(index.row());
-
-    switch (role) {
-    case BeingName:
-        return being->name();
-    case BeingChatMessage:
-        return being->chatMessage();
-    case BeingX:
-        return being->x();
-    case BeingY:
-        return being->y();
-    default:
-        return QVariant();
+    if (role == BeingRole) {
+        Being *being = mBeings.at(index.row());
+        return QVariant::fromValue(being);
     }
+
+    return QVariant();
 }
 
 void BeingListModel::handleBeingEnter(MessageIn &message)
@@ -177,7 +166,6 @@ void BeingListModel::handleBeingSay(MessageIn &message)
     if (index != -1) {
         const QString text = message.readString();
         mBeings.at(index)->say(text);
-        notifyBeingChanged(index);
     }
 }
 
@@ -199,14 +187,12 @@ void BeingListModel::timerEvent(QTimerEvent *event)
 
         if (direction.lengthSquared() < walkSpeed * walkSpeed) {
             being->setPosition(target);
-            notifyBeingChanged(i);
             continue;
         }
 
         direction.normalize();
         direction *= walkSpeed;
         being->setPosition(pos + direction.toPointF());
-        notifyBeingChanged(i);
     }
 }
 
@@ -244,10 +230,4 @@ int BeingListModel::indexOfBeing(int id) const
             return i;
     }
     return -1;
-}
-
-void BeingListModel::notifyBeingChanged(int index)
-{
-    const QModelIndex modelIndex = QAbstractListModel::index(index);
-    emit dataChanged(modelIndex, modelIndex);
 }

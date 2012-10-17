@@ -68,8 +68,8 @@ Rectangle {
         Repeater {
             model: gameClient.beingListModel;
             delegate: Item {
-                x: model.x;
-                y: model.y;
+                x: model.being.x;
+                y: model.being.y;
                 z: y;
 
                 Rectangle {
@@ -85,7 +85,7 @@ Rectangle {
                     anchors.bottom: sprite.top;
                     anchors.bottomMargin: 10;
                     anchors.horizontalCenter: parent.horizontalCenter;
-                    text: model.chatMessage;
+                    text: model.being.chatMessage;
                     color: "white";
                     opacity: 0;
 
@@ -116,7 +116,7 @@ Rectangle {
                     anchors.top: parent.bottom
                     anchors.topMargin: 5
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: model.name;
+                    text: model.being.name;
                 }
             }
         }
