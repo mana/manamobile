@@ -1,6 +1,7 @@
 /*
  * manalib
  * Copyright 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * Copyright 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  * This file is part of manalib.
  *
@@ -21,9 +22,12 @@
 #ifndef BEING_H
 #define BEING_H
 
+#include <QMap>
 #include <QObject>
 #include <QPointF>
 #include <QMetaType>
+
+#include "protocol.h"
 
 namespace Mana {
 
@@ -41,17 +45,9 @@ class Being : public QObject
     Q_PROPERTY(int direction READ direction NOTIFY directionChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString chatMessage READ chatMessage NOTIFY chatMessageChanged)
+    Q_PROPERTY(BeingGender gender READ gender CONSTANT)
 
 public:
-    enum Action {
-        Stand,
-        Move,
-        Attack,
-        Sit,
-        Dead,
-        Hurt
-    };
-
     Being(int type, int id, QPointF position);
 
     int type() const { return mType; }
@@ -60,7 +56,7 @@ public:
     int y() const { return mPosition.y(); }
 
     int direction() const { return mDirection; }
-    void setDirection(int direction);
+    void setDirection(BeingDirection direction);
 
     QString name() const { return mName; }
     void setName(const QString &name);
@@ -70,8 +66,8 @@ public:
     qreal walkSpeed() const { return mWalkSpeed; }
     void setWalkSpeed(qreal walkSpeed) { mWalkSpeed = walkSpeed; }
 
-    Action action() const { return mAction; }
-    void setAction(Action action) { mAction = action; }
+    const QString &action() const { return mAction; }
+    void setAction(const QString &action);
 
     QPointF position() const { return mPosition; }
     void setPosition(QPointF position);
@@ -81,22 +77,39 @@ public:
 
     void say(const QString &text);
 
+    BeingGender gender() const { return mGender; }
+    void setGender(BeingGender gender) { mGender = gender; }
+
+    void setSprite(int slot, int id);
+
+    QMap<int, int> &equipmentSlots() { return mSlots; }
+
+    void lookAt(const QPointF &point);
+
 signals:
     void positionChanged();
-    void directionChanged();
+    void directionChanged(Mana::BeingDirection newDirection);
     void nameChanged();
     void chatMessageChanged();
+    void actionChanged(const QString &newAction);
+    void slotUnequipping(int slot);
+    void slotEquipped(int slot, int itemId);
 
 private:
     int mType;
     int mId;
     qreal mWalkSpeed;
-    Action mAction;
+    QString mAction;
     QPointF mPosition;
-    int mDirection;
+    BeingDirection mDirection;
     QPointF mServerPosition;
     QString mName;
     QString mChatMessage;
+    BeingGender mGender;
+
+    // key: equipment slot
+    // value: item id
+    QMap<int, int> mSlots;
 };
 
 } // namespace Mana

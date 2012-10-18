@@ -23,6 +23,8 @@
 
 #include "spritedef.h"
 
+#include "mana/protocol.h"
+
 #include <QList>
 #include <QMap>
 
@@ -66,6 +68,8 @@ public:
     Q_INVOKABLE void unload();
 
     Q_INVOKABLE const ItemInfo *getInfo(int id) const;
+
+    bool loaded() const { return mLoaded; }
 
     void setStatsList(QList<Stat> stats);
 
@@ -167,15 +171,15 @@ public:
     int weight() const
     { return mWeight; }
 
-    QMap<SpriteReference::Gender, SpriteReference*> sprites() const
+    QMap<BeingGender, SpriteReference *> sprites() const
     { return mSprites; }
 
-    SpriteReference* sprite(SpriteReference::Gender gender) const
+    SpriteReference *sprite(BeingGender gender) const
     {
         if (mSprites.contains(gender))
             return mSprites.value(gender);
 
-        return mSprites[SpriteReference::UNKNOWN];
+        return mSprites[GENDER_UNSPECIFIED];
     }
 
     QString particleFx() const
@@ -192,7 +196,7 @@ protected:
     QList<QString> mEffects;
     int mWeight;
 
-    QMap<SpriteReference::Gender, SpriteReference*> mSprites;
+    QMap<BeingGender, SpriteReference *> mSprites;
     QString mParticleFx;
 };
 

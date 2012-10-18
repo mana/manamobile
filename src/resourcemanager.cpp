@@ -21,6 +21,7 @@
 
 #include "resourcemanager.h"
 
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QNetworkConfigurationManager>
 #include <QNetworkDiskCache>
@@ -30,7 +31,14 @@
 
 #include "mana/xmlreader.h"
 
+#include "mana/resource/pixmapresource.h"
+#include "mana/resource/resource.h"
+#include "mana/resource/spritedef.h"
+
 ResourceManager *ResourceManager::mInstance;
+
+// Time in seconds that a currently unused resource should stay in cache
+static const int CACHE_TIME = 60;
 
 ResourceManager::ResourceManager(QObject *parent)
     : QObject(parent)
@@ -122,4 +130,76 @@ QNetworkReply *ResourceManager::requestFile(const QString &fileName)
     const QNetworkRequest request(mDataUrl + fileName);
     QNetworkReply *reply = mNetworkAccessManager.get(request);
     return reply;
+}
+
+void ResourceManager::removeResource(Mana::Resource *resource)
+{
+    for (QMap<QString, Mana::Resource *>::iterator it = mResources.begin(),
+         it_end = mResources.end(); it != it_end; ++it) {
+        if (it.value() == resource) {
+            Q_ASSERT(it.value()->refCount() == 0);
+            delete it.value();
+            mResources.erase(it);
+            return;
+        }
+    }
+
+    Q_ASSERT(false); // should not happen
+}
+
+void ResourceManager::cleanUpResources()
+{
+    unsigned releaseTime = QDateTime::currentMSecsSinceEpoch() - CACHE_TIME;
+
+    // Temponary list to prevent issues when iterating in list
+    // while removing at the same time
+    QList<Mana::Resource *> markedForRemoval;
+
+    foreach (Mana::Resource *resource, mResources) {
+        if (resource->refCount() == 0
+                && resource->releaseTime() < releaseTime) {
+            markedForRemoval.append(resource);
+        }
+    }
+
+    foreach (Mana::Resource *resource, markedForRemoval) {
+        removeResource(resource);
+    }
+}
+
+Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
+        const QString &path, int variant)
+{
+    Mana::SpriteDefinition *sprite = 0;
+
+    const QString &spritePrefix = spritePath();
+
+    // Check if the sprite is already cached
+    QMap<QString, Mana::Resource *>::iterator it =
+            mResources.find(spritePrefix + path);
+
+    if (it != mResources.end()) {
+        sprite = static_cast<Mana::SpriteDefinition *>(it.value());
+    } else {
+        sprite = new Mana::SpriteDefinition(this, spritePrefix + path, variant);
+        mResources.insert(path, sprite);
+    }
+    sprite->incRef();
+    return sprite;
+}
+
+Mana::PixmapResource *ResourceManager::requestPixmap(const QString &path)
+{
+    Mana::PixmapResource *pixmap = 0;
+
+    // Check if the sprite is already cached
+    QMap<QString, Mana::Resource *>::iterator it = mResources.find(path);
+    if (it != mResources.end()) {
+        pixmap = static_cast<Mana::PixmapResource *>(it.value());
+    } else {
+        pixmap = new Mana::PixmapResource(path, this);
+        mResources.insert(path, pixmap);
+    }
+    pixmap->incRef();
+    return pixmap;
 }

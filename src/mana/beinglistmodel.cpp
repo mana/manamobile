@@ -1,6 +1,7 @@
 /*
  * manalib
  * Copyright 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * Copyright 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  * This file is part of manalib.
  *
@@ -23,6 +24,8 @@
 #include "being.h"
 #include "messagein.h"
 #include "protocol.h"
+
+#include "resource/spritedef.h"
 
 #include <safeassert.h>
 
@@ -62,15 +65,31 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
 {
     const int type = message.readInt8();
     const int id = message.readInt16();
-    message.readInt8(); // action
+    const QString &action = SpriteAction::actionByInt(message.readInt8());
     const int x = message.readInt16();
     const int y = message.readInt16();
-    message.readInt8(); // direction
+    BeingDirection direction = (BeingDirection)message.readInt8();
 
     Being *being = new Being(type, id, QPointF(x, y));
+    being->setAction(action);
+    being->setDirection(direction);
 
     if (being->type() == OBJECT_CHARACTER) {
         being->setName(message.readString());
+
+        int hairstyle = message.readInt8();
+        int haircolor = message.readInt8();
+
+        Q_UNUSED(hairstyle);
+        Q_UNUSED(haircolor);
+
+        // TODO: handle hair
+
+        BeingGender gender = (BeingGender)message.readInt8();
+        being->setGender(gender);
+
+        if (message.unreadLength())
+            handleLooks(being, message);
 
         // Match the being by name to see whether it's the current player
         if (being->name() == mPlayerName) {
@@ -99,7 +118,7 @@ void BeingListModel::handleBeingDirChange(MessageIn &message)
 {
     const int id = message.readInt16();
     const int index = indexOfBeing(id);
-    const int dir = message.readInt8();
+    BeingDirection dir = (BeingDirection)message.readInt8();
     SAFE_ASSERT(index != -1, return);
 
     Being *being = mBeings.at(index);
@@ -117,14 +136,12 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
 
         int dx = 0, dy = 0, speed = 0;
 
-        if (flags & MOVING_POSITION)
-        {
+        if (flags & MOVING_POSITION) {
             message.readInt16(); // unused previous x position
             message.readInt16(); // unused previous y position
         }
 
-        if (flags & MOVING_DESTINATION)
-        {
+        if (flags & MOVING_DESTINATION) {
             dx = message.readInt16();
             dy = message.readInt16();
             speed = message.readInt8();
@@ -144,8 +161,42 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
             being->setWalkSpeed(pixelsPerTimerEvent);
         }
 
-        if (flags & MOVING_DESTINATION)
-            being->setServerPosition(QPointF(dx, dy));
+        if (flags & MOVING_DESTINATION) {
+            QPointF pos(dx, dy);
+            being->setServerPosition(pos);
+        }
+    }
+}
+
+void BeingListModel::handleLooks(Being *being, MessageIn &message)
+{
+    int numberOfChanges = message.readInt8();
+
+    while (numberOfChanges-- > 0) {
+        int slot = message.readInt8();
+        int itemId = message.readInt16();
+
+        being->setSprite(slot + FIXED_SPRITE_LAYER_SIZE, itemId);
+    }
+}
+
+void BeingListModel::handleBeingLooksChange(MessageIn &message)
+{
+    qDebug() << Q_FUNC_INFO;
+    const int id = message.readInt16();
+    if (Being *being = beingById(id)) {
+        handleLooks(being, message);
+
+        // Further data is hair
+        if (message.unreadLength()) {
+            int style = message.readInt16();
+            int color = message.readInt16();
+
+            Q_UNUSED(style);
+            Q_UNUSED(color);
+
+            // TODO: Add hair support!
+        }
     }
 }
 
@@ -153,8 +204,13 @@ void BeingListModel::handleBeingActionChange(MessageIn &message)
 {
     const int id = message.readInt16();
     if (Being *being = beingById(id)) {
-        const Being::Action action = (Being::Action) message.readInt8();
-        being->setAction(action);
+        int actionAsInt = message.readInt8();
+        const QString &newAction = SpriteAction::actionByInt(actionAsInt);
+
+        if (newAction == SpriteAction::STAND &&
+                being->action() == SpriteAction::WALK)
+            return; // Client knows when to stop movement
+        being->setAction(newAction);
     }
 }
 
@@ -179,8 +235,13 @@ void BeingListModel::timerEvent(QTimerEvent *event)
 
         const QPointF pos = being->position();
         const QPointF target = being->serverPosition();
-        if (pos == target)
+        if (pos == target) {
+            if (being->action() == SpriteAction::WALK)
+                being->setAction(SpriteAction::STAND);
             continue;
+        } else {
+            being->setAction(SpriteAction::WALK);
+        }
 
         const qreal walkSpeed = being->walkSpeed();
         QVector2D direction(target - pos);
@@ -192,7 +253,9 @@ void BeingListModel::timerEvent(QTimerEvent *event)
 
         direction.normalize();
         direction *= walkSpeed;
-        being->setPosition(pos + direction.toPointF());
+        QPointF newPos = pos + direction.toPointF();
+        being->lookAt(newPos);
+        being->setPosition(newPos);
     }
 }
 

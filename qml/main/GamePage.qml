@@ -1,5 +1,6 @@
 import Qt 4.7
 import Tiled 1.0
+import Mana 1.0
 
 Rectangle {
     id: gamePage;
@@ -101,15 +102,11 @@ Rectangle {
                     }
                 }
 
-                Rectangle {
+                BeingItem {
                     id: sprite;
+                    being: model.being;
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.bottom: parent.bottom;
-                    color: "blue";
-                    width: 32;
-                    height: 64;
-                    opacity: 0.5;
-                    radius: 15;
                 }
 
                 Text {

@@ -40,6 +40,7 @@
 
 #include "mana/resource/itemdb.h"
 
+#include "beingitem.h"
 #include "mapitem.h"
 #include "resourcemanager.h"
 
@@ -51,6 +52,7 @@ static void registerTypes()
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
     qmlRegisterType<Mana::Settings>("Mana", 1, 0, "Settings");
+    qmlRegisterType<BeingItem>("Mana", 1, 0, "BeingItem");
 
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();

@@ -110,6 +110,9 @@ void GameClient::messageReceived(MessageIn &message)
     case GPMSG_BEINGS_MOVE:
         mBeingListModel->handleBeingsMove(message);
         break;
+    case GPMSG_BEING_LOOKS_CHANGE:
+        mBeingListModel->handleBeingLooksChange(message);
+        break;
     case GPMSG_BEING_ACTION_CHANGE:
         mBeingListModel->handleBeingActionChange(message);
         break;

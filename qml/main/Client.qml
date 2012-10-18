@@ -41,4 +41,14 @@ Item {
             gameClient.service();
         }
     }
+
+    Timer {
+        id: cleanUpTimer
+        interval: 10000
+        running: true
+        repeat: true
+        onTriggered: {
+            resourceManager.cleanUpResources();
+        }
+    }
 }

@@ -88,8 +88,6 @@ void ItemDB::load()
     mReply = ResourceManager::instance()->requestFile(ITEMS_DB_FILE);
 
     connect(mReply, SIGNAL(finished()), this, SLOT(fileReady()));
-
-    mLoaded = true;
 }
 
 void ItemDB::unload()
@@ -179,11 +177,11 @@ void ItemDB::fileReady()
             SpriteReference *sprite = readSprite(xml, currentItem);
 
             if (gender == "male")
-                currentItem->mSprites[SpriteReference::MALE] = sprite;
-            else if (gender == "male")
-                currentItem->mSprites[SpriteReference::FEMALE] = sprite;
+                currentItem->mSprites[GENDER_MALE] = sprite;
+            else if (gender == "female")
+                currentItem->mSprites[GENDER_FEMALE] = sprite;
             else
-                currentItem->mSprites[SpriteReference::UNKNOWN] = sprite;
+                currentItem->mSprites[GENDER_UNSPECIFIED] = sprite;
         }
         else if (currentTag == "particlefx")
             currentItem->mParticleFx = xml.readElementText();

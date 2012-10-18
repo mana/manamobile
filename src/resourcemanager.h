@@ -25,6 +25,9 @@
 #include <QMap>
 #include <QNetworkAccessManager>
 
+#include "mana/resource/pixmapresource.h"
+#include "mana/resource/spritedef.h"
+
 /**
  * This is meant to be a convenient abstraction on top of QNetworkAccessManager
  * for retrieving and managing resources.
@@ -48,7 +51,19 @@ public:
                  const QString &value = QString()) const
     { return mPaths.value(key, value); }
 
+    QString spritePath() const
+    { return path("sprites", "graphics/sprites/"); }
+
     QNetworkReply *requestFile(const QString &fileName);
+
+    void removeResource(Mana::Resource *resource);
+
+    Q_INVOKABLE void cleanUpResources();
+
+    Mana::SpriteDefinition *requestSpriteDefinition(const QString &path,
+                                                    int variant = 0);
+
+    Mana::PixmapResource *requestPixmap(const QString &path);
 
 signals:
     void dataUrlChanged();
@@ -60,6 +75,7 @@ private slots:
 private:
     QString mDataUrl;
     QNetworkAccessManager mNetworkAccessManager;
+    QMap<QString, Mana::Resource *> mResources;
 
     bool mPathsLoaded;
     QMap<QString, QString> mPaths;

@@ -1,6 +1,7 @@
 /*
  * manalib
  * Copyright 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * Copyright 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  * This file is part of manalib.
  *
@@ -38,6 +39,13 @@ public:
         BeingRole = Qt::UserRole
     };
 
+    enum SpriteLayer
+    {
+        SPRITE_LAYER_BASE = 0,
+        SPRITE_LAYER_HAIR,
+        FIXED_SPRITE_LAYER_SIZE
+    };
+
     explicit BeingListModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent) const;
@@ -52,6 +60,7 @@ public:
     void handleBeingLeave(MessageIn &message);
     void handleBeingDirChange(MessageIn &message);
     void handleBeingsMove(MessageIn &message);
+    void handleBeingLooksChange(MessageIn &message);
     void handleBeingActionChange(MessageIn &message);
     void handleBeingSay(MessageIn &message);
 
@@ -68,6 +77,8 @@ private:
     void removeBeing(int id);
     int indexOfBeing(int id) const;
     const QList<Being*> &beings() const { return mBeings; }
+
+    void handleLooks(Being *being, MessageIn &message);
 
     QList<Being*> mBeings;
 
