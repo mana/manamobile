@@ -7,3 +7,6 @@ manamobile
 
 # Qt Creator artifacts
 *.pro.user
+
+# Autosaves
+*.autosave
