@@ -1,6 +1,7 @@
 /*
  *  Mana Mobile
  *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ *  Copyright (C) 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  *  This file is part of Mana Mobile.
  *
@@ -21,6 +22,7 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
+#include <QMap>
 #include <QNetworkAccessManager>
 
 /**
@@ -41,14 +43,25 @@ public:
     QString dataUrl() const { return mDataUrl; }
     void setDataUrl(const QString &url);
 
+
+    const QString &path(const QString &key,
+                        const QString &value = QString()) const;
+
     QNetworkReply *requestFile(const QString &fileName);
 
 signals:
     void dataUrlChanged();
+    void pathsLoaded();
+
+private slots:
+    void pathsFileFinished();
 
 private:
     QString mDataUrl;
     QNetworkAccessManager mNetworkAccessManager;
+
+    bool mPathsLoaded;
+    QMap<QString, QString> mPaths;
 
     static ResourceManager *mInstance;
 };

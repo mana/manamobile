@@ -1,6 +1,7 @@
 /*
  *  Mana Mobile
  *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ *  Copyright (C) 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  *  This file is part of Mana Mobile.
  *
@@ -27,10 +28,13 @@
 #include <QNetworkRequest>
 #include <QDebug>
 
+#include "mana/xmlreader.h"
+
 ResourceManager *ResourceManager::mInstance;
 
-ResourceManager::ResourceManager(QObject *parent) :
-    QObject(parent)
+ResourceManager::ResourceManager(QObject *parent)
+    : QObject(parent)
+    , mPathsLoaded(false)
 {
     // TODO: This takes about 400 ms on my system. Doing it here prevents
     // experiencing this hickup later on when the the network access manager is
@@ -58,6 +62,46 @@ ResourceManager::ResourceManager(QObject *parent) :
     mInstance = this;
 }
 
+void ResourceManager::pathsFileFinished()
+{
+    QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    reply->deleteLater();
+
+    // 404 is fine since we will just pick defaults then
+    if (!(reply->error() == QNetworkReply::NoError ||
+            reply->error() == QNetworkReply::ContentNotFoundError)) {
+        qDebug() << "Failed to download paths.xml:\n"
+                 << reply->errorString();
+        mPathsLoaded = false;
+        return;
+    }
+
+    XmlReader xml(reply);
+
+    while (!xml.atEnd())
+    {
+        xml.readNext();
+        if (!xml.isStartElement())
+            continue;
+
+        if (xml.name() == "option") {
+            QString key = xml.attribute("name");
+            QString value = xml.attribute("value");
+
+            if (key.isEmpty()) {
+                qDebug() << Q_FUNC_INFO
+                         << "Invalid value for the attribute \"name\"!";
+                continue;
+            }
+
+            mPaths[key] = value;
+        }
+    }
+
+    mPathsLoaded = true;
+    emit pathsLoaded();
+}
+
 void ResourceManager::setDataUrl(const QString &url)
 {
     if (mDataUrl == url)
@@ -65,6 +109,19 @@ void ResourceManager::setDataUrl(const QString &url)
 
     mDataUrl = url;
     emit dataUrlChanged();
+
+    // Load the paths.xml if available
+    QNetworkReply *reply = requestFile("paths.xml");
+    connect(reply, SIGNAL(finished()), this, SLOT(pathsFileFinished()));
+}
+
+const QString &ResourceManager::path(const QString &key,
+                                    const QString &value) const
+{
+    QMap<QString, QString>::const_iterator it = mPaths.find(key);
+    if (it != mPaths.end())
+        return it.value();
+    return value;
 }
 
 QNetworkReply *ResourceManager::requestFile(const QString &fileName)
