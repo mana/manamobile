@@ -115,15 +115,6 @@ void ResourceManager::setDataUrl(const QString &url)
     connect(reply, SIGNAL(finished()), this, SLOT(pathsFileFinished()));
 }
 
-const QString &ResourceManager::path(const QString &key,
-                                    const QString &value) const
-{
-    QMap<QString, QString>::const_iterator it = mPaths.find(key);
-    if (it != mPaths.end())
-        return it.value();
-    return value;
-}
-
 QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 {
     qDebug() << Q_FUNC_INFO << fileName;

@@ -44,8 +44,9 @@ public:
     void setDataUrl(const QString &url);
 
 
-    const QString &path(const QString &key,
-                        const QString &value = QString()) const;
+    QString path(const QString &key,
+                 const QString &value = QString()) const
+    { return mPaths.value(key, value); }
 
     QNetworkReply *requestFile(const QString &fileName);
 
