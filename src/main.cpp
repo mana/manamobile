@@ -39,6 +39,7 @@
 #include "mana/gameclient.h"
 
 #include "mana/resource/itemdb.h"
+#include "mana/resource/racedb.h"
 
 #include "beingitem.h"
 #include "mapitem.h"
@@ -61,6 +62,7 @@ static void registerTypes()
     qmlRegisterType<ResourceManager>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
+    qmlRegisterType<Mana::RaceDB>();
 
     qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
 }
@@ -93,10 +95,12 @@ int main(int argc, char *argv[])
 
     ResourceManager *resourceManager = new ResourceManager(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
+    Mana::RaceDB *raceDB = new Mana::RaceDB(&viewer);
 
     QDeclarativeContext *context = viewer.rootContext();
     context->setContextProperty("resourceManager", resourceManager);
     context->setContextProperty("itemDB", itemDB);
+    context->setContextProperty("raceDB", raceDB);
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
 

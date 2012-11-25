@@ -42,6 +42,18 @@ SpriteReference::SpriteReference(QObject *parent, QString sprite, int variant)
     this->variant = variant;
 }
 
+
+
+SpriteReference *SpriteReference::readSprite(XmlReader &xml, QObject *parent)
+{
+    Q_ASSERT(xml.isStartElement() && xml.name() == "sprite");
+
+    int variant = xml.attributes().value("variant").toString().toInt();
+    QString file = xml.readElementText();
+
+    return new SpriteReference(parent, file, variant);
+}
+
 SpriteDefinition::SpriteDefinition(QObject *parent,
                                    const QString &filePath,
                                    int variant)

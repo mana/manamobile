@@ -45,6 +45,7 @@ Q_OBJECT
 Q_PROPERTY(QList<const ItemInfo*> items READ items NOTIFY itemsChanged)
 
 friend class ItemInfo;
+friend class RaceInfo;
 
 public:
     class Stat
@@ -75,8 +76,7 @@ public:
 
     QList<const ItemInfo*> items() const;
 
-    static ItemDB* instance()
-    { return mInstance; }
+    static ItemDB *instance() { return mInstance; }
 
 signals:
     void itemsChanged();
@@ -86,14 +86,14 @@ private slots:
 
 private:
     static ItemDB *mInstance;
-    static SpriteReference *readSprite(XmlReader &xml, ItemInfo *item);
+    static SpriteReference *readSprite(XmlReader &xml, QObject *parent);
 
     ~ItemDB() { unload(); }
 
     QNetworkReply *mReply;
     bool mLoaded;
     QList<Stat> mExtraStats;
-    QMap<int, const ItemInfo*> mItems;
+    QMap<int, const ItemInfo *> mItems;
 };
 
 class ItemInfo : public QObject

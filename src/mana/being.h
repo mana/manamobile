@@ -55,7 +55,7 @@ public:
     int x() const { return mPosition.x(); }
     int y() const { return mPosition.y(); }
 
-    int direction() const { return mDirection; }
+    BeingDirection direction() const { return mDirection; }
     void setDirection(BeingDirection direction);
 
     QString name() const { return mName; }

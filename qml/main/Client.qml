@@ -13,6 +13,7 @@ Item {
         onLoginSucceeded: {
             resourceManager.dataUrl = dataUrl;
             itemDB.load();
+            raceDB.load();
         }
         onRegistrationSucceeded: resourceManager.dataUrl = dataUrl;
         onChooseCharacterSucceeded: {

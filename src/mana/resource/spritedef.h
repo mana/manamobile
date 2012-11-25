@@ -46,7 +46,7 @@ class SpriteReference : public QObject
     Q_OBJECT
 
 public:
-    static SpriteReference *Empty;
+    static SpriteReference *readSprite(XmlReader &xml, QObject *parent);
 
     SpriteReference(QObject *parent, QString sprite = "", int variant = 0);
 
@@ -108,6 +108,21 @@ enum SpriteDirection
     DIRECTION_RIGHT,
     DIRECTION_INVALID
 };
+
+static inline SpriteDirection spriteDirectionByBeing(BeingDirection dir)
+{
+    SpriteDirection spriteDirection = DIRECTION_DEFAULT;
+    if (dir == UP)
+        return DIRECTION_UP;
+    else if (dir == DOWN)
+        return DIRECTION_DOWN;
+    else if (dir == LEFT)
+        return DIRECTION_LEFT;
+    else if (dir == RIGHT)
+        return DIRECTION_RIGHT;
+
+    return DIRECTION_DEFAULT;
+}
 
 class SpriteDefinition : public Resource
 {

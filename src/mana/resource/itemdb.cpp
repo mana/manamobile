@@ -22,6 +22,8 @@
 #include "../../resourcemanager.h"
 #include "../xmlreader.h"
 
+#include "racedb.h"
+
 #include <QDebug>
 #include <QNetworkReply>
 
@@ -140,6 +142,32 @@ void ItemDB::fileReady()
                 continue;
             }
 
+            // TODO: Move races to a seperate file and move parsing to racedb
+            if (xml.attribute("type") == "racesprite") { // Race "item"
+                RaceInfo *raceInfo = new RaceInfo(-id, RaceDB::instance());
+                raceInfo->mName = xml.attribute("name");
+                while (!(xml.name() == "item" && xml.isEndElement())) {
+                    xml.readNext();
+                    if (!xml.isStartElement())
+                        continue;
+
+                    if (xml.name() == "sprite") {
+                        QString gender = xml.attribute("gender");
+                        SpriteReference *sprite =
+                                SpriteReference::readSprite(xml, raceInfo);
+                        if (gender == "male")
+                            raceInfo->mSprites[GENDER_MALE] = sprite;
+                        else if (gender == "female")
+                            raceInfo->mSprites[GENDER_FEMALE] = sprite;
+                        else
+                            raceInfo->mSprites[GENDER_UNSPECIFIED] = sprite;
+                    }
+                }
+
+                RaceDB::instance()->mRaces[id] = raceInfo;
+                continue;
+            }
+
             currentItem = new ItemInfo(this, id);
 
             currentItem->mType = itemTypeFromString(xml.attribute("type"));
@@ -174,7 +202,7 @@ void ItemDB::fileReady()
         else if (currentTag == "sprite")
         {
             QString gender = xml.attributes().value("gender").toString();
-            SpriteReference *sprite = readSprite(xml, currentItem);
+            SpriteReference *sprite = SpriteReference::readSprite(xml, currentItem);
 
             if (gender == "male")
                 currentItem->mSprites[GENDER_MALE] = sprite;
@@ -191,7 +219,8 @@ void ItemDB::fileReady()
             while (xml.readNextStartElement())
             {
                 if (xml.name() == "sprite")
-                    currentItem->mDisplay.sprites.push_back(readSprite(xml, currentItem));
+                    currentItem->mDisplay.sprites.push_back(
+                                SpriteReference::readSprite(xml, currentItem));
                 else if (xml.name() == "particlefx")
                     currentItem->mDisplay.particles.push_back(xml.readElementText());
                 else
@@ -204,15 +233,7 @@ void ItemDB::fileReady()
     }
 
     mLoaded = true;
+    RaceDB::instance()->mLoaded = true;
     emit itemsChanged();
-}
-
-SpriteReference *ItemDB::readSprite(XmlReader &xml, ItemInfo *item)
-{
-    Q_ASSERT(xml.isStartElement() && xml.name() == "sprite");
-
-    int variant = xml.attributes().value("variant").toString().toInt();
-    QString file = xml.readElementText();
-
-    return new SpriteReference(item, file, variant);
+    emit RaceDB::instance()->racesChanged();
 }

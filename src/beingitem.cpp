@@ -31,6 +31,7 @@
 #include "mana/gameclient.h"
 
 #include "mana/resource/itemdb.h"
+#include "mana/resource/racedb.h"
 #include "mana/resource/spritedef.h"
 
 using namespace Mana;
@@ -38,11 +39,30 @@ using namespace Mana;
 BeingItem::BeingItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , mBeing(0)
+    , mRaceSprite(0)
 {
 }
 
 BeingItem::~BeingItem()
 {
+}
+
+void BeingItem::loadRaceSprite()
+{
+    RaceDB *db = RaceDB::instance();
+    if (!db->loaded() || mRaceSprite)
+        return;
+
+    // No real race support so far. Just load the first race
+    Q_ASSERT(db->races().count() > 0);
+    mRaceSprite = new SpriteItem(db->races().at(0)->sprite(mBeing->gender()),
+                                 this);
+    mRaceSprite->setZValue(0);
+
+    mRaceSprite->setDirection(spriteDirectionByBeing(mBeing->direction()));
+    mRaceSprite->play(mBeing->action());
+
+    disconnect(db, SIGNAL(racesChanged()), this, SLOT(loadRaceSprite()));
 }
 
 void BeingItem::setBeing(Being *being)
@@ -59,6 +79,8 @@ void BeingItem::setBeing(Being *being)
                    this, SLOT(actionChanged(QString)));
         disconnect(mBeing, SIGNAL(directionChanged(Mana::BeingDirection)),
                    this, SLOT(directionChanged(Mana::BeingDirection)));
+        disconnect(RaceDB::instance(), SIGNAL(racesChanged()),
+                   this, SLOT(loadRace()));
 
         QMap<int, int> &equipmentSlots = mBeing->equipmentSlots();
         for (QMap<int, int>::iterator it = equipmentSlots.begin(),
@@ -85,6 +107,13 @@ void BeingItem::setBeing(Being *being)
             if (it.value()) // 0 means empty
                 slotEquipped(it.key(), it.value());
         }
+
+        // Update Racesprite
+        RaceDB *db = RaceDB::instance();
+        if (db->loaded())
+            loadRaceSprite();
+        else
+            connect(db, SIGNAL(racesChanged()), this, SLOT(loadRaceSprite()));
     }
 }
 
@@ -99,6 +128,7 @@ void BeingItem::slotEquipped(int slot, int itemId)
         return;
 
     SpriteItem *spriteItem = new SpriteItem(spriteRef, this);
+    spriteItem->setZValue(slot);
     mSprites[slot] = spriteItem;
     spriteItem->play(mBeing->action());
 }
@@ -117,21 +147,18 @@ void BeingItem::actionChanged(const QString &newAction)
     foreach (SpriteItem *sprite, mSprites) {
         sprite->play(newAction);
     }
+    if (mRaceSprite)
+        mRaceSprite->play(newAction);
 }
 
 void BeingItem::directionChanged(BeingDirection newDirection)
 {
-    SpriteDirection spriteDirection = DIRECTION_DEFAULT;
-    if (newDirection == UP)
-        spriteDirection = DIRECTION_UP;
-    else if (newDirection == DOWN)
-        spriteDirection = DIRECTION_DOWN;
-    else if (newDirection == LEFT)
-        spriteDirection = DIRECTION_LEFT;
-    else if (newDirection == RIGHT)
-        spriteDirection = DIRECTION_RIGHT;
+    SpriteDirection spriteDirection = spriteDirectionByBeing(newDirection);
 
     foreach (SpriteItem *sprite, mSprites) {
         sprite->setDirection(spriteDirection);
     }
+
+    if (mRaceSprite)
+        mRaceSprite->setDirection(spriteDirection);
 }
