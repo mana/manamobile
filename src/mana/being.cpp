@@ -33,6 +33,8 @@ Being::Being(int type, int id, QPointF position)
     , mPosition(position)
     , mServerPosition(position)
     , mGender(GENDER_UNSPECIFIED)
+    , mHairStyle(0),
+      mHairColor(0)
 {
 }
 
@@ -96,6 +98,15 @@ void Being::setSprite(int slot, int itemId)
     if (itemId) {
         mSlots[slot] = itemId;
         emit slotEquipped(slot, itemId);
+    }
+}
+
+void Being::setHairStyle(int style, int color)
+{
+    if (mHairStyle != style || mHairColor != color) {
+        mHairStyle = style;
+        mHairColor = color;
+        emit hairChanged();
     }
 }
 

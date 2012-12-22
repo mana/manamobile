@@ -79,6 +79,7 @@ private:
     const QList<Being*> &beings() const { return mBeings; }
 
     void handleLooks(Being *being, MessageIn &message);
+    void handleHair(Being *being, MessageIn &message);
 
     QList<Being*> mBeings;
 

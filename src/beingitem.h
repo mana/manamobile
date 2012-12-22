@@ -49,6 +49,7 @@ public:
 
 private slots:
     void loadRaceSprite();
+    void loadHairSprite();
     void slotEquipped(int slot, int itemId);
     void slotUnequipping(int slot);
     void actionChanged(const QString &newAction);
@@ -58,6 +59,7 @@ private slots:
 private:
 
     Mana::Being *mBeing;
+    SpriteItem *mHairSprite;
     SpriteItem *mRaceSprite;
 
     QMap<int, SpriteItem *> mSprites;

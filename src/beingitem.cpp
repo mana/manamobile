@@ -30,6 +30,7 @@
 #include "mana/being.h"
 #include "mana/gameclient.h"
 
+#include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
 #include "mana/resource/racedb.h"
 #include "mana/resource/spritedef.h"
@@ -39,12 +40,36 @@ using namespace Mana;
 BeingItem::BeingItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , mBeing(0)
+    , mHairSprite(0)
     , mRaceSprite(0)
 {
 }
 
 BeingItem::~BeingItem()
 {
+}
+
+void BeingItem::loadHairSprite()
+{
+    HairDB *db = HairDB::instance();
+    if (!db->loaded() || mHairSprite || !mBeing)
+        return;
+
+    const HairInfo *hair = db->getInfo(mBeing->hairStyle());
+
+    qDebug() << "GETTING HAIR!!!!!" << hair
+             << " Desired: " << mBeing->hairStyle();
+
+    if (!hair)
+        return;
+
+    mHairSprite = new SpriteItem(hair->sprite(mBeing->gender()), this);
+    mHairSprite->setZValue(0);
+
+    mHairSprite->setDirection(spriteDirectionByBeing(mBeing->direction()));
+    mHairSprite->play(mBeing->action());
+
+    disconnect(db, SIGNAL(hairsChanged()), this, SLOT(loadHairSprite()));
 }
 
 void BeingItem::loadRaceSprite()
@@ -57,7 +82,7 @@ void BeingItem::loadRaceSprite()
     Q_ASSERT(db->races().count() > 0);
     mRaceSprite = new SpriteItem(db->races().at(0)->sprite(mBeing->gender()),
                                  this);
-    mRaceSprite->setZValue(0);
+    mRaceSprite->setZValue(-1);
 
     mRaceSprite->setDirection(spriteDirectionByBeing(mBeing->direction()));
     mRaceSprite->play(mBeing->action());
@@ -109,11 +134,19 @@ void BeingItem::setBeing(Being *being)
         }
 
         // Update Racesprite
-        RaceDB *db = RaceDB::instance();
-        if (db->loaded())
+        RaceDB *raceDB = RaceDB::instance();
+        if (raceDB->loaded())
             loadRaceSprite();
         else
-            connect(db, SIGNAL(racesChanged()), this, SLOT(loadRaceSprite()));
+            connect(raceDB, SIGNAL(racesChanged()), this, SLOT(loadRaceSprite()));
+
+
+        // Update Hairsprite
+        HairDB *hairDB = HairDB::instance();
+        if (hairDB->loaded())
+            loadHairSprite();
+        else
+            connect(hairDB, SIGNAL(hairsChanged()), this, SLOT(loadHairSprite()));
     }
 }
 

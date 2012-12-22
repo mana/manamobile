@@ -30,6 +30,7 @@
 #include "protocol.h"
 
 namespace Mana {
+class HairInfo;
 
 /**
  * Class representing a being.
@@ -84,6 +85,10 @@ public:
 
     QMap<int, int> &equipmentSlots() { return mSlots; }
 
+    void setHairStyle(int style, int color);
+    int hairStyle() const { return mHairStyle; }
+    int hairColor() const { return mHairColor; }
+
     void lookAt(const QPointF &point);
 
 signals:
@@ -94,6 +99,7 @@ signals:
     void actionChanged(const QString &newAction);
     void slotUnequipping(int slot);
     void slotEquipped(int slot, int itemId);
+    void hairChanged();
 
 private:
     int mType;
@@ -106,6 +112,8 @@ private:
     QString mName;
     QString mChatMessage;
     BeingGender mGender;
+    int mHairStyle;
+    int mHairColor;
 
     // key: equipment slot
     // value: item id

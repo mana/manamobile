@@ -89,7 +89,8 @@ SOURCES += src/main.cpp \
     src/tiled/tileset.cpp \
     src/tilelayeritem.cpp \
     src/mana/beinglistmodel.cpp \
-    src/mana/resource/racedb.cpp
+    src/mana/resource/racedb.cpp \
+    src/mana/resource/hairdb.cpp
 
 HEADERS += \
     src/beingitem.h \
@@ -141,7 +142,8 @@ HEADERS += \
     src/tilelayeritem.h \
     src/mana/characterlistmodel.h \
     src/mana/beinglistmodel.h \
-    src/mana/resource/racedb.h
+    src/mana/resource/racedb.h \
+    src/mana/resource/hairdb.h
 
 
 # Please do not modify the following two lines. Required for deployment.

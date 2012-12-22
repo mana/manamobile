@@ -38,6 +38,7 @@
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
 
+#include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
 #include "mana/resource/racedb.h"
 
@@ -94,11 +95,13 @@ int main(int argc, char *argv[])
     viewer.setWindowTitle(app.applicationName());
 
     ResourceManager *resourceManager = new ResourceManager(&viewer);
+    Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
     Mana::RaceDB *raceDB = new Mana::RaceDB(&viewer);
 
     QDeclarativeContext *context = viewer.rootContext();
     context->setContextProperty("resourceManager", resourceManager);
+    context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);
     context->setContextProperty("raceDB", raceDB);
 

@@ -44,6 +44,7 @@ Q_OBJECT
 
 Q_PROPERTY(QList<const ItemInfo*> items READ items NOTIFY itemsChanged)
 
+friend class HairInfo;
 friend class ItemInfo;
 friend class RaceInfo;
 

@@ -22,6 +22,7 @@
 #include "../../resourcemanager.h"
 #include "../xmlreader.h"
 
+#include "hairdb.h"
 #include "racedb.h"
 
 #include <QDebug>
@@ -164,7 +165,33 @@ void ItemDB::fileReady()
                     }
                 }
 
-                RaceDB::instance()->mRaces[id] = raceInfo;
+                RaceDB::instance()->mRaces[-id] = raceInfo;
+                continue;
+            }
+
+            // TODO: Move hairs to a seperate file and move parsing to hairdb
+            if (xml.attribute("type") == "hairsprite") { // Hair "item"
+                HairInfo *hairInfo = new HairInfo(-id, HairDB::instance());
+                hairInfo->mName = xml.attribute("name");
+                while (!(xml.name() == "item" && xml.isEndElement())) {
+                    xml.readNext();
+                    if (!xml.isStartElement())
+                        continue;
+
+                    if (xml.name() == "sprite") {
+                        QString gender = xml.attribute("gender");
+                        SpriteReference *sprite =
+                                SpriteReference::readSprite(xml, hairInfo);
+                        if (gender == "male")
+                            hairInfo->mSprites[GENDER_MALE] = sprite;
+                        else if (gender == "female")
+                            hairInfo->mSprites[GENDER_FEMALE] = sprite;
+                        else
+                            hairInfo->mSprites[GENDER_UNSPECIFIED] = sprite;
+                    }
+                }
+
+                HairDB::instance()->mHairs[-id] = hairInfo;
                 continue;
             }
 
@@ -234,6 +261,8 @@ void ItemDB::fileReady()
 
     mLoaded = true;
     RaceDB::instance()->mLoaded = true;
+    HairDB::instance()->mLoaded = true;
     emit itemsChanged();
     emit RaceDB::instance()->racesChanged();
+    emit HairDB::instance()->hairsChanged();
 }

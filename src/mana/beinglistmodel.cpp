@@ -25,6 +25,7 @@
 #include "messagein.h"
 #include "protocol.h"
 
+#include "resource/hairdb.h"
 #include "resource/spritedef.h"
 
 #include <safeassert.h>
@@ -77,13 +78,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     if (being->type() == OBJECT_CHARACTER) {
         being->setName(message.readString());
 
-        int hairstyle = message.readInt8();
-        int haircolor = message.readInt8();
-
-        Q_UNUSED(hairstyle);
-        Q_UNUSED(haircolor);
-
-        // TODO: handle hair
+        handleHair(being, message);
 
         BeingGender gender = (BeingGender)message.readInt8();
         being->setGender(gender);
@@ -180,6 +175,14 @@ void BeingListModel::handleLooks(Being *being, MessageIn &message)
     }
 }
 
+void BeingListModel::handleHair(Being *being, MessageIn &message)
+{
+    int hairstyle = message.readInt8();
+    int haircolor = message.readInt8();
+
+    being->setHairStyle(hairstyle, haircolor);
+}
+
 void BeingListModel::handleBeingLooksChange(MessageIn &message)
 {
     qDebug() << Q_FUNC_INFO;
@@ -187,16 +190,9 @@ void BeingListModel::handleBeingLooksChange(MessageIn &message)
     if (Being *being = beingById(id)) {
         handleLooks(being, message);
 
-        // Further data is hair
-        if (message.unreadLength()) {
-            int style = message.readInt16();
-            int color = message.readInt16();
-
-            Q_UNUSED(style);
-            Q_UNUSED(color);
-
-            // TODO: Add hair support!
-        }
+        // Further data is hair (if available)
+        if (message.unreadLength())
+            handleHair(being, message);
     }
 }
 
