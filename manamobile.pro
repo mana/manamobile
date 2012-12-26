@@ -50,9 +50,10 @@ else:LIBS += -lz
 include(src/enet/enet.pri)
 
 SOURCES += src/main.cpp \
-    src/beingitem.cpp \
     src/mana/accountclient.cpp \
     src/mana/being.cpp \
+    src/mana/beinglistmodel.cpp \
+    src/mana/character.cpp \
     src/mana/characterlistmodel.cpp \
     src/mana/chatclient.cpp \
     src/mana/enetclient.cpp \
@@ -61,13 +62,16 @@ SOURCES += src/main.cpp \
     src/mana/messageout.cpp \
     src/mana/resource/action.cpp \
     src/mana/resource/animation.cpp \
+    src/mana/resource/hairdb.cpp \
     src/mana/resource/imageset.cpp \
     src/mana/resource/itemdb.cpp \
     src/mana/resource/pixmapresource.cpp \
+    src/mana/resource/racedb.cpp \
     src/mana/resource/resource.cpp \
     src/mana/resource/spritedef.cpp \
     src/mana/settings.cpp \
     src/mana/sha256.cpp \
+    src/mana/spritelistmodel.cpp \
     src/mapitem.cpp \
     src/resourcemanager.cpp \
     src/spriteitem.cpp \
@@ -87,16 +91,15 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tilelayer.cpp \
     src/tiled/tileset.cpp \
-    src/tilelayeritem.cpp \
-    src/mana/beinglistmodel.cpp \
-    src/mana/resource/racedb.cpp \
-    src/mana/resource/hairdb.cpp
+    src/tilelayeritem.cpp
 
 HEADERS += \
-    src/beingitem.h \
     src/durationlogger.h \
     src/mana/accountclient.h \
     src/mana/being.h \
+    src/mana/beinglistmodel.h \
+    src/mana/character.h \
+    src/mana/characterlistmodel.h \
     src/mana/chatclient.h \
     src/mana/enetclient.h \
     src/mana/gameclient.h \
@@ -105,13 +108,16 @@ HEADERS += \
     src/mana/protocol.h \
     src/mana/resource/action.h \
     src/mana/resource/animation.h \
+    src/mana/resource/hairdb.h \
     src/mana/resource/imageset.h \
     src/mana/resource/itemdb.h \
     src/mana/resource/pixmapresource.h \
+    src/mana/resource/racedb.h \
     src/mana/resource/resource.h \
     src/mana/resource/spritedef.h \
     src/mana/settings.h \
     src/mana/sha256.h \
+    src/mana/spritelistmodel.h \
     src/mana/xmlreader.h \
     src/mapitem.h \
     src/resourcemanager.h \
@@ -139,11 +145,7 @@ HEADERS += \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
     src/tiled/tileset.h \
-    src/tilelayeritem.h \
-    src/mana/characterlistmodel.h \
-    src/mana/beinglistmodel.h \
-    src/mana/resource/racedb.h \
-    src/mana/resource/hairdb.h
+    src/tilelayeritem.h
 
 
 # Please do not modify the following two lines. Required for deployment.

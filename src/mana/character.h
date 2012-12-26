@@ -18,45 +18,50 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACTION_H
-#define ACTION_H
+#ifndef CHARACTER_H
+#define CHARACTER_H
 
-#include <QMap>
-#include <QObject>
+#include "being.h"
 
 namespace Mana {
 
-class Animation;
-
-class Action : public QObject
+class Character : public Being
 {
     Q_OBJECT
 
-    Q_ENUMS(SpriteDirection)
-
 public:
-    enum SpriteDirection
-    {
-        DIRECTION_DEFAULT = 0,
-        DIRECTION_UP,
-        DIRECTION_DOWN,
-        DIRECTION_LEFT,
-        DIRECTION_RIGHT,
-        DIRECTION_INVALID
+    enum SlotLayer {
+        SLOT_RACE = 0,
+        SLOT_HAIR,
+        SLOT_EQUIPMENT
     };
 
-    explicit Action(QObject *parent = 0);
-    ~Action();
+    Character(int id, QPointF position);
 
-    void setAnimation(int direction, Animation *animation);
+    void setEquipmentSlot(int slot, int id);
 
-    const Animation *animation(int direction) const;
+    QMap<int, int> &equipmentSlots() { return mEquipmentSlots; }
+
+    void setHairStyle(int style, int color);
+    int hairStyle() const { return mHairStyle; }
+    int hairColor() const { return mHairColor; }
+
+    virtual void setGender(BeingGender gender);
+
+signals:
+    void slotUnequipping(int slot);
+    void slotEquipped(int slot, int itemId);
+    void hairChanged();
+
+private slots:
+    void rebuildSprites();
 
 private:
-    QMap<int, Animation *> mAnimations;
-
+    QMap<int, int> mEquipmentSlots;
+    int mHairStyle;
+    int mHairColor;
 };
 
 }
 
-#endif // ACTION_H
+#endif // CHARACTER_H

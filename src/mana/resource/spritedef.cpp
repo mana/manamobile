@@ -80,8 +80,6 @@ SpriteDefinition::SpriteDefinition(QObject *parent,
 
 SpriteDefinition::~SpriteDefinition()
 {
-    qDeleteAll(mImageSets);
-    qDeleteAll(mActions);
 }
 
 void SpriteDefinition::itemsFileFinished()
@@ -210,7 +208,7 @@ void SpriteDefinition::loadAction(XmlReader *xml)
         return;
     }
 
-    Action *action = new Action;
+    Action *action = new Action(this);
     mActions[actionName] = action;
 
     // When first action set it as default action
@@ -225,20 +223,20 @@ void SpriteDefinition::loadAction(XmlReader *xml)
 
 }
 
-static SpriteDirection directionByName(const QString &name)
+static Action::SpriteDirection directionByName(const QString &name)
 {
     if (name.length() == 0 || name == "default")
-        return DIRECTION_DEFAULT;
+        return Action::DIRECTION_DEFAULT;
     else if (name == "up")
-        return DIRECTION_UP;
+        return Action::DIRECTION_UP;
     else if (name == "down")
-        return DIRECTION_DOWN;
+        return Action::DIRECTION_DOWN;
     else if (name == "left")
-        return DIRECTION_LEFT;
+        return Action::DIRECTION_LEFT;
     else if (name == "right")
-        return DIRECTION_RIGHT;
+        return Action::DIRECTION_RIGHT;
     else
-        return DIRECTION_INVALID;
+        return Action::DIRECTION_INVALID;
 }
 
 void SpriteDefinition::loadAnimation(XmlReader *xml,
@@ -246,8 +244,8 @@ void SpriteDefinition::loadAnimation(XmlReader *xml,
                                      ImageSet *imageset)
 {
     const QString directionName = xml->attribute("direction");
-    const SpriteDirection direction = directionByName(directionName);
-    if (direction == DIRECTION_INVALID) {
+    const Action::SpriteDirection direction = directionByName(directionName);
+    if (direction == Action::DIRECTION_INVALID) {
         qWarning() << Q_FUNC_INFO << "Unknown direction \""
                    << directionName << "\"";
         return;

@@ -102,11 +102,24 @@ Rectangle {
                     }
                 }
 
-                BeingItem {
+                CompoundSprite {
                     id: sprite;
-                    being: model.being;
+                    sprites: model.being.spriteListModel;
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.bottom: parent.bottom;
+                    action: model.being.action;
+                    direction: model.being.spriteDirection;
+                }
+
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.bottom: parent.bottom;
+                    color: "blue";
+                    width: 32;
+                    height: 64;
+                    opacity: 0.5;
+                    radius: 15;
+                    visible: model.being.type != Being.OBJECT_CHARACTER;
                 }
 
                 Text {

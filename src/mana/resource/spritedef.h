@@ -28,7 +28,9 @@
 #include <QSet>
 #include <QString>
 
+#include "action.h"
 #include "resource.h"
+
 #include "mana/being.h"
 #include "mana/protocol.h"
 
@@ -37,7 +39,6 @@ class XmlReader;
 
 namespace Mana {
 
-class Action;
 class ImageSet;
 class PixmapResource;
 
@@ -99,29 +100,19 @@ static inline const QString &actionByInt(int integer)
 
 }
 
-enum SpriteDirection
+static inline Action::SpriteDirection beingToSpriteDirection(BeingDirection dir)
 {
-    DIRECTION_DEFAULT = 0,
-    DIRECTION_UP,
-    DIRECTION_DOWN,
-    DIRECTION_LEFT,
-    DIRECTION_RIGHT,
-    DIRECTION_INVALID
-};
-
-static inline SpriteDirection spriteDirectionByBeing(BeingDirection dir)
-{
-    SpriteDirection spriteDirection = DIRECTION_DEFAULT;
+    Action::SpriteDirection spriteDirection = Action::DIRECTION_DEFAULT;
     if (dir == UP)
-        return DIRECTION_UP;
+        return Action::DIRECTION_UP;
     else if (dir == DOWN)
-        return DIRECTION_DOWN;
+        return Action::DIRECTION_DOWN;
     else if (dir == LEFT)
-        return DIRECTION_LEFT;
+        return Action::DIRECTION_LEFT;
     else if (dir == RIGHT)
-        return DIRECTION_RIGHT;
+        return Action::DIRECTION_RIGHT;
 
-    return DIRECTION_DEFAULT;
+    return Action::DIRECTION_DEFAULT;
 }
 
 class SpriteDefinition : public Resource
@@ -175,5 +166,7 @@ private:
 };
 
 } // namespace Mana
+
+Q_DECLARE_METATYPE(const Mana::SpriteReference*)
 
 #endif // SPRITEDEF_H

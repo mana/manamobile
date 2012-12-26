@@ -29,33 +29,44 @@
 
 using namespace Mana;
 
-SpriteItem::SpriteItem(SpriteReference *sprite,
-                       QDeclarativeItem *parent)
+SpriteItem::SpriteItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
-    , mTimer(0)
-    , mDirection(DIRECTION_DOWN)
+    , mSpriteRef(0)
+    , mDirection(Action::DIRECTION_DOWN)
+    , mReady(false)
     , mAction(0)
     , mAnimation(0)
     , mFrameIndex(0)
     , mFrame(0)
 {
-    mSprite = ResourceManager::instance()->requestSpriteDefinition(
-                sprite->sprite, sprite->variant);
-
-    if (mSprite->status() == Resource::Loading) {
-        connect(mSprite, SIGNAL(statusChanged(Mana::Resource::Status)),
-                this, SLOT(statusChanged(Mana::Resource::Status)));
-    } else {
-        statusChanged(mSprite->status());
-    }
-
     connect(&mTimer, SIGNAL(timeout()), this, SLOT(timerTick()));
-    setFlag(ItemHasNoContents, false);
 }
 
 SpriteItem::~SpriteItem()
 {
     mSprite->decRef();
+}
+
+void SpriteItem::setSpriteRef(const SpriteReference *sprite)
+{
+    if (sprite == mSpriteRef)
+        return;
+
+    if (sprite) {
+        mSprite = ResourceManager::instance()->requestSpriteDefinition(
+                    sprite->sprite, sprite->variant);
+
+        if (mSprite->status() == Resource::Loading) {
+            connect(mSprite, SIGNAL(statusChanged(Mana::Resource::Status)),
+                    this, SLOT(statusChanged(Mana::Resource::Status)));
+        } else {
+            statusChanged(mSprite->status());
+        }
+    }
+
+    setFlag(ItemHasNoContents, sprite == 0);
+
+    emit spriteRefChanged();
 }
 
 void SpriteItem::reset()
@@ -66,18 +77,27 @@ void SpriteItem::reset()
     update();
 }
 
-void SpriteItem::play(const QString &actionName)
+void SpriteItem::setAction(const QString &actionName)
 {
-    mSavedAction = actionName;
-
-    if (!mReady)
+    if (!mReady) {
+        mActionName = actionName;
         return;
+    }
+
+    if (actionName == mActionName && mFrame)
+        return;
+
+    mActionName = actionName;
 
     const Action *action = mSprite->action(actionName);
     if (!action)
         return;
 
     playAnimation(action);
+
+    updateSize();
+
+    emit actionChanged();
 }
 
 void SpriteItem::playAnimation(const Action *action)
@@ -88,8 +108,6 @@ void SpriteItem::playAnimation(const Action *action)
     if (animation && animation != mAnimation && animation->length() > 0) {
         mAnimation = animation;
         reset();
-        setPos(-mFrame->clip.width() / 2 + mFrame->offsetX,
-               -mFrame->clip.height() + mFrame->offsetY);
     }
 }
 
@@ -104,14 +122,19 @@ void SpriteItem::paint(QPainter *painter,
                         *mFrame->imageset->pixmap(), mFrame->clip);
 }
 
-void SpriteItem::setDirection(SpriteDirection direction)
+void SpriteItem::setDirection(Action::SpriteDirection direction)
 {
+    if (mDirection == direction)
+        return;
+
     mDirection = direction;
 
     if (!mAction)
         return;
 
     playAnimation(mAction);
+
+    emit directionChanged();
 }
 
 void SpriteItem::timerTick()
@@ -124,7 +147,7 @@ void SpriteItem::timerTick()
         updateTimer();
 
         if (Animation::isTerminator(*mFrame))
-            play(SpriteAction::STAND);
+            setAction(SpriteAction::STAND);
         else
             update();
     }
@@ -136,8 +159,8 @@ void SpriteItem::statusChanged(Resource::Status status)
         mReady = true;
 
         // start playing saved
-        if (mSavedAction.size())
-            play(mSavedAction);
+        if (mActionName.size())
+            setAction(mActionName);
     } else if (status == Resource::Error) {
         mSprite->decRef();
         mSprite = 0;
@@ -147,4 +170,12 @@ void SpriteItem::statusChanged(Resource::Status status)
 void SpriteItem::updateTimer()
 {
     mTimer.start(mFrame->delay);
+}
+
+void SpriteItem::updateSize()
+{
+    if (mFrame) {
+        setImplicitWidth(mFrame->clip.width());
+        setImplicitHeight(mFrame->clip.height());
+    }
 }

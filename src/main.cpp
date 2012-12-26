@@ -1,6 +1,7 @@
 /*
  *  Mana Mobile
  *  Copyright (C) 2010  Thorbjørn Lindeijer
+ *  Copyright (C) 2012  Erik Schilling
  *
  *  This file is part of Mana Mobile.
  *
@@ -37,14 +38,15 @@
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
+#include "mana/spritelistmodel.h"
 
 #include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
 #include "mana/resource/racedb.h"
 
-#include "beingitem.h"
 #include "mapitem.h"
 #include "resourcemanager.h"
+#include "spriteitem.h"
 
 #include "mana/settings.h"
 
@@ -54,11 +56,16 @@ static void registerTypes()
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
     qmlRegisterType<Mana::Settings>("Mana", 1, 0, "Settings");
-    qmlRegisterType<BeingItem>("Mana", 1, 0, "BeingItem");
+    qmlRegisterType<SpriteItem>("Mana", 1, 0, "Sprite");
 
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();
-    qmlRegisterType<Mana::Being>();
+    qmlRegisterUncreatableType<Mana::Being>("Mana", 1, 0, "Being",
+                                            "Managed on C++ side");
+
+
+    qmlRegisterType<Mana::SpriteListModel>();
+    qmlRegisterType<const Mana::SpriteReference>();
 
     qmlRegisterType<ResourceManager>();
     qmlRegisterType<Mana::ItemDB>();

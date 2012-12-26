@@ -54,7 +54,7 @@ public:
 
     bool loaded() const { return mLoaded; }
 
-    QList<RaceInfo *> races() const { return mRaces.values(); }
+    QList<RaceInfo *> races() { return mRaces.values(); }
 
     static RaceDB *instance() { return mInstance; }
 

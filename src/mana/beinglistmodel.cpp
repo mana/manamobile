@@ -22,6 +22,7 @@
 #include "beinglistmodel.h"
 
 #include "being.h"
+#include "character.h"
 #include "messagein.h"
 #include "protocol.h"
 
@@ -71,27 +72,34 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     const int y = message.readInt16();
     BeingDirection direction = (BeingDirection)message.readInt8();
 
-    Being *being = new Being(type, id, QPointF(x, y));
-    being->setAction(action);
-    being->setDirection(direction);
+    Being *being;
 
-    if (being->type() == OBJECT_CHARACTER) {
-        being->setName(message.readString());
+    if (type== OBJECT_CHARACTER) {
+        Character *ch = new Character(id, QPointF(x, y));
+        ch->setName(message.readString());
 
-        handleHair(being, message);
+        handleHair(ch, message);
 
         BeingGender gender = (BeingGender)message.readInt8();
-        being->setGender(gender);
+        ch->setGender(gender);
 
-        if (message.unreadLength())
-            handleLooks(being, message);
+        if (message.unreadLength()) {
+            handleLooks(ch, message);
+        }
 
         // Match the being by name to see whether it's the current player
-        if (being->name() == mPlayerName) {
-            mPlayerBeing = being;
+        if (ch->name() == mPlayerName) {
+            mPlayerBeing = ch;
             emit playerChanged();
         }
+
+        being = ch;
+    } else {
+        being = new Being(type, id, QPointF(x, y));
     }
+
+    being->setAction(action);
+    being->setDirection(direction);
 
     qDebug() << Q_FUNC_INFO << being->name() << being->id() << being->x() << being->y();
     addBeing(being);
@@ -163,7 +171,7 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
     }
 }
 
-void BeingListModel::handleLooks(Being *being, MessageIn &message)
+void BeingListModel::handleLooks(Character *ch, MessageIn &message)
 {
     int numberOfChanges = message.readInt8();
 
@@ -171,16 +179,16 @@ void BeingListModel::handleLooks(Being *being, MessageIn &message)
         int slot = message.readInt8();
         int itemId = message.readInt16();
 
-        being->setSprite(slot + FIXED_SPRITE_LAYER_SIZE, itemId);
+        ch->setEquipmentSlot(slot, itemId);
     }
 }
 
-void BeingListModel::handleHair(Being *being, MessageIn &message)
+void BeingListModel::handleHair(Character *ch, MessageIn &message)
 {
     int hairstyle = message.readInt8();
     int haircolor = message.readInt8();
 
-    being->setHairStyle(hairstyle, haircolor);
+    ch->setHairStyle(hairstyle, haircolor);
 }
 
 void BeingListModel::handleBeingLooksChange(MessageIn &message)
@@ -188,11 +196,13 @@ void BeingListModel::handleBeingLooksChange(MessageIn &message)
     qDebug() << Q_FUNC_INFO;
     const int id = message.readInt16();
     if (Being *being = beingById(id)) {
-        handleLooks(being, message);
+        SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);
+        Character *ch = static_cast<Character *>(being);
+        handleLooks(ch, message);
 
         // Further data is hair (if available)
         if (message.unreadLength())
-            handleHair(being, message);
+            handleHair(ch, message);
     }
 }
 

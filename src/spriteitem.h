@@ -17,35 +17,49 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ANIMATEDSPRITEITEM_H
-#define ANIMATEDSPRITEITEM_H
+#ifndef SPRITEITEM_H
+#define SPRITEITEM_H
 
 #include <QDeclarativeItem>
 #include <QTimer>
 
+#include "mana/resource/action.h"
 #include "mana/resource/animation.h"
 #include "mana/resource/spritedef.h"
 
 
 class SpriteItem : public QDeclarativeItem
 {
-Q_OBJECT
+    Q_OBJECT
+
+    Q_PROPERTY(const Mana::SpriteReference *spriteReference READ spriteRef WRITE setSpriteRef NOTIFY spriteRefChanged)
+    Q_PROPERTY(QString action READ action WRITE setAction NOTIFY actionChanged)
+    Q_PROPERTY(Mana::Action::SpriteDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
 public:
-    explicit SpriteItem(Mana::SpriteReference *sprite,
-                        QDeclarativeItem *parent = 0);
+    explicit SpriteItem(QDeclarativeItem *parent = 0);
 
     ~SpriteItem();
 
     void reset();
 
-    void play(const QString &actionName);
+    void setSpriteRef(const Mana::SpriteReference *sprite);
+    const Mana::SpriteReference *spriteRef() const { return mSpriteRef; }
+
+    void setAction(const QString &actionName);
+    QString action() const { return mActionName; }
+
+    void setDirection(Mana::Action::SpriteDirection direction);
+    Mana::Action::SpriteDirection direction() const { return mDirection; }
 
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *,
                QWidget *);
 
-    void setDirection(Mana::SpriteDirection direction);
+signals:
+    void spriteRefChanged();
+    void actionChanged();
+    void directionChanged();
 
 private slots:
     void timerTick();
@@ -54,19 +68,20 @@ private slots:
 private:
     void playAnimation(const Mana::Action *action);
     void updateTimer();
+    void updateSize();
+
+    const Mana::SpriteReference *mSpriteRef;
+    QString mActionName;
+    Mana::Action::SpriteDirection mDirection;
 
     bool mReady;
 
-    Mana::SpriteDirection mDirection;
     Mana::SpriteDefinition *mSprite;
     const Mana::Action *mAction;
-    QString mSavedAction;
     const Mana::Animation *mAnimation;
     int mFrameIndex;
     const Mana::Frame *mFrame;
     QTimer mTimer;
-
-
 };
 
-#endif // ANIMATEDSPRITEITEM_H
+#endif // SPRITEITEM_H

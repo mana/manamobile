@@ -27,6 +27,7 @@
 namespace Mana {
 
 class Being;
+class Character;
 class MessageIn;
 
 class BeingListModel : public QAbstractListModel
@@ -78,8 +79,8 @@ private:
     int indexOfBeing(int id) const;
     const QList<Being*> &beings() const { return mBeings; }
 
-    void handleLooks(Being *being, MessageIn &message);
-    void handleHair(Being *being, MessageIn &message);
+    void handleLooks(Character *being, MessageIn &message);
+    void handleHair(Character *ch, MessageIn &message);
 
     QList<Being*> mBeings;
 

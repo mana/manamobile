@@ -21,6 +21,8 @@
 
 #include "being.h"
 
+#include "spritelistmodel.h"
+
 #include "resource/spritedef.h"
 
 using namespace Mana;
@@ -31,11 +33,11 @@ Being::Being(int type, int id, QPointF position)
     , mWalkSpeed(0.0)
     , mAction(SpriteAction::STAND)
     , mPosition(position)
+    , mDirection(DOWN)
     , mServerPosition(position)
     , mGender(GENDER_UNSPECIFIED)
-    , mHairStyle(0),
-      mHairColor(0)
 {
+    mSpriteList = new SpriteListModel(this);
 }
 
 void Being::setPosition(QPointF position)
@@ -50,6 +52,11 @@ void Being::setPosition(QPointF position)
 void Being::setServerPosition(QPointF position)
 {
     mServerPosition = position;
+}
+
+Action::SpriteDirection Being::spriteDirection() const
+{
+    return beingToSpriteDirection(mDirection);
 }
 
 void Being::setDirection(BeingDirection direction)
@@ -80,33 +87,7 @@ void Being::setAction(const QString &action)
 {
     if (mAction != action) {
         mAction = action;
-        emit actionChanged(action);
-    }
-}
-
-void Being::setSprite(int slot, int itemId)
-{
-    if (mSlots[slot] == itemId)
-        return;
-
-    QMap<int, int>::iterator it = mSlots.find(slot);
-    if (it != mSlots.end()) {
-        emit slotUnequipping(slot);
-        it = mSlots.erase(it);
-    }
-
-    if (itemId) {
-        mSlots[slot] = itemId;
-        emit slotEquipped(slot, itemId);
-    }
-}
-
-void Being::setHairStyle(int style, int color)
-{
-    if (mHairStyle != style || mHairColor != color) {
-        mHairStyle = style;
-        mHairColor = color;
-        emit hairChanged();
+        emit actionChanged();
     }
 }
 

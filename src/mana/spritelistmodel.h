@@ -18,45 +18,41 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACTION_H
-#define ACTION_H
+#ifndef SPRITELISTMODEL_H
+#define SPRITELISTMODEL_H
 
-#include <QMap>
-#include <QObject>
+#include <QAbstractListModel>
+
+#include "resource/spritedef.h"
 
 namespace Mana {
 
-class Animation;
+class SpriteReference;
 
-class Action : public QObject
+class SpriteListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_ENUMS(SpriteDirection)
-
 public:
-    enum SpriteDirection
-    {
-        DIRECTION_DEFAULT = 0,
-        DIRECTION_UP,
-        DIRECTION_DOWN,
-        DIRECTION_LEFT,
-        DIRECTION_RIGHT,
-        DIRECTION_INVALID
+    enum SpriteRoles {
+        SpriteRole = Qt::UserRole,
+        SlotRole
     };
 
-    explicit Action(QObject *parent = 0);
-    ~Action();
+    explicit SpriteListModel(QObject *parent = 0);
 
-    void setAnimation(int direction, Animation *animation);
+    int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
 
-    const Animation *animation(int direction) const;
+    void addSprite(int slot, const SpriteReference *spriteRef);
+    void removeSprite(int slot);
+    void removeAll();
 
 private:
-    QMap<int, Animation *> mAnimations;
+    QList< QPair<int, const SpriteReference *> > mSprites;
 
 };
 
 }
 
-#endif // ACTION_H
+#endif // SPRITELISTMODEL_H

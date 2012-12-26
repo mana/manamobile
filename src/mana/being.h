@@ -29,8 +29,11 @@
 
 #include "protocol.h"
 
+#include "resource/action.h"
+
 namespace Mana {
 class HairInfo;
+class SpriteListModel;
 
 /**
  * Class representing a being.
@@ -39,16 +42,33 @@ class Being : public QObject
 {
     Q_OBJECT
 
-    Q_ENUMS(Action)
     Q_PROPERTY(int id READ id CONSTANT)
+    Q_PROPERTY(int type READ type CONSTANT)
     Q_PROPERTY(int x READ x NOTIFY positionChanged)
     Q_PROPERTY(int y READ y NOTIFY positionChanged)
     Q_PROPERTY(int direction READ direction NOTIFY directionChanged)
+    Q_PROPERTY(int spriteDirection READ spriteDirection NOTIFY directionChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString chatMessage READ chatMessage NOTIFY chatMessageChanged)
+    Q_PROPERTY(QString action READ action WRITE setAction NOTIFY actionChanged)
     Q_PROPERTY(BeingGender gender READ gender CONSTANT)
+    Q_PROPERTY(Mana::SpriteListModel *spriteListModel READ spriteListModel CONSTANT)
+
+    Q_ENUMS(EntityType)
 
 public:
+    // Keep in sync with protocol
+    enum EntityType
+    {
+        OBJECT_ITEM = 0,
+        OBJECT_ACTOR,
+        OBJECT_NPC,
+        OBJECT_MONSTER,
+        OBJECT_CHARACTER,
+        OBJECT_EFFECT,
+        OBJECT_OTHER
+    };
+
     Being(int type, int id, QPointF position);
 
     int type() const { return mType; }
@@ -57,6 +77,7 @@ public:
     int y() const { return mPosition.y(); }
 
     BeingDirection direction() const { return mDirection; }
+    Action::SpriteDirection spriteDirection() const;
     void setDirection(BeingDirection direction);
 
     QString name() const { return mName; }
@@ -79,29 +100,20 @@ public:
     void say(const QString &text);
 
     BeingGender gender() const { return mGender; }
-    void setGender(BeingGender gender) { mGender = gender; }
-
-    void setSprite(int slot, int id);
-
-    QMap<int, int> &equipmentSlots() { return mSlots; }
-
-    void setHairStyle(int style, int color);
-    int hairStyle() const { return mHairStyle; }
-    int hairColor() const { return mHairColor; }
+    virtual void setGender(BeingGender gender) { mGender = gender; }
 
     void lookAt(const QPointF &point);
+
+    Mana::SpriteListModel *spriteListModel() const { return mSpriteList; }
 
 signals:
     void positionChanged();
     void directionChanged(Mana::BeingDirection newDirection);
     void nameChanged();
     void chatMessageChanged();
-    void actionChanged(const QString &newAction);
-    void slotUnequipping(int slot);
-    void slotEquipped(int slot, int itemId);
-    void hairChanged();
+    void actionChanged();
 
-private:
+protected:
     int mType;
     int mId;
     qreal mWalkSpeed;
@@ -111,13 +123,8 @@ private:
     QPointF mServerPosition;
     QString mName;
     QString mChatMessage;
+    Mana::SpriteListModel *mSpriteList;
     BeingGender mGender;
-    int mHairStyle;
-    int mHairColor;
-
-    // key: equipment slot
-    // value: item id
-    QMap<int, int> mSlots;
 };
 
 } // namespace Mana
