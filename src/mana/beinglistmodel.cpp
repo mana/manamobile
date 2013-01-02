@@ -24,6 +24,7 @@
 #include "being.h"
 #include "character.h"
 #include "messagein.h"
+#include "npc.h"
 #include "protocol.h"
 
 #include "resource/hairdb.h"
@@ -74,7 +75,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
 
     Being *being;
 
-    if (type== OBJECT_CHARACTER) {
+    if (type == OBJECT_CHARACTER) {
         Character *ch = new Character(id, QPointF(x, y));
         ch->setName(message.readString());
 
@@ -94,6 +95,16 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
         }
 
         being = ch;
+    } else if (type == OBJECT_NPC) {
+        int spriteId = message.readInt16();
+        QString name = message.readString();
+        BeingGender gender = (BeingGender)message.readInt8();
+
+        NPC *npc = new NPC(id, QPointF(x, y), spriteId);
+        npc->setName(name);
+        npc->setGender(gender);
+
+        being = npc;
     } else {
         being = new Being(type, id, QPointF(x, y));
     }

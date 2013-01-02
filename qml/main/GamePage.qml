@@ -119,7 +119,7 @@ Rectangle {
                     height: 64;
                     opacity: 0.5;
                     radius: 15;
-                    visible: model.being.type != Being.OBJECT_CHARACTER;
+                    visible: model.being.type == Being.OBJECT_MONSTER;
                 }
 
                 Text {

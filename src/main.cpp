@@ -42,6 +42,7 @@
 
 #include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
+#include "mana/resource/npcdb.h"
 #include "mana/resource/racedb.h"
 
 #include "mapitem.h"
@@ -70,6 +71,7 @@ static void registerTypes()
     qmlRegisterType<ResourceManager>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
+    qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();
 
     qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
@@ -104,12 +106,14 @@ int main(int argc, char *argv[])
     ResourceManager *resourceManager = new ResourceManager(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
+    Mana::NpcDB *npcDB = new Mana::NpcDB(&viewer);
     Mana::RaceDB *raceDB = new Mana::RaceDB(&viewer);
 
     QDeclarativeContext *context = viewer.rootContext();
     context->setContextProperty("resourceManager", resourceManager);
     context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);
+    context->setContextProperty("npcDB", npcDB);
     context->setContextProperty("raceDB", raceDB);
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
