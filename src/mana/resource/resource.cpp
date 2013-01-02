@@ -28,6 +28,7 @@ using namespace Mana;
 
 Resource::Resource(QObject *parent)
     : QObject(parent)
+    , mRefCount(0)
     , mReleaseTime(0)
     , mStatus(Null)
 {
