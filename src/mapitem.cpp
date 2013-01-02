@@ -92,6 +92,7 @@ void MapItem::load()
     qDeleteAll(childItems());
     delete mMap;
     delete mRenderer;
+    mMap = 0;
     mRenderer = 0;
 
     // Cancel any previous requests
