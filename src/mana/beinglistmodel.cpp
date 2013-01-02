@@ -24,6 +24,7 @@
 #include "being.h"
 #include "character.h"
 #include "messagein.h"
+#include "monster.h"
 #include "npc.h"
 #include "protocol.h"
 
@@ -105,8 +106,18 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
         npc->setGender(gender);
 
         being = npc;
+    } else if (type == OBJECT_MONSTER) {
+        int monsterId = message.readInt16();
+        QString name = message.readString();
+        BeingGender gender = (BeingGender)message.readInt8();
+
+        Monster *monster = new Monster(id, QPointF(x, y), monsterId);
+        monster->setName(name);
+        monster->setGender(gender);
+
+        being = monster;
     } else {
-        being = new Being(type, id, QPointF(x, y));
+        return;
     }
 
     being->setAction(action);

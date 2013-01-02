@@ -13,6 +13,7 @@ Item {
         onLoginSucceeded: {
             resourceManager.dataUrl = dataUrl;
             itemDB.load();
+            monsterDB.load();
             npcDB.load();
             raceDB.load();
         }

@@ -47,7 +47,7 @@ class SpriteReference : public QObject
     Q_OBJECT
 
 public:
-    static SpriteReference *readSprite(XmlReader &xml, QObject *parent);
+    static SpriteReference *readSprite(XmlReader &xml, QObject *parent = 0);
 
     SpriteReference(QObject *parent, QString sprite = "", int variant = 0);
 

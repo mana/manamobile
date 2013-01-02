@@ -42,6 +42,7 @@
 
 #include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
+#include "mana/resource/monsterdb.h"
 #include "mana/resource/npcdb.h"
 #include "mana/resource/racedb.h"
 
@@ -71,6 +72,7 @@ static void registerTypes()
     qmlRegisterType<ResourceManager>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
+    qmlRegisterType<Mana::MonsterDB>();
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();
 
@@ -106,6 +108,7 @@ int main(int argc, char *argv[])
     ResourceManager *resourceManager = new ResourceManager(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
+    Mana::MonsterDB *monsterDB = new Mana::MonsterDB(&viewer);
     Mana::NpcDB *npcDB = new Mana::NpcDB(&viewer);
     Mana::RaceDB *raceDB = new Mana::RaceDB(&viewer);
 
@@ -113,6 +116,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("resourceManager", resourceManager);
     context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);
+    context->setContextProperty("monsterDB", monsterDB);
     context->setContextProperty("npcDB", npcDB);
     context->setContextProperty("raceDB", raceDB);
 

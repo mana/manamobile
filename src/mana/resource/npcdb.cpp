@@ -93,7 +93,7 @@ void NpcDB::fileReady()
                     continue;
 
                 if (xml.name() == "sprite")
-                    sprites.append(SpriteReference::readSprite(xml, 0));
+                    sprites.append(SpriteReference::readSprite(xml));
             }
             mNpcs[id] = sprites;
         }
