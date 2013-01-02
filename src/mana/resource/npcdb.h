@@ -49,7 +49,7 @@ public:
 
     bool loaded() const { return mLoaded; }
 
-    const QList<SpriteReference *> &getSprites(int id) const
+    const QList<SpriteReference *> getSprites(int id) const
     { return mNpcs.value(id); }
 
     static NpcDB *instance() { return mInstance; }
