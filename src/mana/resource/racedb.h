@@ -99,7 +99,7 @@ public:
     }
 
 protected:
-    RaceInfo(int id, QObject *parent) : QObject(parent), mId(id) {}
+    RaceInfo(int id, QObject *parent = 0) : QObject(parent), mId(id) {}
 
     int mId;
     QString mName;

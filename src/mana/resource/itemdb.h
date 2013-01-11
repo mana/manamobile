@@ -187,7 +187,7 @@ public:
     { return mParticleFx; }
 
 protected:
-    ItemInfo(ItemDB *db, int id) : QObject(db), mId(id) {}
+    explicit ItemInfo(int id, QObject *parent = 0) : QObject(parent), mId(id) {}
 
     int mId;
     Type mType;
