@@ -76,7 +76,7 @@ ItemDB::ItemDB(QObject *parent)
     : QObject(parent)
     , mLoaded(false)
 {
-    ItemInfo::null = new ItemInfo(this, 0);
+    ItemInfo::null = new ItemInfo(0);
 
     Q_ASSERT(!mInstance);
     mInstance = this;
@@ -95,6 +95,7 @@ void ItemDB::load()
 
 void ItemDB::unload()
 {
+    qDeleteAll(mItems);
     mItems.clear();
 
     mLoaded = false;
@@ -145,7 +146,7 @@ void ItemDB::fileReady()
 
             // TODO: Move races to a seperate file and move parsing to racedb
             if (xml.attribute("type") == "racesprite") { // Race "item"
-                RaceInfo *raceInfo = new RaceInfo(-id, RaceDB::instance());
+                RaceInfo *raceInfo = new RaceInfo(-id);
                 raceInfo->mName = xml.attribute("name");
                 while (!(xml.name() == "item" && xml.isEndElement())) {
                     xml.readNext();
@@ -195,7 +196,7 @@ void ItemDB::fileReady()
                 continue;
             }
 
-            currentItem = new ItemInfo(this, id);
+            currentItem = new ItemInfo(id);
 
             currentItem->mType = itemTypeFromString(xml.attribute("type"));
             currentItem->mName = xml.attribute("name", "unnamed");
