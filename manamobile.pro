@@ -60,11 +60,15 @@ SOURCES += src/main.cpp \
     src/mana/gameclient.cpp \
     src/mana/messagein.cpp \
     src/mana/messageout.cpp \
+    src/mana/monster.cpp \
+    src/mana/npc.cpp \
     src/mana/resource/action.cpp \
     src/mana/resource/animation.cpp \
     src/mana/resource/hairdb.cpp \
     src/mana/resource/imageset.cpp \
     src/mana/resource/itemdb.cpp \
+    src/mana/resource/monsterdb.cpp \
+    src/mana/resource/npcdb.cpp \
     src/mana/resource/pixmapresource.cpp \
     src/mana/resource/racedb.cpp \
     src/mana/resource/resource.cpp \
@@ -91,9 +95,7 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tilelayer.cpp \
     src/tiled/tileset.cpp \
-    src/tilelayeritem.cpp \
-    src/mana/npc.cpp \
-    src/mana/resource/npcdb.cpp
+    src/tilelayeritem.cpp
 
 HEADERS += \
     src/durationlogger.h \
@@ -107,12 +109,16 @@ HEADERS += \
     src/mana/gameclient.h \
     src/mana/messagein.h \
     src/mana/messageout.h \
+    src/mana/monster.h \
+    src/mana/npc.h \
     src/mana/protocol.h \
     src/mana/resource/action.h \
     src/mana/resource/animation.h \
     src/mana/resource/hairdb.h \
     src/mana/resource/imageset.h \
     src/mana/resource/itemdb.h \
+    src/mana/resource/monsterdb.h \
+    src/mana/resource/npcdb.h \
     src/mana/resource/pixmapresource.h \
     src/mana/resource/racedb.h \
     src/mana/resource/resource.h \
@@ -147,9 +153,7 @@ HEADERS += \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
     src/tiled/tileset.h \
-    src/tilelayeritem.h \
-    src/mana/npc.h \
-    src/mana/resource/npcdb.h
+    src/tilelayeritem.h
 
 
 # Please do not modify the following two lines. Required for deployment.
