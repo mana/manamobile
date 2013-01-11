@@ -63,14 +63,12 @@ void MonsterDB::fileReady()
     reply->deleteLater();
     XmlReader xml(reply);
 
-    if (xml.readNextStartElement() || xml.name() != "monsters")
-    {
+    if (!xml.readNextStartElement() || xml.name() != "monsters") {
         xml.raiseError(tr("Not an monster database."));
         return;
     }
 
-    while (xml.readNextStartElement())
-    {
+    while (xml.readNextStartElement()) {
         int id = xml.intAttribute("id");
         QString name = xml.attribute("name");
         if (!id) {
