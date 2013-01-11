@@ -73,6 +73,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     const int x = message.readInt16();
     const int y = message.readInt16();
     BeingDirection direction = (BeingDirection)message.readInt8();
+    BeingGender gender = (BeingGender)message.readInt8();
 
     Being *being;
 
@@ -82,12 +83,10 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
 
         handleHair(ch, message);
 
-        BeingGender gender = (BeingGender)message.readInt8();
         ch->setGender(gender);
 
-        if (message.unreadLength()) {
+        if (message.unreadLength())
             handleLooks(ch, message);
-        }
 
         // Match the being by name to see whether it's the current player
         if (ch->name() == mPlayerName) {
@@ -99,7 +98,6 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     } else if (type == OBJECT_NPC) {
         int spriteId = message.readInt16();
         QString name = message.readString();
-        BeingGender gender = (BeingGender)message.readInt8();
 
         NPC *npc = new NPC(id, QPointF(x, y), spriteId);
         npc->setName(name);
@@ -109,7 +107,6 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     } else if (type == OBJECT_MONSTER) {
         int monsterId = message.readInt16();
         QString name = message.readString();
-        BeingGender gender = (BeingGender)message.readInt8();
 
         Monster *monster = new Monster(id, QPointF(x, y), monsterId);
         monster->setName(name);
