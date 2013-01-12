@@ -30,12 +30,7 @@ Monster::Monster(int id, QPointF position, int monsterId)
     : Being(OBJECT_MONSTER, id, position)
 {
     Q_ASSERT(MonsterDB::instance()->loaded());
-    const QList<SpriteReference *> sprites =
-            MonsterDB::instance()->getInfo(monsterId)->sprites();
 
-    for (int i = 0, max = sprites.length(); i < max; ++i) {
-        mSpriteList->addSprite(i, sprites.at(i));
-    }
+    const MonsterInfo *monsterInfo = MonsterDB::instance()->getInfo(monsterId);
+    mSpriteList->setSprites(monsterInfo->sprites());
 }
-
-

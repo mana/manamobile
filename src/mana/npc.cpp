@@ -29,12 +29,5 @@ using namespace Mana;
 NPC::NPC(int id, QPointF position, int spriteId)
     : Being(OBJECT_NPC, id, position)
 {
-    const QList<SpriteReference *> sprites =
-            NpcDB::instance()->getSprites(spriteId);
-
-    for (int i = 0, max = sprites.length(); i < max; ++i) {
-        mSpriteList->addSprite(i, sprites.at(i));
-    }
+    mSpriteList->setSprites(NpcDB::instance()->getSprites(spriteId));
 }
-
-
