@@ -56,6 +56,7 @@ void NpcDB::unload()
     mNpcs.clear();
 
     mLoaded = false;
+    emit npcsChanged();
 }
 
 void NpcDB::fileReady()
@@ -101,4 +102,5 @@ void NpcDB::fileReady()
 
     mLoaded = true;
     emit npcsChanged();
+    emit loaded();
 }

@@ -37,9 +37,9 @@ using namespace Mana;
 
 SpriteReference::SpriteReference(QObject *parent, QString sprite, int variant)
     : QObject(parent)
+    , sprite(sprite)
+    , variant(variant)
 {
-    this->sprite = sprite;
-    this->variant = variant;
 }
 
 
@@ -70,10 +70,10 @@ SpriteDefinition::SpriteDefinition(QObject *parent,
 
     mFilePathWithoutDye = filePath.left(pos);
 
-    if (ItemDB::instance()->loaded()) {
+    if (ItemDB::instance()->isLoaded()) {
         itemsFileFinished();
     } else {
-        connect(ItemDB::instance(), SIGNAL(itemsChanged()),
+        connect(ItemDB::instance(), SIGNAL(loaded()),
                 this, SLOT(itemsFileFinished()));
     }
 }

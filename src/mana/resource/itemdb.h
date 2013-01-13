@@ -66,12 +66,10 @@ public:
     ItemDB(QObject *parent);
 
     Q_INVOKABLE void load();
-
     Q_INVOKABLE void unload();
+    bool isLoaded() const { return mLoaded; }
 
     Q_INVOKABLE const ItemInfo *getInfo(int id) const;
-
-    bool loaded() const { return mLoaded; }
 
     void setStatsList(QList<Stat> stats);
 
@@ -81,6 +79,7 @@ public:
 
 signals:
     void itemsChanged();
+    void loaded();
 
 private slots:
     void fileReady();
@@ -103,21 +102,13 @@ class ItemInfo : public QObject
     friend class ItemDB;
 
     Q_PROPERTY(bool isNull READ isNull CONSTANT)
-
     Q_PROPERTY(int id READ id CONSTANT)
-
     Q_PROPERTY(ItemInfo::Type type READ type CONSTANT)
-
     Q_PROPERTY(SpriteDisplay display READ display CONSTANT)
-
     Q_PROPERTY(QString name READ name CONSTANT)
-
     Q_PROPERTY(QString description READ description CONSTANT)
-
     Q_PROPERTY(QList<QString> effects READ effects CONSTANT)
-
     Q_PROPERTY(int weight READ weight CONSTANT)
-
     Q_PROPERTY(QString particleFx READ particleFx CONSTANT)
 
 public:

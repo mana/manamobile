@@ -45,6 +45,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
     void addSprite(int slot, const SpriteReference *spriteRef);
+    void setSprite(int slot, const SpriteReference *spriteRef);
     void setSprites(const QList<SpriteReference*> &sprites);
     void removeSprite(int slot);
     void removeAll();

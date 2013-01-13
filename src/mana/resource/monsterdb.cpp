@@ -55,6 +55,7 @@ void MonsterDB::unload()
     mMonsters.clear();
 
     mLoaded = false;
+    emit monstersChanged();
 }
 
 void MonsterDB::fileReady()
@@ -99,4 +100,5 @@ void MonsterDB::fileReady()
 
     mLoaded = true;
     emit monstersChanged();
+    emit loaded();
 }

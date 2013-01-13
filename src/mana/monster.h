@@ -31,6 +31,12 @@ class Monster : public Being
 
 public:
     Monster(int id, QPointF position, int monsterId);
+
+private slots:
+    void initializeSprites();
+
+private:
+    const int mMonsterId;
 };
 
 }

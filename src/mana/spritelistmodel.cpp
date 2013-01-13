@@ -56,6 +56,12 @@ void SpriteListModel::addSprite(int slot, const SpriteReference *spriteRef)
     endInsertRows();
 }
 
+void SpriteListModel::setSprite(int slot, const SpriteReference *spriteRef)
+{
+    removeSprite(slot);
+    addSprite(slot, spriteRef);
+}
+
 /**
  * Sets the list of sprites, assigning slots based on the index in the list.
  */

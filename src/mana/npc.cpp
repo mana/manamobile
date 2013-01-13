@@ -28,6 +28,18 @@ using namespace Mana;
 
 NPC::NPC(int id, QPointF position, int spriteId)
     : Being(OBJECT_NPC, id, position)
+    , mSpriteId(spriteId)
 {
-    mSpriteList->setSprites(NpcDB::instance()->getSprites(spriteId));
+    if (NpcDB::instance()->isLoaded()) {
+        initializeSprites();
+    } else {
+        connect(NpcDB::instance(), SIGNAL(loaded()),
+                this, SLOT(initializeSprites()));
+    }
+}
+
+void NPC::initializeSprites()
+{
+    Q_ASSERT(NpcDB::instance()->isLoaded());
+    mSpriteList->setSprites(NpcDB::instance()->getSprites(mSpriteId));
 }

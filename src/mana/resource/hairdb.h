@@ -46,13 +46,12 @@ public:
     HairDB(QObject *parent);
 
     Q_INVOKABLE void load();
-
     Q_INVOKABLE void unload();
+    bool isLoaded() const { return mLoaded; }
 
     Q_INVOKABLE const HairInfo *getInfo(int id) const
     { return mHairs[id]; }
 
-    bool loaded() const { return mLoaded; }
 
     QList<HairInfo *> hairs() const { return mHairs.values(); }
 
@@ -60,6 +59,7 @@ public:
 
 signals:
     void hairsChanged();
+    void loaded();
 
 private:
     static HairDB *mInstance;
@@ -76,7 +76,6 @@ class HairInfo : public QObject
     friend class ItemDB;
 
     Q_PROPERTY(int id READ id CONSTANT)
-
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:

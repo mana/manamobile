@@ -98,6 +98,7 @@ void ItemDB::unload()
     mItems.clear();
 
     mLoaded = false;
+    emit itemsChanged();
 }
 
 const ItemInfo *ItemDB::getInfo(int id) const
@@ -263,6 +264,9 @@ void ItemDB::fileReady()
     RaceDB::instance()->mLoaded = true;
     HairDB::instance()->mLoaded = true;
     emit itemsChanged();
+    emit loaded();
     emit RaceDB::instance()->racesChanged();
+    emit RaceDB::instance()->loaded();
     emit HairDB::instance()->hairsChanged();
+    emit HairDB::instance()->loaded();
 }

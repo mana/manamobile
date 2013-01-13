@@ -36,11 +36,17 @@ Character::Character(int id, QPointF position)
     , mHairStyle(0)
     , mHairColor(0)
 {
+    if (!HairDB::instance()->isLoaded())
+        connect(HairDB::instance(), SIGNAL(loaded()), SLOT(rebuildSprites()));
+    if (!RaceDB::instance()->isLoaded())
+        connect(RaceDB::instance(), SIGNAL(loaded()), SLOT(rebuildSprites()));
+    if (!ItemDB::instance()->isLoaded())
+        connect(ItemDB::instance(), SIGNAL(loaded()), SLOT(rebuildSprites()));
 }
 
 void Character::setEquipmentSlot(int slot, int itemId)
 {
-    if (mEquipmentSlots[slot] == itemId)
+    if (mEquipmentSlots.value(slot) == itemId)
         return;
 
     QMap<int, int>::iterator it = mEquipmentSlots.find(slot);
@@ -54,30 +60,32 @@ void Character::setEquipmentSlot(int slot, int itemId)
         mEquipmentSlots[slot] = itemId;
         emit slotEquipped(slot, itemId);
 
-        Q_ASSERT(ItemDB::instance()->loaded());
-        const ItemInfo *info = ItemDB::instance()->getInfo(itemId);
-        if (!info) {
-            qWarning() << Q_FUNC_INFO << "Tried to equip unknown itemid "
-                       << itemId;
-            return;
+        if (ItemDB::instance()->isLoaded()) {
+            const ItemInfo *info = ItemDB::instance()->getInfo(itemId);
+            if (!info) {
+                qWarning() << Q_FUNC_INFO << "Tried to equip unknown item "
+                           << itemId;
+                return;
+            }
+            if (SpriteReference *sprite = info->sprite(mGender))
+                mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
         }
-        SpriteReference *sprite = info->sprite(mGender);
-        if (sprite)
-            mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
     }
 }
 
 void Character::setHairStyle(int style, int color)
 {
-    if (mHairStyle != style || mHairColor != color) {
-        mHairStyle = style;
-        mHairColor = color;
-        emit hairChanged();
-        Q_ASSERT(HairDB::instance()->loaded());
+    if (mHairStyle == style && mHairColor == color)
+        return;
+
+    mHairStyle = style;
+    mHairColor = color;
+    emit hairChanged();
+
+    if (HairDB::instance()->isLoaded()) {
         const HairInfo *info = HairDB::instance()->getInfo(style);
-        SpriteReference *sprite = info->sprite(mGender);
-        if (sprite)
-            mSpriteList->addSprite(SLOT_HAIR, sprite);
+        if (SpriteReference *sprite = info->sprite(mGender))
+            mSpriteList->setSprite(SLOT_HAIR, sprite);
     }
 }
 
@@ -91,18 +99,33 @@ void Character::rebuildSprites()
 {
     mSpriteList->removeAll();
 
-    SpriteReference *sprite;
+    if (HairDB::instance()->isLoaded()) {
+        const HairInfo *hairInfo = HairDB::instance()->getInfo(mHairStyle);
+        if (SpriteReference *sprite = hairInfo->sprite(mGender))
+            mSpriteList->addSprite(SLOT_HAIR, sprite);
+    }
 
-    // Hair
-    const HairInfo *hairInfo = HairDB::instance()->getInfo(mHairStyle);
-    sprite = hairInfo->sprite(mGender);
-    if (sprite)
-        mSpriteList->addSprite(SLOT_HAIR, sprite);
+    if (RaceDB::instance()->isLoaded()) {
+        const RaceInfo *raceInfo = RaceDB::instance()->races().at(0);
+        if (SpriteReference *sprite = raceInfo->sprite(mGender))
+            mSpriteList->addSprite(SLOT_RACE, sprite);
+    }
 
-    // Race
-    RaceInfo *raceInfo = RaceDB::instance()->races().at(0);
-    sprite = raceInfo->sprite(mGender);
-    if (sprite)
-        mSpriteList->addSprite(SLOT_RACE, sprite);
+    if (ItemDB::instance()->isLoaded()) {
+        QMapIterator<int, int> it(mEquipmentSlots);
+        while (it.hasNext()) {
+            it.next();
+            const int slot = it.key();
+            const int itemId = it.value();
+
+            const ItemInfo *info = ItemDB::instance()->getInfo(itemId);
+            if (!info) {
+                qWarning() << Q_FUNC_INFO << "Unknown equipped item "
+                           << itemId;
+                continue;
+            }
+            if (SpriteReference *sprite = info->sprite(mGender))
+                mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
+        }
+    }
 }
-
