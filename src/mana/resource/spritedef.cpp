@@ -21,13 +21,9 @@
 
 #include "spritedef.h"
 
-#include "action.h"
 #include "animation.h"
-#include "itemdb.h"
 #include "imageset.h"
 #include "resourcemanager.h"
-#include "resource.h"
-#include "spriteitem.h"
 
 #include "mana/xmlreader.h"
 
@@ -68,23 +64,12 @@ SpriteDefinition::SpriteDefinition(QObject *parent,
     if (pos != -1)
         mPalettes = filePath.right(filePath.length() - pos);
 
-    mFilePathWithoutDye = filePath.left(pos);
-
-    if (ItemDB::instance()->isLoaded()) {
-        itemsFileFinished();
-    } else {
-        connect(ItemDB::instance(), SIGNAL(loaded()),
-                this, SLOT(itemsFileFinished()));
-    }
+    const QString filePathWithoutDye = filePath.left(pos);
+    requestFile(filePathWithoutDye);
 }
 
 SpriteDefinition::~SpriteDefinition()
 {
-}
-
-void SpriteDefinition::itemsFileFinished()
-{
-    requestFile(mFilePathWithoutDye);
 }
 
 const Action *SpriteDefinition::action(const QString &actionName) const

@@ -126,7 +126,6 @@ public:
     const Action *action(const QString &actionName) const;
 
 private slots:
-    void itemsFileFinished();
     void xmlFileFinished();
     void imageFileStatusChanged(Mana::Resource::Status newStatus);
 
@@ -144,8 +143,6 @@ private:
 
     // Dye string
     QString mPalettes;
-
-    QString mFilePathWithoutDye;
 
     // xml reader -> his reader parent (for includes)
     // parent parsing has to be resumed after child is fully parsed
