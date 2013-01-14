@@ -38,6 +38,7 @@ class RaceInfo;
 class RaceDB : public QObject
 {
     Q_OBJECT
+
     Q_PROPERTY(QList<RaceInfo *> races READ races NOTIFY racesChanged)
 
     friend class ItemDB;
@@ -46,13 +47,11 @@ public:
     RaceDB(QObject *parent);
 
     Q_INVOKABLE void load();
-
     Q_INVOKABLE void unload();
+    bool isLoaded() const { return mLoaded; }
 
     Q_INVOKABLE const RaceInfo *getInfo(int id) const
     { return mRaces[id]; }
-
-    bool loaded() const { return mLoaded; }
 
     QList<RaceInfo *> races() { return mRaces.values(); }
 
@@ -60,6 +59,7 @@ public:
 
 signals:
     void racesChanged();
+    void loaded();
 
 private:
     static RaceDB *mInstance;
@@ -76,11 +76,9 @@ class RaceInfo : public QObject
     friend class ItemDB;
 
     Q_PROPERTY(int id READ id CONSTANT)
-
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:
-
     int id() const
     { return mId; }
 

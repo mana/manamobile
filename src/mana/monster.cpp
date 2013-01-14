@@ -28,14 +28,20 @@ using namespace Mana;
 
 Monster::Monster(int id, QPointF position, int monsterId)
     : Being(OBJECT_MONSTER, id, position)
+    , mMonsterId(monsterId)
 {
-    Q_ASSERT(MonsterDB::instance()->loaded());
-    const QList<SpriteReference *> sprites =
-            MonsterDB::instance()->getInfo(monsterId)->sprites();
-
-    for (int i = 0, max = sprites.length(); i < max; ++i) {
-        mSpriteList->addSprite(i, sprites.at(i));
+    if (MonsterDB::instance()->isLoaded()) {
+        initializeSprites();
+    } else {
+        connect(MonsterDB::instance(), SIGNAL(loaded()),
+                this, SLOT(initializeSprites()));
     }
 }
 
+void Monster::initializeSprites()
+{
+    Q_ASSERT(MonsterDB::instance()->isLoaded());
 
+    if (const MonsterInfo *monsterInfo = MonsterDB::instance()->getInfo(mMonsterId))
+        mSpriteList->setSprites(monsterInfo->sprites());
+}

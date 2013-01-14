@@ -40,23 +40,19 @@ class MonsterInfo;
 
 class MonsterDB : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-Q_PROPERTY(QList<const MonsterInfo*> monsters READ monsters NOTIFY monstersChanged)
-
-friend class MonsterInfo;
+    Q_PROPERTY(QList<const MonsterInfo*> monsters READ monsters NOTIFY monstersChanged)
 
 public:
     MonsterDB(QObject *parent);
 
     Q_INVOKABLE void load();
-
     Q_INVOKABLE void unload();
+    bool isLoaded() const { return mLoaded; }
 
     Q_INVOKABLE const MonsterInfo *getInfo(int id) const
     { return mMonsters.value(id); }
-
-    bool loaded() const { return mLoaded; }
 
     QList<const MonsterInfo*> monsters() const
     { return mMonsters.values(); }
@@ -65,6 +61,7 @@ public:
 
 signals:
     void monstersChanged();
+    void loaded();
 
 private slots:
     void fileReady();
@@ -84,7 +81,6 @@ class MonsterInfo : public QObject
     friend class MonsterDB;
 
     Q_PROPERTY(int id READ id CONSTANT)
-
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:
@@ -94,11 +90,11 @@ public:
     QString name() const
     { return mName; }
 
-    QList<SpriteReference *> sprites() const
+    const QList<SpriteReference *> &sprites() const
     { return mSprites; }
 
 protected:
-    MonsterInfo(int id, QString name) : QObject(), mId(id), mName(name) {}
+    MonsterInfo(int id, QString name) : mId(id), mName(name) {}
 
     int mId;
     QString mName;

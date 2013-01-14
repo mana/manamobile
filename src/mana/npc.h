@@ -31,6 +31,12 @@ class NPC : public Being
 
 public:
     NPC(int id, QPointF position, int spriteId);
+
+private slots:
+    void initializeSprites();
+
+private:
+    const int mSpriteId;
 };
 
 }

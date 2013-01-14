@@ -38,16 +38,14 @@ namespace Mana {
 
 class NpcDB : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit NpcDB(QObject *parent);
 
     Q_INVOKABLE void load();
-
     Q_INVOKABLE void unload();
-
-    bool loaded() const { return mLoaded; }
+    bool isLoaded() const { return mLoaded; }
 
     const QList<SpriteReference *> getSprites(int id) const
     { return mNpcs.value(id); }
@@ -56,6 +54,7 @@ public:
 
 signals:
     void npcsChanged();
+    void loaded();
 
 private slots:
     void fileReady();

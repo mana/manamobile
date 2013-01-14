@@ -56,12 +56,32 @@ void SpriteListModel::addSprite(int slot, const SpriteReference *spriteRef)
     endInsertRows();
 }
 
+void SpriteListModel::setSprite(int slot, const SpriteReference *spriteRef)
+{
+    removeSprite(slot);
+    addSprite(slot, spriteRef);
+}
+
+/**
+ * Sets the list of sprites, assigning slots based on the index in the list.
+ */
+void SpriteListModel::setSprites(const QList<SpriteReference *> &sprites)
+{
+    beginResetModel();
+    mSprites.clear();
+    for (int i = 0; i < sprites.length(); ++i) {
+        const SpriteReference *spriteRef = sprites.at(i);
+        mSprites.append(qMakePair(i, spriteRef));
+    }
+    endResetModel();
+}
+
 void SpriteListModel::removeSprite(int slot)
 {
     for (int i = 0, end = mSprites.size(); i < end; ++i) {
         if (mSprites.at(i).first == slot) {
             beginRemoveRows(QModelIndex(), i, i);
-            mSprites.removeAt(i);
+            mSprites.remove(i);
             endRemoveRows();
             return;
         }
