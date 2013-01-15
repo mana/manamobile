@@ -102,7 +102,6 @@ static inline const QString &actionByInt(int integer)
 
 static inline Action::SpriteDirection beingToSpriteDirection(BeingDirection dir)
 {
-    Action::SpriteDirection spriteDirection = Action::DIRECTION_DEFAULT;
     if (dir == UP)
         return Action::DIRECTION_UP;
     else if (dir == DOWN)
