@@ -90,6 +90,9 @@ void SpriteListModel::removeSprite(int slot)
 
 void SpriteListModel::removeAll()
 {
+    if (mSprites.isEmpty())
+        return;
+
     beginRemoveRows(QModelIndex(), 0, mSprites.size() - 1);
     mSprites.clear();
     endRemoveRows();
