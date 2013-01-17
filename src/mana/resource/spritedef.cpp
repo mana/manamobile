@@ -111,10 +111,9 @@ void SpriteDefinition::xmlFileFinished()
     it = mXmlRequests.erase(it);
 
     XmlReader *xml = new XmlReader(reply);
-
     mResources[xml] = parent;
 
-    parseSprite(xml, parent);
+    readSprite(*xml, parent);
 }
 
 void SpriteDefinition::imageFileStatusChanged(Status newStatus)
@@ -122,7 +121,7 @@ void SpriteDefinition::imageFileStatusChanged(Status newStatus)
     if (newStatus == Ready) {
         // continue parsing parent xml
         XmlReader *xml = mImageRequests[static_cast<PixmapResource *>(sender())];
-        parseSprite(xml, mResources[xml]);
+        readSprite(*xml, mResources[xml]);
     }
 }
 
@@ -147,39 +146,45 @@ void SpriteDefinition::cleanUp(Status status)
     setStatus(status);
 }
 
-void SpriteDefinition::parseSprite(XmlReader *xml, XmlReader *parent)
+void SpriteDefinition::readSprite(XmlReader &xml, XmlReader *parent)
 {
-    while (!xml->atEnd()) {
-        xml->readNext();
-        if (!xml->isStartElement())
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (!xml.isStartElement())
             continue;
 
-        if (xml->name() == "sprite") {
-            mVariantCount = xml->intAttribute("variants");
-            mVariantOffset = xml->intAttribute("variant_offset");
-        } else if (xml->name() == "include") {
-            const QString filename = xml->attribute("file");
-            requestFile("sprites/" + filename, xml);
+        if (xml.name() == "sprite") {
+            const QXmlStreamAttributes attr = xml.attributes();
+            mVariantCount = attr.value("variants").toString().toInt();
+            mVariantOffset = attr.value("variant_offset").toString().toInt();
+        } else if (xml.name() == "include") {
+            const QString filename = xml.attributes().value("file").toString();
+            requestFile("sprites/" + filename, &xml);
             return; // Wait for this file to be loaded first
-        } else if (xml->name() == "action") {
-            loadAction(xml);
-        } else if (xml->name() == "imageset") {
-            if (loadImageSet(xml))
+        } else if (xml.name() == "action") {
+            readAction(xml);
+        } else if (xml.name() == "imageset") {
+            if (readImageSet(xml))
                 return; // Wait for it to be loaded first2
         }
     }
 
     // This file is fully parsed. Continue parsing the parent
     if (parent)
-        parseSprite(parent, mResources[parent]);
+        readSprite(*parent, mResources[parent]);
     else
         cleanUp(Ready);
 }
 
-void SpriteDefinition::loadAction(XmlReader *xml)
+void SpriteDefinition::readAction(XmlReader &xml)
 {
-    const QString actionName = xml->attribute("name");
-    const QString imageSetName = xml->attribute("imageset");
+    Q_ASSERT(xml.isStartElement() && xml.name() == "action");
+
+    const QXmlStreamAttributes attr = xml.attributes();
+
+    const QString actionName = attr.value("name").toString();
+    const QString imageSetName = attr.value("imageset").toString();
+
     QMap<QString, ImageSet *>::iterator it = mImageSets.find(imageSetName);
     if (it == mImageSets.end()) {
         qWarning() << Q_FUNC_INFO << "Imageset \""
@@ -200,15 +205,16 @@ void SpriteDefinition::loadAction(XmlReader *xml)
     if (mActions.size() == 1)
         mActions[SpriteAction::DEFAULT] = action;
 
-    while (!(xml->isEndElement() && xml->name() == "action")) {
-        xml->readNextStartElement();
-        if (xml->name() == "animation")
-            loadAnimation(xml, action, imageSet);
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "animation")
+            readAnimation(xml, action, imageSet);
+        else
+            xml.readUnknownElement();
     }
 
 }
 
-static Action::SpriteDirection directionByName(const QString &name)
+static Action::SpriteDirection directionByName(const QStringRef &name)
 {
     if (name.length() == 0 || name == "default")
         return Action::DIRECTION_DEFAULT;
@@ -224,11 +230,15 @@ static Action::SpriteDirection directionByName(const QString &name)
         return Action::DIRECTION_INVALID;
 }
 
-void SpriteDefinition::loadAnimation(XmlReader *xml,
+void SpriteDefinition::readAnimation(XmlReader &xml,
                                      Action *action,
                                      ImageSet *imageset)
 {
-    const QString directionName = xml->attribute("direction");
+    Q_ASSERT(xml.isStartElement() && xml.name() == "animation");
+
+    const QXmlStreamAttributes attr = xml.attributes();
+
+    const QStringRef directionName = attr.value("direction");
     const Action::SpriteDirection direction = directionByName(directionName);
     if (direction == Action::DIRECTION_INVALID) {
         qWarning() << Q_FUNC_INFO << "Unknown direction \""
@@ -239,33 +249,41 @@ void SpriteDefinition::loadAnimation(XmlReader *xml,
     Animation *animation = new Animation;
     action->setAnimation(direction, animation);
 
-    while (!(xml->isEndElement() && xml->name() == "animation")) {
-        if (!xml->isStartElement()) {
-            xml->readNext();
-            continue;
-        }
+    while (xml.readNextStartElement()) {
+        const QXmlStreamAttributes attr = xml.attributes();
 
-        const int delay = xml->intAttribute("delay", DEFAULT_FRAME_DELAY);
-        const int offsetX = xml->intAttribute("offsetX") + imageset->offsetX();
-        const int offsetY = xml->intAttribute("offsetY") + imageset->offsetY();
-        if (xml->name() == "frame") {
-            const int index = xml->intAttribute("index", -1);
-            if (index < 0) {
+        bool delayOk;
+        int delay = attr.value("delay").toString().toInt(&delayOk);
+        int offsetX = attr.value("offsetX").toString().toInt();
+        int offsetY = attr.value("offsetY").toString().toInt();
+
+        if (!delayOk)
+            delay = DEFAULT_FRAME_DELAY;
+
+        offsetX += imageset->offsetX();
+        offsetY += imageset->offsetY();
+
+        if (xml.name() == "frame") {
+            bool indexOk;
+            const int index = attr.value("index").toString().toInt(&indexOk);
+            if (!indexOk || index < 0) {
                 qWarning() << Q_FUNC_INFO << "No valid value for 'index'!";
-                xml->readNext();
+                xml.skipCurrentElement();
                 continue;
             }
 
             animation->addFrame(index + mVariantOffset, imageset,
                                 delay, offsetX, offsetY);
-        } else if (xml->name() == "sequence") {
-            int start = xml->intAttribute("start", -1);
-            const int end = xml->intAttribute("end", -1);
+            xml.skipCurrentElement();
+        } else if (xml.name() == "sequence") {
+            bool startOk, endOk;
+            int start = attr.value("start").toString().toInt(&startOk);
+            const int end = attr.value("end").toString().toInt(&endOk);
 
-            if (start < 0 || end < 0) {
+            if (!startOk || !endOk || start < 0 || end < 0) {
                 qWarning() << Q_FUNC_INFO
                            << "No valid value for 'start' or 'end'";
-                xml->readNext();
+                xml.skipCurrentElement();
                 continue;
             }
 
@@ -274,33 +292,41 @@ void SpriteDefinition::loadAnimation(XmlReader *xml,
                                     delay, offsetX, offsetY);
                 start++;
             }
-        } else if (xml->name() == "end") {
+            xml.skipCurrentElement();
+        } else if (xml.name() == "end") {
             animation->addTerminator();
+            xml.skipCurrentElement();
+        } else {
+            xml.readUnknownElement();
         }
-        xml->readNext();
     }
 }
 
-bool SpriteDefinition::loadImageSet(XmlReader *xml)
+bool SpriteDefinition::readImageSet(XmlReader &xml)
 {
-    QString name = xml->attribute("name");
+    Q_ASSERT(xml.isStartElement() && xml.name() == "imageset");
+
+    const QXmlStreamAttributes attr = xml.attributes();
+    const QString name = attr.value("name").toString();
 
     if (name.isEmpty()) {
         qWarning() << "Empty name for imageset!";
+        xml.skipCurrentElement();
         return false;
     }
 
     // Do not allow same imageset multiple times
     if (mImageSets.find(name) != mImageSets.end()) {
         qWarning() << "Duplicate use of image set name \"" << name << "\"!";
+        xml.skipCurrentElement();
         return false;
     }
 
-    const int width = xml->intAttribute("width");
-    const int height = xml->intAttribute("height");
-    const int offsetX = xml->intAttribute("offsetX");
-    const int offsetY = xml->intAttribute("offsetY");
-    QString imageSrc = xml->attribute("src");
+    const int width = attr.value("width").toString().toInt();
+    const int height = attr.value("height").toString().toInt();
+    const int offsetX = attr.value("offsetX").toString().toInt();
+    const int offsetY = attr.value("offsetY").toString().toInt();
+    QString imageSrc = attr.value("src").toString();
 
     // TODO: Dye
 
@@ -309,7 +335,7 @@ bool SpriteDefinition::loadImageSet(XmlReader *xml)
     connect(imageSet->pixmapResource(),
             SIGNAL(statusChanged(Mana::Resource::Status)),
             this, SLOT(imageFileStatusChanged(Mana::Resource::Status)));
-    mImageRequests[imageSet->pixmapResource()] = xml;
+    mImageRequests[imageSet->pixmapResource()] = &xml;
     mImageSets[name] = imageSet;
     return true;
 }

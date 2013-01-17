@@ -65,38 +65,32 @@ void NpcDB::fileReady()
     reply->deleteLater();
     XmlReader xml(reply);
 
-    if (xml.readNextStartElement() && xml.name() != "npcs") {
-        xml.raiseError(tr("Not an npc database."));
+    if (!xml.readNextStartElement() || xml.name() != "npcs") {
+        qDebug() << "Error loading npcs.xml";
         return;
     }
 
-    while (!xml.atEnd())
-    {
-        xml.readNext();
-        if (!xml.isStartElement())
-            continue;
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "npc") {
+            const QXmlStreamAttributes atts = xml.attributes();
+            int id = atts.value("id").toString().toInt();
 
-        if (xml.name() == "npc")
-        {
-            int id = xml.intAttribute("id", 0);
-
-            if (!id)
-            {
-                qDebug() << "Bad npc id at line " << xml.lineNumber();
+            if (!id) {
+                qDebug() << "Bad NPC id at line " << xml.lineNumber();
                 xml.skipCurrentElement();
                 continue;
             }
 
             QList<SpriteReference *> sprites;
-            while (!(xml.isEndElement() && xml.name() == "npc")) {
-                xml.readNext();
-                if (!xml.isStartElement())
-                    continue;
-
+            while (xml.readNextStartElement()) {
                 if (xml.name() == "sprite")
                     sprites.append(SpriteReference::readSprite(xml));
+                else
+                    xml.readUnknownElement();
             }
             mNpcs[id] = sprites;
+        } else {
+            xml.readUnknownElement();
         }
     }
 
