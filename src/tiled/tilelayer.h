@@ -272,6 +272,8 @@ protected:
     TileLayer *initializeClone(TileLayer *clone) const;
 
 private:
+    void adjustDrawMargins(const Cell &cell);
+
     QSize mMaxTileSize;
     QMargins mOffsetMargins;
     QVector<Cell> mGrid;

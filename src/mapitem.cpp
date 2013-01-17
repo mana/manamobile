@@ -186,8 +186,37 @@ void MapItem::mapFinished()
 void MapItem::tilesetFinished()
 {
     QNetworkReply *reply = finishReply();
-    Q_UNUSED(reply)
-    // TODO: Support external tilesets
+    const QString requestedUrl = reply->request().url().toString();
+
+    qDebug() << Q_FUNC_INFO << requestedUrl;
+
+    ResourceManager *rm = ResourceManager::instance();
+
+    const int dataUrlLength = rm->dataUrl().length();
+    const QString tilesetFilePath = requestedUrl.mid(dataUrlLength);
+    const int lastSlashPos = tilesetFilePath.lastIndexOf(QLatin1Char('/'));
+    const QString tilesetPath = tilesetFilePath.left(lastSlashPos);
+
+    Tiled::MapReader reader;
+    reader.setLazy(true); // Don't have it load the tileset image immediately
+
+    Tiled::Tileset *tileset = reader.readTileset(reply, tilesetPath);
+    if (!tileset) {
+        qDebug() << "Error reading tileset:" << requestedUrl << "\n"
+                 << reader.errorString();
+    } else {
+        QNetworkReply *reply = rm->requestFile(tileset->imageSource());
+        mPendingResources.append(reply);
+        connect(reply, SIGNAL(finished()), this, SLOT(imageFinished()));
+
+        foreach (Tileset *ts, mMap->tilesets()) {
+            if (ts->fileName() == tilesetFilePath) {
+                mMap->replaceTileset(ts, tileset);
+                delete ts;
+                break;
+            }
+        }
+    }
 
     checkReady();
 }
