@@ -52,6 +52,8 @@ public:
     Q_INVOKABLE const HairInfo *getInfo(int id) const
     { return mHairs[id]; }
 
+    void setInfo(int id, HairInfo *info)
+    { mHairs[id] = info; }
 
     QList<HairInfo *> hairs() const { return mHairs.values(); }
 
@@ -73,18 +75,18 @@ private:
 class HairInfo : public QObject
 {
     Q_OBJECT
-    friend class ItemDB;
 
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:
+    HairInfo(int id, QObject *parent) : QObject(parent), mId(id) {}
 
     int id() const
     { return mId; }
 
-    QString name() const
-    { return mName; }
+    QString name() const { return mName; }
+    void setName(const QString &name) { mName = name; }
 
     QMap<BeingGender, SpriteReference *> sprites() const
     { return mSprites; }
@@ -97,9 +99,10 @@ public:
         return mSprites[GENDER_UNSPECIFIED];
     }
 
-protected:
-    HairInfo(int id, QObject *parent) : QObject(parent), mId(id) {}
+    void setSprite(BeingGender gender, SpriteReference *sprite)
+    { mSprites[gender] = sprite; }
 
+private:
     int mId;
     QString mName;
     QMap<BeingGender, SpriteReference *> mSprites;
