@@ -87,27 +87,8 @@ void TileLayer::setCell(int x, int y, const Cell &cell)
 {
     Q_ASSERT(contains(x, y));
 
-    if (cell.tile) {
-        int width = cell.tile->width();
-        int height = cell.tile->height();
-
-        if (cell.flippedAntiDiagonally)
-            std::swap(width, height);
-
-        const QPoint offset = cell.tile->tileset()->tileOffset();
-
-        mMaxTileSize = maxSize(QSize(width, height), mMaxTileSize);
-        mOffsetMargins = maxMargins(QMargins(-offset.x(),
-                                             -offset.y(),
-                                             offset.x(),
-                                             offset.y()),
-                                    mOffsetMargins);
-
-        if (mMap)
-            mMap->adjustDrawMargins(drawMargins());
-    }
-
     mGrid[x + y * mWidth] = cell;
+    adjustDrawMargins(cell);
 }
 
 TileLayer *TileLayer::copy(const QRegion &region) const
@@ -280,7 +261,7 @@ void TileLayer::removeReferencesToTileset(Tileset *tileset)
     for (int i = 0, i_end = mGrid.size(); i < i_end; ++i) {
         const Tile *tile = mGrid.at(i).tile;
         if (tile && tile->tileset() == tileset)
-            mGrid.replace(i, Cell());
+            mGrid[i] = Cell();
     }
 }
 
@@ -289,8 +270,10 @@ void TileLayer::replaceReferencesToTileset(Tileset *oldTileset,
 {
     for (int i = 0, i_end = mGrid.size(); i < i_end; ++i) {
         const Tile *tile = mGrid.at(i).tile;
-        if (tile && tile->tileset() == oldTileset)
+        if (tile && tile->tileset() == oldTileset) {
             mGrid[i].tile = newTileset->tileAt(tile->id());
+            adjustDrawMargins(mGrid[i]);
+        }
     }
 }
 
@@ -431,4 +414,27 @@ TileLayer *TileLayer::initializeClone(TileLayer *clone) const
     clone->mMaxTileSize = mMaxTileSize;
     clone->mOffsetMargins = mOffsetMargins;
     return clone;
+}
+
+void TileLayer::adjustDrawMargins(const Cell &cell)
+{
+    if (cell.tile) {
+        int width = cell.tile->width();
+        int height = cell.tile->height();
+
+        if (cell.flippedAntiDiagonally)
+            std::swap(width, height);
+
+        const QPoint offset = cell.tile->tileset()->tileOffset();
+
+        mMaxTileSize = maxSize(QSize(width, height), mMaxTileSize);
+        mOffsetMargins = maxMargins(QMargins(-offset.x(),
+                                             -offset.y(),
+                                             offset.x(),
+                                             offset.y()),
+                                    mOffsetMargins);
+
+        if (mMap)
+            mMap->adjustDrawMargins(drawMargins());
+    }
 }
