@@ -80,29 +80,28 @@ void ResourceManager::pathsFileFinished()
             reply->error() == QNetworkReply::ContentNotFoundError)) {
         qDebug() << "Failed to download paths.xml:\n"
                  << reply->errorString();
-        mPathsLoaded = false;
         return;
     }
 
     XmlReader xml(reply);
 
-    while (!xml.atEnd())
-    {
-        xml.readNext();
-        if (!xml.isStartElement())
-            continue;
+    if (!xml.readNextStartElement() || xml.name() != "configuration") {
+        qDebug() << "Error loading paths.xml";
+        return;
+    }
 
+    while (xml.readNextStartElement()) {
         if (xml.name() == "option") {
-            QString key = xml.attribute("name");
-            QString value = xml.attribute("value");
+            const QXmlStreamAttributes atts = xml.attributes();
+            const QStringRef name = atts.value("name");
+            const QStringRef value = atts.value("value");
 
-            if (key.isEmpty()) {
-                qDebug() << Q_FUNC_INFO
-                         << "Invalid value for the attribute \"name\"!";
-                continue;
-            }
+            if (!name.isEmpty())
+                mPaths[name.toString()] = value.toString();
 
-            mPaths[key] = value;
+            xml.skipCurrentElement();
+        } else {
+            xml.readUnknownElement();
         }
     }
 
@@ -116,6 +115,8 @@ void ResourceManager::setDataUrl(const QString &url)
         return;
 
     mDataUrl = url;
+    mPaths.clear();
+    mPathsLoaded = false;
     emit dataUrlChanged();
 
     // Load the paths.xml if available

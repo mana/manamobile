@@ -40,27 +40,22 @@ class ItemInfo;
 
 class ItemDB : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-Q_PROPERTY(QList<const ItemInfo*> items READ items NOTIFY itemsChanged)
-
-friend class HairInfo;
-friend class ItemInfo;
-friend class RaceInfo;
+    Q_PROPERTY(QList<const ItemInfo*> items READ items NOTIFY itemsChanged)
 
 public:
     class Stat
     {
-        friend class ItemDB;
-
     public:
-        Stat(QString tag, QString format) : tag(tag), format(format) {}
+        Stat(QString tag, QString format)
+            : tag(tag), format(format)
+        {}
 
         bool operator ==(QString name) const { return tag == name; }
 
-    protected:
-        QString tag;
-        QString format;
+        const QString tag;
+        const QString format;
     };
 
     ItemDB(QObject *parent);
@@ -99,7 +94,6 @@ private:
 class ItemInfo : public QObject
 {
     Q_OBJECT
-    friend class ItemDB;
 
     Q_PROPERTY(bool isNull READ isNull CONSTANT)
     Q_PROPERTY(int id READ id CONSTANT)
@@ -107,11 +101,15 @@ class ItemInfo : public QObject
     Q_PROPERTY(SpriteDisplay display READ display CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString description READ description CONSTANT)
-    Q_PROPERTY(QList<QString> effects READ effects CONSTANT)
+    Q_PROPERTY(QStringList effects READ effects CONSTANT)
     Q_PROPERTY(int weight READ weight CONSTANT)
     Q_PROPERTY(QString particleFx READ particleFx CONSTANT)
 
 public:
+    explicit ItemInfo(int id, QObject *parent = 0)
+        : QObject(parent), mId(id)
+    {}
+
     /**
      * Enumeration of available Item types.
      */
@@ -145,23 +143,23 @@ public:
     int id() const
     { return mId; }
 
-    Type type() const
-    { return mType; }
+    Type type() const { return mType; }
+    void setType(Type type) { mType = type; }
 
-    SpriteDisplay display() const
-    { return mDisplay; }
+    SpriteDisplay display() const { return mDisplay; }
+    void setDisplay(const SpriteDisplay &display) { mDisplay = display; }
 
-    QString name() const
-    { return mName; }
+    QString name() const { return mName; }
+    void setName(const QString &name) { mName = name; }
 
-    QString description() const
-    { return mDescription; }
+    QString description() const { return mDescription; }
+    void setDescription(const QString &description) { mDescription = description; }
 
-    QList<QString> effects() const
-    { return mEffects; }
+    QStringList effects() const { return mEffects; }
+    void setEffects(const QStringList &effects) { mEffects = effects; }
 
-    int weight() const
-    { return mWeight; }
+    int weight() const { return mWeight; }
+    void setWeight(int weight) { mWeight = weight; }
 
     QMap<BeingGender, SpriteReference *> sprites() const
     { return mSprites; }
@@ -174,18 +172,19 @@ public:
         return mSprites[GENDER_UNSPECIFIED];
     }
 
-    QString particleFx() const
-    { return mParticleFx; }
+    void setSprite(BeingGender gender, SpriteReference *sprite)
+    { mSprites[gender] = sprite; }
 
-protected:
-    explicit ItemInfo(int id, QObject *parent = 0) : QObject(parent), mId(id) {}
+    QString particleFx() const { return mParticleFx; }
+    void setParticleFx(const QString &particleFx) { mParticleFx = particleFx; }
 
+private:
     int mId;
     Type mType;
     SpriteDisplay mDisplay; // Icon
     QString mName;
     QString mDescription;
-    QList<QString> mEffects;
+    QStringList mEffects;
     int mWeight;
 
     QMap<BeingGender, SpriteReference *> mSprites;

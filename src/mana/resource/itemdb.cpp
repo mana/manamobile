@@ -47,25 +47,34 @@ QList<const ItemInfo*> ItemDB::items() const
     return mItems.values();
 }
 
-static ItemInfo::Type itemTypeFromString(QString name)
+static ItemInfo::Type itemTypeFromString(const QStringRef &name)
 {
-    if      (name=="generic")           return ItemInfo::ITEM_UNUSABLE;
-    else if (name=="usable")            return ItemInfo::ITEM_USABLE;
-    else if (name=="equip-1hand")       return ItemInfo::ITEM_EQUIPMENT_ONE_HAND_WEAPON;
-    else if (name=="equip-2hand")       return ItemInfo::ITEM_EQUIPMENT_TWO_HANDS_WEAPON;
-    else if (name=="equip-torso")       return ItemInfo::ITEM_EQUIPMENT_TORSO;
-    else if (name=="equip-arms")        return ItemInfo::ITEM_EQUIPMENT_ARMS;
-    else if (name=="equip-head")        return ItemInfo::ITEM_EQUIPMENT_HEAD;
-    else if (name=="equip-legs")        return ItemInfo::ITEM_EQUIPMENT_LEGS;
-    else if (name=="equip-shield")      return ItemInfo::ITEM_EQUIPMENT_SHIELD;
-    else if (name=="equip-ring")        return ItemInfo::ITEM_EQUIPMENT_RING;
-    else if (name=="equip-charm")       return ItemInfo::ITEM_EQUIPMENT_CHARM;
-    else if (name=="equip-necklace")    return ItemInfo::ITEM_EQUIPMENT_NECKLACE;
-    else if (name=="equip-feet")        return ItemInfo::ITEM_EQUIPMENT_FEET;
-    else if (name=="equip-ammo")        return ItemInfo::ITEM_EQUIPMENT_AMMO;
-    else if (name=="racesprite")        return ItemInfo::ITEM_SPRITE_RACE;
-    else if (name=="hairsprite")        return ItemInfo::ITEM_SPRITE_HAIR;
-    else return ItemInfo::ITEM_UNUSABLE;
+    if      (name == "generic")         return ItemInfo::ITEM_UNUSABLE;
+    else if (name == "usable")          return ItemInfo::ITEM_USABLE;
+    else if (name == "equip-1hand")     return ItemInfo::ITEM_EQUIPMENT_ONE_HAND_WEAPON;
+    else if (name == "equip-2hand")     return ItemInfo::ITEM_EQUIPMENT_TWO_HANDS_WEAPON;
+    else if (name == "equip-torso")     return ItemInfo::ITEM_EQUIPMENT_TORSO;
+    else if (name == "equip-arms")      return ItemInfo::ITEM_EQUIPMENT_ARMS;
+    else if (name == "equip-head")      return ItemInfo::ITEM_EQUIPMENT_HEAD;
+    else if (name == "equip-legs")      return ItemInfo::ITEM_EQUIPMENT_LEGS;
+    else if (name == "equip-shield")    return ItemInfo::ITEM_EQUIPMENT_SHIELD;
+    else if (name == "equip-ring")      return ItemInfo::ITEM_EQUIPMENT_RING;
+    else if (name == "equip-charm")     return ItemInfo::ITEM_EQUIPMENT_CHARM;
+    else if (name == "equip-necklace")  return ItemInfo::ITEM_EQUIPMENT_NECKLACE;
+    else if (name == "equip-feet")      return ItemInfo::ITEM_EQUIPMENT_FEET;
+    else if (name == "equip-ammo")      return ItemInfo::ITEM_EQUIPMENT_AMMO;
+    else if (name == "racesprite")      return ItemInfo::ITEM_SPRITE_RACE;
+    else if (name == "hairsprite")      return ItemInfo::ITEM_SPRITE_HAIR;
+
+    return ItemInfo::ITEM_UNUSABLE;
+}
+
+static BeingGender genderFromString(const QStringRef &gender)
+{
+    if      (gender == "male")          return GENDER_MALE;
+    else if (gender == "female")        return GENDER_FEMALE;
+
+    return GENDER_UNSPECIFIED;
 }
 
 ItemInfo *ItemInfo::null = 0;
@@ -109,155 +118,144 @@ const ItemInfo *ItemDB::getInfo(int id) const
     return ItemInfo::null;
 }
 
+static ItemInfo *readItem(XmlReader &xml)
+{
+    const QXmlStreamAttributes attr = xml.attributes();
+    int id = attr.value("id").toString().toInt();
+
+    if (!id) {
+        qDebug() << "Bad or missing item id at line " << xml.lineNumber();
+        xml.skipCurrentElement();
+        return 0;
+    }
+
+    // TODO: Move races to a seperate file and move parsing to racedb
+    if (attr.value("type") == "racesprite") { // Race "item"
+        RaceInfo *raceInfo = new RaceInfo(-id);
+        raceInfo->setName(attr.value("name").toString());
+
+        while (xml.readNextStartElement()) {
+            if (xml.name() == "sprite") {
+                const BeingGender gender =
+                        genderFromString(xml.attributes().value("gender"));
+                SpriteReference *sprite =
+                        SpriteReference::readSprite(xml, raceInfo);
+
+                raceInfo->setSprite(gender, sprite);
+            } else {
+                xml.skipCurrentElement();
+            }
+        }
+
+        RaceDB::instance()->setInfo(-id, raceInfo);
+        return 0;
+    }
+
+    // TODO: Move hairs to a seperate file and move parsing to hairdb
+    if (attr.value("type") == "hairsprite") { // Hair "item"
+        HairInfo *hairInfo = new HairInfo(-id, HairDB::instance());
+        hairInfo->setName(attr.value("name").toString());
+
+        while (xml.readNextStartElement()) {
+            if (xml.name() == "sprite") {
+                const BeingGender gender =
+                        genderFromString(xml.attributes().value("gender"));
+                SpriteReference *sprite =
+                        SpriteReference::readSprite(xml, hairInfo);
+
+                hairInfo->setSprite(gender, sprite);
+            } else {
+                xml.skipCurrentElement();
+            }
+        }
+
+        HairDB::instance()->setInfo(id, hairInfo);
+        return 0;
+    }
+
+    ItemInfo *item = new ItemInfo(id);
+
+    item->setType(itemTypeFromString(attr.value("type")));
+    item->setName(attr.value("name").toString());
+    item->setDescription(attr.value("description").toString());
+    item->setWeight(attr.value("weight").toString().toInt());
+
+    SpriteDisplay display;
+    display.image = attr.value("image").toString();
+
+    if (item->name().isEmpty())
+        item->setName("unnamed");
+
+    QStringList effects;
+
+    for (int i = 0; i < int(sizeof(fields) / sizeof(fields[0])); ++i) {
+        int value = attr.value(fields[i].tag).toString().toInt();
+        if (value)
+            effects.append(fields[i].format.arg(value));
+    }
+
+//    foreach (Stat stat, mExtraStats) {
+//        int value = xml.intAttribute(stat.tag);
+//        if (value)
+//            effects.append(stat.format.arg(value));
+//    }
+
+    const QStringRef temp = attr.value("effect");
+    if (!temp.isEmpty())
+        effects.append(temp.toString());
+
+    item->setEffects(effects);
+
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "sprite") {
+            const BeingGender gender =
+                    genderFromString(xml.attributes().value("gender"));
+            SpriteReference *sprite = SpriteReference::readSprite(xml, item);
+
+            item->setSprite(gender, sprite);
+        } else if (xml.name() == "particlefx") {
+            item->setParticleFx(xml.readElementText());
+        } else if (xml.name() == "sound") {
+            xml.skipCurrentElement(); // TODO
+        } else if (xml.name() == "floor") {
+            while (xml.readNextStartElement()) {
+                if (xml.name() == "sprite") {
+                    display.sprites.append(
+                                SpriteReference::readSprite(xml, item));
+                } else if (xml.name() == "particlefx") {
+                    display.particles.append(xml.readElementText());
+                } else {
+                    xml.readUnknownElement();
+                }
+            }
+        } else {
+            xml.readUnknownElement();
+        }
+    }
+
+    item->setDisplay(display);
+
+    return item;
+}
+
 void ItemDB::fileReady()
 {
     XmlReader xml(mReply);
 
-    if (xml.readNextStartElement() && xml.name() == "items")
-    {}
-    else
-    {
-        xml.raiseError(tr("Not an item database."));
+    if (!xml.readNextStartElement() || xml.name() != "items") {
+        qDebug() << "Error loading items.xml";
         return;
     }
 
-    QStringRef currentTag;
-    ItemInfo *currentItem;
-
-    while (!xml.atEnd())
-    {
-        xml.readNext();
-
-        if (xml.isStartElement())
-            currentTag = xml.name();
-        else
-            continue;
-
-        if (currentTag == "item")
-        {
-            int id = xml.intAttribute("id", 0);
-
-            if (!id)
-            {
-                qDebug() << "Bad item id at line " << xml.lineNumber();
-                xml.skipCurrentElement();
-                continue;
-            }
-
-            // TODO: Move races to a seperate file and move parsing to racedb
-            if (xml.attribute("type") == "racesprite") { // Race "item"
-                RaceInfo *raceInfo = new RaceInfo(-id);
-                raceInfo->mName = xml.attribute("name");
-                while (!(xml.name() == "item" && xml.isEndElement())) {
-                    xml.readNext();
-                    if (!xml.isStartElement())
-                        continue;
-
-                    if (xml.name() == "sprite") {
-                        QString gender = xml.attribute("gender");
-                        SpriteReference *sprite =
-                                SpriteReference::readSprite(xml, raceInfo);
-                        if (gender == "male")
-                            raceInfo->mSprites[GENDER_MALE] = sprite;
-                        else if (gender == "female")
-                            raceInfo->mSprites[GENDER_FEMALE] = sprite;
-                        else
-                            raceInfo->mSprites[GENDER_UNSPECIFIED] = sprite;
-                    }
-                }
-
-                RaceDB::instance()->mRaces[-id] = raceInfo;
-                continue;
-            }
-
-            // TODO: Move hairs to a seperate file and move parsing to hairdb
-            if (xml.attribute("type") == "hairsprite") { // Hair "item"
-                HairInfo *hairInfo = new HairInfo(-id, HairDB::instance());
-                hairInfo->mName = xml.attribute("name");
-                while (!(xml.name() == "item" && xml.isEndElement())) {
-                    xml.readNext();
-                    if (!xml.isStartElement())
-                        continue;
-
-                    if (xml.name() == "sprite") {
-                        QString gender = xml.attribute("gender");
-                        SpriteReference *sprite =
-                                SpriteReference::readSprite(xml, hairInfo);
-                        if (gender == "male")
-                            hairInfo->mSprites[GENDER_MALE] = sprite;
-                        else if (gender == "female")
-                            hairInfo->mSprites[GENDER_FEMALE] = sprite;
-                        else
-                            hairInfo->mSprites[GENDER_UNSPECIFIED] = sprite;
-                    }
-                }
-
-                HairDB::instance()->mHairs[-id] = hairInfo;
-                continue;
-            }
-
-            currentItem = new ItemInfo(id);
-
-            currentItem->mType = itemTypeFromString(xml.attribute("type"));
-            currentItem->mName = xml.attribute("name", "unnamed");
-            currentItem->mDescription = xml.attribute("description");
-            currentItem->mWeight = xml.intAttribute("weight");
-
-            currentItem->mDisplay.image = xml.attribute("image");
-
-            for (int i = 0; i < int(sizeof(fields) / sizeof(fields[0])); ++i)
-            {
-                int value = xml.intAttribute(fields[i].tag);
-                if (value)
-                    currentItem->mEffects.push_back(fields[i].format.arg(value));
-            }
-
-            foreach(Stat stat, mExtraStats)
-            {
-                int value = xml.intAttribute(stat.tag);
-                if (value)
-                    currentItem->mEffects.push_back(stat.format.arg(value));
-            }
-
-            QString temp = xml.attribute("effect");
-            if (!temp.isEmpty())
-                currentItem->mEffects.push_back(temp);
-
-            // TODO read other attributes?
-
-            mItems[id] = currentItem;
-        }
-        else if (currentTag == "sprite")
-        {
-            QString gender = xml.attributes().value("gender").toString();
-            SpriteReference *sprite = SpriteReference::readSprite(xml, currentItem);
-
-            if (gender == "male")
-                currentItem->mSprites[GENDER_MALE] = sprite;
-            else if (gender == "female")
-                currentItem->mSprites[GENDER_FEMALE] = sprite;
-            else
-                currentItem->mSprites[GENDER_UNSPECIFIED] = sprite;
-        }
-        else if (currentTag == "particlefx")
-            currentItem->mParticleFx = xml.readElementText();
-        else if (currentTag == "sound")
-            xml.skipCurrentElement(); // TODO
-        else if (currentTag == "floor")
-            while (xml.readNextStartElement())
-            {
-                if (xml.name() == "sprite")
-                    currentItem->mDisplay.sprites.push_back(
-                                SpriteReference::readSprite(xml, currentItem));
-                else if (xml.name() == "particlefx")
-                    currentItem->mDisplay.particles.push_back(xml.readElementText());
-                else
-                    xml.readUnknownElement();
-            }
-        else if (currentTag == "version")
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "item") {
+            if (ItemInfo *item = readItem(xml))
+                mItems[item->id()] = item;
+        } else if (xml.name() == "version") {
             xml.skipCurrentElement(); // Ignore for now
-        else
+        } else {
             xml.readUnknownElement();
+        }
     }
 
     mLoaded = true;

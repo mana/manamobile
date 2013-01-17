@@ -59,7 +59,7 @@ struct SpriteDisplay
 {
     QString image;
     QList<SpriteReference*> sprites;
-    QList<QString> particles;
+    QStringList particles;
 };
 
 static int DEFAULT_FRAME_DELAY = 75;
@@ -131,10 +131,10 @@ private slots:
 private:
     void requestFile(const QString &filePath, XmlReader *parent = 0);
     void cleanUp(Status status);
-    void parseSprite(XmlReader *xml, XmlReader *parent);
-    void loadAction(XmlReader *xml);
-    void loadAnimation(XmlReader *xml, Action *action, ImageSet *imageset);
-    bool loadImageSet(XmlReader *xml);
+    void readSprite(XmlReader &xml, XmlReader *parent);
+    void readAction(XmlReader &xml);
+    void readAnimation(XmlReader &xml, Action *action, ImageSet *imageset);
+    bool readImageSet(XmlReader &xml);
 
     int mVariant;
     int mVariantCount;
