@@ -53,6 +53,9 @@ public:
     Q_INVOKABLE const RaceInfo *getInfo(int id) const
     { return mRaces[id]; }
 
+    void setInfo(int id, RaceInfo *info)
+    { mRaces[id] = info; }
+
     QList<RaceInfo *> races() { return mRaces.values(); }
 
     static RaceDB *instance() { return mInstance; }
@@ -73,17 +76,17 @@ private:
 class RaceInfo : public QObject
 {
     Q_OBJECT
-    friend class ItemDB;
 
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:
-    int id() const
-    { return mId; }
+    RaceInfo(int id, QObject *parent = 0) : QObject(parent), mId(id) {}
 
-    QString name() const
-    { return mName; }
+    int id() const { return mId; }
+
+    QString name() const { return mName; }
+    void setName(const QString &name) { mName = name; }
 
     QMap<BeingGender, SpriteReference *> sprites() const
     { return mSprites; }
@@ -96,9 +99,10 @@ public:
         return mSprites[GENDER_UNSPECIFIED];
     }
 
-protected:
-    RaceInfo(int id, QObject *parent = 0) : QObject(parent), mId(id) {}
+    void setSprite(BeingGender gender, SpriteReference *sprite)
+    { mSprites[gender] = sprite; }
 
+private:
     int mId;
     QString mName;
     QMap<BeingGender, SpriteReference *> mSprites;

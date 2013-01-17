@@ -33,29 +33,9 @@ public:
 
     void readUnknownElement()
     {
-        qDebug() << "Unknown element at line " << lineNumber()
-                << " (fixme):" << name();
+        qDebug() << "Unknown element at line" << lineNumber()
+                 << "(fixme):" << name();
         skipCurrentElement();
-    }
-
-    QString attribute(QString name, QString def = "")
-    {
-        return attributes().hasAttribute(name)
-                    ? attributes().value(name).toString()
-                    : def;
-    }
-
-    int intAttribute(QString name, int def = 0)
-    {
-        bool ok;
-        if (attributes().hasAttribute(name))
-        {
-            int ret = attributes().value(name).toString().toInt(&ok);
-            if (ok)
-                return ret;
-        }
-
-        return def;
     }
 };
 

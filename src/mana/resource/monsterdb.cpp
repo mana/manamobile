@@ -70,8 +70,16 @@ void MonsterDB::fileReady()
     }
 
     while (xml.readNextStartElement()) {
-        int id = xml.intAttribute("id");
-        QString name = xml.attribute("name");
+        if (xml.name() != "monster") {
+            xml.readUnknownElement();
+            continue;
+        }
+
+        const QXmlStreamAttributes attr = xml.attributes();
+
+        const int id = attr.value("id").toString().toInt();
+        const QString name = attr.value("name").toString();
+
         if (!id) {
             if (name.isEmpty())
                 xml.raiseError(tr("Invalid monster id"));
@@ -83,6 +91,7 @@ void MonsterDB::fileReady()
             xml.raiseError(tr("Empty name for monster id %1").arg(id));
             return;
         }
+
         MonsterInfo *info = new MonsterInfo(id, name);
 
         while (xml.readNextStartElement()) {
