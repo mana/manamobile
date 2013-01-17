@@ -60,7 +60,7 @@ SpriteDefinition::SpriteDefinition(QObject *parent,
 {
     setStatus(Resource::Loading);
 
-    int pos = filePath.indexOf("|");
+    int pos = filePath.indexOf(QLatin1Char('|'));
     if (pos != -1)
         mPalettes = filePath.right(filePath.length() - pos);
 
@@ -182,8 +182,8 @@ void SpriteDefinition::loadAction(XmlReader *xml)
     const QString imageSetName = xml->attribute("imageset");
     QMap<QString, ImageSet *>::iterator it = mImageSets.find(imageSetName);
     if (it == mImageSets.end()) {
-        qWarning() << Q_FUNC_INFO << "Imageset \""
-                   << imageSetName << "\" not defined!";
+        qWarning() << Q_FUNC_INFO << "Imageset"
+                   << imageSetName << "not defined!";
         return;
     }
     ImageSet *imageSet = it.value();

@@ -32,7 +32,7 @@ PixmapResource::PixmapResource(const QString &filePath, QObject *parent)
     : Resource(parent)
     , mPixmap(0)
 {
-    int pos = filePath.indexOf("|");
+    int pos = filePath.indexOf(QLatin1Char('|'));
 
     QString palettes;
     if (pos != -1)
