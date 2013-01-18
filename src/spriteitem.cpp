@@ -34,6 +34,7 @@ SpriteItem::SpriteItem(QDeclarativeItem *parent)
     , mSpriteRef(0)
     , mDirection(Action::DIRECTION_DOWN)
     , mReady(false)
+    , mSprite(0)
     , mAction(0)
     , mAnimation(0)
     , mFrameIndex(0)
@@ -44,13 +45,19 @@ SpriteItem::SpriteItem(QDeclarativeItem *parent)
 
 SpriteItem::~SpriteItem()
 {
-    mSprite->decRef();
+    if (mSprite)
+        mSprite->decRef();
 }
 
 void SpriteItem::setSpriteRef(const SpriteReference *sprite)
 {
     if (sprite == mSpriteRef)
         return;
+
+    if (mSprite) {
+        mSprite->decRef();
+        mSprite = 0;
+    }
 
     if (sprite) {
         mSprite = ResourceManager::instance()->requestSpriteDefinition(
