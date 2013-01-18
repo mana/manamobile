@@ -112,10 +112,7 @@ void ItemDB::unload()
 
 const ItemInfo *ItemDB::getInfo(int id) const
 {
-    if (mItems.contains(id))
-        return mItems[id];
-
-    return ItemInfo::null;
+    return mItems.value(id, ItemInfo::null);
 }
 
 static ItemInfo *readItem(XmlReader &xml)
