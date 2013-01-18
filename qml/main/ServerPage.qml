@@ -16,9 +16,13 @@ Item {
     }
 
     Item {
-        anchors { left: title.left; right: parent.right; top: title.bottom;
-                    bottom: parent.bottom; margins: 5; }
-        height: window.height / 2;
+        anchors {
+            left: title.left;
+            right: parent.right;
+            top: title.bottom;
+            bottom: parent.bottom;
+            margins: 5;
+        }
 
         BorderImage {
             anchors.fill: parent
@@ -40,98 +44,11 @@ Item {
             Column {
                 id: flickColumn;
                 width: parent.width;
+                spacing: 5;
 
                 Repeater {
-                    //anchors.fill: parent;
                     model: serverListModel;
-                    delegate: serverListEntry;
-                }
-            }
-        }
-    }
-
-    Timer {
-        id: networkTimer;
-        interval: 100;
-        running: true;
-        repeat: true;
-    }
-
-    Component {
-        id: serverListEntry
-        Item {
-            id: serverListEntryItem;
-            height: container.height;
-            width: flickColumn.width - 4;
-            property string entryTitle: name == "" ? hostname : name;
-            property bool canSee: false;
-
-            Row {
-                id: container;
-                x: 1;
-                spacing: 2;
-
-                Rectangle {
-                    id: status;
-                    width: 32;
-                    height: 32;
-                    y: nameLabel.y + 5;
-
-                    color: canSee ? "green" : "red";
-                }
-
-                Column {
-                    spacing: 1;
-                    Text {
-                        id: nameLabel;
-                        text: entryTitle;
-                        font.pointSize: 12;
-                    }
-
-                    Text {
-                        id: addressLabel;
-                        text: hostname + ":" + port;
-                        color: "midnightblue";
-                        font.pointSize: 9;
-                        z: 5
-                    }
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent;
-                enabled: !serverPage.serverChosen;
-                onClicked: {
-                    serverPage.serverChosen = true;
-                    serverName = entryTitle;
-                    accountClient.connect(hostname, port);
-                }
-            }
-
-            AccountClient {
-                id: client;
-                onConnected: {
-                    canSee = true;
-
-                    // A direct disconnect here messes things up
-                    disconnectTimer.start();
-                }
-            }
-
-            Timer {
-                id: disconnectTimer
-                interval: 1
-                onTriggered: client.disconnect();
-            }
-
-            Component.onCompleted: {
-                client.connect(hostname, port);
-            }
-
-            Connections {
-                target: networkTimer;
-                onTriggered: {
-                    client.service();
+                    delegate: ServerListEntry {}
                 }
             }
         }
