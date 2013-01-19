@@ -1,4 +1,4 @@
-import Qt 4.7
+import QtQuick 1.1
 
 /**
  * This is the desktop version of the QML based Mana client.
