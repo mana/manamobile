@@ -23,7 +23,6 @@
 #include "resourcemanager.h"
 #include "mana/xmlreader.h"
 
-#include <QDebug>
 #include <QNetworkReply>
 
 using namespace Mana;
@@ -95,7 +94,6 @@ void MonsterDB::fileReady()
         MonsterInfo *info = new MonsterInfo(id, name);
 
         while (xml.readNextStartElement()) {
-            qDebug() << xml.name();
             if (xml.name() == "sprite") {
                 SpriteReference *sprite = SpriteReference::readSprite(xml,
                                                                       info);
