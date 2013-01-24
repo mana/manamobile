@@ -150,7 +150,9 @@ static ItemInfo *readItem(XmlReader &xml)
 
     // TODO: Move hairs to a seperate file and move parsing to hairdb
     if (attr.value("type") == "hairsprite") { // Hair "item"
-        HairInfo *hairInfo = new HairInfo(-id, HairDB::instance());
+        // invert the negative id for now
+        id = -id;
+        HairInfo *hairInfo = new HairInfo(id, HairDB::instance());
         hairInfo->setName(attr.value("name").toString());
 
         while (xml.readNextStartElement()) {
