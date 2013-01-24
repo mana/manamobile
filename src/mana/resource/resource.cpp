@@ -26,9 +26,10 @@
 
 using namespace Mana;
 
-Resource::Resource(QObject *parent)
+Resource::Resource(QString path, QObject *parent)
     : QObject(parent)
     , mRefCount(0)
+    , mPath(path)
     , mReleaseTime(0)
     , mStatus(Null)
 {

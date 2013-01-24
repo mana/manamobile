@@ -29,7 +29,7 @@
 using namespace Mana;
 
 PixmapResource::PixmapResource(const QString &filePath, QObject *parent)
-    : Resource(parent)
+    : Resource(filePath, parent)
     , mPixmap(0)
 {
     int pos = filePath.indexOf(QLatin1Char('|'));

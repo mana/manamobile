@@ -116,7 +116,7 @@ static inline Action::SpriteDirection beingToSpriteDirection(BeingDirection dir)
 
 class SpriteDefinition : public Resource
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     SpriteDefinition(QObject *parent, const QString &filePath, int variant);

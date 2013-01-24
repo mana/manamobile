@@ -49,7 +49,7 @@ public:
         DeleteImmediately
     };
 
-    Resource(QObject *parent = 0);
+    Resource(QString path, QObject *parent = 0);
 
     virtual ~Resource();
 
