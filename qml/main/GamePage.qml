@@ -105,8 +105,6 @@ Rectangle {
                 CompoundSprite {
                     id: sprite;
                     sprites: model.being.spriteListModel;
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    anchors.bottom: parent.bottom;
                     action: model.being.action;
                     direction: model.being.spriteDirection;
                 }

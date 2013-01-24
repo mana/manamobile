@@ -30,7 +30,7 @@ class NPC : public Being
     Q_OBJECT
 
 public:
-    NPC(int id, QPointF position, int spriteId);
+    explicit NPC(int spriteId);
 
 private slots:
     void initializeSprites();

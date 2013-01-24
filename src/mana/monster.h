@@ -30,7 +30,7 @@ class Monster : public Being
     Q_OBJECT
 
 public:
-    Monster(int id, QPointF position, int monsterId);
+    explicit Monster(int monsterId);
 
 private slots:
     void initializeSprites();

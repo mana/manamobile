@@ -21,11 +21,11 @@
 #ifndef CHARACTERLISTMODEL_H
 #define CHARACTERLISTMODEL_H
 
-#include "accountclient.h"
-
 #include <QAbstractListModel>
 
 namespace Mana {
+
+class Character;
 
 class CharacterListModel : public QAbstractListModel
 {
@@ -33,9 +33,7 @@ class CharacterListModel : public QAbstractListModel
 
 public:
     enum CharacterRoles {
-        Name = Qt::DisplayRole,
-        Level = Qt::UserRole,
-        Money
+        CharRole = Qt::UserRole
     };
 
     explicit CharacterListModel(QObject *parent = 0);
@@ -43,10 +41,10 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
-    void setCharacters(const QList<CharacterInfo> &characters);
+    void setCharacters(const QList<Character *> &characters);
 
 private:
-    QList<CharacterInfo> mCharacters;
+    QList<Character *> mCharacters;
 };
 
 } // namespace Mana

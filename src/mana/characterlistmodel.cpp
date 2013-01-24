@@ -20,18 +20,15 @@
 
 #include "characterlistmodel.h"
 
-using namespace Mana;
+#include "character.h"
 
-// See defines.h in manaserv repository
-enum Attributes { ATTR_GP = 18 };
+using namespace Mana;
 
 CharacterListModel::CharacterListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     QHash<int, QByteArray> roleNames;
-    roleNames.insert(Name, "name");
-    roleNames.insert(Level, "level");
-    roleNames.insert(Money, "money");
+    roleNames.insert(CharRole, "character");
     setRoleNames(roleNames);
 }
 
@@ -42,21 +39,15 @@ int CharacterListModel::rowCount(const QModelIndex &parent) const
 
 QVariant CharacterListModel::data(const QModelIndex &index, int role) const
 {
-    const Mana::CharacterInfo &character = mCharacters.at(index.row());
-
-    switch (role) {
-    case Name:
-        return character.name;
-    case Level:
-        return character.level;
-    case Money:
-        return character.attributes.value(ATTR_GP).modified;
+    if (role == CharRole) {
+        Character *charInfo = mCharacters.at(index.row());
+        return QVariant::fromValue(charInfo);
     }
 
     return QVariant();
 }
 
-void CharacterListModel::setCharacters(const QList<Mana::CharacterInfo> &
+void CharacterListModel::setCharacters(const QList<Mana::Character *> &
                                        characters)
 {
     beginResetModel();

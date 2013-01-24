@@ -4,7 +4,7 @@ import Mana 1.0
 Item {
     id: spriteContainer;
     property alias sprites: repeater.model;
-    property variant direction;
+    property int direction;
     property variant action;
 
     Repeater {
@@ -12,6 +12,7 @@ Item {
         model: spriteContainer.sprites;
         delegate: Sprite {
             id: element;
+            parent: spriteContainer;
 
             direction: spriteContainer.direction;
             action: spriteContainer.action;

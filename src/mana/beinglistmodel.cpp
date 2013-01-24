@@ -78,7 +78,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     Being *being;
 
     if (type == OBJECT_CHARACTER) {
-        Character *ch = new Character(id, QPointF(x, y));
+        Character *ch = new Character;
         ch->setName(message.readString());
 
         handleHair(ch, message);
@@ -99,7 +99,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
         int spriteId = message.readInt16();
         QString name = message.readString();
 
-        NPC *npc = new NPC(id, QPointF(x, y), spriteId);
+        NPC *npc = new NPC(spriteId);
         npc->setName(name);
         npc->setGender(gender);
 
@@ -108,7 +108,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
         int monsterId = message.readInt16();
         QString name = message.readString();
 
-        Monster *monster = new Monster(id, QPointF(x, y), monsterId);
+        Monster *monster = new Monster(monsterId);
         monster->setName(name);
         monster->setGender(gender);
 
@@ -117,6 +117,9 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
         return;
     }
 
+    being->setId(id);
+    being->setPosition(QPointF(x, y));
+    being->setServerPosition(QPointF(x, y));
     being->setAction(action);
     being->setDirection(direction);
 

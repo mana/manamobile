@@ -64,6 +64,8 @@ static void registerTypes()
     qmlRegisterType<Mana::BeingListModel>();
     qmlRegisterUncreatableType<Mana::Being>("Mana", 1, 0, "Being",
                                             "Managed on C++ side");
+    qmlRegisterUncreatableType<Mana::Character>("Mana", 1, 0, "Character",
+                                                "Managed on C++ side");
 
 
     qmlRegisterType<Mana::SpriteListModel>();

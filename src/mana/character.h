@@ -25,6 +25,35 @@
 
 namespace Mana {
 
+class AttributeValue : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(double base READ base NOTIFY baseChanged)
+    Q_PROPERTY(double modified READ modified NOTIFY modifiedChanged)
+
+public:
+    explicit AttributeValue(QObject *parent = 0)
+        : QObject(parent)
+        , mBase(0)
+        , mModified(0)
+    {}
+
+    double base() const { return mBase; }
+    void setBase(double value);
+
+    double modified() const { return mModified; }
+    void setModified(double value);
+
+signals:
+    void baseChanged();
+    void modifiedChanged();
+
+private:
+    double mBase;
+    double mModified;
+};
+
 class Character : public Being
 {
     Q_OBJECT
@@ -36,7 +65,7 @@ public:
         SLOT_EQUIPMENT
     };
 
-    Character(int id, QPointF position);
+    Character();
 
     void setEquipmentSlot(int slot, int id);
 
@@ -47,6 +76,14 @@ public:
     int hairColor() const { return mHairColor; }
 
     virtual void setGender(BeingGender gender);
+
+    void setCharacterSlot(int value) { mCharacterSlot = value; }
+    int characterSlot() const { return mCharacterSlot; }
+
+    void setLevel(int value) { mLevel = value; }
+    int level() const { return mLevel; }
+
+    void setAttribute(int id, double base, double mod);
 
 signals:
     void slotUnequipping(int slot);
@@ -60,8 +97,15 @@ private:
     QMap<int, int> mEquipmentSlots;
     int mHairStyle;
     int mHairColor;
+
+    /* Only used for the characters created for the character selection screen */
+    int mCharacterSlot;
+    int mLevel;
+    QMap<int, AttributeValue *> mAttributes;
 };
 
 }
+
+Q_DECLARE_METATYPE(Mana::Character*)
 
 #endif // CHARACTER_H

@@ -21,6 +21,7 @@
 #ifndef ACCOUNTCLIENT_H
 #define ACCOUNTCLIENT_H
 
+#include "character.h"
 #include "enetclient.h"
 
 #include <QMap>
@@ -28,22 +29,6 @@
 namespace Mana {
 
 class CharacterListModel;
-
-struct AttributeValue {
-    double base;
-    double modified;
-};
-
-class CharacterInfo
-{
-public:
-    QString name;
-    int level;
-    int slot;
-
-    typedef QMap<unsigned, AttributeValue > AttributeMap;
-    AttributeMap attributes;
-};
 
 /**
  * The account client allows interacting with the account server.
@@ -74,6 +59,7 @@ class AccountClient : public ENetClient
 
 public:
     AccountClient(QObject *parent = 0);
+    ~AccountClient();
 
     bool registrationAllowed() const { return mRegistrationAllowed; }
     int minimumNameLength() const { return mMinimumNameLength; }
@@ -134,7 +120,8 @@ signals:
     void deleteCharacterSucceeded();
     void deleteCharacterFailed(int error, const QString &errorMessage);
 
-    void characterInfoReceived(const Mana::CharacterInfo &info);
+    void characterInfoReceived(const Mana::Character *info);
+    void dataUrlReceived();
 
     void chooseCharacterSucceeded();
     void chooseCharacterFailed(int error, const QString &errorMessage);
@@ -203,7 +190,7 @@ private:
     QString mPlayerName;
 
     int mMaxCharacters;
-    QList<Mana::CharacterInfo> mCharacters;
+    QList<Mana::Character *> mCharacters;
 
     CharacterListModel *mCharacterListModel;
 
