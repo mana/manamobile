@@ -114,7 +114,19 @@ int main(int argc, char *argv[])
     Mana::NpcDB *npcDB = new Mana::NpcDB(&viewer);
     Mana::RaceDB *raceDB = new Mana::RaceDB(&viewer);
 
+    QStringList arguments = app.arguments();
+    QString customServerListPath = "";
+    for (int i = 1, max = arguments.length(); i < max; ++i) {
+        if (arguments[i] == "--serverlist") {
+            if (i + 1 < max)
+                customServerListPath = arguments[++i];
+            else
+                qWarning() << "Missing argument for --serverlist";
+        }
+    }
+
     QDeclarativeContext *context = viewer.rootContext();
+    context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("resourceManager", resourceManager);
     context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);
