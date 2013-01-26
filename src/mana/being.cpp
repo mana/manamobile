@@ -27,14 +27,12 @@
 
 using namespace Mana;
 
-Being::Being(int type, int id, QPointF position)
+Being::Being(int type)
     : mType(type)
-    , mId(id)
+    , mId(0)
     , mWalkSpeed(0.0)
     , mAction(SpriteAction::STAND)
-    , mPosition(position)
     , mDirection(DOWN)
-    , mServerPosition(position)
     , mGender(GENDER_UNSPECIFIED)
 {
     mSpriteList = new SpriteListModel(this);

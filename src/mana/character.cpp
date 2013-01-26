@@ -31,10 +31,28 @@
 
 using namespace Mana;
 
-Character::Character(int id, QPointF position)
-    : Being(OBJECT_CHARACTER, id, position)
+void AttributeValue::setBase(double value)
+{
+    if (mBase != value) {
+        mBase = value;
+        emit baseChanged();
+    }
+}
+
+void AttributeValue::setModified(double value)
+{
+    if (mModified != value) {
+        mModified = value;
+        emit modifiedChanged();
+    }
+}
+
+Character::Character()
+    : Being(OBJECT_CHARACTER)
     , mHairStyle(0)
     , mHairColor(0)
+    , mCharacterSlot(0)
+    , mLevel(0)
 {
     if (!HairDB::instance()->isLoaded())
         connect(HairDB::instance(), SIGNAL(loaded()), SLOT(rebuildSprites()));
@@ -87,6 +105,15 @@ void Character::setHairStyle(int style, int color)
             if (const SpriteReference *sprite = info->sprite(mGender))
                 mSpriteList->setSprite(SLOT_HAIR, sprite);
     }
+}
+
+void Character::setAttribute(int id, double base, double mod)
+{
+    AttributeValue *value = mAttributes.value(id);
+    if (!value)
+        value = new AttributeValue(this);
+    value->setBase(base);
+    value->setModified(mod);
 }
 
 void Character::setGender(BeingGender gender)

@@ -42,6 +42,11 @@ AccountClient::AccountClient(QObject *parent)
     , mDeleteIndex(-1)
 {}
 
+AccountClient::~AccountClient()
+{
+    qDeleteAll(mCharacters);
+}
+
 void AccountClient::requestRegistrationInfo()
 {
     send(MessageOut(PAMSG_REQUEST_REGISTER_INFO));
@@ -132,25 +137,25 @@ void AccountClient::createCharacter(const QString &name,
 void AccountClient::deleteCharacter(int index)
 {
     SAFE_ASSERT(index >= 0 && index < mCharacters.size(), return);
-    const CharacterInfo &character = mCharacters.at(index);
+    const Character *character = mCharacters.at(index);
 
     mDeleteIndex = index;
 
     MessageOut m(PAMSG_CHAR_DELETE);
-    m.writeInt8(character.slot);
+    m.writeInt8(character->characterSlot());
     send(m);
 }
 
 void AccountClient::chooseCharacter(int index)
 {
     SAFE_ASSERT(index >= 0 && index < mCharacters.size(), return);
-    const CharacterInfo &character = mCharacters.at(index);
+    const Character *character = mCharacters.at(index);
 
     MessageOut m(PAMSG_CHAR_SELECT);
-    m.writeInt8(character.slot);
+    m.writeInt8(character->characterSlot());
     send(m);
 
-    mPendingPlayerName = character.name;
+    mPendingPlayerName = character->name();
 }
 
 void AccountClient::changeEmail(const QString &email)
@@ -302,8 +307,9 @@ void AccountClient::handleCharacterDeleteResponse(MessageIn &message)
     const int error = message.readInt8();
 
     if (error == ERRMSG_OK) {
-        mCharacters.removeAt(mDeleteIndex);
+        Character *ch = mCharacters.takeAt(mDeleteIndex);
         mCharacterListModel->setCharacters(mCharacters);
+        delete ch;
         emit deleteCharacterSucceeded();
     } else {
         // Delete error messages are same as choose character error messages
@@ -315,31 +321,30 @@ void AccountClient::handleCharacterDeleteResponse(MessageIn &message)
 
 void AccountClient::handleCharacterInfo(MessageIn &message)
 {
-    CharacterInfo info;
+    Character *character = new Character;
 
-    info.slot = message.readInt8();
-    info.name = message.readString();
-    message.readInt8(); // gender
-    message.readInt8(); // hair style
-    message.readInt8(); // hair color
-    info.level = message.readInt16();
+    character->setCharacterSlot(message.readInt8());
+    character->setName(message.readString());
+    character->setGender((BeingGender)message.readInt8());
+    character->setHairStyle(message.readInt8(), message.readInt8());
+    character->setLevel(message.readInt16());
     message.readInt16(); // character points
     message.readInt16(); // correction points
 
     while (message.unreadLength() > 0) {
         const unsigned id = message.readInt32();
 
-        AttributeValue value;
-        value.base = message.readInt32() / 256.0;
-        value.modified = message.readInt32() / 256.0;
+        AttributeValue *value = new AttributeValue(character);
+        int base = message.readInt32() / 256.0;
+        int mod = message.readInt32() / 256.0;
 
-        info.attributes.insert(id, value);
+        character->setAttribute(id, base, mod);
     }
 
-    mCharacters.append(info);
+    mCharacters.append(character);
     mCharacterListModel->setCharacters(mCharacters);
 
-    emit characterInfoReceived(info);
+    emit characterInfoReceived(character);
 }
 
 void AccountClient::handleCharacterSelectResponse(MessageIn &message)

@@ -53,7 +53,7 @@ SpriteReference *SpriteReference::readSprite(XmlReader &xml, QObject *parent)
 SpriteDefinition::SpriteDefinition(QObject *parent,
                                    const QString &filePath,
                                    int variant)
-    : Resource(parent)
+    : Resource(filePath, parent)
     , mVariant(variant)
     , mVariantCount(0)
     , mVariantOffset(0)

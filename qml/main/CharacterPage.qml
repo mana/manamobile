@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import Mana 1.0
 
 Item {
     Text {
@@ -44,16 +45,39 @@ Item {
             text: qsTr("Choose your character...")
         }
 
-        ListView {
+        GridView {
             id: characterList;
             focus: window.state == "chooseCharacter";
+            flow: GridView.LeftToRight;
 
             width: window.width * 0.3;
             height: window.height * 0.3;
+
+            clip: true;
+
             model: accountClient.characterListModel;
-            delegate: Text {
-                text: model.name + " (money: " + model.money + ", level: "
-                      + model.level + ")";
+            delegate: Item {
+                id: container;
+                width: 64;
+                height: 64 + name.height;
+
+                CompoundSprite {
+                    id: sprites;
+                    sprites: model.character.spriteListModel;
+                    action: "stand";
+                    direction: 2;
+
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.bottom: parent.bottom;
+                    anchors.bottomMargin: name.height;
+                }
+
+                Text {
+                    id: name;
+                    text: model.character.name;
+                    anchors.bottom: parent.bottom;
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -66,7 +90,8 @@ Item {
             highlight: Rectangle {
                 color: "black";
                 opacity: 0.2;
-                width: characterList.width;
+                width: characterList.currentItem.width;
+                height: characterList.currentItem.height;
             }
 
             onCountChanged: {
@@ -79,6 +104,7 @@ Item {
                 anchors.fill: parent;
                 color: "transparent";
                 border.color: "black";
+                border.width: 1;
             }
         }
     }

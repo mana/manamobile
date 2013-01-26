@@ -26,8 +26,8 @@
 
 using namespace Mana;
 
-NPC::NPC(int id, QPointF position, int spriteId)
-    : Being(OBJECT_NPC, id, position)
+NPC::NPC(int spriteId)
+    : Being(OBJECT_NPC)
     , mSpriteId(spriteId)
 {
     if (NpcDB::instance()->isLoaded()) {

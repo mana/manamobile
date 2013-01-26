@@ -69,10 +69,13 @@ public:
         OBJECT_OTHER
     };
 
-    Being(int type, int id, QPointF position);
+    Being(int type);
 
     int type() const { return mType; }
+
     int id() const { return mId; }
+    void setId(int value) { mId = value; }
+
     int x() const { return mPosition.x(); }
     int y() const { return mPosition.y(); }
 

@@ -183,7 +183,7 @@ Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
         sprite = static_cast<Mana::SpriteDefinition *>(it.value());
     } else {
         sprite = new Mana::SpriteDefinition(this, spritePrefix + path, variant);
-        mResources.insert(path, sprite);
+        mResources.insert(sprite->path(), sprite);
     }
     sprite->incRef();
     return sprite;

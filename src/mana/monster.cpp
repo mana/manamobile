@@ -26,8 +26,8 @@
 
 using namespace Mana;
 
-Monster::Monster(int id, QPointF position, int monsterId)
-    : Being(OBJECT_MONSTER, id, position)
+Monster::Monster(int monsterId)
+    : Being(OBJECT_MONSTER)
     , mMonsterId(monsterId)
 {
     if (MonsterDB::instance()->isLoaded()) {
