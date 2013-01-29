@@ -20,6 +20,7 @@
 
 #include "gameclient.h"
 
+#include "being.h"
 #include "beinglistmodel.h"
 #include "messagein.h"
 #include "messageout.h"
@@ -42,6 +43,11 @@ GameClient::GameClient(QObject *parent)
                      this, SLOT(startedTalkingToNpc(int)));
     QObject::connect(mNpcDialogManager, SIGNAL(nextMessage(int)),
                      this, SLOT(nextNpcTalk(int)));
+
+    QObject::connect(mBeingListModel, SIGNAL(playerWalkDirectionChanged()),
+                     this, SIGNAL(playerWalkDirectionChanged()));
+    QObject::connect(mBeingListModel, SIGNAL(playerPositionChanged()),
+                     this, SLOT(playerPositionChanged()));
 }
 
 GameClient::~GameClient()
@@ -56,6 +62,16 @@ BeingListModel *GameClient::beingListModel() const
 Being *GameClient::player() const
 {
     return mBeingListModel->player();
+}
+
+QPointF GameClient::playerWalkDirection() const
+{
+    return mBeingListModel->playerWalkDirection().toPointF();
+}
+
+void GameClient::setPlayerWalkDirection(QPointF direction)
+{
+    mBeingListModel->setPlayerWalkDirection(QVector2D(direction));
 }
 
 QString GameClient::playerName() const
@@ -154,6 +170,12 @@ void GameClient::messageReceived(MessageIn &message)
                   << message;
         break;
     }
+}
+
+void GameClient::playerPositionChanged()
+{
+    const Being *ch = player();
+    walkTo(ch->x(), ch->y());
 }
 
 void GameClient::handleAuthenticationResponse(MessageIn &message)
