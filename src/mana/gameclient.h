@@ -28,8 +28,10 @@
 
 namespace Mana {
 
+class AttributeListModel;
 class Being;
 class BeingListModel;
+class Character;
 class NpcDialogManager;
 
 /**
@@ -45,11 +47,12 @@ class GameClient : public ENetClient
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
-    Q_PROPERTY(Mana::Being *player READ player NOTIFY playerChanged)
+    Q_PROPERTY(Mana::Character *player READ player NOTIFY playerChanged)
     Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
+    Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
     Q_PROPERTY(Mana::NpcDialogManager *npcDialogManager READ npcDialogManager CONSTANT)
 
 public:
@@ -59,7 +62,7 @@ public:
     bool authenticated() const { return mAuthenticated; }
     QString currentMap() const { return mCurrentMap; }
     BeingListModel *beingListModel() const;
-    Being *player() const;
+    Character *player() const;
 
     QPointF playerWalkDirection() const;
     void setPlayerWalkDirection(QPointF direction);
@@ -71,6 +74,7 @@ public:
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
 
+    AttributeListModel *attributeListModel() const;
     NpcDialogManager *npcDialogManager() const { return mNpcDialogManager; }
 
 signals:
@@ -94,16 +98,25 @@ private slots:
     void playerPositionChanged();
     void doNpcChoice(int npcId, int choice);
 
+    void restoreWalkingSpeed();
+
 private:
     void handleAuthenticationResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
+    void handlePlayerAttributeChange(MessageIn &message);
 
     bool mAuthenticated;
     QString mCurrentMap;
 
+    AttributeListModel *mAttributeListModel;
     BeingListModel *mBeingListModel;
     NpcDialogManager *mNpcDialogManager;
 };
+
+inline AttributeListModel *GameClient::attributeListModel() const
+{
+    return mAttributeListModel;
+}
 
 } // namespace Mana
 

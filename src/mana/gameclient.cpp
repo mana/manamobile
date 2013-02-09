@@ -20,8 +20,10 @@
 
 #include "gameclient.h"
 
+#include "attributelistmodel.h"
 #include "being.h"
 #include "beinglistmodel.h"
+#include "character.h"
 #include "messagein.h"
 #include "messageout.h"
 #include "npcdialogmanager.h"
@@ -34,11 +36,16 @@ namespace Mana {
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
+    , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
     , mNpcDialogManager(new NpcDialogManager(this))
 {
     QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
                      this, SIGNAL(playerChanged()));
+    QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
+                     this, SLOT(restoreWalkingSpeed()));
+
+
     QObject::connect(mNpcDialogManager, SIGNAL(startTalking(int)),
                      this, SLOT(startedTalkingToNpc(int)));
     QObject::connect(mNpcDialogManager, SIGNAL(nextMessage(int)),
@@ -61,7 +68,7 @@ BeingListModel *GameClient::beingListModel() const
     return mBeingListModel;
 }
 
-Being *GameClient::player() const
+Character *GameClient::player() const
 {
     return mBeingListModel->player();
 }
@@ -135,6 +142,16 @@ void GameClient::doNpcChoice(int npcId, int choice)
     send(message);
 }
 
+void GameClient::restoreWalkingSpeed()
+{
+    const AttributeValue *attribute =
+            mAttributeListModel->attribute(ATTR_MOVE_SPEED_TPS);
+    if (attribute && player()) {
+        qreal speed = AttributeListModel::tpsToPixelPerTick(attribute->modified());
+        player()->setWalkSpeed(speed);
+    }
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -175,6 +192,10 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_NPC_CLOSE:
         mNpcDialogManager->handleNpcClose(message);
+        break;
+
+    case GPMSG_PLAYER_ATTRIBUTE_CHANGE:
+        handlePlayerAttributeChange(message);
         break;
 
     case XXMSG_INVALID:
@@ -235,6 +256,20 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
 
     // None of the beings are valid on the new map, including the player
     mBeingListModel->clear();
+}
+
+void GameClient::handlePlayerAttributeChange(MessageIn &message)
+{
+    while (message.unreadLength()) {
+        const int id = message.readInt16();
+        const qreal base = message.readInt32() / 256;
+        const qreal mod = message.readInt32() / 256;
+
+        if (id == ATTR_MOVE_SPEED_TPS)
+            player()->setWalkSpeed(AttributeListModel::tpsToPixelPerTick(base));
+
+        mAttributeListModel->setAttribute(id, base, mod);
+    }
 }
 
 } // namespace Mana

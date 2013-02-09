@@ -58,7 +58,7 @@ public:
     QString playerName() const { return mPlayerName; }
     void setPlayerName(const QString &name) { mPlayerName = name; }
 
-    Being *player() const { return mPlayerBeing; }
+    Character *player() const { return mPlayerCharacter; }
 
     QVector2D playerWalkDirection() const { return mPlayerWalkDirection; }
     void setPlayerWalkDirection(QVector2D direction);
@@ -72,7 +72,6 @@ public:
     void handleBeingSay(MessageIn &message);
 
     void clear();
-
 signals:
     void playerChanged();
     void playerPositionChanged();
@@ -96,7 +95,7 @@ private:
 
     int mBeingUpdateTimer;
     QString mPlayerName;
-    Being *mPlayerBeing;
+    Character *mPlayerCharacter;
     QVector2D mPlayerWalkDirection;
 
     QHash<int, QByteArray> mRoleNames;

@@ -21,6 +21,7 @@
 
 #include "beinglistmodel.h"
 
+#include "attributelistmodel.h"
 #include "being.h"
 #include "character.h"
 #include "messagein.h"
@@ -41,7 +42,7 @@ using namespace Mana;
 
 BeingListModel::BeingListModel(QObject *parent)
     : QAbstractListModel(parent)
-    , mPlayerBeing(0)
+    , mPlayerCharacter(0)
 {
     mRoleNames.insert(BeingRole, "being");
 #if QT_VERSION < 0x050000
@@ -91,22 +92,23 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     BeingGender gender = (BeingGender)message.readInt8();
 
     Being *being;
-    Being *playerBeing = 0;
+    Character *playerCharacter = 0;
 
     if (type == OBJECT_CHARACTER) {
         Character *ch = new Character;
-        ch->setName(message.readString());
+        QString name = message.readString();
+
+        ch->setName(name);
+        ch->setGender(gender);
 
         handleHair(ch, message);
-
-        ch->setGender(gender);
 
         if (message.unreadLength())
             handleLooks(ch, message);
 
         // Match the being by name to see whether it's the current player
         if (ch->name() == mPlayerName)
-            playerBeing = ch;
+            playerCharacter = ch;
 
         being = ch;
     } else if (type == OBJECT_NPC) {
@@ -141,8 +143,8 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     addBeing(being);
 
     // Emit playerChanged after the player has been fully initialized and added
-    if (playerBeing) {
-        mPlayerBeing = playerBeing;
+    if (playerCharacter) {
+        mPlayerCharacter = playerCharacter;
         emit playerChanged();
     }
 }
@@ -151,8 +153,8 @@ void BeingListModel::handleBeingLeave(MessageIn &message)
 {
     const int id = message.readInt16();
 
-    if (mPlayerBeing && mPlayerBeing->id() == id) {
-        mPlayerBeing = 0;
+    if (mPlayerCharacter && mPlayerCharacter->id() == id) {
+        mPlayerCharacter = 0;
         emit playerChanged();
     }
 
@@ -201,9 +203,8 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
              * The being's speed is transfered in tiles per second * 10
              * to keep it transferable in a byte.
              */
-            const qreal pixelsPerSecond = (qreal) speed / 10 * 32;
-            const qreal pixelsPerTimerEvent = pixelsPerSecond * 0.016;
-            being->setWalkSpeed(pixelsPerTimerEvent);
+            const qreal tps = (qreal) speed / 10;
+            being->setWalkSpeed(AttributeListModel::tpsToPixelPerTick(tps));
         }
 
         if (flags & MOVING_DESTINATION) {
@@ -276,8 +277,8 @@ void BeingListModel::handleBeingSay(MessageIn &message)
 void BeingListModel::clear()
 {
     // Reset the player being before it gets deleted
-    if (mPlayerBeing) {
-        mPlayerBeing = 0;
+    if (mPlayerCharacter) {
+        mPlayerCharacter = 0;
         emit playerChanged();
     }
 
@@ -300,11 +301,11 @@ void BeingListModel::timerEvent(QTimerEvent *event)
 
         const QPointF pos = being->position();
 
-        if (being == mPlayerBeing) {
+        if (being == mPlayerCharacter) {
             // Temponary hack since we currently do not know the walkspeed
             // before the being walked once. Remove as soon the attribute system
             // is implemented
-            const qreal walkSpeed = being->walkSpeed() ? being->walkSpeed() : 1;
+            const qreal walkSpeed = being->walkSpeed();
             QVector2D direction = mPlayerWalkDirection;
 
             if (direction.lengthSquared() == 0 || !walkSpeed) {
@@ -315,11 +316,11 @@ void BeingListModel::timerEvent(QTimerEvent *event)
             direction.normalize();
             direction *= walkSpeed;
             QPointF newPos(pos.x() + direction.x(), pos.y() + direction.y());
-            mPlayerBeing->lookAt(newPos);
-            mPlayerBeing->setPosition(newPos);
+            being->lookAt(newPos);
+            being->setPosition(newPos);
 
             emit playerPositionChanged();
-            mPlayerBeing->setAction(SpriteAction::WALK);
+            being->setAction(SpriteAction::WALK);
             continue;
         }
 

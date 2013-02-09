@@ -12,6 +12,7 @@ Item {
         onConnected: requestRegistrationInfo();
         onLoginSucceeded: {
             resourceManager.dataUrl = dataUrl;
+            attributeDB.load();
             hairDB.load();
             itemDB.load();
             monsterDB.load();

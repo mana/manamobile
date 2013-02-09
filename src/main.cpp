@@ -33,6 +33,7 @@
 #include "qmlapplicationviewer.h"
 
 #include "mana/accountclient.h"
+#include "mana/attributelistmodel.h"
 #include "mana/being.h"
 #include "mana/beinglistmodel.h"
 #include "mana/characterlistmodel.h"
@@ -41,6 +42,7 @@
 #include "mana/npcdialogmanager.h"
 #include "mana/spritelistmodel.h"
 
+#include "mana/resource/attributedb.h"
 #include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
 #include "mana/resource/monsterdb.h"
@@ -73,11 +75,15 @@ static void registerTypes()
 
     qmlRegisterType<Mana::NpcDialogManager>("Mana", 1, 0, "NpcDialogManager");
 
-
     qmlRegisterType<Mana::SpriteListModel>();
     qmlRegisterType<const Mana::SpriteReference>();
 
+    qmlRegisterType<Mana::AttributeListModel>();
+    qmlRegisterType<Mana::AttributeInfo>();
+    qmlRegisterType<Mana::AttributeValue>();
+
     qmlRegisterType<ResourceManager>();
+    qmlRegisterType<Mana::AttributeDB>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
     qmlRegisterType<Mana::MonsterDB>();
@@ -114,6 +120,7 @@ int main(int argc, char *argv[])
     viewer.setWindowTitle(app.applicationName());
 
     ResourceManager *resourceManager = new ResourceManager(&viewer);
+    Mana::AttributeDB *attributeDB = new Mana::AttributeDB(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
     Mana::MonsterDB *monsterDB = new Mana::MonsterDB(&viewer);
@@ -134,6 +141,7 @@ int main(int argc, char *argv[])
     QDeclarativeContext *context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("resourceManager", resourceManager);
+    context->setContextProperty("attributeDB", attributeDB);
     context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);
     context->setContextProperty("monsterDB", monsterDB);
