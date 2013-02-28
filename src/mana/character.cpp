@@ -85,7 +85,8 @@ void Character::setEquipmentSlot(int slot, int itemId)
                            << itemId;
                 return;
             }
-            if (SpriteReference *sprite = info->sprite(mGender))
+            QVector<SpriteReference *> sprites = info->sprites(mGender);
+            foreach (SpriteReference *sprite, sprites)
                 mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
         }
     }
@@ -151,7 +152,8 @@ void Character::rebuildSprites()
                            << itemId;
                 continue;
             }
-            if (SpriteReference *sprite = info->sprite(mGender))
+            QVector<SpriteReference *> sprites = info->sprites(mGender);
+            foreach (SpriteReference *sprite, sprites)
                 mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
         }
     }

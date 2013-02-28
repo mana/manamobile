@@ -161,10 +161,10 @@ public:
     int weight() const { return mWeight; }
     void setWeight(int weight) { mWeight = weight; }
 
-    QMap<BeingGender, SpriteReference *> sprites() const
+    QMap<BeingGender, QVector<SpriteReference *> > sprites() const
     { return mSprites; }
 
-    SpriteReference *sprite(BeingGender gender) const
+    QVector<SpriteReference *> sprites(BeingGender gender) const
     {
         if (mSprites.contains(gender))
             return mSprites.value(gender);
@@ -172,8 +172,8 @@ public:
         return mSprites[GENDER_UNSPECIFIED];
     }
 
-    void setSprite(BeingGender gender, SpriteReference *sprite)
-    { mSprites[gender] = sprite; }
+    void addSprite(BeingGender gender, SpriteReference *sprite)
+    { mSprites[gender].append(sprite); }
 
     QString particleFx() const { return mParticleFx; }
     void setParticleFx(const QString &particleFx) { mParticleFx = particleFx; }
@@ -187,7 +187,7 @@ private:
     QStringList mEffects;
     int mWeight;
 
-    QMap<BeingGender, SpriteReference *> mSprites;
+    QMap<BeingGender, QVector<SpriteReference *> > mSprites;
     QString mParticleFx;
 };
 
