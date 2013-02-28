@@ -211,7 +211,7 @@ static ItemInfo *readItem(XmlReader &xml)
                     genderFromString(xml.attributes().value("gender"));
             SpriteReference *sprite = SpriteReference::readSprite(xml, item);
 
-            item->setSprite(gender, sprite);
+            item->addSprite(gender, sprite);
         } else if (xml.name() == "particlefx") {
             item->setParticleFx(xml.readElementText());
         } else if (xml.name() == "sound") {
