@@ -42,6 +42,7 @@ SOURCES += \
     mana/collisionhelper.cpp \
     mana/enetclient.cpp \
     mana/gameclient.cpp \
+    mana/inventorylistmodel.cpp \
     mana/logicdriver.cpp \
     mana/manaplugin.cpp \
     mana/mapitem.cpp \
@@ -100,6 +101,7 @@ HEADERS += \
     mana/collisionhelper.h \
     mana/enetclient.h \
     mana/gameclient.h \
+    mana/inventorylistmodel.h \
     mana/logicdriver.h \
     mana/manaplugin.h \
     mana/mapitem.h \

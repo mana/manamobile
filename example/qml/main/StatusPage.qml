@@ -11,6 +11,7 @@ Rectangle {
     anchors.top: parent.top;
     anchors.bottom: parent.bottom;
 
+
     function toggle() {
         state = state === "closed" ? "open" : "closed";
     }

@@ -11,7 +11,6 @@ ListModel {
                     "http://www.manasource.org/serverlist.json": customServerListPath;
         xhr.open("GET", serverlistPath);
         xhr.onreadystatechange = function() {
-
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 try {
                     var serverlist = JSON.parse(xhr.responseText);

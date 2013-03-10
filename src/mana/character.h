@@ -1,6 +1,6 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2012  Erik Schilling 
+ * Copyright (C) 2012  Erik Schilling
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,7 +39,7 @@ public:
 
     Character();
 
-    void setEquipmentSlot(int slot, int id);
+    void setEquipmentSlots(const QMap<int, int> &equipmentSlots);
 
     QMap<int, int> &equipmentSlots() { return mEquipmentSlots; }
 
@@ -60,14 +60,14 @@ public:
     int level() const { return mLevel; }
 
 signals:
-    void slotUnequipping(int slot);
-    void slotEquipped(int slot, int itemId);
     void hairChanged();
 
 private slots:
     void rebuildSprites();
 
 private:
+    void addItemSprites(int slot, int itemId);
+
     QMap<int, int> mEquipmentSlots;
     int mHairStyle;
     int mHairColor;

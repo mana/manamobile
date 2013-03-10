@@ -23,8 +23,8 @@
 namespace Mana {
 
 enum {
-    PROTOCOL_VERSION = 5,
-    SUPPORTED_DB_VERSION = 24
+    PROTOCOL_VERSION = 6,
+    SUPPORTED_DB_VERSION = 25
 };
 
 /**
@@ -107,10 +107,12 @@ enum {
     PGMSG_DROP                     = 0x0111, // W slot, W amount
     PGMSG_EQUIP                    = 0x0112, // W inventory slot
     PGMSG_UNEQUIP                  = 0x0113, // W item Instance id
-    PGMSG_MOVE_ITEM                = 0x0114, // W slot1, W slot2, W amount
     GPMSG_INVENTORY                = 0x0120, // { W slot, W item id [, W amount] (if item id is nonzero) }*
-    GPMSG_INVENTORY_FULL           = 0x0121, // W inventory slot count { W slot, W itemId, W amount }, { W equip slot, W item Id, W item Instance}*
-    GPMSG_EQUIP                    = 0x0122, // W item Id, W equip slot type count //{ W equip slot, W capacity used}*//<- When equipping, //{ W item instance, W 0}*//<- When unequipping
+    GPMSG_INVENTORY_FULL           = 0x0121, // W inventory slot count { W slot, W itemId, W amount, W equipmentSlot }
+    GPMSG_EQUIP                    = 0x0122, // W equipped inventory slot, W slot equipmentSlot
+    GPMSG_EQUIP_RESPONSE           = 0x0123, // B error, W slot
+    GPMSG_UNEQUIP                  = 0x0124, // W equipped inventory slot
+    GPMSG_UNEQUIP_RESPONE          = 0x0125, // B error, W slot
     GPMSG_PLAYER_ATTRIBUTE_CHANGE  = 0x0130, // { W attribute, D base value (in 1/256ths), D modified value (in 1/256ths)}*
     GPMSG_ATTRIBUTE_POINTS_STATUS  = 0x0140, // W character points, W correction points
     PGMSG_RAISE_ATTRIBUTE          = 0x0160, // W attribute
@@ -124,7 +126,7 @@ enum {
                                              // npc: W type id
     GPMSG_BEING_LEAVE              = 0x0201, // W being id
     GPMSG_ITEM_APPEAR              = 0x0202, // W item id, W*2 position
-    GPMSG_BEING_LOOKS_CHANGE       = 0x0210, // B sprite layers changed, { B slot type, W item id }*
+    GPMSG_BEING_LOOKS_CHANGE       = 0x0210, // B hairstyle, B haircolor, B sprite layers changed, { B slot type, W item id }*
     GPMSG_BEING_EMOTE              = 0x0211, // W being id, W emote id
     PGMSG_BEING_EMOTE              = 0x0212, // W emoticon id
     PGMSG_WALK                     = 0x0260, // W*2 destination
@@ -244,7 +246,7 @@ enum {
     PCMSG_KICK_USER                   = 0x0466, // W channel id, S name
 
     // Inter-server
-    GAMSG_REGISTER              = 0x0500, // S address, W port, S password, D items db revision
+    GAMSG_REGISTER              = 0x0500, // S address, W port, S password, D items db revision, { W map id }*
     AGMSG_REGISTER_RESPONSE     = 0x0501, // W item version, W password response, { S globalvar_key, S globalvar_value }
     AGMSG_ACTIVE_MAP            = 0x0502, // W map id, W Number of mapvar_key mapvar_value sent, { S mapvar_key, S mapvar_value }, W Number of map items, { D item Id, W amount, W posX, W posY }
     AGMSG_PLAYER_ENTER          = 0x0510, // B*32 token, D id, S name, serialised character data

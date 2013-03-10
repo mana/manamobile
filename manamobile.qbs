@@ -13,30 +13,17 @@ Project {
                 "quick",
             ]
         }
-
-        Depends { name: "cpp" }
-
         Group {
             name: "Binaries"
             qbs.install: true
-            qbs.installDir: "bin/qml/Mana/"
-            fileTagsFilter: "dynamiclibrary"
+            qbs.installDir: "bin"
+            fileTagsFilter: "application"
         }
 
         Group {
-            name: "qmldir"
-            qbs.install: true
-            qbs.installDir: "bin/qml/Mana/"
+            name: "Manamobile C++ code"
             files: [
-                "qmldir",
-                "ServerListModel.qml",
-            ]
-            prefix: "src/mana/qml/Mana/"
-        }
-
-        Group {
-            name: "C++ QML elements"
-            files: [
+                "main.cpp",
                 "mana/abilitylistmodel.cpp",
                 "mana/abilitylistmodel.h",
                 "mana/accountclient.cpp",
@@ -59,6 +46,8 @@ Project {
                 "mana/enetclient.h",
                 "mana/gameclient.cpp",
                 "mana/gameclient.h",
+                "mana/inventorylistmodel.cpp",
+                "mana/inventorylistmodel.h",
                 "mana/logicdriver.cpp",
                 "mana/logicdriver.h",
                 "mana/manaplugin.cpp",

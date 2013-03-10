@@ -1,6 +1,6 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2011  Jared Adams 
+ * Copyright (C) 2011  Jared Adams
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,7 +41,9 @@ class ItemDB : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QList<const ItemInfo*> items READ items NOTIFY itemsChanged)
+    Q_PROPERTY(QList<Mana::ItemInfo*> items READ items NOTIFY itemsChanged)
+
+    Q_PROPERTY(bool isLoaded READ isLoaded NOTIFY itemsChanged)
 
 public:
     class Stat
@@ -63,11 +65,11 @@ public:
     Q_INVOKABLE void unload();
     bool isLoaded() const { return mLoaded; }
 
-    Q_INVOKABLE const ItemInfo *getInfo(int id) const;
+    Q_INVOKABLE Mana::ItemInfo *getInfo(int id) const;
 
     void setStatsList(QList<Stat> stats);
 
-    QList<const ItemInfo*> items() const;
+    QList<Mana::ItemInfo*> items() const;
 
     static ItemDB *instance() { return mInstance; }
 
@@ -82,12 +84,12 @@ private:
     static ItemDB *mInstance;
     static SpriteReference *readSprite(XmlReader &xml, QObject *parent);
 
-    ~ItemDB() { unload(); }
+    ItemInfo *readItem(XmlReader &xml);
 
     QNetworkReply *mReply;
     bool mLoaded;
     QList<Stat> mExtraStats;
-    QMap<int, const ItemInfo *> mItems;
+    QMap<int, ItemInfo *> mItems;
 };
 
 class ItemInfo : public QObject
@@ -96,6 +98,7 @@ class ItemInfo : public QObject
 
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(ItemInfo::Type type READ type CONSTANT)
+    Q_PROPERTY(QString image READ image CONSTANT)
     Q_PROPERTY(SpriteDisplay display READ display CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString description READ description CONSTANT)
@@ -140,7 +143,10 @@ public:
     void setType(Type type) { mType = type; }
 
     SpriteDisplay display() const { return mDisplay; }
-    void setDisplay(const SpriteDisplay &display) { mDisplay = display; }
+    void setDisplay(SpriteDisplay display) { mDisplay = display; }
+
+    QString image() const { return mImage; }
+    void setImage(QString image) { mImage = image; }
 
     QString name() const { return mName; }
     void setName(const QString &name) { mName = name; }
@@ -174,7 +180,8 @@ public:
 private:
     int mId;
     Type mType;
-    SpriteDisplay mDisplay; // Icon
+    SpriteDisplay mDisplay;
+    QString mImage;
     QString mName;
     QString mDescription;
     QStringList mEffects;
@@ -185,5 +192,7 @@ private:
 };
 
 } // namespace Mana
+
+Q_DECLARE_METATYPE(Mana::ItemInfo *)
 
 #endif // ITEMDB_H

@@ -1,6 +1,6 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2012  Erik Schilling 
+ * Copyright (C) 2012  Erik Schilling
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,33 +44,53 @@ Character::Character()
         connect(ItemDB::instance(), SIGNAL(loaded()), SLOT(rebuildSprites()));
 }
 
-void Character::setEquipmentSlot(int slot, int itemId)
+void Character::addItemSprites(int slot, int itemId)
 {
-    if (mEquipmentSlots.value(slot) == itemId)
+    const ItemInfo *info = ItemDB::instance()->getInfo(itemId);
+    if (!info) {
+        qWarning() << "Trying to add unknown item";
         return;
-
-    QMap<int, int>::iterator it = mEquipmentSlots.find(slot);
-    if (it != mEquipmentSlots.end()) {
-        emit slotUnequipping(slot);
-        it = mEquipmentSlots.erase(it);
-        mSpriteList->removeSprite(SLOT_EQUIPMENT + slot);
     }
 
-    if (itemId) {
-        mEquipmentSlots[slot] = itemId;
-        emit slotEquipped(slot, itemId);
+    foreach (SpriteReference *spriteRef, info->sprites(mGender))
+        mSpriteList->addSprite(SLOT_EQUIPMENT + slot, spriteRef);
+}
 
-        if (ItemDB::instance()->isLoaded()) {
-            const ItemInfo *info = ItemDB::instance()->getInfo(itemId);
-            if (!info) {
-                qWarning() << Q_FUNC_INFO << "Tried to equip unknown item "
-                           << itemId;
-                return;
+void Character::setEquipmentSlots(const QMap<int, int> &equipmentSlots)
+{
+    QMap<int, int> newEquipmentSlots(equipmentSlots);
+
+    QMap<int, int>::iterator currentItemIt = mEquipmentSlots.begin();
+    while (currentItemIt != mEquipmentSlots.end())
+    {
+        int slot = currentItemIt.key();
+
+        QMap<int, int>::iterator newItemIt = newEquipmentSlots.find(slot);
+        if (newItemIt == newEquipmentSlots.end()) {
+            currentItemIt = mEquipmentSlots.erase(currentItemIt);
+            mSpriteList->removeSprite(SLOT_EQUIPMENT + slot);
+        } else {
+            int oldItemId = currentItemIt.value();
+            int newItemId = newItemIt.value();
+            if (oldItemId != newItemId) {
+                mSpriteList->removeSprite(SLOT_EQUIPMENT + slot);
+
+                currentItemIt.value() = newItemId;
+                addItemSprites(slot, newItemId);
             }
-            QVector<SpriteReference *> sprites = info->sprites(mGender);
-            foreach (SpriteReference *sprite, sprites)
-                mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
+            newEquipmentSlots.remove(slot);
+
+            ++currentItemIt;
         }
+    }
+
+    for (QMap<int, int>::iterator it = newEquipmentSlots.begin(),
+         it_end = newEquipmentSlots.end(); it != it_end; ++it)
+    {
+        int slot = it.key();
+        int itemId = it.value();
+        mEquipmentSlots.insert(slot, itemId);
+        addItemSprites(slot, itemId);
     }
 }
 

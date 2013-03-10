@@ -13,7 +13,7 @@ Item {
     Item {
         anchors.top: parent.top;
         anchors.left: statusPage.right;
-        anchors.right: parent.right;
+        anchors.right: inventoryPage.left;
         anchors.bottom: parent.bottom;
 
         Viewport {
@@ -107,12 +107,17 @@ Item {
 
         if (pressed && event.key === Qt.Key_C)
             statusPage.toggle();
+
+        if (pressed && event.key == Qt.Key_I)
+            inventoryPage.toggle();
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
     Keys.onPressed: handleKeyEvent(event, true);
 
     StatusPage { id: statusPage; }
+
+    InventoryPage { id: inventoryPage; }
 
     Joystick {
         id: joystick;

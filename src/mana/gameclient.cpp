@@ -24,6 +24,7 @@
 #include "beinglistmodel.h"
 #include "character.h"
 #include "collisionhelper.h"
+#include "inventorylistmodel.h"
 #include "logicdriver.h"
 #include "messagein.h"
 #include "messageout.h"
@@ -50,9 +51,10 @@ GameClient::GameClient(QObject *parent)
     , mPlayerCharacter(0)
     , mNpcState(NoNpc)
     , mNpc(0)
-    , mBeingListModel(new BeingListModel(this))
     , mAbilityListModel(new AbilityListModel(this))
     , mAttributeListModel(new AttributeListModel(this))
+    , mBeingListModel(new BeingListModel(this))
+    , mInventoryListModel(new InventoryListModel(this))
     , mLogicDriver(new LogicDriver(this))
 {
     QObject::connect(mLogicDriver, SIGNAL(update(qreal)),
@@ -161,6 +163,20 @@ void GameClient::useAbility(unsigned id, int x, int y)
     send(message);
 }
 
+void GameClient::equip(unsigned slot)
+{
+    MessageOut message(PGMSG_EQUIP);
+    message.writeInt16(slot);
+    send(message);
+}
+
+void GameClient::unequip(unsigned slot)
+{
+    MessageOut message(PGMSG_UNEQUIP);
+    message.writeInt16(slot);
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -169,6 +185,19 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
+        break;
+
+    case GPMSG_INVENTORY:
+        handleInventory(message);
+        break;
+    case GPMSG_INVENTORY_FULL:
+        handleInventoryFull(message);
+        break;
+    case GPMSG_EQUIP:
+        handleEquip(message);
+        break;
+    case GPMSG_UNEQUIP:
+        handleUnEquip(message);
         break;
 
     case GPMSG_BEING_ENTER:
@@ -380,24 +409,32 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     emit mapChanged(mCurrentMap, mPlayerStartX, mPlayerStartY);
 }
 
-static void handleLooks(Character *ch, MessageIn &message)
-{
-    int numberOfChanges = message.readInt8();
-
-    while (numberOfChanges-- > 0) {
-        int slot = message.readInt8();
-        int itemId = message.readInt16();
-
-        ch->setEquipmentSlot(slot, itemId);
-    }
-}
-
 static void handleHair(Character *ch, MessageIn &message)
 {
     int hairstyle = message.readInt8();
     int haircolor = message.readInt8();
 
     ch->setHairStyle(hairstyle, haircolor);
+}
+
+static void handleLooks(Character *ch, MessageIn &message)
+{
+    handleHair(ch, message);
+
+    if (!message.unreadData())
+        return;
+
+    int numberOfChanges = message.readInt8();
+
+    QMap<int, int> equippedSlots;
+
+    while (numberOfChanges-- > 0) {
+        int slot = message.readInt8();
+        int itemId = message.readInt16();
+
+        equippedSlots[slot] = itemId;
+    }
+    ch->setEquipmentSlots(equippedSlots);
 }
 
 void GameClient::handleBeingEnter(MessageIn &message)
@@ -420,10 +457,7 @@ void GameClient::handleBeingEnter(MessageIn &message)
         ch->setName(name);
         ch->setGender(gender);
 
-        handleHair(ch, message);
-
-        if (message.unreadData())
-            handleLooks(ch, message);
+        handleLooks(ch, message);
 
         // Match the being by name to see whether it's the current player
         if (ch->name() == mPlayerName)
@@ -541,10 +575,6 @@ void GameClient::handleBeingLooksChange(MessageIn &message)
         SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);
         Character *ch = static_cast<Character *>(being);
         handleLooks(ch, message);
-
-        // Further data is hair (if available)
-        if (message.unreadData())
-            handleHair(ch, message);
     }
 }
 
@@ -688,5 +718,45 @@ void GameClient::handlePlayerAttributeChange(MessageIn &message)
         mAttributeListModel->setAttribute(id, base, mod);
     }
 }
+
+void GameClient::handleInventory(MessageIn &message)
+{
+    while (message.unreadData()) {
+        unsigned slot = message.readInt16();
+        int id = message.readInt16(); // 0 id means removal of slot
+        unsigned amount = id ? message.readInt16() : 0;
+        unsigned equipmentSlot = id ? message.readInt16() : 0;
+
+        mInventoryListModel->setItemSlot(slot, id, amount, equipmentSlot);
+    }
+}
+
+void GameClient::handleInventoryFull(MessageIn &message)
+{
+    mInventoryListModel->removeAllItems();
+
+    int count = message.readInt16();
+    while (count--) {
+        int slot = message.readInt16();
+        int id = message.readInt16();
+        int amount = message.readInt16();
+        int equipmentSlot = message.readInt16();
+        mInventoryListModel->setItemSlot(slot, id, amount, equipmentSlot);
+    }
+}
+
+void GameClient::handleEquip(MessageIn &message)
+{
+    const unsigned inventorySlot = message.readInt16();
+    const unsigned equipmentSlot = message.readInt16();
+    mInventoryListModel->equip(inventorySlot, equipmentSlot);
+}
+
+void GameClient::handleUnEquip(MessageIn &message)
+{
+    const unsigned slot = message.readInt16();
+    mInventoryListModel->unequip(slot);
+}
+
 
 } // namespace Mana

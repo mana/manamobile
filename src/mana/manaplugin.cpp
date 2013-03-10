@@ -26,6 +26,7 @@
 #include "chatclient.h"
 #include "enetclient.h"
 #include "gameclient.h"
+#include "inventorylistmodel.h"
 #include "mapitem.h"
 #include "resourcelistmodel.h"
 #include "resourcemanager.h"
@@ -106,6 +107,8 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::AttributeInfo>();
     qmlRegisterType<Mana::AttributeValue>();
 
+    qmlRegisterType<Mana::InventoryListModel>();
+
     qmlRegisterType<Mana::ResourceManager>();
     qmlRegisterUncreatableType<Mana::Resource>(uri, 1, 0, "Resource",
                                                "Base of all resources");
@@ -116,6 +119,7 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::AttributeDB>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
+    qmlRegisterType<Mana::ItemInstance>();
     qmlRegisterType<Mana::MonsterDB>();
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();

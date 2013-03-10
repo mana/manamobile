@@ -42,6 +42,7 @@ class ResourceManager : public QObject
 
     Q_PROPERTY(QString dataUrl READ dataUrl WRITE setDataUrl NOTIFY dataUrlChanged)
     Q_PROPERTY(bool pathsLoaded READ pathsLoaded NOTIFY pathsLoadedChanged)
+    Q_PROPERTY(QString itemIconsPrefix READ itemIconsPrefix NOTIFY pathsLoadedChanged)
 
     Q_PROPERTY(Mana::ResourceListModel *resourceListModel READ resourceListModel CONSTANT)
 
@@ -64,6 +65,7 @@ public:
 
     QString path(const QString &key, const QString &value = QString()) const;
     QString spritePath() const;
+    QString itemIconsPrefix() const;
 
     QUrl resolve(const QString &path) const;
 
@@ -123,6 +125,9 @@ inline QString ResourceManager::path(const QString &key,
 
 inline QString ResourceManager::spritePath() const
 { return path("sprites", "graphics/sprites/"); }
+
+inline QString ResourceManager::itemIconsPrefix() const
+{ return path("itemIcons", "graphics/items/"); }
 
 /**
  * Returns the URL for the resource located at \a path, relative from the

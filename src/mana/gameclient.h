@@ -1,6 +1,6 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2010  Thorbjørn Lindeijer 
+ * Copyright (C) 2010  Thorbjørn Lindeijer
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,6 +32,7 @@ class AttributeListModel;
 class Being;
 class BeingListModel;
 class Character;
+class InventoryListModel;
 class LogicDriver;
 class MapResource;
 class NPC;
@@ -51,7 +52,6 @@ class GameClient : public ENetClient
     Q_PROPERTY(Mana::MapResource *currentMapResource READ currentMapResource NOTIFY mapChanged)
     Q_PROPERTY(int playerStartX READ playerStartX NOTIFY mapChanged)
     Q_PROPERTY(int playerStartY READ playerStartY NOTIFY mapChanged)
-    Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
     Q_PROPERTY(Mana::Character *player READ player NOTIFY playerChanged)
     Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
 
@@ -64,6 +64,8 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(Mana::AbilityListModel *abilityListModel READ abilityListModel CONSTANT)
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
+    Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
+    Q_PROPERTY(Mana::InventoryListModel *inventoryListModel READ inventoryListModel CONSTANT)
 
     Q_ENUMS(NpcState)
 
@@ -107,9 +109,13 @@ public:
 
     Q_INVOKABLE void useAbility(unsigned id, int x, int y);
 
-    BeingListModel *beingListModel() const;
     AbilityListModel *abilityListModel() const;
     AttributeListModel *attributeListModel() const;
+    BeingListModel *beingListModel() const;
+    InventoryListModel *inventoryListModel() const;
+
+    Q_INVOKABLE void equip(unsigned slot);
+    Q_INVOKABLE void unequip(unsigned slot);
 
 signals:
     void authenticationFailed(const QString &errorMessage);
@@ -161,6 +167,11 @@ private:
 
     void handlePlayerAttributeChange(MessageIn &message);
 
+    void handleInventory(MessageIn &message);
+    void handleInventoryFull(MessageIn &message);
+    void handleEquip(MessageIn &message);
+    void handleUnEquip(MessageIn &message);
+
     bool mAuthenticated;
     QString mCurrentMap;
     MapResource *mMapResource;
@@ -176,17 +187,13 @@ private:
     QStringList mNpcChoices;
     NPC *mNpc;
 
-    BeingListModel *mBeingListModel;
     AbilityListModel *mAbilityListModel;
     AttributeListModel *mAttributeListModel;
+    BeingListModel *mBeingListModel;
+    InventoryListModel *mInventoryListModel;
     LogicDriver *mLogicDriver;
 };
 
-
-inline BeingListModel *GameClient::beingListModel() const
-{
-    return mBeingListModel;
-}
 
 inline AbilityListModel *GameClient::abilityListModel() const
 {
@@ -196,6 +203,15 @@ inline AbilityListModel *GameClient::abilityListModel() const
 inline AttributeListModel *GameClient::attributeListModel() const
 {
     return mAttributeListModel;
+}
+inline BeingListModel *GameClient::beingListModel() const
+{
+    return mBeingListModel;
+}
+
+inline InventoryListModel *GameClient::inventoryListModel() const
+{
+    return mInventoryListModel;
 }
 
 } // namespace Mana
