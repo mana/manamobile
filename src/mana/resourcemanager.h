@@ -43,6 +43,7 @@ class ResourceManager : public QObject
 
     Q_PROPERTY(QString dataUrl READ dataUrl WRITE setDataUrl NOTIFY dataUrlChanged)
     Q_PROPERTY(bool pathsLoaded READ pathsLoaded NOTIFY pathsLoadedChanged)
+    Q_PROPERTY(QString itemIconsPrefix READ itemIconsPrefix NOTIFY pathsLoadedChanged)
 
     Q_PROPERTY(Mana::ResourceListModel *resourceListModel READ resourceListModel CONSTANT)
 
@@ -65,6 +66,8 @@ public:
 
     QString path(const QString &key, const QString &value = QString()) const;
     QString spritePath() const;
+    QString itemIconsPrefix() const
+    { return path("itemIcons", "graphics/items/"); }
 
     QUrl resolve(const QString &path) const;
 

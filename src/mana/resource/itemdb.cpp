@@ -43,7 +43,7 @@ void ItemDB::setStatsList(QList<Stat> stats)
     mExtraStats = stats;
 }
 
-QList<const ItemInfo*> ItemDB::items() const
+QList<ItemInfo*> ItemDB::items() const
 {
     return mItems.values();
 }
@@ -107,7 +107,7 @@ void ItemDB::unload()
     emit itemsChanged();
 }
 
-const ItemInfo *ItemDB::getInfo(int id) const
+ItemInfo *ItemDB::getInfo(int id) const
 {
     return mItems.value(id);
 }
@@ -177,7 +177,7 @@ static ItemInfo *readItem(XmlReader &xml)
     item->setWeight(attr.value("weight").toString().toInt());
 
     SpriteDisplay display;
-    display.image = attr.value("image").toString();
+    item->setImage(attr.value("image").toString());
 
     if (item->name().isEmpty())
         item->setName("unnamed");

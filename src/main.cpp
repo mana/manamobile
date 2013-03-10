@@ -33,6 +33,7 @@
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
+#include "mana/inventorylistmodel.h"
 #include "mana/mapitem.h"
 #include "mana/npcdialogmanager.h"
 #include "mana/resourcelistmodel.h"
@@ -88,6 +89,9 @@ static void registerTypes()
     qmlRegisterType<Mana::RaceDB>();
 
     qmlRegisterType<Mana::MapItem>("Mana", 1, 0, "TileMap");
+
+    qmlRegisterType<Mana::InventoryListModel>();
+    qmlRegisterType<Mana::ItemInstance>();
 }
 
 int main(int argc, char *argv[])

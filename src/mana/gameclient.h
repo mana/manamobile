@@ -32,6 +32,7 @@ class AttributeListModel;
 class Being;
 class BeingListModel;
 class Character;
+class InventoryListModel;
 class NpcDialogManager;
 
 /**
@@ -47,6 +48,7 @@ class GameClient : public ENetClient
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
+    Q_PROPERTY(Mana::InventoryListModel *inventoryListModel READ inventoryListModel CONSTANT)
     Q_PROPERTY(Mana::Character *player READ player NOTIFY playerChanged)
     Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
 
@@ -62,6 +64,7 @@ public:
     bool authenticated() const { return mAuthenticated; }
     QString currentMap() const { return mCurrentMap; }
     BeingListModel *beingListModel() const;
+    InventoryListModel *inventoryListModel() const;
     Character *player() const;
 
     QPointF playerWalkDirection() const;
@@ -76,6 +79,9 @@ public:
 
     AttributeListModel *attributeListModel() const;
     NpcDialogManager *npcDialogManager() const { return mNpcDialogManager; }
+
+    Q_INVOKABLE void equip(unsigned slot);
+    Q_INVOKABLE void unequip(unsigned slot);
 
 signals:
     void authenticationFailed(const QString &errorMessage);
@@ -110,6 +116,7 @@ private:
 
     AttributeListModel *mAttributeListModel;
     BeingListModel *mBeingListModel;
+    InventoryListModel *mInventoryListModel;
     NpcDialogManager *mNpcDialogManager;
 };
 

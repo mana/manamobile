@@ -102,10 +102,8 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
         ch->setName(name);
         ch->setGender(gender);
 
-        handleHair(ch, message);
+        handleLooks(ch, message);
 
-        if (message.unreadLength())
-            handleLooks(ch, message);
 
         // Match the being by name to see whether it's the current player
         if (ch->name() == mPlayerName)
@@ -217,14 +215,20 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
 
 void BeingListModel::handleLooks(Character *ch, MessageIn &message)
 {
-    int numberOfChanges = message.readInt8();
+    handleHair(ch, message);
+
+    int numberOfChanges = message.unreadLength() == 0 ? 0 : message.readInt8();
+
+    QMap<int, int> equipmentSlots;
 
     while (numberOfChanges-- > 0) {
         int slot = message.readInt8();
         int itemId = message.readInt16();
 
-        ch->setEquipmentSlot(slot, itemId);
+        equipmentSlots[slot] = itemId;
     }
+
+    ch->setEquipmentSlots(equipmentSlots);
 }
 
 void BeingListModel::handleHair(Character *ch, MessageIn &message)
@@ -243,10 +247,6 @@ void BeingListModel::handleBeingLooksChange(MessageIn &message)
         SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);
         Character *ch = static_cast<Character *>(being);
         handleLooks(ch, message);
-
-        // Further data is hair (if available)
-        if (message.unreadLength())
-            handleHair(ch, message);
     }
 }
 

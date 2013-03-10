@@ -46,32 +46,58 @@ Character::Character()
         connect(ItemDB::instance(), SIGNAL(loaded()), SLOT(rebuildSprites()));
 }
 
-void Character::setEquipmentSlot(int slot, int itemId)
+void Character::setEquipmentSlots(const QMap<int, int> &equipmentSlots)
 {
-    if (mEquipmentSlots.value(slot) == itemId)
-        return;
+    QMap<int, int> toInsert(equipmentSlots);
 
-    QMap<int, int>::iterator it = mEquipmentSlots.find(slot);
-    if (it != mEquipmentSlots.end()) {
-        emit slotUnequipping(slot);
-        it = mEquipmentSlots.erase(it);
-        mSpriteList->removeSprite(SLOT_EQUIPMENT + slot);
+    // Delete old entries and update existing ones if needed
+    for (QMap<int, int>::iterator it = mEquipmentSlots.begin(),
+         it_end = mEquipmentSlots.end(); it != it_end;) {
+        QMap<int, int>::iterator slotIt = toInsert.find(it.key());
+        qDebug() << it.key();
+        if (slotIt == toInsert.end()) {
+            qDebug() << "a" << it.key();
+            mSpriteList->removeSprite(SLOT_EQUIPMENT + it.key());
+            Q_ASSERT(it != mEquipmentSlots.end());
+            it = mEquipmentSlots.erase(it);
+            continue;
+        }
+        if (it.key() != slotIt.key()) {
+            mSpriteList->removeSprite(SLOT_EQUIPMENT + it.key());
+            mEquipmentSlots[it.key()] = slotIt.value();
+
+            slotIt = toInsert.erase(slotIt);
+
+            if (ItemDB::instance()->isLoaded()) {
+                ItemDB *itemDB = ItemDB::instance();
+                const ItemInfo *info = itemDB->getInfo(slotIt.value());
+                if (!info) {
+                    qWarning() << Q_FUNC_INFO << "Tried to equip unknown item "
+                               << slotIt.value();
+                    return;
+                }
+                foreach (SpriteReference *sprite, info->sprites(mGender))
+                    mSpriteList->addSprite(SLOT_EQUIPMENT + it.key(), sprite);
+            }
+        }
+        ++it;
     }
 
-    if (itemId) {
-        mEquipmentSlots[slot] = itemId;
-        emit slotEquipped(slot, itemId);
+    // Insert remaining ones
+    for (QMap<int, int>::iterator it = toInsert.begin(),
+         it_end = toInsert.end(); it != it_end; ++it) {
+        mEquipmentSlots[it.key()] = it.value();
 
         if (ItemDB::instance()->isLoaded()) {
-            const ItemInfo *info = ItemDB::instance()->getInfo(itemId);
+            const ItemInfo *info = ItemDB::instance()->getInfo(it.value());
             if (!info) {
                 qWarning() << Q_FUNC_INFO << "Tried to equip unknown item "
-                           << itemId;
+                           << it.value();
                 return;
             }
             QVector<SpriteReference *> sprites = info->sprites(mGender);
             foreach (SpriteReference *sprite, sprites)
-                mSpriteList->addSprite(SLOT_EQUIPMENT + slot, sprite);
+                mSpriteList->addSprite(SLOT_EQUIPMENT + it.key(), sprite);
         }
     }
 }

@@ -82,6 +82,9 @@ Item {
 
         if (pressed && event.key == Qt.Key_C)
             gamePage.state = "status";
+
+        if (pressed && event.key == Qt.Key_I)
+            gamePage.state = "inventory";
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
@@ -159,6 +162,12 @@ Item {
         visible: false;
     }
 
+    Inventory {
+        id: inventoryPage
+        anchors.fill: parent;
+        visible: false;
+    }
+
     states: [
         State {
             name: "game";
@@ -166,16 +175,19 @@ Item {
                 target: gamePage;
                 focus: true;
             }
-            PropertyChanges {
-                target: statusPage;
-                focus: false;
-                opacity: 0;
-            }
         },
         State {
             name: "status";
             PropertyChanges {
                 target: statusPage;
+                focus: true;
+                opacity: 1;
+            }
+        },
+        State {
+            name: "inventory";
+            PropertyChanges {
+                target: inventoryPage;
                 focus: true;
                 visible: true;
                 opacity: 1;

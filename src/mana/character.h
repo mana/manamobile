@@ -38,7 +38,7 @@ public:
 
     Character();
 
-    void setEquipmentSlot(int slot, int id);
+    void setEquipmentSlots(const QMap<int, int> &equipmentSlots);
 
     QMap<int, int> &equipmentSlots() { return mEquipmentSlots; }
 
@@ -55,8 +55,6 @@ public:
     int level() const { return mLevel; }
 
 signals:
-    void slotUnequipping(int slot);
-    void slotEquipped(int slot, int itemId);
     void hairChanged();
 
 private slots:
