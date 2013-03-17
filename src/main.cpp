@@ -38,6 +38,7 @@
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
+#include "mana/npcdialogmanager.h"
 #include "mana/spritelistmodel.h"
 
 #include "mana/resource/hairdb.h"
@@ -66,6 +67,8 @@ static void registerTypes()
                                             "Managed on C++ side");
     qmlRegisterUncreatableType<Mana::Character>("Mana", 1, 0, "Character",
                                                 "Managed on C++ side");
+
+    qmlRegisterType<Mana::NpcDialogManager>("Mana", 1, 0, "NpcDialogManager");
 
 
     qmlRegisterType<Mana::SpriteListModel>();
