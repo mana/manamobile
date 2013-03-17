@@ -95,7 +95,8 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tilelayer.cpp \
     src/tiled/tileset.cpp \
-    src/tilelayeritem.cpp
+    src/tilelayeritem.cpp \
+    src/mana/npcdialogmanager.cpp
 
 HEADERS += \
     src/durationlogger.h \
@@ -153,7 +154,8 @@ HEADERS += \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
     src/tiled/tileset.h \
-    src/tilelayeritem.h
+    src/tilelayeritem.h \
+    src/mana/npcdialogmanager.h
 
 
 # Please do not modify the following two lines. Required for deployment.
