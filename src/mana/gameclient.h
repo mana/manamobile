@@ -27,6 +27,7 @@ namespace Mana {
 
 class Being;
 class BeingListModel;
+class NpcDialogManager;
 
 /**
  * The game client allows interacting with the game server.
@@ -45,6 +46,8 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
+    Q_PROPERTY(Mana::NpcDialogManager *npcDialogManager READ npcDialogManager CONSTANT)
+
 public:
     GameClient(QObject *parent = 0);
     ~GameClient();
@@ -61,6 +64,8 @@ public:
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
 
+    NpcDialogManager *npcDialogManager() const { return mNpcDialogManager; }
+
 signals:
     void authenticationFailed(const QString &errorMessage);
 
@@ -75,6 +80,10 @@ signals:
 protected:
     void messageReceived(MessageIn &message);
 
+private slots:
+    void startedTalkingToNpc(int npcId);
+    void nextNpcTalk(int npcId);
+
 private:
     void handleAuthenticationResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
@@ -83,6 +92,7 @@ private:
     QString mCurrentMap;
 
     BeingListModel *mBeingListModel;
+    NpcDialogManager *mNpcDialogManager;
 };
 
 } // namespace Mana

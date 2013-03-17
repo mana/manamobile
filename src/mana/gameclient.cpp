@@ -23,6 +23,7 @@
 #include "beinglistmodel.h"
 #include "messagein.h"
 #include "messageout.h"
+#include "npcdialogmanager.h"
 #include "protocol.h"
 
 #include <iostream>
@@ -33,9 +34,14 @@ GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
     , mBeingListModel(new BeingListModel(this))
+    , mNpcDialogManager(new NpcDialogManager(this))
 {
     QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
                      this, SIGNAL(playerChanged()));
+    QObject::connect(mNpcDialogManager, SIGNAL(startTalking(int)),
+                     this, SLOT(startedTalkingToNpc(int)));
+    QObject::connect(mNpcDialogManager, SIGNAL(nextMessage(int)),
+                     this, SLOT(nextNpcTalk(int)));
 }
 
 GameClient::~GameClient()
@@ -89,6 +95,20 @@ void GameClient::say(const QString &text)
     send(message);
 }
 
+void GameClient::startedTalkingToNpc(int npcId)
+{
+    MessageOut message(PGMSG_NPC_TALK);
+    message.writeInt16(npcId);
+    send(message);
+}
+
+void GameClient::nextNpcTalk(int npcId)
+{
+    MessageOut message(PGMSG_NPC_TALK_NEXT);
+    message.writeInt16(npcId);
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -118,6 +138,12 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_SAY:
         mBeingListModel->handleBeingSay(message);
+        break;
+    case GPMSG_NPC_MESSAGE:
+        mNpcDialogManager->handleNpcMessage(message);
+        break;
+    case GPMSG_NPC_CLOSE:
+        mNpcDialogManager->handleNpcClose(message);
         break;
     case XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "

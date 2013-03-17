@@ -115,6 +115,20 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: model.being.name;
                 }
+
+                MouseArea {
+                    width: 64;
+                    height: 64;
+
+                    anchors.bottom: parent.bottom;
+                    anchors.horizontalCenter: parent.horizontalCenter;
+
+                    onClicked: {
+                        if (model.being.type == Being.OBJECT_NPC) {
+                            gameClient.npcDialogManager.startTalkingTo(model.being);
+                        }
+                    }
+                }
             }
         }
     }
@@ -142,6 +156,14 @@ Rectangle {
             chatBar.open();
             chatInput.text += event.text;
         }
+    }
+
+    NpcDialog {
+        id: npcDialog;
+        width: parent.width / 2;
+        height: 100;
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom;
     }
 
     FocusScope {
