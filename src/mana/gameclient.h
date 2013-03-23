@@ -92,6 +92,7 @@ private slots:
     void startedTalkingToNpc(int npcId);
     void nextNpcTalk(int npcId);
     void playerPositionChanged();
+    void doNpcChoice(int npcId, int choice);
 
 private:
     void handleAuthenticationResponse(MessageIn &message);

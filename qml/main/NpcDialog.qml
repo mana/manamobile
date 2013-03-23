@@ -2,16 +2,15 @@ import QtQuick 1.1
 import Mana 1.0
 
 Rectangle {
-    property variant npc;
-
-    focus: gameClient.npcDialogManager.expectedInput != NpcDialogManager.EXPECT_NOTHING;
-    opacity: focus ? 1 : 0;
+    opacity: gameClient.npcDialogManager.expectedInput != NpcDialogManager.EXPECT_NOTHING ? 1 : 0;
 
     radius: 10;
     color: "grey";
 
     Text {
-        anchors.fill: parent;
+        id: message;
+        anchors.top: parent.top;
+        anchors.left: parent.left;
         anchors.margins: 10;
         text: gameClient.npcDialogManager.currentText;
     }
@@ -20,7 +19,43 @@ Rectangle {
         anchors.fill: parent;
 
         onClicked: {
-            gameClient.npcDialogManager.next();
+            if (gameClient.npcDialogManager.expectedInput == NpcDialogManager.EXPECT_NEXT)
+                gameClient.npcDialogManager.next();
         }
     }
+
+    ListView {
+        id: choices;
+        anchors.top: message.bottom;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        anchors.bottom: parent.bottom;
+        anchors.margins: 10;
+
+        clip: true;
+
+        model: gameClient.npcDialogManager.currentChoices;
+        opacity: gameClient.npcDialogManager.expectedInput == NpcDialogManager.EXPECT_CHOICE ? 1 : 0;
+
+        delegate: Item {
+            width: parent.width;
+            height: choice.height;
+            Text {
+                id: choice;
+                color: mouseArea.containsMouse ? "white" : "black";
+                wrapMode:Text.WordWrap;
+                width: parent.width;
+                text: "> " + modelData;
+            }
+            MouseArea {
+                id: mouseArea;
+                anchors.fill: parent;
+                hoverEnabled: true;
+                onClicked: {
+                    gameClient.npcDialogManager.choose(model.index + 1);
+                }
+            }
+        }
+    }
+
 }

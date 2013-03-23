@@ -23,6 +23,8 @@
 
 #include <QObject>
 
+#include <QStringList>
+
 #include "messagein.h"
 #include "npc.h"
 
@@ -34,6 +36,7 @@ class NpcDialogManager : public QObject
 
     Q_ENUMS(ExpectedInput)
     Q_PROPERTY(QString currentText READ currentText NOTIFY currentTextChanged)
+    Q_PROPERTY(QStringList currentChoices READ currentChoices NOTIFY currentChoicesChanged)
     Q_PROPERTY(Mana::NPC *npc READ npc NOTIFY npcChanged)
     Q_PROPERTY(ExpectedInput expectedInput READ expectedInput NOTIFY expectedInputChanged)
 
@@ -47,6 +50,7 @@ public:
     explicit NpcDialogManager(QObject *parent = 0);
 
     QString currentText() const { return mCurrentText; }
+    QStringList currentChoices() const { return mCurrentChoices; }
 
     NPC *npc() const { return mNpc; }
     void setNpc(Being *npc);
@@ -55,20 +59,26 @@ public:
 
     Q_INVOKABLE void startTalkingTo(Mana::Being *being);
     Q_INVOKABLE void next();
+    Q_INVOKABLE void choose(int choice);
 
     void handleNpcMessage(MessageIn &message);
     void handleNpcClose(MessageIn &message);
+    void handleNpcChoice(MessageIn &message);
 
 signals:
     void startTalking(int id);
     void nextMessage(int id);
+    void doChoice(int npcId, int choice);
 
     void currentTextChanged();
+    void currentChoicesChanged();
     void npcChanged();
     void expectedInputChanged();
 
 private:
     QString mCurrentText;
+
+    QStringList mCurrentChoices;
 
     ExpectedInput mExpectedInput;
 

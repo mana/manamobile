@@ -43,6 +43,8 @@ GameClient::GameClient(QObject *parent)
                      this, SLOT(startedTalkingToNpc(int)));
     QObject::connect(mNpcDialogManager, SIGNAL(nextMessage(int)),
                      this, SLOT(nextNpcTalk(int)));
+    QObject::connect(mNpcDialogManager, SIGNAL(doChoice(int,int)),
+                     this, SLOT(doNpcChoice(int,int)));
 
     QObject::connect(mBeingListModel, SIGNAL(playerWalkDirectionChanged()),
                      this, SIGNAL(playerWalkDirectionChanged()));
@@ -125,6 +127,14 @@ void GameClient::nextNpcTalk(int npcId)
     send(message);
 }
 
+void GameClient::doNpcChoice(int npcId, int choice)
+{
+    MessageOut message(PGMSG_NPC_SELECT);
+    message.writeInt16(npcId);
+    message.writeInt8(choice);
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -157,6 +167,9 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_NPC_MESSAGE:
         mNpcDialogManager->handleNpcMessage(message);
+        break;
+    case GPMSG_NPC_CHOICE:
+        mNpcDialogManager->handleNpcChoice(message);
         break;
     case GPMSG_NPC_CLOSE:
         mNpcDialogManager->handleNpcClose(message);

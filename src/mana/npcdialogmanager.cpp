@@ -71,6 +71,14 @@ void NpcDialogManager::next()
     emit nextMessage(mNpc->id());
 }
 
+void NpcDialogManager::choose(int choice)
+{
+    ASSERT_ELSE(mExpectedInput == EXPECT_CHOICE && mNpc)
+        return;
+
+    emit doChoice(mNpc->id(), choice);
+}
+
 void NpcDialogManager::handleNpcMessage(MessageIn &message)
 {
     int id = message.readInt16();
@@ -91,4 +99,19 @@ void NpcDialogManager::handleNpcClose(MessageIn &message)
     mNpc = 0;
     emit expectedInputChanged();
     emit npcChanged();
+}
+
+
+void NpcDialogManager::handleNpcChoice(MessageIn &message)
+{
+    mCurrentChoices.clear();
+
+    int id = message.readInt16();
+
+    while (message.unreadLength())
+        mCurrentChoices.append(message.readString());
+
+    mExpectedInput = EXPECT_CHOICE;
+    emit currentChoicesChanged();
+    emit expectedInputChanged();
 }
