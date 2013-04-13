@@ -25,10 +25,11 @@ using namespace Mana;
 SpriteListModel::SpriteListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(SpriteRole, "sprite");
-    roleNames.insert(SlotRole, "slot");
-    setRoleNames(roleNames);
+    mRoleNames.insert(SpriteRole, "sprite");
+    mRoleNames.insert(SlotRole, "slot");
+#if QT_VERSION < 0x050000
+    setRoleNames(mRoleNames);
+#endif
 }
 
 int SpriteListModel::rowCount(const QModelIndex &parent) const
@@ -46,6 +47,11 @@ QVariant SpriteListModel::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+
+QHash<int, QByteArray> SpriteListModel::roleNames() const
+{
+    return mRoleNames;
 }
 
 void SpriteListModel::addSprite(int slot, const SpriteReference *spriteRef)

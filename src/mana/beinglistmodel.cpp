@@ -43,9 +43,10 @@ BeingListModel::BeingListModel(QObject *parent)
     : QAbstractListModel(parent)
     , mPlayerBeing(0)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(BeingRole, "being");
-    setRoleNames(roleNames);
+    mRoleNames.insert(BeingRole, "being");
+#if QT_VERSION < 0x050000
+    setRoleNames(mRoleNames);
+#endif
 
     mBeingUpdateTimer = startTimer(16);
 }
@@ -63,6 +64,11 @@ QVariant BeingListModel::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+
+QHash<int, QByteArray> BeingListModel::roleNames() const
+{
+    return mRoleNames;
 }
 
 void BeingListModel::handleBeingEnter(MessageIn &message)

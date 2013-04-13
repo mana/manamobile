@@ -51,6 +51,7 @@ public:
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() const;
 
     QString playerName() const { return mPlayerName; }
     void setPlayerName(const QString &name) { mPlayerName = name; }
@@ -87,6 +88,8 @@ private:
     int mBeingUpdateTimer;
     QString mPlayerName;
     Being *mPlayerBeing;
+
+    QHash<int, QByteArray> mRoleNames;
 };
 
 } // namespace Mana

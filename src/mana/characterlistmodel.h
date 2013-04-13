@@ -40,11 +40,13 @@ public:
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() const;
 
     void setCharacters(const QList<Character *> &characters);
 
 private:
     QList<Character *> mCharacters;
+    QHash<int, QByteArray> mRoleNames;
 };
 
 } // namespace Mana

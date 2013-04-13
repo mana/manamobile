@@ -231,7 +231,7 @@ void MapItem::imageFinished()
     // TODO: Remove hack here to pass image type based on extension. If we
     // don't do this, Qt seems to query all image plugins and the 'ras' one
     // will warn about not supporting sequential devices...
-    QImageReader reader(reply, QFileInfo(requestedUrl).suffix().toAscii());
+    QImageReader reader(reply, QFileInfo(requestedUrl).suffix().toLatin1());
     const QImage image = reader.read();
 
     if (image.isNull()) {

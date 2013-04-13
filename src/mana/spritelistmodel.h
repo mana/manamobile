@@ -43,6 +43,7 @@ public:
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() const;
 
     void addSprite(int slot, const SpriteReference *spriteRef);
     void setSprite(int slot, const SpriteReference *spriteRef);
@@ -52,7 +53,7 @@ public:
 
 private:
     QVector< QPair<int, const SpriteReference *> > mSprites;
-
+    QHash<int, QByteArray> mRoleNames;
 };
 
 }

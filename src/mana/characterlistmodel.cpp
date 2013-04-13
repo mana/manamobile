@@ -27,9 +27,10 @@ using namespace Mana;
 CharacterListModel::CharacterListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(CharRole, "character");
-    setRoleNames(roleNames);
+    mRoleNames.insert(CharRole, "character");
+#if QT_VERSION < 0x050000
+    setRoleNames(mRoleNames);
+#endif
 }
 
 int CharacterListModel::rowCount(const QModelIndex &parent) const
@@ -45,6 +46,11 @@ QVariant CharacterListModel::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+
+QHash<int, QByteArray> CharacterListModel::roleNames() const
+{
+    return mRoleNames;
 }
 
 void CharacterListModel::setCharacters(const QList<Mana::Character *> &
