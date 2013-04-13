@@ -32,6 +32,7 @@
 #include "spriteitem.h"
 #include "spritelistmodel.h"
 
+#include "resource/abilitydb.h"
 #include "resource/attributedb.h"
 #include "resource/hairdb.h"
 #include "resource/itemdb.h"
@@ -52,6 +53,7 @@ ManaPlugin::ManaPlugin(QObject *parent) :
 void ManaPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Mana::ResourceManager *resourceManager = new Mana::ResourceManager(engine);
+    Mana::AbilityDB *abilityDB = new Mana::AbilityDB(engine);
     Mana::AttributeDB *attributeDB = new Mana::AttributeDB(engine);
     Mana::HairDB *hairDB = new Mana::HairDB(engine);
     Mana::ItemDB *itemDB = new Mana::ItemDB(engine);
@@ -61,6 +63,7 @@ void ManaPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     QQmlContext *context = engine->rootContext();
     context->setContextProperty("resourceManager", resourceManager);
+    context->setContextProperty("abilityDB", abilityDB);
     context->setContextProperty("attributeDB", attributeDB);
     context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);
@@ -108,6 +111,7 @@ void ManaPlugin::registerTypes(const char *uri)
                                                "Base of all resources");
     qmlRegisterType<Mana::ResourceListModel>();
 
+    qmlRegisterType<Mana::AbilityDB>();
     qmlRegisterType<Mana::AttributeDB>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();

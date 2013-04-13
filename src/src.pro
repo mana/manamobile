@@ -31,6 +31,7 @@ include(enet/enet.pri)
 INCLUDEPATH += .
 
 SOURCES += \
+    mana/abilitylistmodel.cpp \
     mana/accountclient.cpp \
     mana/attributelistmodel.cpp \
     mana/being.cpp \
@@ -48,6 +49,7 @@ SOURCES += \
     mana/monster.cpp \
     mana/npc.cpp \
     mana/npcdialogmanager.cpp \
+    mana/resource/abilitydb.cpp \
     mana/resource/action.cpp \
     mana/resource/animation.cpp \
     mana/resource/attributedb.cpp \
@@ -86,6 +88,7 @@ SOURCES += \
 
 HEADERS += \
     durationlogger.h \
+    mana/abilitylistmodel.h \
     mana/accountclient.h \
     mana/attributelistmodel.h \
     mana/being.h \
@@ -104,6 +107,7 @@ HEADERS += \
     mana/npc.h \
     mana/npcdialogmanager.h \
     mana/protocol.h \
+    mana/resource/abilitydb.h \
     mana/resource/action.h \
     mana/resource/animation.h \
     mana/resource/attributedb.h \

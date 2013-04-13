@@ -13,6 +13,7 @@ Item {
         onLoginSucceeded: {
             resourceManager.dataUrl = dataUrl;
             attributeDB.load();
+            abilityDB.load();
             hairDB.load();
             itemDB.load();
             monsterDB.load();

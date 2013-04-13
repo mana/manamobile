@@ -46,6 +46,10 @@ Item {
         }
     }
 
+    function getAbsolutePosition(relativePoint) {
+        return Qt.point(relativePoint.x - map.x, relativePoint.y - map.y)
+    }
+
     property var smoothFollowInstance;
 
     function resetSmoothFollow() {

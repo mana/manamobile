@@ -26,6 +26,7 @@
 
 namespace Mana {
 
+class AbilityListModel;
 class AttributeListModel;
 class Being;
 class BeingListModel;
@@ -53,6 +54,7 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
+    Q_PROPERTY(Mana::AbilityListModel *abilityListModel READ abilityListModel CONSTANT)
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
     Q_PROPERTY(Mana::NpcDialogManager *npcDialogManager READ npcDialogManager CONSTANT)
 
@@ -78,7 +80,9 @@ public:
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
+    Q_INVOKABLE void useAbility(unsigned id, QPointF target);
 
+    AbilityListModel *abilityListModel() const { return mAbilityListModel; }
     AttributeListModel *attributeListModel() const;
     NpcDialogManager *npcDialogManager() const { return mNpcDialogManager; }
 
@@ -108,6 +112,10 @@ private slots:
 private:
     void handleAuthenticationResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
+
+    void handleAbilityStatus(MessageIn &messageIn);
+    void handleAbilityRemoved(MessageIn &messageIn);
+
     void handlePlayerAttributeChange(MessageIn &message);
 
     bool mAuthenticated;
@@ -115,6 +123,7 @@ private:
     int mPlayerStartX;
     int mPlayerStartY;
 
+    AbilityListModel *mAbilityListModel;
     AttributeListModel *mAttributeListModel;
     BeingListModel *mBeingListModel;
     NpcDialogManager *mNpcDialogManager;

@@ -27,6 +27,7 @@
 #include "npc.h"
 #include "protocol.h"
 
+#include "resource/abilitydb.h"
 #include "resource/hairdb.h"
 #include "resource/spritedef.h"
 
@@ -282,6 +283,53 @@ void BeingListModel::clear()
     }
 }
 
+void BeingListModel::handleBeingAbilityOnPoint(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const int abilityId = message.readInt8();
+    const int x = message.readInt16();
+    const int y = message.readInt16();
+
+    const int index = indexOfBeing(id);
+
+    if (index != -1) {
+        Being *being = mBeings.at(index);
+        being->lookAt(QPointF(x, y));
+        const AbilityInfo *abilityInfo =
+                AbilityDB::instance()->getInfo(abilityId);
+        if (!abilityInfo) {
+            qWarning() << Q_FUNC_INFO << "The server sent unknown ability"
+                       << " as being used. Mismatching world data?";
+            return;
+        }
+        being->setAction(abilityInfo->useAction());
+    }
+}
+
+void BeingListModel::handleBeingAbilityOnBeing(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const int abilityId = message.readInt8();
+    const int otherBeing = message.readInt16();
+
+    const int index = indexOfBeing(id);
+    const int indexOtherBeing = indexOfBeing(otherBeing);
+
+    if (index != -1 && indexOtherBeing != -1) {
+        Being *being = mBeings.at(index);
+        Being *otherBeing = mBeings.at(indexOtherBeing);
+        being->lookAt(otherBeing->position());
+        const AbilityInfo *abilityInfo =
+                AbilityDB::instance()->getInfo(abilityId);
+        if (!abilityInfo) {
+            qWarning() << Q_FUNC_INFO << "The server sent unknown ability"
+                       << " as being used. Mismatching world data?";
+            return;
+        }
+        being->setAction(abilityInfo->useAction());
+    }
+}
+
 void BeingListModel::update(qreal deltaTime)
 {
     for (int i = 0, end = mBeings.size(); i < end; ++i) {
@@ -295,6 +343,8 @@ void BeingListModel::update(qreal deltaTime)
 
             if (direction.isNull() || !walkDistance) {
                 being->setAction(SpriteAction::STAND);
+                if (being->action() == SpriteAction::WALK)
+                    being->setAction(SpriteAction::STAND);
                 continue;
             }
 

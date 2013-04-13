@@ -37,6 +37,8 @@ Project {
         Group {
             name: "C++ QML elements"
             files: [
+                "mana/abilitylistmodel.cpp",
+                "mana/abilitylistmodel.h",
                 "mana/accountclient.cpp",
                 "mana/accountclient.h",
                 "mana/attributelistmodel.cpp",
@@ -72,6 +74,8 @@ Project {
                 "mana/npcdialogmanager.h",
                 "mana/npc.h",
                 "mana/protocol.h",
+                "mana/resource/abilitydb.cpp",
+                "mana/resource/abilitydb.h",
                 "mana/resource/action.cpp",
                 "mana/resource/action.h",
                 "mana/resource/animation.cpp",

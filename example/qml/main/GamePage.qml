@@ -23,6 +23,18 @@ Item {
         }
     }
 
+    MouseArea {
+        anchors.fill: parent;
+        onClicked: {
+            if (actionBar.selectedButton != -1) {
+                gameClient.useAbility(actionBar.selectedButton + 1,
+                                      viewport.getAbsolutePosition(
+                                         Qt.point(mouse.x, mouse.y)));
+                actionBar.selectedButton = -1;
+            }
+        }
+    }
+
     Rectangle {
         color: "black";
         opacity: 0.5;
@@ -156,6 +168,12 @@ Item {
             onClicked: chatBar.sayText();
             KeyNavigation.left: chatInput;
         }
+    }
+
+    ActionBar {
+        id: actionBar;
+        anchors.bottom: parent.bottom;
+        anchors.right: parent.right;
     }
 
     states: [
