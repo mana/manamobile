@@ -24,6 +24,7 @@
 
 #include "qtquick2applicationviewer.h"
 
+#include "mana/abilitylistmodel.h"
 #include "mana/accountclient.h"
 #include "mana/attributelistmodel.h"
 #include "mana/being.h"
@@ -38,6 +39,7 @@
 #include "mana/spriteitem.h"
 #include "mana/spritelistmodel.h"
 
+#include "mana/resource/abilitydb.h"
 #include "mana/resource/attributedb.h"
 #include "mana/resource/hairdb.h"
 #include "mana/resource/itemdb.h"
@@ -57,6 +59,7 @@ static void registerTypes()
     qmlRegisterType<Mana::Settings>("Mana", 1, 0, "Settings");
     qmlRegisterType<Mana::SpriteItem>("Mana", 1, 0, "Sprite");
 
+    qmlRegisterType<Mana::AbilityListModel>();
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();
     qmlRegisterUncreatableType<Mana::Being>("Mana", 1, 0, "Being",
@@ -78,6 +81,7 @@ static void registerTypes()
                                                "Base of all resources");
     qmlRegisterType<Mana::ResourceListModel>();
 
+    qmlRegisterType<Mana::AbilityDB>();
     qmlRegisterType<Mana::AttributeDB>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
@@ -111,6 +115,7 @@ int main(int argc, char *argv[])
     viewer.setClearBeforeRendering(false);
 
     Mana::ResourceManager *resourceManager = new Mana::ResourceManager(&viewer);
+    Mana::AbilityDB *abilityDB = new Mana::AbilityDB(&viewer);
     Mana::AttributeDB *attributeDB = new Mana::AttributeDB(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
@@ -132,6 +137,7 @@ int main(int argc, char *argv[])
     QQmlContext* context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("resourceManager", resourceManager);
+    context->setContextProperty("abilityDB", abilityDB);
     context->setContextProperty("attributeDB", attributeDB);
     context->setContextProperty("hairDB", hairDB);
     context->setContextProperty("itemDB", itemDB);

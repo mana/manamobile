@@ -23,7 +23,7 @@
 namespace Mana {
 
 enum {
-    PROTOCOL_VERSION = 3,
+    PROTOCOL_VERSION = 4,
     SUPPORTED_DB_VERSION = 21
 };
 
@@ -127,7 +127,9 @@ enum {
     GPMSG_BEING_LEAVE              = 0x0201, // W being id
     GPMSG_ITEM_APPEAR              = 0x0202, // W item id, W*2 position
     GPMSG_BEING_LOOKS_CHANGE       = 0x0210, // B sprite layers changed, { B slot type, W item id }*
-    PGMSG_WALK                     = 0x0260, // W*2 current position
+    GPMSG_BEING_EMOTE              = 0x0211, // W being id, W emote id
+    PGMSG_BEING_EMOTE              = 0x0212, // W emoticon id
+    PGMSG_WALK                     = 0x0260, // W*2 destination
     PGMSG_ACTION_CHANGE            = 0x0270, // B Action
     GPMSG_BEING_ACTION_CHANGE      = 0x0271, // W being id, B action
     PGMSG_DIRECTION_CHANGE         = 0x0272, // B Direction
@@ -135,11 +137,15 @@ enum {
     GPMSG_BEING_HEALTH_CHANGE      = 0x0274, // W being id, W hp, W max hp
     GPMSG_BEINGS_MOVE              = 0x0280, // { W being id, B flags [, [W*2 position,] W*2 destination, B speed] }*
     GPMSG_ITEMS                    = 0x0281, // { W item id, W*2 position }*
+    GPMSG_BEING_ABILITY_POINT      = 0x0282, // W being id, B abilityId, W*2 point
+    GPMSG_BEING_ABILITY_BEING      = 0x0283, // W being id, B abilityId, W target being id
     PGMSG_ATTACK                   = 0x0290, // W being id
     GPMSG_BEING_ATTACK             = 0x0291, // W being id, B direction, B attack Id
-    PGMSG_USE_SPECIAL_ON_BEING     = 0x0292, // B specialID, W being id
-    GPMSG_SPECIAL_STATUS           = 0x0293, // { B specialID, D current, D max, D recharge }
-    PGMSG_USE_SPECIAL_ON_POINT     = 0x0294, // B specialID, W*2 position
+    PGMSG_USE_ABILITY_ON_BEING     = 0x0292, // B abilityID, W being id
+    GPMSG_ABILITY_STATUS           = 0x0293, // { B abilityID, D current, D max, D recharge }
+    PGMSG_USE_ABILITY_ON_POINT     = 0x0294, // B abilityID, W*2 position
+    GPMSG_ABILITY_REMOVED          = 0x0295, // B abilityID
+    GPMSG_ABILITY_COOLDOWN         = 0x0296, // W ticks to wait
     PGMSG_SAY                      = 0x02A0, // S text
     GPMSG_SAY                      = 0x02A1, // W being id, S text
     GPMSG_NPC_CHOICE               = 0x02B0, // W being id, { S text }*
@@ -242,7 +248,7 @@ enum {
     PCMSG_KICK_USER                   = 0x0466, // W channel id, S name
 
     // Inter-server
-    GAMSG_REGISTER              = 0x0500, // S address, W port, S password, D items db revision, { W map id }*
+    GAMSG_REGISTER              = 0x0500, // S address, W port, S password, D items db revision
     AGMSG_REGISTER_RESPONSE     = 0x0501, // W item version, W password response, { S globalvar_key, S globalvar_value }
     AGMSG_ACTIVE_MAP            = 0x0502, // W map id, W Number of mapvar_key mapvar_value sent, { S mapvar_key, S mapvar_value }, W Number of map items, { D item Id, W amount, W posX, W posY }
     AGMSG_PLAYER_ENTER          = 0x0510, // B*32 token, D id, S name, serialised character data

@@ -86,7 +86,13 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tile.cpp \
     src/tiled/tilelayer.cpp \
-    src/tiled/tileset.cpp
+    src/tiled/tileset.cpp \
+    src/mana/resource/attributedb.cpp \
+    src/mana/attributelistmodel.cpp \
+    src/tilelayeritem.cpp \
+    src/mana/npcdialogmanager.cpp \
+    src/mana/resource/abilitydb.cpp \
+    src/mana/abilitylistmodel.cpp
 
 HEADERS += \
     src/durationlogger.h \
@@ -149,7 +155,17 @@ HEADERS += \
     src/tiled/tiled_global.h \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
+<<<<<<< HEAD
     src/tiled/tileset.h
+=======
+    src/tiled/tileset.h \
+    src/mana/resource/attributedb.h \
+    src/mana/attributelistmodel.h \
+    src/tilelayeritem.h \
+    src/mana/npcdialogmanager.h \
+    src/mana/resource/abilitydb.h \
+    src/mana/abilitylistmodel.h
+>>>>>>> Added first version of abilities
 
 
 # Please do not modify the following two lines. Required for deployment.

@@ -68,6 +68,8 @@ public:
     void handleBeingLooksChange(MessageIn &message);
     void handleBeingActionChange(MessageIn &message);
     void handleBeingSay(MessageIn &message);
+    void handleBeingAbilityOnPoint(MessageIn &message);
+    void handleBeingAbilityOnBeing(MessageIn &message);
 
     void clear();
 signals:

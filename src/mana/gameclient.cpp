@@ -18,6 +18,7 @@
 
 #include "gameclient.h"
 
+#include "abilitylistmodel.h"
 #include "attributelistmodel.h"
 #include "being.h"
 #include "beinglistmodel.h"
@@ -34,6 +35,7 @@ namespace Mana {
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
+    , mAbilityListModel(new AbilityListModel(this))
     , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
     , mNpcDialogManager(new NpcDialogManager(this))
@@ -118,6 +120,15 @@ void GameClient::say(const QString &text)
     send(message);
 }
 
+void GameClient::useAbility(unsigned id, QPointF target)
+{
+    MessageOut message(PGMSG_USE_ABILITY_ON_POINT);
+    message.writeInt8(id);
+    message.writeInt16(target.x());
+    message.writeInt16(target.y());
+    send(message);
+}
+
 void GameClient::startedTalkingToNpc(int npcId)
 {
     MessageOut message(PGMSG_NPC_TALK);
@@ -178,6 +189,12 @@ void GameClient::messageReceived(MessageIn &message)
     case GPMSG_BEING_ACTION_CHANGE:
         mBeingListModel->handleBeingActionChange(message);
         break;
+    case GPMSG_BEING_ABILITY_POINT:
+        mBeingListModel->handleBeingAbilityOnPoint(message);
+        break;
+    case GPMSG_BEING_ABILITY_BEING:
+        mBeingListModel->handleBeingAbilityOnBeing(message);
+        break;
     case GPMSG_SAY:
         mBeingListModel->handleBeingSay(message);
         break;
@@ -194,6 +211,13 @@ void GameClient::messageReceived(MessageIn &message)
 
     case GPMSG_PLAYER_ATTRIBUTE_CHANGE:
         handlePlayerAttributeChange(message);
+        break;
+
+    case GPMSG_ABILITY_STATUS:
+        handleAbilityStatus(message);
+        break;
+    case GPMSG_ABILITY_REMOVED:
+        handleAbilityRemoved(message);
         break;
 
     case XXMSG_INVALID:
@@ -256,6 +280,18 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     emit mapChanged(mCurrentMap, mPlayerStartX, mPlayerStartY);
 }
 
+void GameClient::handleAbilityStatus(MessageIn &messageIn)
+{
+    while (messageIn.unreadLength() > 0) {
+        unsigned id = messageIn.readInt8();
+        unsigned currentPoints = messageIn.readInt32();
+        unsigned maxPoints = messageIn.readInt32();
+        unsigned rechargeSpeed = messageIn.readInt32();
+        mAbilityListModel->setAbilityStatus(id, currentPoints,
+                                            maxPoints, rechargeSpeed);
+    }
+}
+
 void GameClient::handlePlayerAttributeChange(MessageIn &message)
 {
     while (message.unreadLength()) {
@@ -268,6 +304,12 @@ void GameClient::handlePlayerAttributeChange(MessageIn &message)
 
         mAttributeListModel->setAttribute(id, base, mod);
     }
+}
+
+void GameClient::handleAbilityRemoved(MessageIn &messageIn)
+{
+    unsigned id = messageIn.readInt8();
+    mAbilityListModel->takeAbility(id);
 }
 
 } // namespace Mana
