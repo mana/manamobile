@@ -10,26 +10,6 @@ Rectangle {
     color: "black";
     focus: window.state == "game";
 
-    MouseArea {
-        id: walkMouseArea;
-        anchors.fill: parent;
-
-        function walkToMouse() {
-            gameClient.walkTo(walkMouseArea.mouseX + mapView.contentX,
-                              walkMouseArea.mouseY + mapView.contentY);
-        }
-
-        onClicked: walkToMouse();
-
-        Timer {
-            interval: 250;
-            running: walkMouseArea.pressed;
-            triggeredOnStart: true;
-            repeat: true;
-            onTriggered: walkMouseArea.walkToMouse();
-        }
-    }
-
     Flickable {
         id: mapView;
 
@@ -151,11 +131,43 @@ Rectangle {
 
     Keys.onReturnPressed: chatBar.open();
     Keys.onEnterPressed: chatBar.open();
-    Keys.onPressed: {
-        if (event.text.length) {
-            chatBar.open();
-            chatInput.text += event.text;
+
+    onFocusChanged: {
+        gameClient.playerWalkDirection = Qt.point(0, 0);
+    }
+
+    Keys.onReleased: {
+        if (event.isAutoRepeat)
+            return;
+
+        var walkDirection = gameClient.playerWalkDirection;
+        var x = walkDirection.x;
+        var y = walkDirection.y;
+
+        switch (event.key) {
+        case Qt.Key_W: ++y; break;
+        case Qt.Key_A: ++x; break;
+        case Qt.Key_S: --y; break;
+        case Qt.Key_D: --x; break;
         }
+        gameClient.playerWalkDirection = Qt.point(x, y);
+    }
+
+    Keys.onPressed: {
+        if (event.isAutoRepeat)
+            return;
+
+        var walkDirection = gameClient.playerWalkDirection;
+        var x = walkDirection.x;
+        var y = walkDirection.y;
+
+        switch (event.key) {
+        case Qt.Key_W: --y; break;
+        case Qt.Key_A: --x; break;
+        case Qt.Key_S: ++y; break;
+        case Qt.Key_D: ++x; break;
+        }
+        gameClient.playerWalkDirection = Qt.point(x, y);
     }
 
     NpcDialog {

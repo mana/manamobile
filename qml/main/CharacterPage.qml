@@ -114,6 +114,7 @@ Item {
         onChooseCharacterFailed: {
             window.characterChosen = false;
             errorLabel.showError(errorMessage);
+            console.log(errorMessage);
         }
     }
 }

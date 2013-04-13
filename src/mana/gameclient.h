@@ -23,6 +23,9 @@
 
 #include "enetclient.h"
 
+#include <QPoint>
+#include <QVector2D>
+
 namespace Mana {
 
 class Being;
@@ -43,6 +46,7 @@ class GameClient : public ENetClient
     Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
     Q_PROPERTY(Mana::Being *player READ player NOTIFY playerChanged)
+    Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
@@ -56,6 +60,9 @@ public:
     QString currentMap() const { return mCurrentMap; }
     BeingListModel *beingListModel() const;
     Being *player() const;
+
+    QPointF playerWalkDirection() const;
+    void setPlayerWalkDirection(QPointF direction);
 
     QString playerName() const;
     void setPlayerName(const QString &name);
@@ -72,6 +79,7 @@ signals:
     void authenticatedChanged();
     void mapChanged(const QString &name, int x, int y);
     void playerChanged();
+    void playerWalkDirectionChanged();
 
     void playerNameChanged();
 
@@ -83,6 +91,7 @@ protected:
 private slots:
     void startedTalkingToNpc(int npcId);
     void nextNpcTalk(int npcId);
+    void playerPositionChanged();
 
 private:
     void handleAuthenticationResponse(MessageIn &message);

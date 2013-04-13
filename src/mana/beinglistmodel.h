@@ -23,6 +23,8 @@
 #define BEINGLISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QVector2D>
+
 
 namespace Mana {
 
@@ -58,6 +60,9 @@ public:
 
     Being *player() const { return mPlayerBeing; }
 
+    QVector2D playerWalkDirection() const { return mPlayerWalkDirection; }
+    void setPlayerWalkDirection(QVector2D direction);
+
     void handleBeingEnter(MessageIn &message);
     void handleBeingLeave(MessageIn &message);
     void handleBeingDirChange(MessageIn &message);
@@ -68,6 +73,8 @@ public:
 
 signals:
     void playerChanged();
+    void playerPositionChanged();
+    void playerWalkDirectionChanged();
 
 protected:
     void timerEvent(QTimerEvent *);
@@ -88,6 +95,7 @@ private:
     int mBeingUpdateTimer;
     QString mPlayerName;
     Being *mPlayerBeing;
+    QVector2D mPlayerWalkDirection;
 
     QHash<int, QByteArray> mRoleNames;
 };

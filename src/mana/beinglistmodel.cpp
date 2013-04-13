@@ -71,6 +71,15 @@ QHash<int, QByteArray> BeingListModel::roleNames() const
     return mRoleNames;
 }
 
+void BeingListModel::setPlayerWalkDirection(QVector2D direction)
+{
+    if (mPlayerWalkDirection != direction) {
+        mPlayerWalkDirection = direction;
+
+        emit playerWalkDirectionChanged();
+    }
+}
+
 void BeingListModel::handleBeingEnter(MessageIn &message)
 {
     const int type = message.readInt8();
@@ -268,6 +277,30 @@ void BeingListModel::timerEvent(QTimerEvent *event)
         Being *being = mBeings.at(i);
 
         const QPointF pos = being->position();
+
+        if (being == mPlayerBeing) {
+            // Temponary hack since we currently do not know the walkspeed
+            // before the being walked once. Remove as soon the attribute system
+            // is implemented
+            const qreal walkSpeed = being->walkSpeed() ? being->walkSpeed() : 1;
+            QVector2D direction = mPlayerWalkDirection;
+
+            if (direction.lengthSquared() == 0 || !walkSpeed) {
+                being->setAction(SpriteAction::STAND);
+                return;
+            }
+
+            direction.normalize();
+            direction *= walkSpeed;
+            QPointF newPos(pos.x() + direction.x(), pos.y() + direction.y());
+            mPlayerBeing->lookAt(newPos);
+            mPlayerBeing->setPosition(newPos);
+
+            emit playerPositionChanged();
+            mPlayerBeing->setAction(SpriteAction::WALK);
+            return;
+        }
+
         const QPointF target = being->serverPosition();
         if (pos == target) {
             if (being->action() == SpriteAction::WALK)
