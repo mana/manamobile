@@ -93,6 +93,7 @@ SOURCES += src/main.cpp \
     src/tiled/orthogonalrenderer.cpp \
     src/tiled/properties.cpp \
     src/tiled/staggeredrenderer.cpp \
+    src/tiled/tile.cpp \
     src/tiled/tilelayer.cpp \
     src/tiled/tileset.cpp \
     src/tilelayeritem.cpp \
@@ -137,6 +138,7 @@ HEADERS += \
     src/tiled/imagelayer.h \
     src/tiled/isometricrenderer.h \
     src/tiled/layer.h \
+    src/tiled/logginginterface.h \
     src/tiled/map.h \
     src/tiled/mapobject.h \
     src/tiled/mapreader.h \
@@ -150,6 +152,7 @@ HEADERS += \
     src/tiled/properties.h \
     src/tiled/staggeredrenderer.h \
     src/tiled/terrain.h \
+    src/tiled/tiled.h \
     src/tiled/tiled_global.h \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \

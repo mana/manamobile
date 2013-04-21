@@ -1,7 +1,6 @@
 /*
- * imagelayer.cpp
- * Copyright 2011, Gregory Nickonov <gregory@nickonov.ru>
- * Copyright 2012, Alexander Kuhrt <alex@qrt.de>
+ * tiled.h
+ * Copyright 2013, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *
  * This file is part of libtiled.
  *
@@ -27,65 +26,21 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "imagelayer.h"
-#include "map.h"
+#ifndef TILED_H
+#define TILED_H
 
-#include <QBitmap>
+namespace Tiled {
 
-using namespace Tiled;
+enum FlipDirection {
+    FlipHorizontally,
+    FlipVertically
+};
 
-ImageLayer::ImageLayer(const QString &name, int x, int y, int width, int height):
-    Layer(ImageLayerType, name, x, y, width, height)
-{
-}
+enum RotateDirection {
+    RotateLeft,
+    RotateRight
+};
 
-ImageLayer::~ImageLayer()
-{
-}
+} // namespace Tiled
 
-void ImageLayer::resetImage()
-{
-    mImage = QPixmap();
-    mImageSource.clear();
-}
-
-bool ImageLayer::loadFromImage(const QImage &image, const QString &fileName)
-{
-    mImageSource = fileName;
-
-    if (image.isNull()) {
-        mImage = QPixmap();
-        return false;
-    }
-
-    mImage = QPixmap::fromImage(image);
-
-    if (mTransparentColor.isValid()) {
-        const QImage mask = image.createMaskFromColor(mTransparentColor.rgb());
-        mImage.setMask(QBitmap::fromImage(mask));
-    }
-
-    return true;
-}
-
-bool ImageLayer::isEmpty() const
-{
-    return mImage.isNull();
-}
-
-Layer *ImageLayer::clone() const
-{
-    return initializeClone(new ImageLayer(mName, mX, mY, mWidth, mHeight));
-}
-
-ImageLayer *ImageLayer::initializeClone(ImageLayer *clone) const
-{
-    Layer::initializeClone(clone);
-
-    clone->mImageSource = mImageSource;
-    clone->mTransparentColor = mTransparentColor;
-    clone->mImage = mImage;
-
-    return clone;
-}
-
+#endif // TILED_H

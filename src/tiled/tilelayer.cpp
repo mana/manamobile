@@ -261,7 +261,7 @@ void TileLayer::removeReferencesToTileset(Tileset *tileset)
     for (int i = 0, i_end = mGrid.size(); i < i_end; ++i) {
         const Tile *tile = mGrid.at(i).tile;
         if (tile && tile->tileset() == tileset)
-            mGrid[i] = Cell();
+            mGrid.replace(i, Cell());
     }
 }
 
@@ -279,6 +279,9 @@ void TileLayer::replaceReferencesToTileset(Tileset *oldTileset,
 
 void TileLayer::resize(const QSize &size, const QPoint &offset)
 {
+    if (this->size() == size && offset.isNull())
+        return;
+
     QVector<Cell> newGrid(size.width() * size.height());
 
     // Copy over the preserved part

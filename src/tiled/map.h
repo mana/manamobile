@@ -72,6 +72,18 @@ public:
     };
 
     /**
+     * The different formats in which the tile layer data can be stored.
+     */
+    enum LayerDataFormat {
+        Default    = -1,
+        XML        = 0,
+        Base64     = 1,
+        Base64Gzip = 2,
+        Base64Zlib = 3,
+        CSV        = 4
+    };
+
+    /**
      * Constructor, taking map orientation, size and tile size as parameters.
      */
     Map(Orientation orientation,
@@ -125,9 +137,19 @@ public:
     int tileWidth() const { return mTileWidth; }
 
     /**
+     * Sets the width of one tile.
+     */
+    void setTileWidth(int width) { mTileWidth = width; }
+
+    /**
      * Returns the tile height used by this map.
      */
     int tileHeight() const { return mTileHeight; }
+
+    /**
+     * Sets the height of one tile.
+     */
+    void setTileHeight(int height) { mTileHeight = height; }
 
     /**
      * Adjusts the draw margins to be at least as big as the given margins.
@@ -153,7 +175,7 @@ public:
      * Convenience function that returns the number of layers of this map that
      * match the given \a type.
      */
-    int layerCount(Layer::Type type) const;
+    int layerCount(Layer::TypeFlag type) const;
 
     int tileLayerCount() const
     { return layerCount(Layer::TileLayerType); }
@@ -176,7 +198,7 @@ public:
      */
     const QList<Layer*> &layers() const { return mLayers; }
 
-    QList<Layer*> layers(Layer::Type type) const;
+    QList<Layer*> layers(Layer::TypeFlag type) const;
     QList<ObjectGroup*> objectGroups() const;
     QList<TileLayer*> tileLayers() const;
 
@@ -193,7 +215,7 @@ public:
      * searched.
      */
     int indexOfLayer(const QString &layerName,
-                     uint layerTypes = Layer::AnyLayerType) const;
+                     unsigned layerTypes = Layer::AnyLayerType) const;
 
     /**
      * Adds a layer to this map, inserting it at the given index.
@@ -244,6 +266,16 @@ public:
     void replaceTileset(Tileset *oldTileset, Tileset *newTileset);
 
     /**
+     * Returns the number of tilesets of this map.
+     */
+    int tilesetCount() const { return mTilesets.size(); }
+
+    /**
+     * Returns the tileset at the given index.
+     */
+    Tileset *tilesetAt(int index) const { return mTilesets.at(index); }
+
+    /**
      * Returns the tilesets that the tiles on this map are using.
      */
     const QList<Tileset*> &tilesets() const { return mTilesets; }
@@ -276,6 +308,11 @@ public:
      */
     static Map *fromLayer(Layer *layer);
 
+    LayerDataFormat layerDataFormat() const
+    { return mLayerDataFormat; }
+    void setLayerDataFormat(LayerDataFormat format)
+    { mLayerDataFormat = format; }
+
 private:
     void adoptLayer(Layer *layer);
 
@@ -288,6 +325,7 @@ private:
     QMargins mDrawMargins;
     QList<Layer*> mLayers;
     QList<Tileset*> mTilesets;
+    LayerDataFormat mLayerDataFormat;
 };
 
 /**

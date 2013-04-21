@@ -1,6 +1,6 @@
 /*
- * orthogonalrenderer.h
- * Copyright 2009-2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ * logginginterface.h
+ * Copyright 2013, Samuli Tuomola <samuli.tuomola@gmail.com>
  *
  * This file is part of libtiled.
  *
@@ -26,50 +26,32 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ORTHOGONALRENDERER_H
-#define ORTHOGONALRENDERER_H
+#ifndef LOGGINGINTERFACE_H
+#define LOGGINGINTERFACE_H
 
-#include "maprenderer.h"
+#include <QtPlugin>
+
+class QString;
 
 namespace Tiled {
 
 /**
- * The orthogonal map renderer. This is the most basic map renderer,
- * dealing with maps that use rectangular tiles.
+ * An interface to be implemented by classes that want to signal
+ * the message console.
  */
-class TILEDSHARED_EXPORT OrthogonalRenderer : public MapRenderer
+class LoggingInterface
 {
-public:
-    OrthogonalRenderer(const Map *map) : MapRenderer(map) {}
+  public:
+    enum OutputType {
+      INFO, ERROR
+    };
 
-    QSize mapSize() const;
-
-    QRect boundingRect(const QRect &rect) const;
-
-    QRectF boundingRect(const MapObject *object) const;
-    QPainterPath shape(const MapObject *object) const;
-
-    void drawGrid(QPainter *painter, const QRectF &rect,
-                  QColor gridColor) const;
-
-    void drawTileLayer(QPainter *painter, const TileLayer *layer,
-                       const QRectF &exposed = QRectF()) const;
-
-    void drawTileSelection(QPainter *painter,
-                           const QRegion &region,
-                           const QColor &color,
-                           const QRectF &exposed) const;
-
-    void drawMapObject(QPainter *painter,
-                       const MapObject *object,
-                       const QColor &color) const;
-
-    QPointF pixelToTileCoords(qreal x, qreal y) const;
-
-    using MapRenderer::tileToPixelCoords;
-    QPointF tileToPixelCoords(qreal x, qreal y) const;
+    virtual void log(OutputType type, const QString) = 0;
 };
 
 } // namespace Tiled
 
-#endif // ORTHOGONALRENDERER_H
+Q_DECLARE_INTERFACE(Tiled::LoggingInterface,
+                    "org.mapeditor.LoggingInterface")
+
+#endif // LOGGINGINTERFACE_H
