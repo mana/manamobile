@@ -25,6 +25,8 @@
 
 #include "resource/spritedef.h"
 
+#include <cmath>
+
 using namespace Mana;
 
 Being::Being(int type)
@@ -91,73 +93,13 @@ void Being::setAction(const QString &action)
 
 void Being::lookAt(const QPointF &point)
 {
-    // We first handle simple cases
-
-    // If the two positions are the same,
-    // don't update the direction since it's only a matter of keeping
-    // the previous one.
-    if (mPosition.x() == point.x() && mPosition.y() == point.y())
+    if (mPosition == point)
         return;
 
-    if (mPosition.x() == point.x()) {
-        if (mPosition.y() > point.y())
-            setDirection(UP);
-        else
-            setDirection(DOWN);
-        return;
-    }
+    const QPointF diff = point - mPosition;
 
-    if (mPosition.y() == point.y()) {
-        if (mPosition.x() > point.x())
-            setDirection(LEFT);
-        else
-            setDirection(RIGHT);
-        return;
-    }
-
-    // Now let's handle diagonal cases
-    // First, find the lower angle:
-    if (mPosition.x() < point.x()) {
-        // Up-right direction
-        if (mPosition.y() > point.y()) {
-            // Compute tan of the angle
-            if ((mPosition.y() - point.y()) / (point.x() - mPosition.x()) < 1)
-                // The angle is less than 45°, we look to the right
-                setDirection(RIGHT);
-            else
-                setDirection(UP);
-            return;
-        }
-        else { // Down-right
-            // Compute tan of the angle
-            if ((point.y() - mPosition.y()) / (point.x() - mPosition.x()) < 1)
-                // The angle is less than 45°, we look to the right
-                setDirection(RIGHT);
-            else
-                setDirection(DOWN);
-            return;
-        }
-    }
+    if (std::abs(diff.x()) > std::abs(diff.y()))
+        setDirection((diff.x() < 0) ? LEFT : RIGHT);
     else
-    {
-        // Up-left direction
-        if (mPosition.y() > point.y()) {
-            // Compute tan of the angle
-            if ((mPosition.y() - point.y()) / (mPosition.x() - point.x()) < 1)
-                // The angle is less than 45°, we look to the left
-                setDirection(LEFT);
-            else
-                setDirection(UP);
-            return;
-        }
-        else { // Down-left
-            // Compute tan of the angle
-            if ((point.y() - mPosition.y()) / (mPosition.x() - point.x()) < 1)
-                // The angle is less than 45°, we look to the left
-                setDirection(LEFT);
-            else
-                setDirection(DOWN);
-            return;
-        }
-    }
+        setDirection((diff.y() < 0) ? UP : DOWN);
 }
