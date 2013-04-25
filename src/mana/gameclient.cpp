@@ -144,6 +144,7 @@ void GameClient::messageReceived(MessageIn &message)
     case GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
         break;
+
     case GPMSG_BEING_ENTER:
         mBeingListModel->handleBeingEnter(message);
         break;
@@ -165,6 +166,7 @@ void GameClient::messageReceived(MessageIn &message)
     case GPMSG_SAY:
         mBeingListModel->handleBeingSay(message);
         break;
+
     case GPMSG_NPC_MESSAGE:
         mNpcDialogManager->handleNpcMessage(message);
         break;
@@ -174,6 +176,7 @@ void GameClient::messageReceived(MessageIn &message)
     case GPMSG_NPC_CLOSE:
         mNpcDialogManager->handleNpcClose(message);
         break;
+
     case XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "
                       "Did we send an invalid message?";
@@ -229,6 +232,9 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
         mCurrentMap += mapExtension;
 
     emit mapChanged(mCurrentMap, x, y);
+
+    // None of the beings are valid on the new map, including the player
+    mBeingListModel->clear();
 }
 
 } // namespace Mana

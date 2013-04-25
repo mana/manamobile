@@ -91,6 +91,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     BeingGender gender = (BeingGender)message.readInt8();
 
     Being *being;
+    Being *playerBeing = 0;
 
     if (type == OBJECT_CHARACTER) {
         Character *ch = new Character;
@@ -104,10 +105,8 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
             handleLooks(ch, message);
 
         // Match the being by name to see whether it's the current player
-        if (ch->name() == mPlayerName) {
-            mPlayerBeing = ch;
-            emit playerChanged();
-        }
+        if (ch->name() == mPlayerName)
+            playerBeing = ch;
 
         being = ch;
     } else if (type == OBJECT_NPC) {
@@ -140,6 +139,12 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
 
     qDebug() << Q_FUNC_INFO << being->name() << being->id() << being->x() << being->y();
     addBeing(being);
+
+    // Emit playerChanged after the player has been fully initialized and added
+    if (playerBeing) {
+        mPlayerBeing = playerBeing;
+        emit playerChanged();
+    }
 }
 
 void BeingListModel::handleBeingLeave(MessageIn &message)
@@ -266,6 +271,19 @@ void BeingListModel::handleBeingSay(MessageIn &message)
         const QString text = message.readString();
         mBeings.at(index)->say(text);
     }
+}
+
+void BeingListModel::clear()
+{
+    // Reset the player being before it gets deleted
+    mPlayerBeing = 0;
+    emit playerChanged();
+
+    // Remove all beings from the model
+    beginRemoveRows(QModelIndex(), 0, mBeings.size() - 1);
+    qDeleteAll(mBeings);
+    mBeings.clear();
+    endRemoveRows();
 }
 
 void BeingListModel::timerEvent(QTimerEvent *event)

@@ -7,43 +7,58 @@ Rectangle {
     width: 640;
     height: 480;
 
+    property int centerX: width / 2;
+    property int centerY: height / 2;
+
     color: "black";
     focus: window.state == "game";
 
-    Flickable {
-        id: mapView;
+    Item {
+        id: mapContainer;
 
-        anchors.fill: parent
-        interactive: false;
+        property real smoothX;
+        property real smoothY;
 
-        // Center the view on the player
-        contentX: {
-            if (!gameClient.player)
-                return 0;
+        // Remove fraction to avoid tile drawing glitches
+        x: Math.floor(smoothX);
+        y: Math.floor(smoothY);
 
-            var centeredPos = gameClient.player.x - width / 2;
-            return Math.max(0, Math.min(contentWidth - width, centeredPos));
+        // This fast running timer may not be the best solution. One problem
+        // with it is that it is not framerate agnostic.
+        Timer {
+            id: cameraTimer;
+            interval: 1;
+            running: gameClient.player !== null;
+            repeat: true;
+            onTriggered: {
+                var containerX = gamePage.centerX - gameClient.player.x;
+                var containerY = gamePage.centerY - gameClient.player.y;
+                mapContainer.smoothX += (containerX - mapContainer.smoothX) * 0.1;
+                mapContainer.smoothY += (containerY - mapContainer.smoothY) * 0.1;
+            }
         }
-        contentY: {
-            if (!gameClient.player)
-                return 0;
 
-            var centeredPos = gameClient.player.y - height / 2;
-            return Math.max(0, Math.min(contentHeight - height, centeredPos));
+        Connections {
+            target: gameClient;
+            onMapChanged: {
+                // Immediately center the camera on the new player position
+                mapContainer.smoothX = gamePage.centerX - x;
+                mapContainer.smoothY = gamePage.centerY - y;
+            }
         }
-        contentWidth: map.width;
-        contentHeight: map.height;
-
-        // Smoothly animate the camera
-        Behavior on contentX { SpringAnimation { spring: 3; damping: 1 } }
-        Behavior on contentY { SpringAnimation { spring: 3; damping: 1 } }
 
         TileMap {
             id: map;
             source: gameClient.currentMap;
 
-            opacity: status == TileMap.Ready ? 1 : 0
-            Behavior on opacity { NumberAnimation {} }
+            onStatusChanged: {
+                if (status == TileMap.Ready) {
+                    fadeInMap.start();
+                } else {
+                    fadeInMap.stop();
+                    blackOverlay.opacity = 1;
+                }
+            }
         }
 
         Repeater {
@@ -111,6 +126,14 @@ Rectangle {
                 }
             }
         }
+    }
+
+    Rectangle {
+        id: blackOverlay;
+        color: "black";
+        anchors.fill: parent;
+
+        NumberAnimation on opacity { id: fadeInMap; to: 0; }
     }
 
     Rectangle {

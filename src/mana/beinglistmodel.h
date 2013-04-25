@@ -71,6 +71,8 @@ public:
     void handleBeingActionChange(MessageIn &message);
     void handleBeingSay(MessageIn &message);
 
+    void clear();
+
 signals:
     void playerChanged();
     void playerPositionChanged();
