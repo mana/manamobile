@@ -287,7 +287,7 @@ void BeingListModel::timerEvent(QTimerEvent *event)
 
             if (direction.lengthSquared() == 0 || !walkSpeed) {
                 being->setAction(SpriteAction::STAND);
-                return;
+                continue;
             }
 
             direction.normalize();
@@ -298,7 +298,7 @@ void BeingListModel::timerEvent(QTimerEvent *event)
 
             emit playerPositionChanged();
             mPlayerBeing->setAction(SpriteAction::WALK);
-            return;
+            continue;
         }
 
         const QPointF target = being->serverPosition();
