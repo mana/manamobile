@@ -165,39 +165,39 @@ Rectangle {
         gameClient.playerWalkDirection = Qt.point(0, 0);
     }
 
-    Keys.onReleased: {
-        if (event.isAutoRepeat)
-            return;
+    property bool w_pressed: false;
+    property bool a_pressed: false;
+    property bool s_pressed: false;
+    property bool d_pressed: false;
 
-        var walkDirection = gameClient.playerWalkDirection;
-        var x = walkDirection.x;
-        var y = walkDirection.y;
+    function updateWalkDirection() {
+        var x = 0;
+        var y = 0;
 
-        switch (event.key) {
-        case Qt.Key_W: ++y; break;
-        case Qt.Key_A: ++x; break;
-        case Qt.Key_S: --y; break;
-        case Qt.Key_D: --x; break;
-        }
+        if (w_pressed) --y;
+        if (a_pressed) --x;
+        if (s_pressed) ++y;
+        if (d_pressed) ++x;
+
         gameClient.playerWalkDirection = Qt.point(x, y);
     }
 
-    Keys.onPressed: {
+    function handleKeyEvent(event, pressed) {
         if (event.isAutoRepeat)
             return;
 
-        var walkDirection = gameClient.playerWalkDirection;
-        var x = walkDirection.x;
-        var y = walkDirection.y;
-
         switch (event.key) {
-        case Qt.Key_W: --y; break;
-        case Qt.Key_A: --x; break;
-        case Qt.Key_S: ++y; break;
-        case Qt.Key_D: ++x; break;
+        case Qt.Key_W: w_pressed = pressed; break;
+        case Qt.Key_A: a_pressed = pressed; break;
+        case Qt.Key_S: s_pressed = pressed; break;
+        case Qt.Key_D: d_pressed = pressed; break;
         }
-        gameClient.playerWalkDirection = Qt.point(x, y);
+
+        updateWalkDirection();
     }
+
+    Keys.onReleased: handleKeyEvent(event, false);
+    Keys.onPressed: handleKeyEvent(event, true);
 
     NpcDialog {
         id: npcDialog;
