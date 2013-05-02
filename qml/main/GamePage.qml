@@ -10,6 +10,10 @@ Rectangle {
     property int centerX: width / 2;
     property int centerY: height / 2;
 
+    // Workaround for QTBUG-28288 / QTBUG-25644, can be removed once Qt 4.8.5
+    // or Qt 5.1.0 have been released.
+    property bool chatBarHasActiveFocus: false;
+
     color: "black";
     focus: window.state == "game";
 
@@ -27,7 +31,7 @@ Rectangle {
         // with it is that it is not framerate agnostic.
         Timer {
             id: cameraTimer;
-            interval: 1;
+            interval: 10;
             running: gameClient.player !== null;
             repeat: true;
             onTriggered: {
@@ -35,6 +39,8 @@ Rectangle {
                 var containerY = gamePage.centerY - gameClient.player.y;
                 mapContainer.smoothX += (containerX - mapContainer.smoothX) * 0.1;
                 mapContainer.smoothY += (containerY - mapContainer.smoothY) * 0.1;
+
+                chatBarHasActiveFocus = chatBar.activeFocus;
             }
         }
 
@@ -159,39 +165,39 @@ Rectangle {
         gameClient.playerWalkDirection = Qt.point(0, 0);
     }
 
-    Keys.onReleased: {
-        if (event.isAutoRepeat)
-            return;
+    property bool w_pressed: false;
+    property bool a_pressed: false;
+    property bool s_pressed: false;
+    property bool d_pressed: false;
 
-        var walkDirection = gameClient.playerWalkDirection;
-        var x = walkDirection.x;
-        var y = walkDirection.y;
+    function updateWalkDirection() {
+        var x = 0;
+        var y = 0;
 
-        switch (event.key) {
-        case Qt.Key_W: ++y; break;
-        case Qt.Key_A: ++x; break;
-        case Qt.Key_S: --y; break;
-        case Qt.Key_D: --x; break;
-        }
+        if (w_pressed) --y;
+        if (a_pressed) --x;
+        if (s_pressed) ++y;
+        if (d_pressed) ++x;
+
         gameClient.playerWalkDirection = Qt.point(x, y);
     }
 
-    Keys.onPressed: {
+    function handleKeyEvent(event, pressed) {
         if (event.isAutoRepeat)
             return;
 
-        var walkDirection = gameClient.playerWalkDirection;
-        var x = walkDirection.x;
-        var y = walkDirection.y;
-
         switch (event.key) {
-        case Qt.Key_W: --y; break;
-        case Qt.Key_A: --x; break;
-        case Qt.Key_S: ++y; break;
-        case Qt.Key_D: ++x; break;
+        case Qt.Key_W: w_pressed = pressed; break;
+        case Qt.Key_A: a_pressed = pressed; break;
+        case Qt.Key_S: s_pressed = pressed; break;
+        case Qt.Key_D: d_pressed = pressed; break;
         }
-        gameClient.playerWalkDirection = Qt.point(x, y);
+
+        updateWalkDirection();
     }
+
+    Keys.onReleased: handleKeyEvent(event, false);
+    Keys.onPressed: handleKeyEvent(event, true);
 
     NpcDialog {
         id: npcDialog;
@@ -233,7 +239,7 @@ Rectangle {
             states: [
                 State {
                     name: "opened";
-                    when: chatBar.activeFocus;
+                    when: chatBarHasActiveFocus;
                     PropertyChanges {
                         target: chatInput;
                         y: -chatInput.height - 5;

@@ -144,37 +144,20 @@ QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 
 void ResourceManager::removeResource(Mana::Resource *resource)
 {
-    for (QMap<QString, Mana::Resource *>::iterator it = mResources.begin(),
-         it_end = mResources.end(); it != it_end; ++it) {
-        if (it.value() == resource) {
-            Q_ASSERT(it.value()->refCount() == 0);
-            delete it.value();
-            mResources.erase(it);
-            return;
-        }
-    }
+    Q_ASSERT(resource->refCount() == 0);
+    Q_ASSERT(mResources.contains(resource->path()));
 
-    Q_ASSERT(false); // should not happen
+    mResources.remove(resource->path());
+    delete resource;
 }
 
 void ResourceManager::cleanUpResources()
 {
     unsigned releaseTime = QDateTime::currentMSecsSinceEpoch() - CACHE_TIME;
 
-    // Temponary list to prevent issues when iterating in list
-    // while removing at the same time
-    QList<Mana::Resource *> markedForRemoval;
-
-    foreach (Mana::Resource *resource, mResources) {
-        if (resource->refCount() == 0
-                && resource->releaseTime() < releaseTime) {
-            markedForRemoval.append(resource);
-        }
-    }
-
-    foreach (Mana::Resource *resource, markedForRemoval) {
-        removeResource(resource);
-    }
+    foreach (Mana::Resource *resource, mResources)
+        if (resource->refCount() == 0 && resource->releaseTime() < releaseTime)
+            removeResource(resource);
 }
 
 Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
