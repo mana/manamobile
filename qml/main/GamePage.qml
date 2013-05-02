@@ -10,6 +10,10 @@ Rectangle {
     property int centerX: width / 2;
     property int centerY: height / 2;
 
+    // Workaround for QTBUG-28288 / QTBUG-25644, can be removed once Qt 4.8.5
+    // or Qt 5.1.0 have been released.
+    property bool chatBarHasActiveFocus: false;
+
     color: "black";
     focus: window.state == "game";
 
@@ -27,7 +31,7 @@ Rectangle {
         // with it is that it is not framerate agnostic.
         Timer {
             id: cameraTimer;
-            interval: 1;
+            interval: 10;
             running: gameClient.player !== null;
             repeat: true;
             onTriggered: {
@@ -35,6 +39,8 @@ Rectangle {
                 var containerY = gamePage.centerY - gameClient.player.y;
                 mapContainer.smoothX += (containerX - mapContainer.smoothX) * 0.1;
                 mapContainer.smoothY += (containerY - mapContainer.smoothY) * 0.1;
+
+                chatBarHasActiveFocus = chatBar.activeFocus;
             }
         }
 
@@ -233,7 +239,7 @@ Rectangle {
             states: [
                 State {
                     name: "opened";
-                    when: chatBar.activeFocus;
+                    when: chatBarHasActiveFocus;
                     PropertyChanges {
                         target: chatInput;
                         y: -chatInput.height - 5;
