@@ -84,8 +84,8 @@ Rectangle {
                 TextShadow { target: chat; }
                 Text {
                     id: chat;
-                    anchors.bottom: sprite.top;
-                    anchors.bottomMargin: 10;
+                    anchors.bottom: sprite.bottom;
+                    anchors.bottomMargin: sprite.maxHeight;
                     anchors.horizontalCenter: parent.horizontalCenter;
                     text: model.being.chatMessage;
                     color: "white";
@@ -125,9 +125,8 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
 
                     onClicked: {
-                        if (model.being.type == Being.OBJECT_NPC) {
+                        if (model.being.type === Being.OBJECT_NPC)
                             gameClient.npcDialogManager.startTalkingTo(model.being);
-                        }
                     }
                 }
             }

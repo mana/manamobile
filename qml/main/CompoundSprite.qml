@@ -3,13 +3,17 @@ import Mana 1.0
 
 Item {
     id: spriteContainer;
+
     property alias sprites: repeater.model;
+
     property int direction;
-    property variant action;
+    property string action;
+
+    property int maxHeight: childrenRect.height;
 
     Repeater {
         id: repeater;
-        model: spriteContainer.sprites;
+
         delegate: Sprite {
             id: element;
             parent: spriteContainer;
