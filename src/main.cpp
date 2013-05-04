@@ -55,6 +55,9 @@
 
 static void registerTypes()
 {
+    qmlRegisterUncreatableType<Mana::ENetClient>("Mana", 1, 0, "ENetClient",
+                                                 "Use a derived class");
+
     qmlRegisterType<Mana::AccountClient>("Mana", 1, 0, "AccountClient");
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");

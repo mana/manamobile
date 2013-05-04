@@ -17,6 +17,12 @@ Rectangle {
         state = "chooseCharacter"
     }
 
+    ConnectionStatus {
+        z: 1;
+        anchors.top: parent.top;
+        anchors.right: parent.right;
+    }
+
     Connections {
         target: accountClient;
 
