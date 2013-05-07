@@ -135,11 +135,12 @@ void ResourceManager::setDataUrl(const QString &url)
 
 QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 {
-    qDebug() << Q_FUNC_INFO << fileName;
+    QNetworkRequest request(QUrl(mDataUrl).resolved(fileName));
+    request.setAttribute(requestedFile(), fileName);
 
-    const QNetworkRequest request(mDataUrl + fileName);
-    QNetworkReply *reply = mNetworkAccessManager.get(request);
-    return reply;
+    qDebug() << "Retrieving" << request.url();
+
+    return mNetworkAccessManager.get(request);
 }
 
 void ResourceManager::removeResource(Mana::Resource *resource)

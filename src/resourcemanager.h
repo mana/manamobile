@@ -24,6 +24,7 @@
 
 #include <QMap>
 #include <QNetworkAccessManager>
+#include <QNetworkRequest>
 
 #include "mana/resource/pixmapresource.h"
 #include "mana/resource/spritedef.h"
@@ -39,6 +40,10 @@ class ResourceManager : public QObject
     Q_PROPERTY(QString dataUrl READ dataUrl WRITE setDataUrl NOTIFY dataUrlChanged)
 
 public:
+    enum CustomAttribute {
+        RequestedFile = QNetworkRequest::User
+    };
+
     explicit ResourceManager(QObject *parent = 0);
 
     static ResourceManager *instance() { return mInstance; }
@@ -64,6 +69,9 @@ public:
                                                     int variant = 0);
 
     Mana::PixmapResource *requestPixmap(const QString &path);
+
+    static QNetworkRequest::Attribute requestedFile()
+    { return static_cast<QNetworkRequest::Attribute>(RequestedFile); }
 
 signals:
     void dataUrlChanged();

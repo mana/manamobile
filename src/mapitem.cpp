@@ -186,14 +186,13 @@ void MapItem::mapFinished()
 void MapItem::tilesetFinished()
 {
     QNetworkReply *reply = finishReply();
-    const QString requestedUrl = reply->request().url().toString();
 
-    qDebug() << Q_FUNC_INFO << requestedUrl;
+    const QString tilesetFilePath =
+            reply->request().attribute(ResourceManager::requestedFile()).toString();
+    Q_ASSERT(!tilesetFilePath.isEmpty());
 
     ResourceManager *rm = ResourceManager::instance();
 
-    const int dataUrlLength = rm->dataUrl().length();
-    const QString tilesetFilePath = requestedUrl.mid(dataUrlLength);
     const int lastSlashPos = tilesetFilePath.lastIndexOf(QLatin1Char('/'));
     const QString tilesetPath = tilesetFilePath.left(lastSlashPos);
 
@@ -202,7 +201,7 @@ void MapItem::tilesetFinished()
 
     Tiled::Tileset *tileset = reader.readTileset(reply, tilesetPath);
     if (!tileset) {
-        qDebug() << "Error reading tileset:" << requestedUrl << "\n"
+        qDebug() << "Error reading tileset:" << tilesetFilePath << "\n"
                  << reader.errorString();
     } else {
         QNetworkReply *reply = rm->requestFile(tileset->imageSource());
@@ -224,14 +223,15 @@ void MapItem::tilesetFinished()
 void MapItem::imageFinished()
 {
     QNetworkReply *reply = finishReply();
-    const QString requestedUrl = reply->request().url().toString();
 
-    qDebug() << Q_FUNC_INFO << requestedUrl;
+    const QString requestedFile =
+            reply->request().attribute(ResourceManager::requestedFile()).toString();
+    Q_ASSERT(!requestedFile.isEmpty());
 
     // TODO: Remove hack here to pass image type based on extension. If we
     // don't do this, Qt seems to query all image plugins and the 'ras' one
     // will warn about not supporting sequential devices...
-    QImageReader reader(reply, QFileInfo(requestedUrl).suffix().toLatin1());
+    QImageReader reader(reply, QFileInfo(requestedFile).suffix().toLatin1());
     const QImage image = reader.read();
 
     if (image.isNull()) {
@@ -240,12 +240,8 @@ void MapItem::imageFinished()
     }
 
     foreach (Tileset *tileset, mMap->tilesets()) {
-        // TODO: Replace hack with a proper way of identifying whether the
-        // request matches the tileset.
-        if (!tileset->imageSource().isEmpty() &&
-                requestedUrl.endsWith(tileset->imageSource())) {
+        if (requestedFile == tileset->imageSource())
             tileset->loadFromImage(image, tileset->imageSource());
-        }
     }
 
     // Trigger a repaint of the tile layer items
