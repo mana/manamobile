@@ -57,7 +57,7 @@ Item {
     XmlListModel {
         id: serverListModel;
         source: customServerListPath == ""
-                ? "http://manasource.org/serverlist.xml"
+                ? "http://www.manasource.org/serverlist.xml"
                 : customServerListPath;
         query: "/serverlist/server[lower-case(@type)='manaserv']";
 
