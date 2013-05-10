@@ -34,6 +34,8 @@ Item {
         anchors.left: column.left;
     }
 
+    Component.onCompleted: characterList.forceActiveFocus();
+
     Column {
         id: column;
         anchors.verticalCenter: parent.verticalCenter
@@ -47,7 +49,6 @@ Item {
 
         GridView {
             id: characterList;
-            focus: window.state == "chooseCharacter";
             flow: GridView.LeftToRight;
 
             width: window.width * 0.3;

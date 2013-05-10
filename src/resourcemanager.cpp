@@ -89,6 +89,9 @@ void ResourceManager::pathsFileFinished()
             reply->error() == QNetworkReply::ContentNotFoundError)) {
         qDebug() << "Failed to download paths.xml:\n"
                  << reply->errorString();
+
+        mPathsLoaded = true;
+        emit pathsLoadedChanged();
         return;
     }
 
@@ -96,6 +99,9 @@ void ResourceManager::pathsFileFinished()
 
     if (!xml.readNextStartElement() || xml.name() != "configuration") {
         qWarning() << "Error loading paths.xml";
+
+        mPathsLoaded = true;
+        emit pathsLoadedChanged();
         return;
     }
 
@@ -115,7 +121,7 @@ void ResourceManager::pathsFileFinished()
     }
 
     mPathsLoaded = true;
-    emit pathsLoaded();
+    emit pathsLoadedChanged();
 }
 
 void ResourceManager::setDataUrl(const QString &url)
@@ -123,9 +129,11 @@ void ResourceManager::setDataUrl(const QString &url)
     if (mDataUrl == url)
         return;
 
-    mDataUrl = url;
     mPaths.clear();
     mPathsLoaded = false;
+    emit pathsLoadedChanged();
+
+    mDataUrl = url;
     emit dataUrlChanged();
 
     // Load the paths.xml if available
@@ -136,7 +144,7 @@ void ResourceManager::setDataUrl(const QString &url)
 QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 {
     QNetworkRequest request(QUrl(mDataUrl).resolved(fileName));
-    request.setAttribute(requestedFile(), fileName);
+    request.setAttribute(requestedFileAttribute(), fileName);
 
     qDebug() << "Retrieving" << request.url();
 

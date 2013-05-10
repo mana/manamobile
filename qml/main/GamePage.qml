@@ -15,7 +15,8 @@ Rectangle {
     property bool chatBarHasActiveFocus: false;
 
     color: "black";
-    focus: window.state == "game";
+
+    Component.onCompleted: gamePage.forceActiveFocus();
 
     Item {
         id: mapContainer;

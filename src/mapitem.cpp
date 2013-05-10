@@ -187,8 +187,9 @@ void MapItem::tilesetFinished()
 {
     QNetworkReply *reply = finishReply();
 
+    const QNetworkRequest request = reply->request();
     const QString tilesetFilePath =
-            reply->request().attribute(ResourceManager::requestedFile()).toString();
+            request.attribute(ResourceManager::requestedFileAttribute()).toString();
     Q_ASSERT(!tilesetFilePath.isEmpty());
 
     ResourceManager *rm = ResourceManager::instance();
@@ -224,8 +225,9 @@ void MapItem::imageFinished()
 {
     QNetworkReply *reply = finishReply();
 
+    const QNetworkRequest request = reply->request();
     const QString requestedFile =
-            reply->request().attribute(ResourceManager::requestedFile()).toString();
+            request.attribute(ResourceManager::requestedFileAttribute()).toString();
     Q_ASSERT(!requestedFile.isEmpty());
 
     // TODO: Remove hack here to pass image type based on extension. If we
