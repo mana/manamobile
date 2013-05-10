@@ -276,14 +276,18 @@ void BeingListModel::handleBeingSay(MessageIn &message)
 void BeingListModel::clear()
 {
     // Reset the player being before it gets deleted
-    mPlayerBeing = 0;
-    emit playerChanged();
+    if (mPlayerBeing) {
+        mPlayerBeing = 0;
+        emit playerChanged();
+    }
 
     // Remove all beings from the model
-    beginRemoveRows(QModelIndex(), 0, mBeings.size() - 1);
-    qDeleteAll(mBeings);
-    mBeings.clear();
-    endRemoveRows();
+    if (!mBeings.isEmpty()) {
+        beginRemoveRows(QModelIndex(), 0, mBeings.size() - 1);
+        qDeleteAll(mBeings);
+        mBeings.clear();
+        endRemoveRows();
+    }
 }
 
 void BeingListModel::timerEvent(QTimerEvent *event)
