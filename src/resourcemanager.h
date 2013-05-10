@@ -38,6 +38,7 @@ class ResourceManager : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString dataUrl READ dataUrl WRITE setDataUrl NOTIFY dataUrlChanged)
+    Q_PROPERTY(bool pathsLoaded READ pathsLoaded NOTIFY pathsLoadedChanged)
 
 public:
     enum CustomAttribute {
@@ -46,18 +47,16 @@ public:
 
     explicit ResourceManager(QObject *parent = 0);
 
-    static ResourceManager *instance() { return mInstance; }
+    static ResourceManager *instance();
 
-    QString dataUrl() const { return mDataUrl; }
+    QString dataUrl() const;
     void setDataUrl(const QString &url);
 
+    bool pathsLoaded() const;
 
-    QString path(const QString &key,
-                 const QString &value = QString()) const
-    { return mPaths.value(key, value); }
 
-    QString spritePath() const
-    { return path("sprites", "graphics/sprites/"); }
+    QString path(const QString &key, const QString &value = QString()) const;
+    QString spritePath() const;
 
     QNetworkReply *requestFile(const QString &fileName);
 
@@ -70,12 +69,11 @@ public:
 
     Mana::PixmapResource *requestPixmap(const QString &path);
 
-    static QNetworkRequest::Attribute requestedFile()
-    { return static_cast<QNetworkRequest::Attribute>(RequestedFile); }
+    static QNetworkRequest::Attribute requestedFileAttribute();
 
 signals:
     void dataUrlChanged();
-    void pathsLoaded();
+    void pathsLoadedChanged();
 
 private slots:
     void pathsFileFinished();
@@ -90,5 +88,25 @@ private:
 
     static ResourceManager *mInstance;
 };
+
+
+inline ResourceManager *ResourceManager::instance()
+{ return mInstance; }
+
+inline QString ResourceManager::dataUrl() const
+{ return mDataUrl; }
+
+inline bool ResourceManager::pathsLoaded() const
+{ return mPathsLoaded; }
+
+inline QString ResourceManager::path(const QString &key,
+                                     const QString &value) const
+{ return mPaths.value(key, value); }
+
+inline QString ResourceManager::spritePath() const
+{ return path("sprites", "graphics/sprites/"); }
+
+inline QNetworkRequest::Attribute ResourceManager::requestedFileAttribute()
+{ return static_cast<QNetworkRequest::Attribute>(RequestedFile); }
 
 #endif // RESOURCEMANAGER_H

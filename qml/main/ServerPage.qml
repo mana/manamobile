@@ -4,7 +4,6 @@ import Mana 1.0
 Item {
     id: serverPage;
     property bool serverChosen: false;
-    anchors.fill: parent;
 
     Text {
         id: title;

@@ -14,7 +14,7 @@ Rectangle {
     function authenticated() {
         loggedIn = true
         loggingIn = false
-        state = "chooseCharacter"
+        state = "loadingPaths";
     }
 
     ConnectionStatus {
@@ -30,6 +30,13 @@ Rectangle {
         onRegistrationSucceeded: authenticated();
         onLoginFailed: loggingIn = false;
         onRegistrationFailed: loggingIn = false;
+    }
+    Connections {
+        target: resourceManager;
+        onPathsLoadedChanged: {
+            if (resourceManager.pathsLoaded && state == "loadingPaths")
+                state = "chooseCharacter";
+        }
     }
 
     Image {
@@ -47,100 +54,122 @@ Rectangle {
         anchors.right: window.right
         anchors.bottom: window.bottom
         anchors.margins: 10
-        running: accountClient.state == AccountClient.Connecting || loggingIn
+        running: accountClient.state === AccountClient.Connecting || loggingIn
                  || (characterChosen && window.state != "game")
     }
 
-    ServerPage {
-        id: serverPage
-        width: parent.width
-        height: parent.width
-        opacity: 0
-        x: width / 4
+    property variant currentPage;
+
+    function gotoPage(component) {
+        var properties = {
+            "width": function() { return window.width; },
+            "height": function() { return window.height; },
+            "opacity": 0,
+        };
+        var newPage = component.createObject(window, properties);
+
+        if (currentPage) {
+            properties = { "target": currentPage }
+            removePageAnimation.createObject(window, properties).start();
+        }
+
+        properties = { "target": newPage }
+        showPageAnimation.createObject(window, properties).start();
+
+        currentPage = newPage;
     }
-    LoginPage {
-        id: loginPage
-        width: parent.width
-        height: parent.height
-        opacity: 0
-        x: width / 4
+
+    Component.onCompleted: gotoPage(serverPage);
+
+    Component { id: serverPage; ServerPage {} }
+    Component { id: loginPage; LoginPage {} }
+    Component {
+        id: loadingPathsPage;
+        Item {
+            Text { text: "Loading paths..."; anchors.centerIn: parent }
+        }
     }
-    CharacterPage {
-        id: characterPage
-        width: parent.width
-        height: parent.height
-        opacity: 0
-        x: width / 4
+    Component { id: characterPage; CharacterPage {} }
+    Component { id: gamePage; GamePage {} }
+
+    Component {
+        id: removePageAnimation;
+
+        SequentialAnimation {
+            id: animation;
+            property variant target;
+
+            ParallelAnimation {
+                PropertyAnimation {
+                    target: animation.target;
+                    property: "opacity";
+                    from: 1; to: 0;
+                    easing.type: Easing.OutQuad;
+                }
+                PropertyAnimation {
+                    target: animation.target;
+                    property: "x";
+                    from: 0; to: -50;
+                    easing.type: Easing.OutQuad;
+                }
+            }
+            ScriptAction {
+                script: animation.target.destroy();
+            }
+        }
     }
-    GamePage {
-        id: gamePage
-        width: parent.width
-        height: parent.height
-        opacity: 0
-        x: width / 4
+
+    Component {
+        id: showPageAnimation;
+
+        ParallelAnimation {
+            id: animation;
+            property variant target;
+
+            PropertyAnimation {
+                target: animation.target;
+                property: "opacity";
+                from: 0; to: 1;
+                easing.type: Easing.OutQuad;
+            }
+            PropertyAnimation {
+                target: animation.target;
+                property: "x";
+                from: 50; to: 0;
+                easing.type: Easing.OutQuad;
+            }
+        }
     }
 
     states: [
         State {
             name: "serverSelect"
-            PropertyChanges {
-                target: serverPage
-                x: 0
-                opacity: 1
-            }
         },
         State {
             name: "login"
             when: accountClient.connected && !characterChosen
-            PropertyChanges {
-                target: serverPage
-                x: -serverPage.width / 4
-                opacity: 0
+            StateChangeScript {
+                script: gotoPage(loginPage);
             }
-            PropertyChanges {
-                target: loginPage
-                x: 0
-                opacity: 1
+        },
+        State {
+            name: "loadingPaths"
+            StateChangeScript {
+                script: gotoPage(loadingPathsPage);
             }
         },
         State {
             name: "chooseCharacter"
-            PropertyChanges {
-                target: loginPage
-                x: -loginPage.width / 4
-                opacity: 0
-            }
-            PropertyChanges {
-                target: characterPage
-                x: 0
-                opacity: 1
+            StateChangeScript {
+                script: gotoPage(characterPage);
             }
         },
         State {
             name: "game"
             when: chatClient.authenticated && gameClient.authenticated
             extend: "chooseCharacter"
-            PropertyChanges {
-                target: characterPage
-                x: -characterPage.width / 4
-                opacity: 0
-            }
-            PropertyChanges {
-                target: gamePage
-                x: 0
-                opacity: 1
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            SequentialAnimation {
-                NumberAnimation {
-                    properties: "x,opacity"
-                    duration: 500
-                    easing.type: Easing.InOutQuad
-                }
+            StateChangeScript {
+                script: gotoPage(gamePage);
             }
         }
     ]
