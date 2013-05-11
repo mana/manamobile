@@ -51,6 +51,26 @@ Item {
                 }
             }
         }
+
+        Item {
+            anchors.centerIn: parent;
+            visible: serverListModel.status == XmlListModel.Error;
+
+            Text {
+                id: errorLabel;
+                anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.bottom: parent.bottom;
+                text: qsTr("Error downloading server list");
+                font.bold: true;
+            }
+            Text {
+                id: errorText;
+                anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.top: errorLabel.bottom;
+                anchors.topMargin: 5;
+                color: "gray";
+            }
+        }
     }
 
     XmlListModel {
@@ -64,5 +84,10 @@ Item {
         XmlRole { name: "hostname"; query: "connection/@hostname/string()"; }
         XmlRole { name: "port"; query: "connection/@port/number()"; }
         XmlRole { name: "description"; query: "description/string()"; }
+
+        onStatusChanged: {
+            if (status == XmlListModel.Error)
+                errorText.text = errorString();
+        }
     }
 }
