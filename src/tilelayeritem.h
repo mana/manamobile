@@ -21,7 +21,7 @@
 #ifndef TILELAYERITEM_H
 #define TILELAYERITEM_H
 
-#include <QGraphicsItem>
+#include <QQuickItem>
 
 namespace Tiled {
 class TileLayer;
@@ -31,7 +31,7 @@ class MapRenderer;
 /**
  * A graphics item displaying a tile layer in a QGraphicsView.
  */
-class TileLayerItem : public QGraphicsItem
+class TileLayerItem : public QQuickItem
 {
 public:
     /**
@@ -41,7 +41,7 @@ public:
      * @param renderer the map renderer to use to render the layer
      */
     TileLayerItem(Tiled::TileLayer *layer, Tiled::MapRenderer *renderer,
-                  QGraphicsItem *parent = 0);
+                  QQuickItem *parent = 0);
 
     /**
      * Updates the size and position of this item. Should be called when the
@@ -53,11 +53,7 @@ public:
      */
     void syncWithTileLayer();
 
-    // QGraphicsItem
-    QRectF boundingRect() const;
-    void paint(QPainter *painter,
-               const QStyleOptionGraphicsItem *option,
-               QWidget *widget = 0);
+    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 
 private:
     Tiled::TileLayer *mLayer;

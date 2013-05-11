@@ -21,16 +21,10 @@
 
 #include <enet/enet.h>
 
-#include <QApplication>
-#include <QMessageBox>
-#include <QDeclarativeContext>
-#include <qdeclarative.h>
+#include <QGuiApplication>
+#include <QQmlContext>
 
-#ifndef QT_NO_OPENGL
-#include <QGLWidget>
-#endif
-
-#include "qmlapplicationviewer.h"
+#include "qtquick2applicationviewer.h"
 
 #include "mana/accountclient.h"
 #include "mana/being.h"
@@ -89,7 +83,7 @@ static void registerTypes()
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
 
     app.setApplicationName("Mana Mobile");
     app.setOrganizationDomain("manasource.org");
@@ -98,20 +92,15 @@ int main(int argc, char *argv[])
 
     if (enet_initialize() != 0)
     {
-        QMessageBox::critical(0, app.applicationName(),
-                              "An error occurred while initializing ENet.\n");
+        qWarning() << "An error occurred while initializing ENet.";
         return 1;
     }
     atexit(enet_deinitialize);
 
     registerTypes();
 
-    QmlApplicationViewer viewer;
-#ifndef QT_NO_OPENGL
-    viewer.setViewport(new QGLWidget);
-#endif
-    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.setWindowTitle(app.applicationName());
+    QtQuick2ApplicationViewer viewer;
+    viewer.setTitle(app.applicationName());
 
     ResourceManager *resourceManager = new ResourceManager(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
@@ -131,7 +120,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    QDeclarativeContext *context = viewer.rootContext();
+    QQmlContext* context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("resourceManager", resourceManager);
     context->setContextProperty("hairDB", hairDB);
@@ -141,12 +130,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("raceDB", raceDB);
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
-
-#if defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6) || defined(Q_OS_SYMBIAN)
-    viewer.showFullScreen();
-#else
-    viewer.show();
-#endif
+    viewer.showExpanded();
 
     return app.exec();
 }

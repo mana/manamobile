@@ -26,17 +26,16 @@
 #include "tiled/maprenderer.h"
 
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
 
 using namespace Tiled;
 
 TileLayerItem::TileLayerItem(TileLayer *layer, MapRenderer *renderer,
-                             QGraphicsItem *parent)
-    : QGraphicsItem(parent)
+                             QQuickItem *parent)
+    : QQuickItem(parent)
     , mLayer(layer)
     , mRenderer(renderer)
 {
-    setFlag(QGraphicsItem::ItemUsesExtendedStyleOption);
+    setFlag(ItemHasContents);
 
     syncWithTileLayer();
     setOpacity(mLayer->opacity());
@@ -44,18 +43,13 @@ TileLayerItem::TileLayerItem(TileLayer *layer, MapRenderer *renderer,
 
 void TileLayerItem::syncWithTileLayer()
 {
-    prepareGeometryChange();
-    mBoundingRect = mRenderer->boundingRect(mLayer->bounds());
+    const QRectF boundingRect = mRenderer->boundingRect(mLayer->bounds());
+    setPosition(boundingRect.topLeft());
+    setSize(boundingRect.size());
 }
 
-QRectF TileLayerItem::boundingRect() const
+QSGNode *TileLayerItem::updatePaintNode(QSGNode *,
+                                        QQuickItem::UpdatePaintNodeData *)
 {
-    return mBoundingRect;
-}
-
-void TileLayerItem::paint(QPainter *painter,
-                          const QStyleOptionGraphicsItem *option,
-                          QWidget *)
-{
-    mRenderer->drawTileLayer(painter, mLayer, option->exposedRect);
+    // TODO
 }

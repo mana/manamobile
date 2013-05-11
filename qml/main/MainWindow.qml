@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Mana 1.0
 
 Rectangle {
@@ -62,8 +62,8 @@ Rectangle {
 
     function gotoPage(component) {
         var properties = {
-            "width": function() { return window.width; },
-            "height": function() { return window.height; },
+            "width": Qt.binding(function() { return window.width; }),
+            "height": Qt.binding(function() { return window.height; }),
             "opacity": 0,
         };
         var newPage = component.createObject(window, properties);

@@ -34,17 +34,18 @@
 #include <QImageReader>
 #include <QNetworkReply>
 
+#include <QDebug>
+
 using namespace Tiled;
 using namespace Tiled::Internal;
 
-MapItem::MapItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+MapItem::MapItem(QQuickItem *parent)
+    : QQuickItem(parent)
     , mStatus(Null)
     , mMap(0)
     , mRenderer(0)
 {
     qDebug() << Q_FUNC_INFO;
-    setFlag(ItemHasNoContents);
 }
 
 void MapItem::setSource(const QString &source)
@@ -70,7 +71,7 @@ QRectF MapItem::boundingRect() const
 
 void MapItem::componentComplete()
 {
-    QDeclarativeItem::componentComplete();
+    QQuickItem::componentComplete();
     if (!mSource.isEmpty())
         load();
 }
@@ -155,15 +156,14 @@ void MapItem::mapFinished()
     int layerIndex = 0;
     foreach (Layer *layer, mMap->layers()) {
         if (TileLayer *tl = dynamic_cast<TileLayer*>(layer)) {
-            QGraphicsItem *layerItem = new TileLayerItem(tl, mRenderer, this);
-            layerItem->setZValue(layerIndex);
+            QQuickItem *layerItem = new TileLayerItem(tl, mRenderer, this);
+            layerItem->setZ(layerIndex);
             ++layerIndex;
         }
     }
 
     const QSize size = mRenderer->mapSize();
-    setImplicitWidth(size.width());
-    setImplicitHeight(size.height());
+    setImplicitSize(size.width(), size.height());
 
     // Request the external resources that were not loaded yet
     ResourceManager *rm = ResourceManager::instance();
@@ -247,7 +247,7 @@ void MapItem::imageFinished()
     }
 
     // Trigger a repaint of the tile layer items
-    foreach (QGraphicsItem *child, childItems())
+    foreach (QQuickItem *child, childItems())
         child->update();
 
     checkReady();

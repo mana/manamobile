@@ -21,7 +21,7 @@
 #ifndef MAPITEM_H
 #define MAPITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class QNetworkReply;
 
@@ -33,7 +33,7 @@ class MapRenderer;
 /**
  * A declarative item that displays a map.
  */
-class MapItem : public QDeclarativeItem
+class MapItem : public QQuickItem
 {
     Q_OBJECT
     Q_ENUMS(Status)
@@ -49,7 +49,7 @@ public:
         Loading
     };
 
-    explicit MapItem(QDeclarativeItem *parent = 0);
+    explicit MapItem(QQuickItem *parent = 0);
 
     QString source() const { return mSource; }
     void setSource(const QString &source);
@@ -57,7 +57,6 @@ public:
     Status status() const { return mStatus; }
 
     QRectF boundingRect() const;
-    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *) {}
 
     void componentComplete();
 

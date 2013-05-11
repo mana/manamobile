@@ -1,10 +1,10 @@
 # Check the Qt version. If QT_VERSION is not set, it is probably Qt 3.
 isEmpty(QT_VERSION) {
-    error("QT_VERSION not defined. Mana Mobile does not work with Qt 3.")
+    error("QT_VERSION not defined. Mana Mobile requires Qt 5.")
 }
-contains(QT_VERSION, ^4\\.[0-6]\\..*) {
+contains(QT_VERSION, ^4\\..*) {
     message("Cannot build Mana Mobile with Qt version $$QT_VERSION")
-    error("Use at least Qt 4.7")
+    error("Use at least Qt 5.0")
 }
 
 # Add more folders to ship with the application, here
@@ -12,22 +12,7 @@ folder_main.source = qml/main
 folder_main.target = qml
 DEPLOYMENTFOLDERS = folder_main
 
-# Avoid auto screen rotation
-#DEFINES += ORIENTATIONLOCK
-
-# Needs to be defined for Symbian
-DEFINES += NETWORKACCESS
-
-symbian:TARGET.UID3 = 0xE5aedbec
-
-symbian:ICON = symbianicon.svg
-
-# Define QMLJSDEBUGGER to allow debugging of QML
-# (This might significantly increase build time)
-# DEFINES += QMLJSDEBUGGER
-
 QT += network
-contains(QT_CONFIG, opengl): QT += opengl
 
 INCLUDEPATH += src
 
@@ -162,5 +147,5 @@ HEADERS += \
 
 
 # Please do not modify the following two lines. Required for deployment.
-include(qmlapplicationviewer/qmlapplicationviewer.pri)
+include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()

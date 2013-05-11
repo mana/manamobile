@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 
 /**
  * This is the mobile version of the QML based Mana client.

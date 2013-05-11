@@ -29,8 +29,8 @@
 
 using namespace Mana;
 
-SpriteItem::SpriteItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+SpriteItem::SpriteItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
     , mSpriteRef(0)
     , mDirection(Action::DIRECTION_DOWN)
     , mReady(false)
@@ -71,7 +71,7 @@ void SpriteItem::setSpriteRef(const SpriteReference *sprite)
         }
     }
 
-    setFlag(ItemHasNoContents, sprite == 0);
+    setFlag(ItemHasContents, sprite != 0);
 
     emit spriteRefChanged();
 }
@@ -118,9 +118,7 @@ void SpriteItem::playAnimation(const Action *action)
     }
 }
 
-void SpriteItem::paint(QPainter *painter,
-                       const QStyleOptionGraphicsItem *,
-                       QWidget *)
+void SpriteItem::paint(QPainter *painter)
 {
     if (!mFrame)
         return;
