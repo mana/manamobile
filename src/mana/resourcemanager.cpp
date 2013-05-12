@@ -38,6 +38,8 @@
 #include "mana/resource/imageresource.h"
 #include "mana/resource/spritedef.h"
 
+using namespace Mana;
+
 ResourceManager *ResourceManager::mInstance;
 
 // Time in seconds that a currently unused resource should stay in cache

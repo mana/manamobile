@@ -28,6 +28,8 @@ class TileLayer;
 class MapRenderer;
 }
 
+namespace Mana {
+
 /**
  * A graphics item displaying a tile layer in a QGraphicsView.
  */
@@ -60,5 +62,7 @@ private:
     Tiled::MapRenderer *mRenderer;
     QRectF mBoundingRect;
 };
+
+} // namespace Mana
 
 #endif // TILELAYERITEM_H

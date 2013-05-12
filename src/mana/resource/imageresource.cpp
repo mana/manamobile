@@ -20,8 +20,8 @@
 
 #include "imageresource.h"
 
-#include "resource.h"
-#include "resourcemanager.h"
+#include "mana/resource/resource.h"
+#include "mana/resourcemanager.h"
 
 #include <QDebug>
 #include <QNetworkReply>

@@ -20,13 +20,14 @@
 #ifndef SPRITEITEM_H
 #define SPRITEITEM_H
 
-#include <QQuickItem>
-#include <QTimer>
-
 #include "mana/resource/action.h"
 #include "mana/resource/animation.h"
 #include "mana/resource/spritedef.h"
 
+#include <QQuickItem>
+#include <QTimer>
+
+namespace Mana {
 
 class SpriteItem : public QQuickItem
 {
@@ -81,5 +82,7 @@ private:
     const Mana::Frame *mFrame;
     QTimer mTimer;
 };
+
+} // namespace Mana
 
 #endif // SPRITEITEM_H

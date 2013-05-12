@@ -37,7 +37,7 @@
 #include <QDebug>
 
 using namespace Tiled;
-using namespace Tiled::Internal;
+using namespace Mana;
 
 MapItem::MapItem(QQuickItem *parent)
     : QQuickItem(parent)

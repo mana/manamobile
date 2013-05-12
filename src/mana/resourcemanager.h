@@ -27,10 +27,10 @@
 #include <QNetworkRequest>
 
 namespace Mana {
+
 class ImageResource;
 class Resource;
 class SpriteDefinition;
-}
 
 /**
  * This is meant to be a convenient abstraction on top of QNetworkAccessManager
@@ -127,5 +127,7 @@ inline QNetworkRequest::Attribute ResourceManager::requestedFileAttribute()
 template <class R>
 inline R *ResourceManager::find(const QUrl &url)
 { return static_cast<R*>(mResources.value(url)); }
+
+} // namespace Mana
 
 #endif // RESOURCEMANAGER_H

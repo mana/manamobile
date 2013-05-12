@@ -30,6 +30,8 @@ class Map;
 class MapRenderer;
 } // namespace Tiled
 
+namespace Mana {
+
 /**
  * A declarative item that displays a map.
  */
@@ -83,5 +85,7 @@ private:
 
     QList<QNetworkReply*> mPendingResources;
 };
+
+} // namespace Mana
 
 #endif // MAPITEM_H
