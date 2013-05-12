@@ -18,7 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pixmapresource.h"
+#include "imageresource.h"
 
 #include "resource.h"
 #include "resourcemanager.h"

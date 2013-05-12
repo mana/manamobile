@@ -35,8 +35,7 @@
 
 #include "mana/xmlreader.h"
 
-#include "mana/resource/pixmapresource.h"
-#include "mana/resource/resource.h"
+#include "mana/resource/imageresource.h"
 #include "mana/resource/spritedef.h"
 
 ResourceManager *ResourceManager::mInstance;

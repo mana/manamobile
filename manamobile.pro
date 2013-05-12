@@ -50,11 +50,11 @@ SOURCES += src/main.cpp \
     src/mana/resource/action.cpp \
     src/mana/resource/animation.cpp \
     src/mana/resource/hairdb.cpp \
+    src/mana/resource/imageresource.cpp \
     src/mana/resource/imageset.cpp \
     src/mana/resource/itemdb.cpp \
     src/mana/resource/monsterdb.cpp \
     src/mana/resource/npcdb.cpp \
-    src/mana/resource/pixmapresource.cpp \
     src/mana/resource/racedb.cpp \
     src/mana/resource/resource.cpp \
     src/mana/resource/spritedef.cpp \
@@ -102,11 +102,11 @@ HEADERS += \
     src/mana/resource/action.h \
     src/mana/resource/animation.h \
     src/mana/resource/hairdb.h \
+    src/mana/resource/imageresource.h \
     src/mana/resource/imageset.h \
     src/mana/resource/itemdb.h \
     src/mana/resource/monsterdb.h \
     src/mana/resource/npcdb.h \
-    src/mana/resource/pixmapresource.h \
     src/mana/resource/racedb.h \
     src/mana/resource/resource.h \
     src/mana/resource/spritedef.h \

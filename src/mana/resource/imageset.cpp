@@ -20,8 +20,10 @@
 
 #include "imageset.h"
 
+#include "imageresource.h"
 #include "resourcemanager.h"
 
+#include <QImage>
 #include <QRect>
 
 using namespace Mana;

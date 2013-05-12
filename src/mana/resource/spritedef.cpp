@@ -22,6 +22,7 @@
 #include "spritedef.h"
 
 #include "animation.h"
+#include "imageresource.h"
 #include "imageset.h"
 #include "resourcemanager.h"
 

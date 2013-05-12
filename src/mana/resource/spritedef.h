@@ -22,11 +22,9 @@
 #ifndef SPRITEDEF_H
 #define SPRITEDEF_H
 
-#include <QList>
 #include <QMap>
-#include <QPixmap>
 #include <QSet>
-#include <QString>
+#include <QStringList>
 
 #include "action.h"
 #include "resource.h"

@@ -26,8 +26,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 
-#include "mana/resource/pixmapresource.h"
-#include "mana/resource/spritedef.h"
+namespace Mana {
+class ImageResource;
+class Resource;
+class SpriteDefinition;
+}
 
 /**
  * This is meant to be a convenient abstraction on top of QNetworkAccessManager
