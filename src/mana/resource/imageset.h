@@ -23,16 +23,17 @@
 
 #include <QObject>
 
-class QPixmap;
+class QQuickWindow;
 class QRect;
+class QSGTexture;
 
 namespace Mana {
 
-class PixmapResource;
+class ImageResource;
 
 class ImageSet : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit ImageSet(const QString &path,
@@ -47,9 +48,9 @@ public:
 
     int offsetY() const { return mOffsetY; }
 
-    const PixmapResource *pixmapResource() const { return mPixmap; }
+    const ImageResource *imageResource() const { return mImage; }
 
-    const QPixmap *pixmap() const;
+    QSGTexture *texture(QQuickWindow *window) const;
 
     QRect clip(int index) const;
 
@@ -62,7 +63,7 @@ private:
 
     bool mReady;
 
-    PixmapResource *mPixmap;
+    ImageResource *mImage;
 };
 
 }

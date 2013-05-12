@@ -20,9 +20,9 @@
 
 #include "imageset.h"
 
-#include <QRect>
-
 #include "resourcemanager.h"
+
+#include <QRect>
 
 using namespace Mana;
 
@@ -38,22 +38,22 @@ ImageSet::ImageSet(const QString &path,
     , mWidth(width)
     , mHeight(height)
 {
-    mPixmap = ResourceManager::instance()->requestPixmap(path);
+    mImage = ResourceManager::instance()->requestImage(path);
 }
 
 ImageSet::~ImageSet()
 {
-    mPixmap->decRef();
+    mImage->decRef();
 }
 
-const QPixmap *ImageSet::pixmap() const
+QSGTexture *ImageSet::texture(QQuickWindow *window) const
 {
-    return mPixmap->pixmap();
+    return mImage->texture(window);
 }
 
 QRect ImageSet::clip(int index) const
 {
-    const int framesPerRow = pixmap()->width() / mWidth;
+    const int framesPerRow = mImage->image()->width() / mWidth;
     int x = (index % framesPerRow) * mWidth;
     int y = (index / framesPerRow) * mHeight;
     return QRect(x, y, mWidth, mHeight);

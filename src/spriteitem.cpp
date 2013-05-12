@@ -19,18 +19,77 @@
 
 #include "spriteitem.h"
 
-#include <QPainter>
-
 #include "resourcemanager.h"
 
 #include "mana/resource/action.h"
 #include "mana/resource/animation.h"
 #include "mana/resource/imageset.h"
 
+#include <QQuickWindow>
+#include <QSGGeometryNode>
+#include <QSGTextureMaterial>
+
 using namespace Mana;
 
+namespace {
+
+class SubRectTextureNode : public QSGGeometryNode
+{
+public:
+    SubRectTextureNode();
+
+    void setTexture(QSGTexture *texture);
+    void setRects(const QRectF &rect, const QRectF &sourceRect);
+
+private:
+    void update();
+
+    QSGGeometry mGeometry;
+    QSGTextureMaterial mMaterial;
+    QRectF mRect;
+    QRectF mSourceRect;
+};
+
+SubRectTextureNode::SubRectTextureNode()
+    : mGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4)
+{
+    setGeometry(&mGeometry);
+    setMaterial(&mMaterial);
+}
+
+void SubRectTextureNode::setTexture(QSGTexture *texture)
+{
+    if (mMaterial.texture() == texture)
+        return;
+
+    mMaterial.setTexture(texture);
+    update();
+    markDirty(DirtyMaterial);
+}
+
+void SubRectTextureNode::setRects(const QRectF &rect, const QRectF &sourceRect)
+{
+    if (mRect == rect && mSourceRect == sourceRect)
+        return;
+
+    mRect = rect;
+    mSourceRect = sourceRect;
+    update();
+    markDirty(DirtyGeometry);
+}
+
+void SubRectTextureNode::update()
+{
+    QSGTexture *texture = mMaterial.texture();
+    QRectF sourceRect(texture->convertToNormalizedSourceRect(mSourceRect));
+    QSGGeometry::updateTexturedRectGeometry(&mGeometry, mRect, sourceRect);
+}
+
+} // anonymous namespace
+
+
 SpriteItem::SpriteItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+    : QQuickItem(parent)
     , mSpriteRef(0)
     , mDirection(Action::DIRECTION_DOWN)
     , mReady(false)
@@ -40,6 +99,7 @@ SpriteItem::SpriteItem(QQuickItem *parent)
     , mFrameIndex(0)
     , mFrame(0)
 {
+    setFlag(ItemHasContents);
     connect(&mTimer, SIGNAL(timeout()), this, SLOT(timerTick()));
 }
 
@@ -70,8 +130,6 @@ void SpriteItem::setSpriteRef(const SpriteReference *sprite)
             statusChanged(mSprite->status());
         }
     }
-
-    setFlag(ItemHasContents, sprite != 0);
 
     emit spriteRefChanged();
 }
@@ -118,13 +176,30 @@ void SpriteItem::playAnimation(const Action *action)
     }
 }
 
-void SpriteItem::paint(QPainter *painter)
+QSGNode *SpriteItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 {
-    if (!mFrame)
-        return;
+    SubRectTextureNode *n = static_cast<SubRectTextureNode *>(node);
 
-    painter->drawPixmap(QPoint(mFrame->offsetX, mFrame->offsetY),
-                        *mFrame->imageset->pixmap(), mFrame->clip);
+    if (!mFrame) {
+        delete n;
+        return 0;
+    } else {
+        if (!n) {
+            n = new SubRectTextureNode;
+            n->setFlag(QSGNode::OwnedByParent);
+        }
+
+        QSGTexture *texture = mFrame->imageset->texture(window());
+        QRectF rect(mFrame->offsetX,
+                    mFrame->offsetY,
+                    mFrame->clip.width(),
+                    mFrame->clip.height());
+
+        n->setTexture(texture);
+        n->setRects(rect, mFrame->clip);
+    }
+
+    return n;
 }
 
 void SpriteItem::setDirection(Action::SpriteDirection direction)
@@ -180,7 +255,7 @@ void SpriteItem::updateTimer()
 void SpriteItem::updateSize()
 {
     if (mFrame) {
-        setImplicitWidth(mFrame->clip.width());
-        setImplicitHeight(mFrame->clip.height());
+        setImplicitSize(mFrame->clip.width(),
+                        mFrame->clip.height());
     }
 }

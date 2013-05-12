@@ -40,7 +40,7 @@ class XmlReader;
 namespace Mana {
 
 class ImageSet;
-class PixmapResource;
+class ImageResource;
 
 class SpriteReference : public QObject
 {
@@ -151,7 +151,7 @@ private:
     QMap<QNetworkReply *, XmlReader *> mXmlRequests;
 
     // Maps replies to their parent XmlReader
-    QMap<const PixmapResource *, XmlReader *> mImageRequests;
+    QMap<const ImageResource *, XmlReader *> mImageRequests;
 
     QMap<QString, ImageSet *> mImageSets;
 

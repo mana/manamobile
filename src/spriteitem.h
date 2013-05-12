@@ -20,7 +20,7 @@
 #ifndef SPRITEITEM_H
 #define SPRITEITEM_H
 
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 #include <QTimer>
 
 #include "mana/resource/action.h"
@@ -28,7 +28,7 @@
 #include "mana/resource/spritedef.h"
 
 
-class SpriteItem : public QQuickPaintedItem
+class SpriteItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -52,7 +52,7 @@ public:
     void setDirection(Mana::Action::SpriteDirection direction);
     Mana::Action::SpriteDirection direction() const { return mDirection; }
 
-    void paint(QPainter *painter);
+    QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
 
 signals:
     void spriteRefChanged();

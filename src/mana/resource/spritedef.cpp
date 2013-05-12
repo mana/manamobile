@@ -120,7 +120,7 @@ void SpriteDefinition::imageFileStatusChanged(Status newStatus)
 {
     if (newStatus == Ready) {
         // continue parsing parent xml
-        XmlReader *xml = mImageRequests[static_cast<PixmapResource *>(sender())];
+        XmlReader *xml = mImageRequests[static_cast<ImageResource *>(sender())];
         readSprite(*xml, mResources[xml]);
     }
 }
@@ -332,10 +332,10 @@ bool SpriteDefinition::readImageSet(XmlReader &xml)
 
     ImageSet *imageSet =  new ImageSet(imageSrc, offsetX, offsetY,
                                        width, height, this);
-    connect(imageSet->pixmapResource(),
+    connect(imageSet->imageResource(),
             SIGNAL(statusChanged(Mana::Resource::Status)),
             this, SLOT(imageFileStatusChanged(Mana::Resource::Status)));
-    mImageRequests[imageSet->pixmapResource()] = &xml;
+    mImageRequests[imageSet->imageResource()] = &xml;
     mImageSets[name] = imageSet;
     return true;
 }

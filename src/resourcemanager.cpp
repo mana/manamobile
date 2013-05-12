@@ -190,16 +190,16 @@ Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
     return sprite;
 }
 
-Mana::PixmapResource *ResourceManager::requestPixmap(const QString &path)
+Mana::ImageResource *ResourceManager::requestImage(const QString &path)
 {
-    Mana::PixmapResource *pixmap = 0;
+    Mana::ImageResource *pixmap = 0;
 
     // Check if the sprite is already cached
     QMap<QString, Mana::Resource *>::iterator it = mResources.find(path);
     if (it != mResources.end()) {
-        pixmap = static_cast<Mana::PixmapResource *>(it.value());
+        pixmap = static_cast<Mana::ImageResource *>(it.value());
     } else {
-        pixmap = new Mana::PixmapResource(path, this);
+        pixmap = new Mana::ImageResource(path, this);
         mResources.insert(path, pixmap);
     }
     pixmap->incRef();

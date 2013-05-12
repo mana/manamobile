@@ -18,33 +18,36 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PIXMAPRESOURCE_H
-#define PIXMAPRESOURCE_H
+#ifndef IMAGERESOURCE_H
+#define IMAGERESOURCE_H
 
 #include "resource.h"
 
-class QPixmap;
+class QImage;
+class QQuickWindow;
+class QSGTexture;
 
 namespace Mana {
 
-class PixmapResource : public Resource
+class ImageResource : public Resource
 {
     Q_OBJECT
 public:
-    explicit PixmapResource(const QString &filePath, QObject *parent = 0);
+    explicit ImageResource(const QString &filePath, QObject *parent = 0);
 
-    ~PixmapResource();
+    ~ImageResource();
 
-    QPixmap *pixmap() { return mPixmap; }
+    QImage *image() { return mImage; }
+    QSGTexture *texture(QQuickWindow *window) const;
 
 private slots:
     void imageFinished();
 
 private:
-    QPixmap *mPixmap;
-
+    QImage *mImage;
+    mutable QSGTexture *mTexture;
 };
 
 }
 
-#endif // PIXMAPRESOURCE_H
+#endif // IMAGERESOURCE_H

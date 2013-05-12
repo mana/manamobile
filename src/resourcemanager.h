@@ -67,7 +67,7 @@ public:
     Mana::SpriteDefinition *requestSpriteDefinition(const QString &path,
                                                     int variant = 0);
 
-    Mana::PixmapResource *requestPixmap(const QString &path);
+    Mana::ImageResource *requestImage(const QString &path);
 
     static QNetworkRequest::Attribute requestedFileAttribute();
 

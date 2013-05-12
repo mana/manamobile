@@ -20,17 +20,20 @@
 
 #include "pixmapresource.h"
 
-#include <QDebug>
-#include <QNetworkReply>
-
 #include "resource.h"
 #include "resourcemanager.h"
 
+#include <QDebug>
+#include <QNetworkReply>
+#include <QQuickWindow>
+#include <QSGTexture>
+
 using namespace Mana;
 
-PixmapResource::PixmapResource(const QString &filePath, QObject *parent)
+ImageResource::ImageResource(const QString &filePath, QObject *parent)
     : Resource(filePath, parent)
-    , mPixmap(0)
+    , mImage(0)
+    , mTexture(0)
 {
     int pos = filePath.indexOf(QLatin1Char('|'));
 
@@ -47,24 +50,38 @@ PixmapResource::PixmapResource(const QString &filePath, QObject *parent)
     setStatus(Loading);
 }
 
-PixmapResource::~PixmapResource()
+ImageResource::~ImageResource()
 {
-    delete mPixmap;
+    delete mImage;
+
+    if (mTexture)
+        mTexture->deleteLater();
 }
 
-void PixmapResource::imageFinished()
+/**
+ * Returns the image as a scene graph texture.
+ */
+QSGTexture *ImageResource::texture(QQuickWindow *window) const
+{
+    if (!mTexture && mImage)
+        mTexture = window->createTextureFromImage(*mImage);
+
+    return mTexture;
+}
+
+void ImageResource::imageFinished()
 {
     QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    reply->deleteLater();
 
     if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "Failed to download image:" << reply->url() << "\n"
-                 << reply->errorString();
+                   << reply->errorString();
         setStatus(Error);
         return;
     }
 
-    reply->deleteLater();
-    mPixmap = new QPixmap();
-    bool success = mPixmap->loadFromData(reply->readAll());
+    mImage = new QImage;
+    bool success = mImage->loadFromData(reply->readAll());
     setStatus(success ? Ready : Error);
 }
