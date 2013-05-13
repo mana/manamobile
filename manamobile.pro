@@ -12,6 +12,8 @@ folder_main.source = qml/main
 folder_main.target = qml
 DEPLOYMENTFOLDERS = folder_main
 
+DEFINES += QT_NO_URL_CAST_FROM_STRING
+
 QT += network
 
 INCLUDEPATH += src

@@ -26,10 +26,10 @@
 
 using namespace Mana;
 
-Resource::Resource(QString path, QObject *parent)
+Resource::Resource(const QUrl &url, QObject *parent)
     : QObject(parent)
     , mRefCount(0)
-    , mPath(path)
+    , mUrl(url)
     , mReleaseTime(0)
     , mStatus(Null)
 {
