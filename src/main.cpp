@@ -32,7 +32,10 @@
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
+#include "mana/mapitem.h"
 #include "mana/npcdialogmanager.h"
+#include "mana/settings.h"
+#include "mana/spriteitem.h"
 #include "mana/spritelistmodel.h"
 
 #include "mana/resource/hairdb.h"
@@ -40,12 +43,7 @@
 #include "mana/resource/monsterdb.h"
 #include "mana/resource/npcdb.h"
 #include "mana/resource/racedb.h"
-
-#include "mapitem.h"
-#include "resourcemanager.h"
-#include "spriteitem.h"
-
-#include "mana/settings.h"
+#include "mana/resourcemanager.h"
 
 static void registerTypes()
 {
@@ -56,7 +54,7 @@ static void registerTypes()
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
     qmlRegisterType<Mana::Settings>("Mana", 1, 0, "Settings");
-    qmlRegisterType<SpriteItem>("Mana", 1, 0, "Sprite");
+    qmlRegisterType<Mana::SpriteItem>("Mana", 1, 0, "Sprite");
 
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();
@@ -71,14 +69,14 @@ static void registerTypes()
     qmlRegisterType<Mana::SpriteListModel>();
     qmlRegisterType<const Mana::SpriteReference>();
 
-    qmlRegisterType<ResourceManager>();
+    qmlRegisterType<Mana::ResourceManager>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
     qmlRegisterType<Mana::MonsterDB>();
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();
 
-    qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
+    qmlRegisterType<Mana::MapItem>("Tiled", 1, 0, "TileMap");
 }
 
 int main(int argc, char *argv[])
@@ -102,7 +100,7 @@ int main(int argc, char *argv[])
     QtQuick2ApplicationViewer viewer;
     viewer.setTitle(app.applicationName());
 
-    ResourceManager *resourceManager = new ResourceManager(&viewer);
+    Mana::ResourceManager *resourceManager = new Mana::ResourceManager(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
     Mana::MonsterDB *monsterDB = new Mana::MonsterDB(&viewer);

@@ -20,7 +20,7 @@
 
 #include "resource.h"
 
-#include "../../resourcemanager.h"
+#include "mana/resourcemanager.h"
 
 #include <QDateTime>
 

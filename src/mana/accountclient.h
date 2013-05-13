@@ -120,7 +120,7 @@ signals:
     void deleteCharacterSucceeded();
     void deleteCharacterFailed(int error, const QString &errorMessage);
 
-    void characterInfoReceived(const Mana::Character *info);
+    void characterInfoReceived(const Character *info);
     void dataUrlReceived();
 
     void chooseCharacterSucceeded();
@@ -190,7 +190,7 @@ private:
     QString mPlayerName;
 
     int mMaxCharacters;
-    QList<Mana::Character *> mCharacters;
+    QList<Character *> mCharacters;
 
     CharacterListModel *mCharacterListModel;
 

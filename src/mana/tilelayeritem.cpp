@@ -28,6 +28,7 @@
 #include <QPainter>
 
 using namespace Tiled;
+using namespace Mana;
 
 TileLayerItem::TileLayerItem(TileLayer *layer, MapRenderer *renderer,
                              QQuickItem *parent)

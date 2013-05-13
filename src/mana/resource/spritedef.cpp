@@ -21,10 +21,10 @@
 
 #include "spritedef.h"
 
-#include "animation.h"
-#include "imageresource.h"
-#include "imageset.h"
-#include "resourcemanager.h"
+#include "mana/resource/animation.h"
+#include "mana/resource/imageresource.h"
+#include "mana/resource/imageset.h"
+#include "mana/resourcemanager.h"
 
 #include "mana/xmlreader.h"
 
@@ -340,8 +340,8 @@ bool SpriteDefinition::readImageSet(XmlReader &xml)
     ImageSet *imageSet =  new ImageSet(imageSrc, offsetX, offsetY,
                                        width, height, this);
     connect(imageSet->imageResource(),
-            SIGNAL(statusChanged(Mana::Resource::Status)),
-            this, SLOT(imageFileStatusChanged(Mana::Resource::Status)));
+            SIGNAL(statusChanged(Resource::Status)),
+            this, SLOT(imageFileStatusChanged(Resource::Status)));
     mImageRequests[imageSet->imageResource()] = &xml;
     mImageSets[name] = imageSet;
     return true;

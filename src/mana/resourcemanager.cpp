@@ -38,6 +38,8 @@
 #include "mana/resource/imageresource.h"
 #include "mana/resource/spritedef.h"
 
+using namespace Mana;
+
 ResourceManager *ResourceManager::mInstance;
 
 // Time in seconds that a currently unused resource should stay in cache
@@ -156,7 +158,7 @@ QNetworkReply *ResourceManager::requestFile(const QUrl &url)
     return mNetworkAccessManager.get(request);
 }
 
-void ResourceManager::removeResource(Mana::Resource *resource)
+void ResourceManager::removeResource(Resource *resource)
 {
     Q_ASSERT(resource->refCount() == 0);
     Q_ASSERT(mResources.contains(resource->url()));
@@ -169,20 +171,20 @@ void ResourceManager::cleanUpResources()
 {
     unsigned releaseTime = QDateTime::currentMSecsSinceEpoch() - CACHE_TIME;
 
-    foreach (Mana::Resource *resource, mResources)
+    foreach (Resource *resource, mResources)
         if (resource->refCount() == 0 && resource->releaseTime() < releaseTime)
             removeResource(resource);
 }
 
-Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
+SpriteDefinition *ResourceManager::requestSpriteDefinition(
         const QString &path, int variant)
 {
     QUrl url = resolve(spritePath() + path);
     url.setFragment(QString::number(variant), QUrl::DecodedMode);
 
-    Mana::SpriteDefinition *sprite = find<Mana::SpriteDefinition>(url);
+    SpriteDefinition *sprite = find<SpriteDefinition>(url);
     if (!sprite) {
-        sprite = new Mana::SpriteDefinition(this, url, variant);
+        sprite = new SpriteDefinition(this, url, variant);
         mResources.insert(url, sprite);
     }
 
@@ -190,13 +192,13 @@ Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
     return sprite;
 }
 
-Mana::ImageResource *ResourceManager::requestImage(const QString &path)
+ImageResource *ResourceManager::requestImage(const QString &path)
 {
     QUrl url = resolve(path);
 
-    Mana::ImageResource *image = find<Mana::ImageResource>(url);
+    ImageResource *image = find<ImageResource>(url);
     if (!image) {
-        image = new Mana::ImageResource(url, this);
+        image = new ImageResource(url, this);
         mResources.insert(url, image);
     }
 

@@ -65,7 +65,7 @@ public:
     void setStatus(Status newStatus);
 
 signals:
-    void statusChanged(Mana::Resource::Status newStatus);
+    void statusChanged(Resource::Status newStatus);
 
 private:
     unsigned mRefCount;

@@ -45,10 +45,12 @@ SOURCES += src/main.cpp \
     src/mana/chatclient.cpp \
     src/mana/enetclient.cpp \
     src/mana/gameclient.cpp \
+    src/mana/mapitem.cpp \
     src/mana/messagein.cpp \
     src/mana/messageout.cpp \
     src/mana/monster.cpp \
     src/mana/npc.cpp \
+    src/mana/npcdialogmanager.cpp \
     src/mana/resource/action.cpp \
     src/mana/resource/animation.cpp \
     src/mana/resource/hairdb.cpp \
@@ -60,12 +62,12 @@ SOURCES += src/main.cpp \
     src/mana/resource/racedb.cpp \
     src/mana/resource/resource.cpp \
     src/mana/resource/spritedef.cpp \
+    src/mana/resourcemanager.cpp \
     src/mana/settings.cpp \
     src/mana/sha256.cpp \
+    src/mana/spriteitem.cpp \
     src/mana/spritelistmodel.cpp \
-    src/mapitem.cpp \
-    src/resourcemanager.cpp \
-    src/spriteitem.cpp \
+    src/mana/tilelayeritem.cpp \
     src/tiled/compression.cpp \
     src/tiled/gidmapper.cpp \
     src/tiled/imagelayer.cpp \
@@ -82,9 +84,7 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tile.cpp \
     src/tiled/tilelayer.cpp \
-    src/tiled/tileset.cpp \
-    src/tilelayeritem.cpp \
-    src/mana/npcdialogmanager.cpp
+    src/tiled/tileset.cpp
 
 HEADERS += \
     src/durationlogger.h \
@@ -96,10 +96,12 @@ HEADERS += \
     src/mana/chatclient.h \
     src/mana/enetclient.h \
     src/mana/gameclient.h \
+    src/mana/mapitem.h \
     src/mana/messagein.h \
     src/mana/messageout.h \
     src/mana/monster.h \
     src/mana/npc.h \
+    src/mana/npcdialogmanager.h \
     src/mana/protocol.h \
     src/mana/resource/action.h \
     src/mana/resource/animation.h \
@@ -112,14 +114,14 @@ HEADERS += \
     src/mana/resource/racedb.h \
     src/mana/resource/resource.h \
     src/mana/resource/spritedef.h \
+    src/mana/resourcemanager.h \
+    src/mana/safeassert.h \
     src/mana/settings.h \
     src/mana/sha256.h \
+    src/mana/spriteitem.h \
     src/mana/spritelistmodel.h \
+    src/mana/tilelayeritem.h \
     src/mana/xmlreader.h \
-    src/mapitem.h \
-    src/resourcemanager.h \
-    src/safeassert.h \
-    src/spriteitem.h \
     src/tiled/compression.h \
     src/tiled/gidmapper.h \
     src/tiled/imagelayer.h \
@@ -143,9 +145,7 @@ HEADERS += \
     src/tiled/tiled_global.h \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
-    src/tiled/tileset.h \
-    src/tilelayeritem.h \
-    src/mana/npcdialogmanager.h
+    src/tiled/tileset.h
 
 
 # Please do not modify the following two lines. Required for deployment.

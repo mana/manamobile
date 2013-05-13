@@ -20,8 +20,8 @@
 
 #include "npcdb.h"
 
-#include "../../resourcemanager.h"
-#include "../xmlreader.h"
+#include "mana/resourcemanager.h"
+#include "mana/xmlreader.h"
 
 #include "hairdb.h"
 #include "racedb.h"

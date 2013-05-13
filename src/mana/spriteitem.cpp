@@ -19,7 +19,7 @@
 
 #include "spriteitem.h"
 
-#include "resourcemanager.h"
+#include "mana/resourcemanager.h"
 
 #include "mana/resource/action.h"
 #include "mana/resource/animation.h"
@@ -124,8 +124,8 @@ void SpriteItem::setSpriteRef(const SpriteReference *sprite)
                     sprite->sprite, sprite->variant);
 
         if (mSprite->status() == Resource::Loading) {
-            connect(mSprite, SIGNAL(statusChanged(Mana::Resource::Status)),
-                    this, SLOT(statusChanged(Mana::Resource::Status)));
+            connect(mSprite, SIGNAL(statusChanged(Resource::Status)),
+                    this, SLOT(statusChanged(Resource::Status)));
         } else {
             statusChanged(mSprite->status());
         }
