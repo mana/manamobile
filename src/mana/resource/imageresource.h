@@ -33,7 +33,7 @@ class ImageResource : public Resource
 {
     Q_OBJECT
 public:
-    explicit ImageResource(const QString &filePath, QObject *parent = 0);
+    explicit ImageResource(const QUrl &url, QObject *parent = 0);
 
     ~ImageResource();
 

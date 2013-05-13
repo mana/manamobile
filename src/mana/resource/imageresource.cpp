@@ -30,22 +30,27 @@
 
 using namespace Mana;
 
-ImageResource::ImageResource(const QString &filePath, QObject *parent)
-    : Resource(filePath, parent)
+ImageResource::ImageResource(const QUrl &url, QObject *parent)
+    : Resource(url, parent)
     , mImage(0)
     , mTexture(0)
 {
-    int pos = filePath.indexOf(QLatin1Char('|'));
+    QString path = url.path(QUrl::FullyDecoded);
+
+    int pos = path.indexOf(QLatin1Char('|'));
 
     QString palettes;
     if (pos != -1)
-        palettes = filePath.right(filePath.length() - pos);
+        palettes = path.mid(pos + 1);
 
     // TODO: Dye
 
-    const QString filePathWithoutDye = filePath.left(pos);
-    QNetworkReply *reply = ResourceManager::instance()->requestFile(
-                filePathWithoutDye);
+    const QString pathWithoutDye = path.left(pos);
+    QUrl urlWithoutDye = url;
+    urlWithoutDye.setPath(pathWithoutDye, QUrl::DecodedMode);
+
+    ResourceManager *resourceManager = ResourceManager::instance();
+    QNetworkReply *reply = resourceManager->requestFile(urlWithoutDye);
     connect(reply, SIGNAL(finished()), this, SLOT(imageFinished()));
     setStatus(Loading);
 }

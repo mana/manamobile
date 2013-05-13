@@ -142,20 +142,26 @@ void ResourceManager::setDataUrl(const QString &url)
 
 QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 {
-    QNetworkRequest request(QUrl(mDataUrl).resolved(fileName));
+    QNetworkRequest request(resolve(fileName));
     request.setAttribute(requestedFileAttribute(), fileName);
 
     qDebug() << "Retrieving" << request.url();
+    return mNetworkAccessManager.get(request);
+}
 
+QNetworkReply *ResourceManager::requestFile(const QUrl &url)
+{
+    QNetworkRequest request(url);
+    qDebug() << "Retrieving" << request.url();
     return mNetworkAccessManager.get(request);
 }
 
 void ResourceManager::removeResource(Mana::Resource *resource)
 {
     Q_ASSERT(resource->refCount() == 0);
-    Q_ASSERT(mResources.contains(resource->path()));
+    Q_ASSERT(mResources.contains(resource->url()));
 
-    mResources.remove(resource->path());
+    mResources.remove(resource->url());
     delete resource;
 }
 
@@ -171,36 +177,29 @@ void ResourceManager::cleanUpResources()
 Mana::SpriteDefinition *ResourceManager::requestSpriteDefinition(
         const QString &path, int variant)
 {
-    Mana::SpriteDefinition *sprite = 0;
+    QUrl url = resolve(spritePath() + path);
+    url.setFragment(QString::number(variant), QUrl::DecodedMode);
 
-    const QString &spritePrefix = spritePath();
-
-    // Check if the sprite is already cached
-    QMap<QString, Mana::Resource *>::iterator it =
-            mResources.find(spritePrefix + path);
-
-    if (it != mResources.end()) {
-        sprite = static_cast<Mana::SpriteDefinition *>(it.value());
-    } else {
-        sprite = new Mana::SpriteDefinition(this, spritePrefix + path, variant);
-        mResources.insert(sprite->path(), sprite);
+    Mana::SpriteDefinition *sprite = find<Mana::SpriteDefinition>(url);
+    if (!sprite) {
+        sprite = new Mana::SpriteDefinition(this, url, variant);
+        mResources.insert(url, sprite);
     }
+
     sprite->incRef();
     return sprite;
 }
 
 Mana::ImageResource *ResourceManager::requestImage(const QString &path)
 {
-    Mana::ImageResource *pixmap = 0;
+    QUrl url = resolve(path);
 
-    // Check if the sprite is already cached
-    QMap<QString, Mana::Resource *>::iterator it = mResources.find(path);
-    if (it != mResources.end()) {
-        pixmap = static_cast<Mana::ImageResource *>(it.value());
-    } else {
-        pixmap = new Mana::ImageResource(path, this);
-        mResources.insert(path, pixmap);
+    Mana::ImageResource *image = find<Mana::ImageResource>(url);
+    if (!image) {
+        image = new Mana::ImageResource(url, this);
+        mResources.insert(url, image);
     }
-    pixmap->incRef();
-    return pixmap;
+
+    image->incRef();
+    return image;
 }

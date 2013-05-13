@@ -61,7 +61,10 @@ public:
     QString path(const QString &key, const QString &value = QString()) const;
     QString spritePath() const;
 
+    QUrl resolve(const QString &path) const;
+
     QNetworkReply *requestFile(const QString &fileName);
+    QNetworkReply *requestFile(const QUrl &url);
 
     void removeResource(Mana::Resource *resource);
 
@@ -82,9 +85,11 @@ private slots:
     void pathsFileFinished();
 
 private:
+    template <class R> R *find(const QUrl &url);
+
     QString mDataUrl;
     QNetworkAccessManager mNetworkAccessManager;
-    QMap<QString, Mana::Resource *> mResources;
+    QMap<QUrl, Mana::Resource *> mResources;
 
     bool mPathsLoaded;
     QMap<QString, QString> mPaths;
@@ -109,7 +114,18 @@ inline QString ResourceManager::path(const QString &key,
 inline QString ResourceManager::spritePath() const
 { return path("sprites", "graphics/sprites/"); }
 
+/**
+ * Returns the URL for the resource located at \a path, relative from the
+ * data URL.
+ */
+inline QUrl ResourceManager::resolve(const QString &path) const
+{ return QUrl(mDataUrl).resolved(QUrl(path)); }
+
 inline QNetworkRequest::Attribute ResourceManager::requestedFileAttribute()
 { return static_cast<QNetworkRequest::Attribute>(RequestedFile); }
+
+template <class R>
+inline R *ResourceManager::find(const QUrl &url)
+{ return static_cast<R*>(mResources.value(url)); }
 
 #endif // RESOURCEMANAGER_H
