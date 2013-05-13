@@ -57,7 +57,7 @@ public:
 
     ExpectedInput expectedInput() const { return mExpectedInput; }
 
-    Q_INVOKABLE void startTalkingTo(Mana::Being *being);
+    Q_INVOKABLE void startTalkingTo(Being *being);
     Q_INVOKABLE void next();
     Q_INVOKABLE void choose(int choice);
 

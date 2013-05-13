@@ -44,14 +44,14 @@ public:
 
     void reset();
 
-    void setSpriteRef(const Mana::SpriteReference *sprite);
-    const Mana::SpriteReference *spriteRef() const { return mSpriteRef; }
+    void setSpriteRef(const SpriteReference *sprite);
+    const SpriteReference *spriteRef() const { return mSpriteRef; }
 
     void setAction(const QString &actionName);
     QString action() const { return mActionName; }
 
-    void setDirection(Mana::Action::SpriteDirection direction);
-    Mana::Action::SpriteDirection direction() const { return mDirection; }
+    void setDirection(Action::SpriteDirection direction);
+    Action::SpriteDirection direction() const { return mDirection; }
 
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
 
@@ -62,24 +62,24 @@ signals:
 
 private slots:
     void timerTick();
-    void statusChanged(Mana::Resource::Status status);
+    void statusChanged(Resource::Status status);
 
 private:
-    void playAnimation(const Mana::Action *action);
+    void playAnimation(const Action *action);
     void updateTimer();
     void updateSize();
 
-    const Mana::SpriteReference *mSpriteRef;
+    const SpriteReference *mSpriteRef;
     QString mActionName;
-    Mana::Action::SpriteDirection mDirection;
+    Action::SpriteDirection mDirection;
 
     bool mReady;
 
-    Mana::SpriteDefinition *mSprite;
-    const Mana::Action *mAction;
-    const Mana::Animation *mAnimation;
+    SpriteDefinition *mSprite;
+    const Action *mAction;
+    const Animation *mAnimation;
     int mFrameIndex;
-    const Mana::Frame *mFrame;
+    const Frame *mFrame;
     QTimer mTimer;
 };
 

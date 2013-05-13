@@ -107,11 +107,11 @@ public:
 
     void lookAt(const QPointF &point);
 
-    Mana::SpriteListModel *spriteListModel() const { return mSpriteList; }
+    SpriteListModel *spriteListModel() const { return mSpriteList; }
 
 signals:
     void positionChanged();
-    void directionChanged(Mana::BeingDirection newDirection);
+    void directionChanged(BeingDirection newDirection);
     void nameChanged();
     void chatMessageChanged();
     void actionChanged();
@@ -126,7 +126,7 @@ protected:
     QPointF mServerPosition;
     QString mName;
     QString mChatMessage;
-    Mana::SpriteListModel *mSpriteList;
+    SpriteListModel *mSpriteList;
     BeingGender mGender;
 };
 

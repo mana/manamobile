@@ -53,7 +53,7 @@ QHash<int, QByteArray> CharacterListModel::roleNames() const
     return mRoleNames;
 }
 
-void CharacterListModel::setCharacters(const QList<Mana::Character *> &
+void CharacterListModel::setCharacters(const QList<Character *> &
                                        characters)
 {
     beginResetModel();

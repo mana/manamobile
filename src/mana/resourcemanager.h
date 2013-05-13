@@ -66,14 +66,14 @@ public:
     QNetworkReply *requestFile(const QString &fileName);
     QNetworkReply *requestFile(const QUrl &url);
 
-    void removeResource(Mana::Resource *resource);
+    void removeResource(Resource *resource);
 
     Q_INVOKABLE void cleanUpResources();
 
-    Mana::SpriteDefinition *requestSpriteDefinition(const QString &path,
-                                                    int variant = 0);
+    SpriteDefinition *requestSpriteDefinition(const QString &path,
+                                              int variant = 0);
 
-    Mana::ImageResource *requestImage(const QString &path);
+    ImageResource *requestImage(const QString &path);
 
     static QNetworkRequest::Attribute requestedFileAttribute();
 
@@ -89,7 +89,7 @@ private:
 
     QString mDataUrl;
     QNetworkAccessManager mNetworkAccessManager;
-    QMap<QUrl, Mana::Resource *> mResources;
+    QMap<QUrl, Resource *> mResources;
 
     bool mPathsLoaded;
     QMap<QString, QString> mPaths;

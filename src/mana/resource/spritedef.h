@@ -124,7 +124,7 @@ public:
 
 private slots:
     void xmlFileFinished();
-    void imageFileStatusChanged(Mana::Resource::Status newStatus);
+    void imageFileStatusChanged(Resource::Status newStatus);
 
 private:
     void requestFile(const QUrl &url, XmlReader *parent = 0);
