@@ -44,13 +44,12 @@ public:
                       QObject *parent = 0);
     ~ImageSet();
 
-    int offsetX() const { return mOffsetX; }
+    int offsetX() const;
+    int offsetY() const;
 
-    int offsetY() const { return mOffsetY; }
+    const ImageResource *imageResource() const;
 
-    const ImageResource *imageResource() const { return mImage; }
-
-    QSGTexture *texture(QQuickWindow *window) const;
+    QSGTexture *texture(const QQuickWindow *window) const;
 
     QRect clip(int index) const;
 
@@ -61,11 +60,14 @@ private:
     int mWidth;
     int mHeight;
 
-    bool mReady;
-
     ImageResource *mImage;
 };
 
-}
+inline int ImageSet::offsetX() const { return mOffsetX; }
+inline int ImageSet::offsetY() const { return mOffsetY; }
+
+inline const ImageResource *ImageSet::imageResource() const { return mImage; }
+
+} // namespace Mana
 
 #endif // IMAGESET_H

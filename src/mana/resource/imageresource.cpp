@@ -66,7 +66,7 @@ ImageResource::~ImageResource()
 /**
  * Returns the image as a scene graph texture.
  */
-QSGTexture *ImageResource::texture(QQuickWindow *window) const
+QSGTexture *ImageResource::texture(const QQuickWindow *window) const
 {
     if (!mTexture && mImage)
         mTexture = window->createTextureFromImage(*mImage);

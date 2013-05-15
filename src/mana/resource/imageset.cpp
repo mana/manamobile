@@ -48,7 +48,7 @@ ImageSet::~ImageSet()
     mImage->decRef();
 }
 
-QSGTexture *ImageSet::texture(QQuickWindow *window) const
+QSGTexture *ImageSet::texture(const QQuickWindow *window) const
 {
     return mImage->texture(window);
 }

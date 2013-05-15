@@ -58,6 +58,11 @@ Rectangle {
             id: map;
             source: gameClient.currentMap;
 
+            visibleArea: Qt.rect(-mapContainer.x,
+                                 -mapContainer.y,
+                                 gamePage.width,
+                                 gamePage.height);
+
             onStatusChanged: {
                 if (status == TileMap.Ready) {
                     fadeInMap.start();

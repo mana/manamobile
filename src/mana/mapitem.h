@@ -21,16 +21,21 @@
 #ifndef MAPITEM_H
 #define MAPITEM_H
 
+#include <QHash>
 #include <QQuickItem>
 
 class QNetworkReply;
+class QSGTexture;
 
 namespace Tiled {
 class Map;
 class MapRenderer;
+class Tileset;
 } // namespace Tiled
 
 namespace Mana {
+
+class ImageResource;
 
 /**
  * A declarative item that displays a map.
@@ -42,6 +47,7 @@ class MapItem : public QQuickItem
 
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(QRectF visibleArea READ visibleArea WRITE setVisibleArea NOTIFY visibleAreaChanged)
 
 public:
     enum Status {
@@ -58,33 +64,54 @@ public:
 
     Status status() const { return mStatus; }
 
+    const QRectF &visibleArea() const;
+    void setVisibleArea(const QRectF &visibleArea);
+
     QRectF boundingRect() const;
 
     void componentComplete();
 
+    const Tiled::Map *map() const;
+    const ImageResource *tilesetImage(Tiled::Tileset *tileset) const;
+
 signals:
     void sourceChanged(const QString &source);
     void statusChanged();
+    void visibleAreaChanged();
 
 private slots:
     void mapFinished();
     void tilesetFinished();
-    void imageFinished();
+    void imageStatusChanged();
 
 private:
     void setStatus(Status status);
     void load();
     QNetworkReply *finishReply();
     void checkReady();
+    void requestTilesetImage(Tiled::Tileset *tileset);
 
     QString mSource;
     Status mStatus;
+    QRectF mVisibleArea;
 
     Tiled::Map *mMap;
     Tiled::MapRenderer *mRenderer;
 
+    QNetworkReply* mMapReply;
     QList<QNetworkReply*> mPendingResources;
+    QSet<ImageResource*> mPendingImageResources;
+    QHash<Tiled::Tileset*, ImageResource*> mImageResources;
 };
+
+inline const QRectF &MapItem::visibleArea() const
+{ return mVisibleArea; }
+
+inline const Tiled::Map *MapItem::map() const
+{ return mMap; }
+
+inline const ImageResource *MapItem::tilesetImage(Tiled::Tileset *tileset) const
+{ return mImageResources.value(tileset); }
 
 } // namespace Mana
 

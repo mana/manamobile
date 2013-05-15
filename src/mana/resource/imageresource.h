@@ -37,8 +37,8 @@ public:
 
     ~ImageResource();
 
-    QImage *image() { return mImage; }
-    QSGTexture *texture(QQuickWindow *window) const;
+    const QImage *image() const { return mImage; }
+    QSGTexture *texture(const QQuickWindow *window) const;
 
 private slots:
     void imageFinished();

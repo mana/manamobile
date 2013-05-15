@@ -30,6 +30,8 @@
 #include "tiled/tileset.h"
 #include "tiled/mapreader.h"
 
+#include "mana/resource/imageresource.h"
+
 #include <QFileInfo>
 #include <QImageReader>
 #include <QNetworkReply>
@@ -45,7 +47,6 @@ MapItem::MapItem(QQuickItem *parent)
     , mMap(0)
     , mRenderer(0)
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 void MapItem::setSource(const QString &source)
@@ -59,6 +60,12 @@ void MapItem::setSource(const QString &source)
 
     if (isComponentComplete())
         load();
+}
+
+void MapItem::setVisibleArea(const QRectF &visibleArea)
+{
+    mVisibleArea = visibleArea;
+    emit visibleAreaChanged();
 }
 
 QRectF MapItem::boundingRect() const
@@ -97,13 +104,26 @@ void MapItem::load()
     mRenderer = 0;
 
     // Cancel any previous requests
-    foreach (QNetworkReply *reply, mPendingResources)
+    foreach (QNetworkReply *reply, mPendingResources) {
+        disconnect(reply, SIGNAL(finished()));
         reply->deleteLater();
+    }
     mPendingResources.clear();
+
+    foreach (ImageResource *imageResource, mPendingImageResources) {
+        disconnect(imageResource, SIGNAL(statusChanged(Resource::Status)),
+                   this, SLOT(imageStatusChanged()));
+    }
+    mPendingImageResources.clear();
+
+    foreach (ImageResource *imageResource, mImageResources)
+        imageResource->decRef();
+    mImageResources.clear();
 
     // Request the new map
     QNetworkReply *reply = ResourceManager::instance()->requestFile(mSource);
     mPendingResources.append(reply);
+    mMapReply = reply;
 
     connect(reply, SIGNAL(finished()), this, SLOT(mapFinished()));
 
@@ -120,13 +140,20 @@ QNetworkReply *MapItem::finishReply()
 
 void MapItem::checkReady()
 {
-    if (mStatus == Loading && mPendingResources.isEmpty())
-        setStatus(Ready);
+    if (mStatus == Loading) {
+        qDebug() << Q_FUNC_INFO << mPendingResources.size() << mPendingImageResources.size();
+        if (mPendingResources.isEmpty() && mPendingImageResources.isEmpty())
+            setStatus(Ready);
+    }
 }
 
 void MapItem::mapFinished()
 {
     QNetworkReply *reply = finishReply();
+
+    // Ignore late replies if the map has changed meanwhile
+    if (reply != mMapReply)
+        return;
 
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << "Failed to download map:" << mSource << "\n"
@@ -166,17 +193,15 @@ void MapItem::mapFinished()
     setImplicitSize(size.width(), size.height());
 
     // Request the external resources that were not loaded yet
-    ResourceManager *rm = ResourceManager::instance();
     foreach (Tileset *tileset, mMap->tilesets()) {
         if (!tileset->fileName().isEmpty()) {
+            ResourceManager *rm = ResourceManager::instance();
             QNetworkReply *reply = rm->requestFile(tileset->fileName());
             mPendingResources.append(reply);
             connect(reply, SIGNAL(finished()), this, SLOT(tilesetFinished()));
         }
         else if (!tileset->imageSource().isEmpty()) {
-            QNetworkReply *reply = rm->requestFile(tileset->imageSource());
-            mPendingResources.append(reply);
-            connect(reply, SIGNAL(finished()), this, SLOT(imageFinished()));
+            requestTilesetImage(tileset);
         }
     }
 
@@ -186,28 +211,27 @@ void MapItem::mapFinished()
 void MapItem::tilesetFinished()
 {
     QNetworkReply *reply = finishReply();
+    if (!mMap) // Ignore request when we already changed map again
+        return;
 
     const QNetworkRequest request = reply->request();
     const QString tilesetFilePath =
             request.attribute(ResourceManager::requestedFileAttribute()).toString();
     Q_ASSERT(!tilesetFilePath.isEmpty());
 
-    ResourceManager *rm = ResourceManager::instance();
-
     const int lastSlashPos = tilesetFilePath.lastIndexOf(QLatin1Char('/'));
     const QString tilesetPath = tilesetFilePath.left(lastSlashPos);
 
     Tiled::MapReader reader;
-    reader.setLazy(true); // Don't have it load the tileset image immediately
+    reader.setLazy(true); // Don't have it load the tileset images immediately
 
     Tiled::Tileset *tileset = reader.readTileset(reply, tilesetPath);
     if (!tileset) {
         qDebug() << "Error reading tileset:" << tilesetFilePath << "\n"
                  << reader.errorString();
     } else {
-        QNetworkReply *reply = rm->requestFile(tileset->imageSource());
-        mPendingResources.append(reply);
-        connect(reply, SIGNAL(finished()), this, SLOT(imageFinished()));
+        if (!tileset->imageSource().isEmpty())
+            requestTilesetImage(tileset);
 
         foreach (Tileset *ts, mMap->tilesets()) {
             if (ts->fileName() == tilesetFilePath) {
@@ -216,39 +240,45 @@ void MapItem::tilesetFinished()
                 break;
             }
         }
+
+        // The above tileset replacement may change the tile layer draw margins
+        foreach (QQuickItem *child, childItems())
+            static_cast<TileLayerItem*>(child)->updateVisibleTiles();
     }
 
     checkReady();
 }
 
-void MapItem::imageFinished()
+void MapItem::imageStatusChanged()
 {
-    QNetworkReply *reply = finishReply();
-
-    const QNetworkRequest request = reply->request();
-    const QString requestedFile =
-            request.attribute(ResourceManager::requestedFileAttribute()).toString();
-    Q_ASSERT(!requestedFile.isEmpty());
-
-    // TODO: Remove hack here to pass image type based on extension. If we
-    // don't do this, Qt seems to query all image plugins and the 'ras' one
-    // will warn about not supporting sequential devices...
-    QImageReader reader(reply, QFileInfo(requestedFile).suffix().toLatin1());
-    const QImage image = reader.read();
-
-    if (image.isNull()) {
-        qDebug() << "Failed to read image!";
-        return;
-    }
-
-    foreach (Tileset *tileset, mMap->tilesets()) {
-        if (requestedFile == tileset->imageSource())
-            tileset->loadFromImage(image, tileset->imageSource());
-    }
+    ImageResource *imgRes = static_cast<ImageResource*>(sender());
+    mPendingImageResources.remove(imgRes);
 
     // Trigger a repaint of the tile layer items
-    foreach (QQuickItem *child, childItems())
-        child->update();
+    if (imgRes->status() == Resource::Ready) {
+        foreach (QQuickItem *child, childItems())
+            child->update();
+    } else {
+        qWarning() << "Error loading tileset image" << imgRes->url();
+    }
 
     checkReady();
+}
+
+void MapItem::requestTilesetImage(Tileset *tileset)
+{
+    Q_ASSERT(!tileset->imageSource().isEmpty());
+
+    ResourceManager *rm = ResourceManager::instance();
+    ImageResource *imgRes = rm->requestImage(tileset->imageSource());
+    mImageResources.insert(tileset, imgRes);
+
+    if (imgRes->status() == Resource::Loading) {
+        mPendingImageResources.insert(imgRes);
+        connect(imgRes, SIGNAL(statusChanged(Resource::Status)),
+                this, SLOT(imageStatusChanged()));
+    } else {
+        foreach (QQuickItem *child, childItems())
+            child->update();
+    }
 }

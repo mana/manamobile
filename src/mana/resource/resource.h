@@ -64,6 +64,8 @@ public:
     Status status() const;
     void setStatus(Status newStatus);
 
+    bool isReady() const;
+
 signals:
     void statusChanged(Resource::Status newStatus);
 
@@ -90,6 +92,9 @@ inline unsigned Resource::releaseTime() const
 
 inline Resource::Status Resource::status() const
 { return mStatus; }
+
+inline bool Resource::isReady() const
+{ return mStatus == Ready; }
 
 }
 

@@ -30,11 +30,15 @@ class MapRenderer;
 
 namespace Mana {
 
+class MapItem;
+
 /**
  * A graphics item displaying a tile layer in a QGraphicsView.
  */
 class TileLayerItem : public QQuickItem
 {
+    Q_OBJECT
+
 public:
     /**
      * Constructor.
@@ -43,7 +47,7 @@ public:
      * @param renderer the map renderer to use to render the layer
      */
     TileLayerItem(Tiled::TileLayer *layer, Tiled::MapRenderer *renderer,
-                  QQuickItem *parent = 0);
+                  MapItem *parent);
 
     /**
      * Updates the size and position of this item. Should be called when the
@@ -55,12 +59,15 @@ public:
      */
     void syncWithTileLayer();
 
-    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
+    QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
+
+public slots:
+    void updateVisibleTiles();
 
 private:
     Tiled::TileLayer *mLayer;
     Tiled::MapRenderer *mRenderer;
-    QRectF mBoundingRect;
+    QRect mVisibleTiles;
 };
 
 } // namespace Mana
