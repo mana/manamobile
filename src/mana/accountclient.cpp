@@ -20,6 +20,7 @@
 
 #include "accountclient.h"
 
+#include "attributelistmodel.h"
 #include "characterlistmodel.h"
 #include "messagein.h"
 #include "messageout.h"
@@ -334,11 +335,13 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     while (message.unreadLength() > 0) {
         const unsigned id = message.readInt32();
 
-        AttributeValue *value = new AttributeValue(character);
         int base = message.readInt32() / 256.0;
         int mod = message.readInt32() / 256.0;
 
-        character->setAttribute(id, base, mod);
+        Q_UNUSED(base);
+        Q_UNUSED(mod);
+
+        // TODO: Extract the money attribute from here and display it
     }
 
     mCharacters.append(character);

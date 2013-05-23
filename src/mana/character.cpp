@@ -31,22 +31,6 @@
 
 using namespace Mana;
 
-void AttributeValue::setBase(double value)
-{
-    if (mBase != value) {
-        mBase = value;
-        emit baseChanged();
-    }
-}
-
-void AttributeValue::setModified(double value)
-{
-    if (mModified != value) {
-        mModified = value;
-        emit modifiedChanged();
-    }
-}
-
 Character::Character()
     : Being(OBJECT_CHARACTER)
     , mHairStyle(0)
@@ -106,15 +90,6 @@ void Character::setHairStyle(int style, int color)
             if (const SpriteReference *sprite = info->sprite(mGender))
                 mSpriteList->setSprite(SLOT_HAIR, sprite);
     }
-}
-
-void Character::setAttribute(int id, double base, double mod)
-{
-    AttributeValue *value = mAttributes.value(id);
-    if (!value)
-        value = new AttributeValue(this);
-    value->setBase(base);
-    value->setModified(mod);
 }
 
 void Character::setGender(BeingGender gender)

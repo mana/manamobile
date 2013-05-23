@@ -7,6 +7,8 @@ Rectangle {
     width: 640;
     height: 480;
 
+    state: "game";
+
     property int centerX: width / 2;
     property int centerY: height / 2;
 
@@ -194,6 +196,9 @@ Rectangle {
         }
 
         updateWalkDirection();
+
+        if (pressed && event.key == Qt.Key_C)
+            gamePage.state = "status";
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
@@ -264,4 +269,41 @@ Rectangle {
             KeyNavigation.left: chatInput;
         }
     }
+
+    StatusPage {
+        id: statusPage;
+        anchors.fill: parent;
+    }
+
+    states: [
+        State {
+            name: "game";
+            PropertyChanges {
+                target: gamePage;
+                focus: true;
+            }
+            PropertyChanges {
+                target: statusPage;
+                focus: false;
+                opacity: 0;
+            }
+        },
+        State {
+            name: "status";
+            PropertyChanges {
+                target: statusPage;
+                focus: true;
+                opacity: 1;
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            NumberAnimation {
+                property: "opacity";
+                easing.type: Easing.InOutQuad;
+            }
+        }
+    ]
 }

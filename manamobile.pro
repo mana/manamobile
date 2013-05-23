@@ -97,7 +97,9 @@ SOURCES += src/main.cpp \
     src/tiled/tilelayer.cpp \
     src/tiled/tileset.cpp \
     src/tilelayeritem.cpp \
-    src/mana/npcdialogmanager.cpp
+    src/mana/npcdialogmanager.cpp \
+    src/mana/resource/attributedb.cpp \
+    src/mana/attributelistmodel.cpp
 
 HEADERS += \
     src/durationlogger.h \
@@ -158,7 +160,9 @@ HEADERS += \
     src/tiled/tilelayer.h \
     src/tiled/tileset.h \
     src/tilelayeritem.h \
-    src/mana/npcdialogmanager.h
+    src/mana/npcdialogmanager.h \
+    src/mana/resource/attributedb.h \
+    src/mana/attributelistmodel.h
 
 
 # Please do not modify the following two lines. Required for deployment.
