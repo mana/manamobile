@@ -22,7 +22,7 @@
 
 using namespace Mana;
 
-void AttributeValue::setBase(double value)
+void AttributeValue::setBase(qreal value)
 {
     if (mBase != value) {
         mBase = value;
@@ -30,7 +30,7 @@ void AttributeValue::setBase(double value)
     }
 }
 
-void AttributeValue::setModified(double value)
+void AttributeValue::setModified(qreal value)
 {
     if (mModified != value) {
         mModified = value;
