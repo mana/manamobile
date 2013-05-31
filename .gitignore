@@ -10,3 +10,10 @@ manamobile
 
 # Autosaves
 *.autosave
+
+# Android
+android/local.properties
+android/assets/
+android/bin/
+android/gen/
+android/libs/
