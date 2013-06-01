@@ -27,9 +27,9 @@ else:LIBS += -lz
 
 !win32-msvc2010 {
     # Silence compile warnings in ENet code
-    # (this effectively excludes those two types of warnings for C code)
+    # (this effectively excludes those types of warnings for C code)
     CONFIG += warn_off
-    QMAKE_CFLAGS += -Wall -W -Wno-switch -Wno-unknown-pragmas
+    QMAKE_CFLAGS += -Wall -W -Wno-switch -Wno-unknown-pragmas -Wno-unused-parameter
     QMAKE_CXXFLAGS += -Wall -W
 }
 

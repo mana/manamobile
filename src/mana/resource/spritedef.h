@@ -60,7 +60,7 @@ struct SpriteDisplay
     QStringList particles;
 };
 
-static int DEFAULT_FRAME_DELAY = 75;
+static const int DEFAULT_FRAME_DELAY = 75;
 
 namespace SpriteAction {
 static const QString DEFAULT        = "stand";
