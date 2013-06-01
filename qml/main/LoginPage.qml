@@ -43,6 +43,8 @@ Item {
             anchors.top: serverNameDisplay.bottom;
             focus: true;
             labelText: qsTr("Username");
+            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase;
+            maximumLength: accountClient.maximumNameLength;
 
             Component.onCompleted: {
                 text = settings.value("username", "");
@@ -60,6 +62,7 @@ Item {
             labelText: qsTr("Email");
             opacity: 0;
             height: 0;
+            inputMethodHints: Qt.ImhEmailCharactersOnly;
 
             KeyNavigation.down: passwordEdit;
             KeyNavigation.up: nameEdit;
@@ -70,6 +73,9 @@ Item {
             anchors.top: emailEdit.bottom;
             labelText: qsTr("Password");
             echoMode: TextInput.Password;
+            inputMethodHints: Qt.ImhHiddenText | Qt.ImhSensitiveData |
+                              Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText |
+                              Qt.ImhPreferLowercase;
 
             KeyNavigation.up: nameEdit;
             KeyNavigation.down: loginButton;
@@ -80,6 +86,7 @@ Item {
             anchors.top: passwordEdit.bottom;
             labelText: qsTr("Password");
             echoMode: TextInput.Password;
+            inputMethodHints: passwordEdit.inputMethodHints;
             opacity: 0;
             height: 0;
 

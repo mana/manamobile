@@ -7,6 +7,9 @@ FocusScope {
     property alias text: textInput.text
     property alias labelText: label.text
     property alias echoMode: textInput.echoMode
+    property alias inputMethodHints: textInput.inputMethodHints;
+    property alias maximumLength: textInput.maximumLength;
+
     property variant tabTarget: KeyNavigation.down;
     property variant backtabTarget: KeyNavigation.up;
 
@@ -41,7 +44,7 @@ FocusScope {
         states: [
             State {
                 name: "labelHidden";
-                when: textInput.text != "";
+                when: textInput.inputMethodComposing || textInput.text != "";
                 PropertyChanges { target: label; opacity: 0; }
             }
         ]
