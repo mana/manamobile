@@ -115,13 +115,13 @@ HEADERS += \
     src/mana/resource/resource.h \
     src/mana/resource/spritedef.h \
     src/mana/resourcemanager.h \
-    src/mana/safeassert.h \
     src/mana/settings.h \
     src/mana/sha256.h \
     src/mana/spriteitem.h \
     src/mana/spritelistmodel.h \
     src/mana/tilelayeritem.h \
     src/mana/xmlreader.h \
+    src/safeassert.h \
     src/tiled/compression.h \
     src/tiled/gidmapper.h \
     src/tiled/imagelayer.h \
