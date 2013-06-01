@@ -76,7 +76,7 @@ static void registerTypes()
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();
 
-    qmlRegisterType<Mana::MapItem>("Tiled", 1, 0, "TileMap");
+    qmlRegisterType<Mana::MapItem>("Mana", 1, 0, "TileMap");
 }
 
 int main(int argc, char *argv[])

@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import Tiled 1.0
 import Mana 1.0
 
 Rectangle {
