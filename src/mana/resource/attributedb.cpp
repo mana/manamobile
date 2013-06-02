@@ -20,7 +20,7 @@
 
 #include "attributedb.h"
 
-#include "resourcemanager.h"
+#include "mana/resourcemanager.h"
 #include "mana/xmlreader.h"
 
 #include <QNetworkReply>

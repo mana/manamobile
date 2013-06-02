@@ -23,16 +23,17 @@
 
 #include <QObject>
 
-class QPixmap;
+class QQuickWindow;
 class QRect;
+class QSGTexture;
 
 namespace Mana {
 
-class PixmapResource;
+class ImageResource;
 
 class ImageSet : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit ImageSet(const QString &path,
@@ -43,13 +44,12 @@ public:
                       QObject *parent = 0);
     ~ImageSet();
 
-    int offsetX() const { return mOffsetX; }
+    int offsetX() const;
+    int offsetY() const;
 
-    int offsetY() const { return mOffsetY; }
+    const ImageResource *imageResource() const;
 
-    const PixmapResource *pixmapResource() const { return mPixmap; }
-
-    const QPixmap *pixmap() const;
+    QSGTexture *texture(const QQuickWindow *window) const;
 
     QRect clip(int index) const;
 
@@ -60,11 +60,14 @@ private:
     int mWidth;
     int mHeight;
 
-    bool mReady;
-
-    PixmapResource *mPixmap;
+    ImageResource *mImage;
 };
 
-}
+inline int ImageSet::offsetX() const { return mOffsetX; }
+inline int ImageSet::offsetY() const { return mOffsetY; }
+
+inline const ImageResource *ImageSet::imageResource() const { return mImage; }
+
+} // namespace Mana
 
 #endif // IMAGESET_H

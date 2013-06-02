@@ -21,16 +21,10 @@
 
 #include <enet/enet.h>
 
-#include <QApplication>
-#include <QMessageBox>
-#include <QDeclarativeContext>
-#include <qdeclarative.h>
+#include <QGuiApplication>
+#include <QQmlContext>
 
-#ifndef QT_NO_OPENGL
-#include <QGLWidget>
-#endif
-
-#include "qmlapplicationviewer.h"
+#include "qtquick2applicationviewer.h"
 
 #include "mana/accountclient.h"
 #include "mana/attributelistmodel.h"
@@ -39,7 +33,10 @@
 #include "mana/characterlistmodel.h"
 #include "mana/chatclient.h"
 #include "mana/gameclient.h"
+#include "mana/mapitem.h"
 #include "mana/npcdialogmanager.h"
+#include "mana/settings.h"
+#include "mana/spriteitem.h"
 #include "mana/spritelistmodel.h"
 
 #include "mana/resource/attributedb.h"
@@ -48,12 +45,7 @@
 #include "mana/resource/monsterdb.h"
 #include "mana/resource/npcdb.h"
 #include "mana/resource/racedb.h"
-
-#include "mapitem.h"
-#include "resourcemanager.h"
-#include "spriteitem.h"
-
-#include "mana/settings.h"
+#include "mana/resourcemanager.h"
 
 static void registerTypes()
 {
@@ -64,7 +56,7 @@ static void registerTypes()
     qmlRegisterType<Mana::ChatClient>("Mana", 1, 0, "ChatClient");
     qmlRegisterType<Mana::GameClient>("Mana", 1, 0, "GameClient");
     qmlRegisterType<Mana::Settings>("Mana", 1, 0, "Settings");
-    qmlRegisterType<SpriteItem>("Mana", 1, 0, "Sprite");
+    qmlRegisterType<Mana::SpriteItem>("Mana", 1, 0, "Sprite");
 
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();
@@ -82,7 +74,7 @@ static void registerTypes()
     qmlRegisterType<Mana::AttributeInfo>();
     qmlRegisterType<Mana::AttributeValue>();
 
-    qmlRegisterType<ResourceManager>();
+    qmlRegisterType<Mana::ResourceManager>();
     qmlRegisterType<Mana::AttributeDB>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
@@ -90,12 +82,12 @@ static void registerTypes()
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();
 
-    qmlRegisterType<MapItem>("Tiled", 1, 0, "TileMap");
+    qmlRegisterType<Mana::MapItem>("Mana", 1, 0, "TileMap");
 }
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
 
     app.setApplicationName("Mana Mobile");
     app.setOrganizationDomain("manasource.org");
@@ -104,22 +96,17 @@ int main(int argc, char *argv[])
 
     if (enet_initialize() != 0)
     {
-        QMessageBox::critical(0, app.applicationName(),
-                              "An error occurred while initializing ENet.\n");
+        qWarning() << "An error occurred while initializing ENet.";
         return 1;
     }
     atexit(enet_deinitialize);
 
     registerTypes();
 
-    QmlApplicationViewer viewer;
-#ifndef QT_NO_OPENGL
-    viewer.setViewport(new QGLWidget);
-#endif
-    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.setWindowTitle(app.applicationName());
+    QtQuick2ApplicationViewer viewer;
+    viewer.setTitle(app.applicationName());
 
-    ResourceManager *resourceManager = new ResourceManager(&viewer);
+    Mana::ResourceManager *resourceManager = new Mana::ResourceManager(&viewer);
     Mana::AttributeDB *attributeDB = new Mana::AttributeDB(&viewer);
     Mana::HairDB *hairDB = new Mana::HairDB(&viewer);
     Mana::ItemDB *itemDB = new Mana::ItemDB(&viewer);
@@ -138,7 +125,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    QDeclarativeContext *context = viewer.rootContext();
+    QQmlContext* context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("resourceManager", resourceManager);
     context->setContextProperty("attributeDB", attributeDB);
@@ -149,12 +136,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("raceDB", raceDB);
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
-
-#if defined(Q_WS_MAEMO_5) || defined(Q_WS_MAEMO_6) || defined(Q_OS_SYMBIAN)
-    viewer.showFullScreen();
-#else
-    viewer.show();
-#endif
+    viewer.showExpanded();
 
     return app.exec();
 }

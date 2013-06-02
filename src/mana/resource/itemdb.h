@@ -27,6 +27,7 @@
 
 #include <QList>
 #include <QMap>
+#include <QVector>
 
 class XmlReader;
 

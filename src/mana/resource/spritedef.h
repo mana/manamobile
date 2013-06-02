@@ -22,11 +22,9 @@
 #ifndef SPRITEDEF_H
 #define SPRITEDEF_H
 
-#include <QList>
 #include <QMap>
-#include <QPixmap>
 #include <QSet>
-#include <QString>
+#include <QStringList>
 
 #include "action.h"
 #include "resource.h"
@@ -40,7 +38,7 @@ class XmlReader;
 namespace Mana {
 
 class ImageSet;
-class PixmapResource;
+class ImageResource;
 
 class SpriteReference : public QObject
 {
@@ -62,7 +60,7 @@ struct SpriteDisplay
     QStringList particles;
 };
 
-static int DEFAULT_FRAME_DELAY = 75;
+static const int DEFAULT_FRAME_DELAY = 75;
 
 namespace SpriteAction {
 static const QString DEFAULT        = "stand";
@@ -119,17 +117,17 @@ class SpriteDefinition : public Resource
     Q_OBJECT
 
 public:
-    SpriteDefinition(QObject *parent, const QString &filePath, int variant);
+    SpriteDefinition(QObject *parent, const QUrl &url, int variant);
     virtual ~SpriteDefinition();
 
     const Action *action(const QString &actionName) const;
 
 private slots:
     void xmlFileFinished();
-    void imageFileStatusChanged(Mana::Resource::Status newStatus);
+    void imageFileStatusChanged(Resource::Status newStatus);
 
 private:
-    void requestFile(const QString &filePath, XmlReader *parent = 0);
+    void requestFile(const QUrl &url, XmlReader *parent = 0);
     void cleanUp(Status status);
     void readSprite(XmlReader &xml, XmlReader *parent);
     void readAction(XmlReader &xml);
@@ -151,14 +149,14 @@ private:
     QMap<QNetworkReply *, XmlReader *> mXmlRequests;
 
     // Maps replies to their parent XmlReader
-    QMap<const PixmapResource *, XmlReader *> mImageRequests;
+    QMap<const ImageResource *, XmlReader *> mImageRequests;
 
     QMap<QString, ImageSet *> mImageSets;
 
     QMap<QString, Action *> mActions;
 
     // Keep track of loaded files to prevent cycle includes
-    QSet<QString> mProcessedFiles;
+    QSet<QUrl> mProcessedFiles;
 };
 
 } // namespace Mana

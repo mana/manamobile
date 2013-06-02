@@ -1,5 +1,4 @@
-import QtQuick 1.1
-import Tiled 1.0
+import QtQuick 2.0
 import Mana 1.0
 
 Rectangle {
@@ -59,6 +58,11 @@ Rectangle {
         TileMap {
             id: map;
             source: gameClient.currentMap;
+
+            visibleArea: Qt.rect(-mapContainer.x,
+                                 -mapContainer.y,
+                                 gamePage.width,
+                                 gamePage.height);
 
             onStatusChanged: {
                 if (status == TileMap.Ready) {

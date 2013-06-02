@@ -84,7 +84,7 @@ private:
      */
     void expand(size_t size);
 
-    void writeValueType(Mana::ValueType type);
+    void writeValueType(ValueType type);
 
     char *mData;                         /**< Data building up. */
     unsigned int mPos;                   /**< Position in the data. */

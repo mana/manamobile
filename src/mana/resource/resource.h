@@ -23,9 +23,9 @@
 #define RESOURCE_H
 
 #include <QObject>
+#include <QUrl>
 
 namespace Mana {
-
 
 class Resource : public QObject
 {
@@ -43,40 +43,58 @@ public:
         Loading
     };
 
-
     enum OrphanPolicy {
         DeleteLater,
         DeleteImmediately
     };
 
-    Resource(QString path, QObject *parent = 0);
+    Resource(const QUrl &url, QObject *parent = 0);
 
     virtual ~Resource();
 
-    void incRef() { ++mRefCount; }
-
+    void incRef();
     void decRef(OrphanPolicy orphanPolicy = DeleteLater);
 
-    const QString &path() const { return mPath; }
+    const QUrl &url() const;
 
-    int refCount() const { return mRefCount; }
+    int refCount() const;
 
-    unsigned releaseTime() const { return mReleaseTime; }
+    unsigned releaseTime() const;
 
-    Status status() const { return mStatus; }
+    Status status() const;
     void setStatus(Status newStatus);
 
+    bool isReady() const;
+
 signals:
-    void statusChanged(Mana::Resource::Status newStatus);
+    void statusChanged(Resource::Status newStatus);
 
 private:
     unsigned mRefCount;
-    QString mPath;
+    QUrl mUrl;
     // Time when the resource expired
     unsigned mReleaseTime;
     Status mStatus;
-
 };
+
+
+inline void Resource::incRef()
+{ ++mRefCount; }
+
+inline const QUrl &Resource::url() const
+{ return mUrl; }
+
+inline int Resource::refCount() const
+{ return mRefCount; }
+
+inline unsigned Resource::releaseTime() const
+{ return mReleaseTime; }
+
+inline Resource::Status Resource::status() const
+{ return mStatus; }
+
+inline bool Resource::isReady() const
+{ return mStatus == Ready; }
 
 }
 

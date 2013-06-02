@@ -21,9 +21,10 @@
 
 #include "spritedef.h"
 
-#include "animation.h"
-#include "imageset.h"
-#include "resourcemanager.h"
+#include "mana/resource/animation.h"
+#include "mana/resource/imageresource.h"
+#include "mana/resource/imageset.h"
+#include "mana/resourcemanager.h"
 
 #include "mana/xmlreader.h"
 
@@ -51,21 +52,25 @@ SpriteReference *SpriteReference::readSprite(XmlReader &xml, QObject *parent)
 }
 
 SpriteDefinition::SpriteDefinition(QObject *parent,
-                                   const QString &filePath,
+                                   const QUrl &url,
                                    int variant)
-    : Resource(filePath, parent)
+    : Resource(url, parent)
     , mVariant(variant)
     , mVariantCount(0)
     , mVariantOffset(0)
 {
     setStatus(Resource::Loading);
 
-    int pos = filePath.indexOf(QLatin1Char('|'));
+    QString path = url.path(QUrl::FullyDecoded);
+    int pos = path.indexOf(QLatin1Char('|'));
     if (pos != -1)
-        mPalettes = filePath.right(filePath.length() - pos);
+        mPalettes = path.mid(pos + 1);
 
-    const QString filePathWithoutDye = filePath.left(pos);
-    requestFile(filePathWithoutDye);
+    const QString pathWithoutDye = path.left(pos);
+    QUrl urlWithoutDye = url;
+    urlWithoutDye.setPath(pathWithoutDye, QUrl::DecodedMode);
+
+    requestFile(urlWithoutDye);
 }
 
 SpriteDefinition::~SpriteDefinition()
@@ -78,17 +83,17 @@ const Action *SpriteDefinition::action(const QString &actionName) const
     return it != mActions.end() ? it.value() : 0;
 }
 
-void SpriteDefinition::requestFile(const QString &filePath, XmlReader *parent)
+void SpriteDefinition::requestFile(const QUrl &url, XmlReader *parent)
 {
-    QSet<QString>::iterator it = mProcessedFiles.find(filePath);
+    QSet<QUrl>::iterator it = mProcessedFiles.find(url);
     if (it != mProcessedFiles.end()) {
-        qWarning() << "Cycle include of file \"" << filePath << "\"!";
+        qWarning() << "Cycle include of \"" << url << "\"!";
         cleanUp(Error);
     } else {
-        mProcessedFiles.insert(filePath);
+        mProcessedFiles.insert(url);
     }
 
-    QNetworkReply *reply = ResourceManager::instance()->requestFile(filePath);
+    QNetworkReply *reply = ResourceManager::instance()->requestFile(url);
     connect(reply, SIGNAL(finished()), this, SLOT(xmlFileFinished()));
     mXmlRequests[reply] = parent;
 }
@@ -120,7 +125,7 @@ void SpriteDefinition::imageFileStatusChanged(Status newStatus)
 {
     if (newStatus == Ready) {
         // continue parsing parent xml
-        XmlReader *xml = mImageRequests[static_cast<PixmapResource *>(sender())];
+        XmlReader *xml = mImageRequests[static_cast<ImageResource *>(sender())];
         readSprite(*xml, mResources[xml]);
     }
 }
@@ -159,7 +164,9 @@ void SpriteDefinition::readSprite(XmlReader &xml, XmlReader *parent)
             mVariantOffset = attr.value("variant_offset").toString().toInt();
         } else if (xml.name() == "include") {
             const QString filename = xml.attributes().value("file").toString();
-            requestFile("sprites/" + filename, &xml);
+            ResourceManager *resMan = ResourceManager::instance();
+            QUrl url = resMan->resolve(resMan->spritePath() + filename);
+            requestFile(url, &xml);
             return; // Wait for this file to be loaded first
         } else if (xml.name() == "action") {
             readAction(xml);
@@ -332,10 +339,10 @@ bool SpriteDefinition::readImageSet(XmlReader &xml)
 
     ImageSet *imageSet =  new ImageSet(imageSrc, offsetX, offsetY,
                                        width, height, this);
-    connect(imageSet->pixmapResource(),
-            SIGNAL(statusChanged(Mana::Resource::Status)),
-            this, SLOT(imageFileStatusChanged(Mana::Resource::Status)));
-    mImageRequests[imageSet->pixmapResource()] = &xml;
+    connect(imageSet->imageResource(),
+            SIGNAL(statusChanged(Resource::Status)),
+            this, SLOT(imageFileStatusChanged(Resource::Status)));
+    mImageRequests[imageSet->imageResource()] = &xml;
     mImageSets[name] = imageSet;
     return true;
 }

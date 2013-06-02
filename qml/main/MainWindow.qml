@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Mana 1.0
 
 Rectangle {
@@ -55,15 +55,16 @@ Rectangle {
         anchors.bottom: window.bottom
         anchors.margins: 10
         running: accountClient.state === AccountClient.Connecting || loggingIn
-                 || (characterChosen && window.state != "game")
+                 || (characterChosen && window.state != "game");
+        z: 1;
     }
 
     property variant currentPage;
 
     function gotoPage(component) {
         var properties = {
-            "width": function() { return window.width; },
-            "height": function() { return window.height; },
+            "width": Qt.binding(function() { return window.width; }),
+            "height": Qt.binding(function() { return window.height; }),
             "opacity": 0,
         };
         var newPage = component.createObject(window, properties);
