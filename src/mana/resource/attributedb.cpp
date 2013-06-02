@@ -97,7 +97,8 @@ void AttributeDB::fileReady()
             xml.skipCurrentElement();
 
             mAttributes[id] = new AttributeInfo(id, name, description,
-                                                modifiable, min, max);
+                                                modifiable, min, max,
+                                                this);
         } else {
             xml.skipCurrentElement();
         }

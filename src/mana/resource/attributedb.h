@@ -53,9 +53,12 @@ public:
                   QString description,
                   bool modifiable,
                   qreal min,
-                  qreal max)
-        : mId(id)
+                  qreal max,
+                  QObject *parent)
+        : QObject(parent)
+        , mId(id)
         , mName(name)
+        , mDescription(description)
         , mModifiable(modifiable)
         , mMinimum(min)
         , mMaximum(max)
@@ -106,8 +109,6 @@ private:
     static AttributeDB *mInstance;
 
     bool mLoaded;
-
-    ~AttributeDB() { unload(); }
 
     QMap<int, AttributeInfo *> mAttributes;
 };
