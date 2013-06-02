@@ -184,6 +184,9 @@ void MapItem::mapFinished()
     bool seenFringe = false;
     foreach (Layer *layer, mMap->layers()) {
         if (TileLayer *tl = dynamic_cast<TileLayer*>(layer)) {
+            if (tl->name().compare(QLatin1String("collision"), Qt::CaseInsensitive) == 0)
+                continue;
+
             TileLayerItem *layerItem = new TileLayerItem(tl, mRenderer, this);
             if (seenFringe)
                 layerItem->setZ(65536);
