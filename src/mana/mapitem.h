@@ -36,6 +36,7 @@ class Tileset;
 namespace Mana {
 
 class ImageResource;
+class TileLayerItem;
 
 /**
  * A declarative item that displays a map.
@@ -102,6 +103,7 @@ private:
     QList<QNetworkReply*> mPendingResources;
     QSet<ImageResource*> mPendingImageResources;
     QHash<Tiled::Tileset*, ImageResource*> mImageResources;
+    QList<TileLayerItem*> mTileLayerItems;
 };
 
 inline const QRectF &MapItem::visibleArea() const
