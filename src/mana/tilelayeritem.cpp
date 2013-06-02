@@ -58,6 +58,7 @@ private:
 
     QSGGeometry mGeometry;
     QSGTextureMaterial mMaterial;
+    QSGOpaqueTextureMaterial mOpaqueMaterial;
 };
 
 TilesNode::TilesNode(QSGTexture *texture, const QVector<TileData> &tileData)
@@ -66,6 +67,8 @@ TilesNode::TilesNode(QSGTexture *texture, const QVector<TileData> &tileData)
     setFlag(QSGNode::OwnedByParent);
 
     mMaterial.setTexture(texture);
+    mOpaqueMaterial.setTexture(texture);
+
     mGeometry.setDrawingMode(GL_TRIANGLES);
 
     // TODO: Using StaticPattern would make sense since the data is never
@@ -76,6 +79,7 @@ TilesNode::TilesNode(QSGTexture *texture, const QVector<TileData> &tileData)
 
     setGeometry(&mGeometry);
     setMaterial(&mMaterial);
+    setOpaqueMaterial(&mOpaqueMaterial);
 }
 
 inline QSGTexture *TilesNode::texture() const

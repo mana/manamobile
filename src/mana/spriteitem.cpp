@@ -46,6 +46,7 @@ private:
 
     QSGGeometry mGeometry;
     QSGTextureMaterial mMaterial;
+    QSGOpaqueTextureMaterial mOpaqueMaterial;
     QRectF mRect;
     QRectF mSourceRect;
 };
@@ -55,6 +56,7 @@ SubRectTextureNode::SubRectTextureNode()
 {
     setGeometry(&mGeometry);
     setMaterial(&mMaterial);
+    setOpaqueMaterial(&mOpaqueMaterial);
 }
 
 void SubRectTextureNode::setTexture(QSGTexture *texture)
@@ -63,6 +65,7 @@ void SubRectTextureNode::setTexture(QSGTexture *texture)
         return;
 
     mMaterial.setTexture(texture);
+    mOpaqueMaterial.setTexture(texture);
     update();
     markDirty(DirtyMaterial);
 }
