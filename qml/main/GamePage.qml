@@ -1,151 +1,30 @@
 import QtQuick 2.0
 import Mana 1.0
 
-Rectangle {
+Item {
     id: gamePage;
-    width: 640;
-    height: 480;
 
     state: "game";
-
-    property int centerX: width / 2;
-    property int centerY: height / 2;
 
     // Workaround for QTBUG-28288 / QTBUG-25644, can be removed once Qt 4.8.5
     // or Qt 5.1.0 have been released.
     property bool chatBarHasActiveFocus: false;
-
-    color: "black";
+    Timer {
+        id: focusTimer;
+        interval: 100;
+        repeat: true;
+        running: true;
+        onTriggered: chatBarHasActiveFocus = chatBar.activeFocus;
+    }
 
     Component.onCompleted: gamePage.forceActiveFocus();
 
-    Item {
-        id: mapContainer;
-
-        property real smoothX;
-        property real smoothY;
-
-        // Remove fraction to avoid tile drawing glitches
-        x: Math.floor(smoothX);
-        y: Math.floor(smoothY);
-
-        // This fast running timer may not be the best solution. One problem
-        // with it is that it is not framerate agnostic.
-        Timer {
-            id: cameraTimer;
-            interval: 10;
-            running: gameClient.player !== null;
-            repeat: true;
-            onTriggered: {
-                var containerX = gamePage.centerX - gameClient.player.x;
-                var containerY = gamePage.centerY - gameClient.player.y;
-                mapContainer.smoothX += (containerX - mapContainer.smoothX) * 0.1;
-                mapContainer.smoothY += (containerY - mapContainer.smoothY) * 0.1;
-
-                chatBarHasActiveFocus = chatBar.activeFocus;
-            }
-        }
-
-        Connections {
-            target: gameClient;
-            onMapChanged: {
-                // Immediately center the camera on the new player position
-                mapContainer.smoothX = gamePage.centerX - x;
-                mapContainer.smoothY = gamePage.centerY - y;
-            }
-        }
-
-        TileMap {
-            id: map;
-            source: gameClient.currentMap;
-
-            visibleArea: Qt.rect(-mapContainer.x,
-                                 -mapContainer.y,
-                                 gamePage.width,
-                                 gamePage.height);
-
-            onStatusChanged: {
-                if (status == TileMap.Ready) {
-                    fadeInMap.start();
-                } else {
-                    fadeInMap.stop();
-                    blackOverlay.opacity = 1;
-                }
-            }
-        }
-
-        Repeater {
-            model: gameClient.beingListModel;
-            delegate: Item {
-                x: model.being.x;
-                y: model.being.y;
-                z: y;
-
-                Rectangle {
-                    anchors.fill: chat;
-                    anchors.margins: -4;
-                    radius: 10;
-                    color: Qt.rgba(0, 0, 0, 0.2);
-                    opacity: chat.opacity;
-                }
-                TextShadow { target: chat; }
-                Text {
-                    id: chat;
-                    anchors.bottom: sprite.bottom;
-                    anchors.bottomMargin: sprite.maxHeight;
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    text: model.being.chatMessage;
-                    color: "white";
-                    opacity: 0;
-
-                    onTextChanged: {
-                        opacity = 1;
-                        chatAnimation.restart();
-                    }
-
-                    SequentialAnimation {
-                        id: chatAnimation;
-                        PauseAnimation { duration: Math.min(10000, 2500 + chat.text.length * 50); }
-                        NumberAnimation { target: chat; property: "opacity"; to: 0; }
-                    }
-                }
-
-                CompoundSprite {
-                    id: sprite;
-                    sprites: model.being.spriteListModel;
-                    action: model.being.action;
-                    direction: model.being.spriteDirection;
-                }
-
-                Text {
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 5
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: model.being.name;
-                }
-
-                MouseArea {
-                    width: 64;
-                    height: 64;
-
-                    anchors.bottom: parent.bottom;
-                    anchors.horizontalCenter: parent.horizontalCenter;
-
-                    onClicked: {
-                        if (model.being.type === Being.OBJECT_NPC)
-                            gameClient.npcDialogManager.startTalkingTo(model.being);
-                    }
-                }
-            }
-        }
-    }
-
-    Rectangle {
-        id: blackOverlay;
-        color: "black";
-        anchors.fill: parent;
-
-        NumberAnimation on opacity { id: fadeInMap; to: 0; }
+    Viewport {
+        id: viewport;
+        width: parent.width / scale;
+        height: parent.height / scale;
+        scale: Math.ceil(Math.max(parent.width / 1200, parent.height / 1200));
+        transformOrigin: Item.TopLeft;
     }
 
     Rectangle {
