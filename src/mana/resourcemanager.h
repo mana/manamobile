@@ -66,8 +66,7 @@ public:
 
     QString path(const QString &key, const QString &value = QString()) const;
     QString spritePath() const;
-    QString itemIconsPrefix() const
-    { return path("itemIcons", "graphics/items/"); }
+    QString itemIconsPrefix() const;
 
     QUrl resolve(const QString &path) const;
 
@@ -126,6 +125,9 @@ inline QString ResourceManager::path(const QString &key,
 
 inline QString ResourceManager::spritePath() const
 { return path("sprites", "graphics/sprites/"); }
+
+inline QString ResourceManager::itemIconsPrefix() const
+{ return path("itemIcons", "graphics/items/"); }
 
 /**
  * Returns the URL for the resource located at \a path, relative from the

@@ -112,7 +112,7 @@ ItemInfo *ItemDB::getInfo(int id) const
     return mItems.value(id);
 }
 
-static ItemInfo *readItem(XmlReader &xml)
+ItemInfo *ItemDB::readItem(XmlReader &xml)
 {
     const QXmlStreamAttributes attr = xml.attributes();
     int id = attr.value("id").toString().toInt();
@@ -169,7 +169,7 @@ static ItemInfo *readItem(XmlReader &xml)
         return 0;
     }
 
-    ItemInfo *item = new ItemInfo(id);
+    ItemInfo *item = new ItemInfo(id, this);
 
     item->setType(itemTypeFromString(attr.value("type")));
     item->setName(attr.value("name").toString());

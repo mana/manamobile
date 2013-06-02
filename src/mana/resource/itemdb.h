@@ -86,7 +86,7 @@ private:
     static ItemDB *mInstance;
     static SpriteReference *readSprite(XmlReader &xml, QObject *parent);
 
-    ~ItemDB() { unload(); }
+    ItemInfo *readItem(XmlReader &xml);
 
     QNetworkReply *mReply;
     bool mLoaded;
