@@ -55,7 +55,8 @@ Rectangle {
         anchors.bottom: window.bottom
         anchors.margins: 10
         running: accountClient.state === AccountClient.Connecting || loggingIn
-                 || (characterChosen && window.state != "game")
+                 || (characterChosen && window.state != "game");
+        z: 1;
     }
 
     property variant currentPage;
