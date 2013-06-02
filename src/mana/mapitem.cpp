@@ -97,7 +97,8 @@ void MapItem::load()
     qDebug() << Q_FUNC_INFO << mSource;
 
     // Clean up ourselves (maybe wait until the map is available?)
-    qDeleteAll(childItems());
+    qDeleteAll(mTileLayerItems);
+    mTileLayerItems.clear();
     delete mMap;
     delete mRenderer;
     mMap = 0;
@@ -180,12 +181,18 @@ void MapItem::mapFinished()
         break;
     }
 
-    int layerIndex = 0;
+    bool seenFringe = false;
     foreach (Layer *layer, mMap->layers()) {
         if (TileLayer *tl = dynamic_cast<TileLayer*>(layer)) {
-            QQuickItem *layerItem = new TileLayerItem(tl, mRenderer, this);
-            layerItem->setZ(layerIndex);
-            ++layerIndex;
+            if (tl->name().compare(QLatin1String("collision"), Qt::CaseInsensitive) == 0)
+                continue;
+
+            TileLayerItem *layerItem = new TileLayerItem(tl, mRenderer, this);
+            if (seenFringe)
+                layerItem->setZ(65536);
+            else if (tl->name().compare(QLatin1String("fringe"), Qt::CaseInsensitive) == 0)
+                seenFringe = true;
+            mTileLayerItems.append(layerItem);
         }
     }
 
@@ -242,8 +249,8 @@ void MapItem::tilesetFinished()
         }
 
         // The above tileset replacement may change the tile layer draw margins
-        foreach (QQuickItem *child, childItems())
-            static_cast<TileLayerItem*>(child)->updateVisibleTiles();
+        foreach (TileLayerItem *layerItem, mTileLayerItems)
+            layerItem->updateVisibleTiles();
     }
 
     checkReady();
@@ -256,8 +263,8 @@ void MapItem::imageStatusChanged()
 
     // Trigger a repaint of the tile layer items
     if (imgRes->status() == Resource::Ready) {
-        foreach (QQuickItem *child, childItems())
-            child->update();
+        foreach (TileLayerItem *layerItem, mTileLayerItems)
+            layerItem->update();
     } else {
         qWarning() << "Error loading tileset image" << imgRes->url();
     }
@@ -278,7 +285,7 @@ void MapItem::requestTilesetImage(Tileset *tileset)
         connect(imgRes, SIGNAL(statusChanged(Resource::Status)),
                 this, SLOT(imageStatusChanged()));
     } else {
-        foreach (QQuickItem *child, childItems())
-            child->update();
+        foreach (TileLayerItem *layerItem, mTileLayerItems)
+            layerItem->update();
     }
 }
