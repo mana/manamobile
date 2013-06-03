@@ -25,7 +25,7 @@
 namespace Mana {
 
 enum {
-    PROTOCOL_VERSION = 5,
+    PROTOCOL_VERSION = 4,
     SUPPORTED_DB_VERSION = 22
 };
 
