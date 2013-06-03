@@ -10,6 +10,10 @@ Item {
     property real centerX: width / 2;
     property real centerY: height / 2;
 
+    function screenToMap(x, y) {
+        return map.mapFromItem(null, x, y);
+    }
+
     // This fast running timer may not be the best solution. One problem
     // with it is that it is not framerate agnostic.
     Timer {
@@ -118,9 +122,9 @@ Item {
                     anchors.bottom: parent.bottom;
                     anchors.horizontalCenter: parent.horizontalCenter;
 
+                    enabled: model.being.type === Being.OBJECT_NPC;
                     onClicked: {
-                        if (model.being.type === Being.OBJECT_NPC)
-                            gameClient.npcDialogManager.startTalkingTo(model.being);
+                        gameClient.npcDialogManager.startTalkingTo(model.being);
                     }
                 }
             }

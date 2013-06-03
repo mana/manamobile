@@ -19,6 +19,39 @@ Item {
 
     Component.onCompleted: gamePage.forceActiveFocus();
 
+    // This mouse area is below the viewport, so that stuff in the game gets
+    // priority over walking (like NPC interaction).
+    MouseArea {
+        id: walkMouseArea;
+        anchors.fill: parent;
+
+        function walkToMouse() {
+            var mapPos = viewport.screenToMap(mouseX, mouseY);
+            var player = gameClient.player;
+            var dx = mapPos.x - player.x;
+            var dy = mapPos.y - player.y;
+
+            // Don't walk when the distance is too small (dead area)
+            if (Math.abs(dx) < 32 && Math.abs(dy) < 32) {
+                dx = 0;
+                dy = 0;
+            }
+
+            gameClient.playerWalkDirection = Qt.point(dx, dy);
+        }
+
+        onReleased: updateWalkDirection();
+
+        Timer {
+            interval: 250;
+            // Not working properly on Android in Qt 5.1 beta (QTBUG-31331)
+            running: walkMouseArea.pressed;
+            triggeredOnStart: true;
+            repeat: true;
+            onTriggered: walkMouseArea.walkToMouse();
+        }
+    }
+
     Viewport {
         id: viewport;
         width: parent.width / scale;
@@ -156,6 +189,7 @@ Item {
     StatusPage {
         id: statusPage;
         anchors.fill: parent;
+        visible: false;
     }
 
     states: [
@@ -176,12 +210,23 @@ Item {
             PropertyChanges {
                 target: statusPage;
                 focus: true;
+                visible: true;
                 opacity: 1;
             }
         }
     ]
 
     transitions: [
+        Transition {
+            to: "game";
+            SequentialAnimation {
+                NumberAnimation {
+                    property: "opacity";
+                    easing.type: Easing.InOutQuad;
+                }
+                PropertyAction { property: "visible" }
+            }
+        },
         Transition {
             NumberAnimation {
                 property: "opacity";
