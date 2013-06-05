@@ -109,10 +109,9 @@ enum {
     PGMSG_DROP                     = 0x0111, // W slot, W amount
     PGMSG_EQUIP                    = 0x0112, // W inventory slot
     PGMSG_UNEQUIP                  = 0x0113, // W item Instance id
-    PGMSG_MOVE_ITEM                = 0x0114, // W slot1, W slot2, W amount
     GPMSG_INVENTORY                = 0x0120, // { W slot, W item id [, W amount] (if item id is nonzero) }*
     GPMSG_INVENTORY_FULL           = 0x0121, // W inventory slot count { W slot, W itemId, W amount, W equipmentSlot }
-    GPMSG_EQUIP                    = 0x0122, // W equipped inventory slot
+    GPMSG_EQUIP                    = 0x0122, // W equipped inventory slot, W slot equipmentSlot
     GPMSG_EQUIP_RESPONSE           = 0x0123, // B error, W slot
     GPMSG_UNEQUIP                  = 0x0124, // W equipped inventory slot
     GPMSG_UNEQUIP_RESPONE          = 0x0125, // B error, W slot
@@ -134,7 +133,7 @@ enum {
     GPMSG_BEING_LOOKS_CHANGE       = 0x0210, // B hairstyle, B haircolor, B sprite layers changed, { B slot type, W item id }*
     GPMSG_BEING_EMOTE              = 0x0211, // W being id, W emote id
     PGMSG_BEING_EMOTE              = 0x0212, // W emoticon id
-    PGMSG_WALK                     = 0x0260, // W*2 current position
+    PGMSG_WALK                     = 0x0260, // W*2 destination
     PGMSG_ACTION_CHANGE            = 0x0270, // B Action
     GPMSG_BEING_ACTION_CHANGE      = 0x0271, // W being id, B action
     PGMSG_DIRECTION_CHANGE         = 0x0272, // B Direction
