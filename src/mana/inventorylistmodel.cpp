@@ -53,9 +53,6 @@ InventoryListModel::InventoryListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     mRoleNames.insert(ItemRole, "item");
-#if QT_VERSION < 0x050000
-    setRoleNames(mRoleNames);
-#endif
 }
 
 int InventoryListModel::rowCount(const QModelIndex &parent) const
@@ -80,8 +77,7 @@ QHash<int, QByteArray> InventoryListModel::roleNames() const
 
 void InventoryListModel::handleInventory(MessageIn &message)
 {
-    while (message.unreadLength())
-    {
+    while (message.unreadLength()) {
         unsigned slot = message.readInt16();
         int id = message.readInt16(); // 0 id means removal of slot
         unsigned amount = id ? message.readInt16() : 0;
@@ -96,8 +92,7 @@ void InventoryListModel::handleInventoryFull(MessageIn &message)
     removeAllItems();
 
     int count = message.readInt16();
-    while (count--)
-    {
+    while (count--) {
         int slot = message.readInt16();
         int id = message.readInt16();
         int amount = message.readInt16();
