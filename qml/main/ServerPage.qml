@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import QtQuick.XmlListModel 2.0
 import Mana 1.0
 
 Item {
@@ -55,7 +54,7 @@ Item {
 
         Item {
             anchors.centerIn: parent;
-            visible: serverListModel.status == XmlListModel.Error;
+            visible: serverListModel.notfound;
 
             Text {
                 id: errorLabel;
@@ -64,31 +63,10 @@ Item {
                 text: qsTr("Error downloading server list");
                 font.bold: true;
             }
-            Text {
-                id: errorText;
-                anchors.horizontalCenter: parent.horizontalCenter;
-                anchors.top: errorLabel.bottom;
-                anchors.topMargin: 5;
-                color: "gray";
-            }
         }
     }
 
-    XmlListModel {
+    ServerListModel {
         id: serverListModel;
-        source: customServerListPath == ""
-                ? "http://www.manasource.org/serverlist.xml"
-                : customServerListPath;
-        query: "/serverlist/server[lower-case(@type)='manaserv']";
-
-        XmlRole { name: "name"; query: "@name/string()"; }
-        XmlRole { name: "hostname"; query: "connection/@hostname/string()"; }
-        XmlRole { name: "port"; query: "connection/@port/number()"; }
-        XmlRole { name: "description"; query: "description/string()"; }
-
-        onStatusChanged: {
-            if (status == XmlListModel.Error)
-                errorText.text = errorString();
-        }
     }
 }

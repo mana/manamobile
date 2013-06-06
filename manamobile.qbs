@@ -14,7 +14,6 @@ Project {
             name: "Qt";
             submodules: [
                 "network",
-                "xmlpatterns",
                 "quick",
             ]
         }
