@@ -96,7 +96,6 @@ class ItemInfo : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool isNull READ isNull CONSTANT)
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(ItemInfo::Type type READ type CONSTANT)
     Q_PROPERTY(SpriteDisplay display READ display CONSTANT)
@@ -135,11 +134,6 @@ public:
     };
 
     Q_ENUMS(Type)
-
-    static ItemInfo *null;
-
-    bool isNull() const
-    { return this == null; }
 
     int id() const
     { return mId; }

@@ -339,10 +339,17 @@ bool SpriteDefinition::readImageSet(XmlReader &xml)
 
     ImageSet *imageSet =  new ImageSet(imageSrc, offsetX, offsetY,
                                        width, height, this);
-    connect(imageSet->imageResource(),
-            SIGNAL(statusChanged(Resource::Status)),
-            this, SLOT(imageFileStatusChanged(Resource::Status)));
-    mImageRequests[imageSet->imageResource()] = &xml;
     mImageSets[name] = imageSet;
-    return true;
+
+    const Mana::ImageResource *imageResource = imageSet->imageResource();
+
+    // Wait for the image to be ready, if necessary
+    if (imageResource->status() == Resource::Loading) {
+        connect(imageResource, SIGNAL(statusChanged(Resource::Status)),
+                this, SLOT(imageFileStatusChanged(Resource::Status)));
+        mImageRequests[imageResource] = &xml;
+        return true;
+    }
+
+    return false;
 }

@@ -78,16 +78,12 @@ static BeingGender genderFromString(const QStringRef &gender)
     return GENDER_UNSPECIFIED;
 }
 
-ItemInfo *ItemInfo::null = 0;
-
 ItemDB *ItemDB::mInstance = 0;
 
 ItemDB::ItemDB(QObject *parent)
     : QObject(parent)
     , mLoaded(false)
 {
-    ItemInfo::null = new ItemInfo(0);
-
     Q_ASSERT(!mInstance);
     mInstance = this;
 }
@@ -113,7 +109,7 @@ void ItemDB::unload()
 
 const ItemInfo *ItemDB::getInfo(int id) const
 {
-    return mItems.value(id, ItemInfo::null);
+    return mItems.value(id);
 }
 
 static ItemInfo *readItem(XmlReader &xml)

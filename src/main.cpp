@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 
     QtQuick2ApplicationViewer viewer;
     viewer.setTitle(app.applicationName());
+    viewer.setClearBeforeRendering(false);
 
     Mana::ResourceManager *resourceManager = new Mana::ResourceManager(&viewer);
     Mana::AttributeDB *attributeDB = new Mana::AttributeDB(&viewer);
