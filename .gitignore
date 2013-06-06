@@ -6,7 +6,7 @@ Makefile*
 manamobile
 
 # Qt Creator artifacts
-*.pro.user
+*.pro.user*
 
 # Autosaves
 *.autosave
@@ -17,3 +17,14 @@ android/assets/
 android/bin/
 android/gen/
 android/libs/
+
+# eclipse files
+.project
+
+# git leftovers
+*.orig
+*.BACKUP.*.*
+*.BASE.*.*
+*.LOCAL.*.*
+*.REMOTE.*.*
+
