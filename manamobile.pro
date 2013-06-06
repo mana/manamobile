@@ -64,7 +64,6 @@ SOURCES += src/main.cpp \
     src/mana/resource/spritedef.cpp \
     src/mana/resourcemanager.cpp \
     src/mana/settings.cpp \
-    src/mana/sha256.cpp \
     src/mana/spriteitem.cpp \
     src/mana/spritelistmodel.cpp \
     src/mana/tilelayeritem.cpp \
@@ -118,7 +117,6 @@ HEADERS += \
     src/mana/resource/spritedef.h \
     src/mana/resourcemanager.h \
     src/mana/settings.h \
-    src/mana/sha256.h \
     src/mana/spriteitem.h \
     src/mana/spritelistmodel.h \
     src/mana/tilelayeritem.h \

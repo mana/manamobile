@@ -25,9 +25,15 @@
 #include "messagein.h"
 #include "messageout.h"
 #include "protocol.h"
-#include "sha256.h"
 
 #include <safeassert.h>
+
+#include <QCryptographicHash>
+
+static inline QByteArray sha256(const QByteArray &data)
+{
+    return QCryptographicHash::hash(data, QCryptographicHash::Sha256).toHex();
+}
 
 namespace Mana {
 

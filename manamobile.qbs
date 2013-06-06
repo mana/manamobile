@@ -89,8 +89,6 @@ Project {
                 "mana/resource/spritedef.h",
                 "mana/settings.cpp",
                 "mana/settings.h",
-                "mana/sha256.cpp",
-                "mana/sha256.h",
                 "mana/spriteitem.cpp",
                 "mana/spriteitem.h",
                 "mana/spritelistmodel.cpp",
