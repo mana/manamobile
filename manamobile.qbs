@@ -147,8 +147,16 @@ Project {
         Group {
             name: "QML files"
             qbs.install: true
-            qbs.installDir: "share/manamobile/"
-            files: ["qml"]
+            qbs.installDir: "bin/qml/main"
+            files: ["*.qml"]
+            prefix: "qml/main/"
+        }
+        Group {
+            name: "Images"
+            qbs.install: true
+            qbs.installDir: "bin/qml/main/images"
+            files: ["*.png", "*.svg"]
+            prefix: "qml/main/images/"
         }
 
         Group {
@@ -191,8 +199,11 @@ Project {
             return paths;
         }
 
-        cpp.dynamicLibraries: enetIncludes.found ? "enet" : undefined
-        cpp.linkerFlags: ["-lz"]
-
+        cpp.dynamicLibraries: {
+            var libraries = ["z"];
+            if (enetIncludes.found)
+                libraries.push("enet")
+            return libraries;
+        }
     }
 }
