@@ -156,6 +156,7 @@ Item {
     StatusPage {
         id: statusPage;
         anchors.fill: parent;
+        visible: false;
     }
 
     states: [
@@ -176,12 +177,23 @@ Item {
             PropertyChanges {
                 target: statusPage;
                 focus: true;
+                visible: true;
                 opacity: 1;
             }
         }
     ]
 
     transitions: [
+        Transition {
+            to: "game";
+            SequentialAnimation {
+                NumberAnimation {
+                    property: "opacity";
+                    easing.type: Easing.InOutQuad;
+                }
+                PropertyAction { property: "visible" }
+            }
+        },
         Transition {
             NumberAnimation {
                 property: "opacity";
