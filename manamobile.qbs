@@ -75,6 +75,8 @@ Project {
                 "mana/resource/imageset.h",
                 "mana/resource/itemdb.cpp",
                 "mana/resource/itemdb.h",
+                "mana/resourcelistmodel.cpp",
+                "mana/resourcelistmodel.h",
                 "mana/resourcemanager.cpp",
                 "mana/resourcemanager.h",
                 "mana/resource/monsterdb.cpp",

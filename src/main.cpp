@@ -35,6 +35,7 @@
 #include "mana/gameclient.h"
 #include "mana/mapitem.h"
 #include "mana/npcdialogmanager.h"
+#include "mana/resourcelistmodel.h"
 #include "mana/settings.h"
 #include "mana/spriteitem.h"
 #include "mana/spritelistmodel.h"
@@ -75,6 +76,10 @@ static void registerTypes()
     qmlRegisterType<Mana::AttributeValue>();
 
     qmlRegisterType<Mana::ResourceManager>();
+    qmlRegisterUncreatableType<Mana::Resource>("Mana", 1, 0, "Resource",
+                                               "Base of all resources");
+    qmlRegisterType<Mana::ResourceListModel>();
+
     qmlRegisterType<Mana::AttributeDB>();
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();

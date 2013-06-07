@@ -1,6 +1,6 @@
 /*
  *  Mana Mobile
- *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ *  Copyright (C) 2010-2013, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *  Copyright (C) 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  *  This file is part of Mana Mobile.
@@ -22,7 +22,7 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include <QMap>
+#include <QHash>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 
@@ -30,6 +30,7 @@ namespace Mana {
 
 class ImageResource;
 class Resource;
+class ResourceListModel;
 class SpriteDefinition;
 
 /**
@@ -43,12 +44,15 @@ class ResourceManager : public QObject
     Q_PROPERTY(QString dataUrl READ dataUrl WRITE setDataUrl NOTIFY dataUrlChanged)
     Q_PROPERTY(bool pathsLoaded READ pathsLoaded NOTIFY pathsLoadedChanged)
 
+    Q_PROPERTY(Mana::ResourceListModel *resourceListModel READ resourceListModel CONSTANT)
+
 public:
     enum CustomAttribute {
         RequestedFile = QNetworkRequest::User
     };
 
     explicit ResourceManager(QObject *parent = 0);
+    ~ResourceManager();
 
     static ResourceManager *instance();
 
@@ -57,6 +61,7 @@ public:
 
     bool pathsLoaded() const;
 
+    ResourceListModel *resourceListModel() const;
 
     QString path(const QString &key, const QString &value = QString()) const;
     QString spritePath() const;
@@ -89,10 +94,12 @@ private:
 
     QString mDataUrl;
     QNetworkAccessManager mNetworkAccessManager;
-    QMap<QUrl, Resource *> mResources;
+    QHash<QUrl, Resource *> mResources;
 
     bool mPathsLoaded;
-    QMap<QString, QString> mPaths;
+    QHash<QString, QString> mPaths;
+
+    ResourceListModel *mResourceListModel;
 
     static ResourceManager *mInstance;
 };
@@ -106,6 +113,9 @@ inline QString ResourceManager::dataUrl() const
 
 inline bool ResourceManager::pathsLoaded() const
 { return mPathsLoaded; }
+
+inline ResourceListModel *ResourceManager::resourceListModel() const
+{ return mResourceListModel; }
 
 inline QString ResourceManager::path(const QString &key,
                                      const QString &value) const

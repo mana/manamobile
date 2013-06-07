@@ -39,9 +39,10 @@ using namespace Mana;
 namespace {
 
 struct TileData {
-    Cell cell;
     float x;
     float y;
+    float width;
+    float height;
     float tx;
     float ty;
 };
@@ -106,40 +107,36 @@ void TilesNode::processTileData(const QVector<TileData> &tileData)
     QSGGeometry::TexturedPoint2D *v = mGeometry.vertexDataAsTexturedPoint2D();
 
     foreach (const TileData &data, tileData) {
-        const QSize size = data.cell.tile->size();
-        const float width = size.width();
-        const float height = size.height();
-
         // Taking into account the normalized texture subrectancle
-        const float s_width = width * s_x;
-        const float s_height = height * s_y;
+        const float s_width = data.width * s_x;
+        const float s_height = data.height * s_y;
         const float s_tx = r.x() + data.tx * s_x;
         const float s_ty = r.y() + data.ty * s_y;
 
-        // TopLeft                  // TopRight
-        v[0].x = data.x;            v[2].x = data.x + width;
-        v[0].y = data.y;            v[2].y = data.y;
-        v[0].tx = s_tx;             v[2].tx = s_tx + s_width;
-        v[0].ty = s_ty;             v[2].ty = s_ty;
+        // TopLeft                      // TopRight
+        v[0].x = data.x;                v[2].x = data.x + data.width;
+        v[0].y = data.y;                v[2].y = data.y;
+        v[0].tx = s_tx;                 v[2].tx = s_tx + s_width;
+        v[0].ty = s_ty;                 v[2].ty = s_ty;
 
         // BottomLeft
         v[1].x = data.x;
-        v[1].y = data.y + height;
+        v[1].y = data.y + data.height;
         v[1].tx = s_tx;
         v[1].ty = s_ty + s_height;
 
 
-                                    // TopRight
-                                    v[5].x = data.x + width;
-                                    v[5].y = data.y;
-                                    v[5].tx = s_tx + s_width;
-                                    v[5].ty = s_ty;
+                                        // TopRight
+                                        v[5].x = data.x + data.width;
+                                        v[5].y = data.y;
+                                        v[5].tx = s_tx + s_width;
+                                        v[5].ty = s_ty;
 
-        // BottomLeft               // BottomRight
-        v[3].x = data.x;            v[4].x = data.x + width;
-        v[3].y = data.y + height;   v[4].y = data.y + height;
-        v[3].tx = s_tx;             v[4].tx = s_tx + s_width;
-        v[3].ty = s_ty + s_height;  v[4].ty = s_ty + s_height;
+        // BottomLeft                   // BottomRight
+        v[3].x = data.x;                v[4].x = data.x + data.width;
+        v[3].y = data.y + data.height;  v[4].y = data.y + data.height;
+        v[3].tx = s_tx;                 v[4].tx = s_tx + s_width;
+        v[3].ty = s_ty + s_height;      v[4].ty = s_ty + s_height;
 
         v += 6;
     }
@@ -193,6 +190,65 @@ static inline QSGTexture *tilesetTexture(Tileset *tileset,
 }
 
 /**
+ * This helper class exists mainly to avoid redoing calculations that only need
+ * to be done once per tileset.
+ */
+struct TilesetHelper
+{
+    TilesetHelper(const MapItem *mapItem)
+        : mMapItem(mapItem)
+        , mWindow(mapItem->window())
+        , mTileset(0)
+        , mTexture(0)
+        , mMargin(0)
+        , mTileHSpace(0)
+        , mTileVSpace(0)
+        , mTilesPerRow(0)
+    {
+    }
+
+    Tileset *tileset() const { return mTileset; }
+    QSGTexture *texture() const { return mTexture; }
+
+    void setTileset(Tileset *tileset)
+    {
+        mTileset = tileset;
+        mTexture = tilesetTexture(tileset, mMapItem, mWindow);
+        if (!mTexture)
+            return;
+
+        const int tileSpacing = tileset->tileSpacing();
+        mMargin = tileset->margin();
+        mTileHSpace = tileset->tileWidth() + tileSpacing;
+        mTileVSpace = tileset->tileHeight() + tileSpacing;
+
+        const QSize tilesetSize = mTexture->textureSize();
+        const int availableWidth = tilesetSize.width() + tileSpacing - mMargin;
+        mTilesPerRow = availableWidth / mTileHSpace;
+    }
+
+    void setTextureCoordinates(TileData &data, const Cell &cell) const
+    {
+        const int tileId = cell.tile->id();
+        const int column = tileId % mTilesPerRow;
+        const int row = tileId / mTilesPerRow;
+
+        data.tx = column * mTileHSpace + mMargin;
+        data.ty = row * mTileVSpace + mMargin;
+    }
+
+private:
+    const MapItem *mMapItem;
+    QQuickWindow *mWindow;
+    Tileset *mTileset;
+    QSGTexture *mTexture;
+    int mMargin;
+    int mTileHSpace;
+    int mTileVSpace;
+    int mTilesPerRow;
+};
+
+/**
  * Draws an orthogonal tile layer by adding nodes to the scene graph. As long
  * sequentially drawn tiles are using the same tileset, they will share a
  * single geometry node.
@@ -202,14 +258,12 @@ static void drawTileLayer(QSGNode *parent,
                           const TileLayer *layer,
                           const QRect &rect)
 {
-    QQuickWindow *window = mapItem->window();
+    TilesetHelper helper(mapItem);
 
     const Map *map = mapItem->map();
     const int tileWidth = map->tileWidth();
     const int tileHeight = map->tileHeight();
 
-    QSGTexture *currentTexture = 0;
-    int currentTextureId = 0;
     QVector<TileData> tileData;
 
     for (int y = rect.top(); y < rect.bottom(); ++y) {
@@ -219,42 +273,34 @@ static void drawTileLayer(QSGNode *parent,
                 continue;
 
             Tileset *tileset = cell.tile->tileset();
-            QSGTexture *texture = tilesetTexture(tileset, mapItem, window);
 
-            if (texture) {
-                const int textureId = texture->textureId();
-
-                if (textureId != currentTextureId) {
-                    if (!tileData.isEmpty()) {
-                        parent->appendChildNode(new TilesNode(currentTexture,
-                                                              tileData));
-                        tileData.clear();
-                    }
-
-                    currentTexture = texture;
-                    currentTextureId = textureId;
+            if (tileset != helper.tileset()) {
+                if (!tileData.isEmpty()) {
+                    parent->appendChildNode(new TilesNode(helper.texture(),
+                                                          tileData));
+                    tileData.clear();
                 }
 
-                const QSize tilesetSize = texture->textureSize();
-                const int tilesPerRow = tilesetSize.width() / tileset->tileWidth();
-
-                const int tileId = cell.tile->id();
-                const int column = tileId % tilesPerRow;
-                const int row = tileId / tilesPerRow;
-
-                TileData data;
-                data.cell = cell;
-                data.x = x * tileWidth;
-                data.y = (y + 1) * tileHeight - tileset->tileHeight();
-                data.tx = column * tileset->tileWidth();
-                data.ty = row * tileset->tileHeight();
-                tileData.append(data);
+                helper.setTileset(tileset);
             }
+
+            if (!helper.texture())
+                continue;
+
+            const QSize size = cell.tile->size();
+
+            TileData data;
+            data.x = x * tileWidth;
+            data.y = (y + 1) * tileHeight - tileset->tileHeight();
+            data.width = size.width();
+            data.height = size.height();
+            helper.setTextureCoordinates(data, cell);
+            tileData.append(data);
         }
     }
 
     if (!tileData.isEmpty())
-        parent->appendChildNode(new TilesNode(currentTexture, tileData));
+        parent->appendChildNode(new TilesNode(helper.texture(), tileData));
 }
 
 } // anonymous namespace
