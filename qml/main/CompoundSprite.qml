@@ -16,15 +16,14 @@ Item {
 
         delegate: Sprite {
             id: element;
-            parent: spriteContainer;
 
             direction: spriteContainer.direction;
             action: spriteContainer.action;
             z: model.slot;
             spriteReference: model.sprite;
 
-            anchors.horizontalCenter: parent.horizontalCenter;
-            anchors.bottom: parent.bottom;
+            anchors.horizontalCenter: spriteContainer.horizontalCenter;
+            anchors.bottom: spriteContainer.bottom;
         }
     }
 }
