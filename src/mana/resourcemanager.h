@@ -22,7 +22,7 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include <QMap>
+#include <QHash>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 
@@ -52,6 +52,7 @@ public:
     };
 
     explicit ResourceManager(QObject *parent = 0);
+    ~ResourceManager();
 
     static ResourceManager *instance();
 
@@ -93,10 +94,10 @@ private:
 
     QString mDataUrl;
     QNetworkAccessManager mNetworkAccessManager;
-    QMap<QUrl, Resource *> mResources;
+    QHash<QUrl, Resource *> mResources;
 
     bool mPathsLoaded;
-    QMap<QString, QString> mPaths;
+    QHash<QString, QString> mPaths;
 
     ResourceListModel *mResourceListModel;
 

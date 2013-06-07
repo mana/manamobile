@@ -82,6 +82,23 @@ ResourceManager::ResourceManager(QObject *parent)
     mInstance = this;
 }
 
+ResourceManager::~ResourceManager()
+{
+    QMutableHashIterator<QUrl, Resource *> iterator(mResources);
+
+    // Sprite definitions have to be cleaned before the images
+    while (iterator.hasNext()) {
+        Resource *resource = iterator.next().value();
+
+        if (SpriteDefinition *s = dynamic_cast<SpriteDefinition*>(resource)) {
+            iterator.remove();
+            delete s;
+        }
+    }
+
+    qDeleteAll(mResources);
+}
+
 void ResourceManager::pathsFileFinished()
 {
     QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
