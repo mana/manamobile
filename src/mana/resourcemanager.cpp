@@ -43,8 +43,8 @@ using namespace Mana;
 
 ResourceManager *ResourceManager::mInstance;
 
-// Time in seconds that a currently unused resource should stay in cache
-static const int CACHE_TIME = 60;
+// Time in milliseconds that an unused resource should stay in cache
+static const int CACHE_TIME = 30 * 1000;
 
 ResourceManager::ResourceManager(QObject *parent)
     : QObject(parent)
