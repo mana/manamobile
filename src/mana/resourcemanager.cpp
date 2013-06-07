@@ -1,6 +1,6 @@
 /*
  *  Mana Mobile
- *  Copyright (C) 2010, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
+ *  Copyright (C) 2010-2013, Thorbjørn Lindeijer <thorbjorn@lindeijer.nl>
  *  Copyright (C) 2012, Erik Schilling <ablu.erikschilling@googlemail.com>
  *
  *  This file is part of Mana Mobile.
@@ -34,6 +34,7 @@
 #include <QDebug>
 
 #include "mana/xmlreader.h"
+#include "mana/resourcelistmodel.h"
 
 #include "mana/resource/imageresource.h"
 #include "mana/resource/spritedef.h"
@@ -48,6 +49,7 @@ static const int CACHE_TIME = 60;
 ResourceManager::ResourceManager(QObject *parent)
     : QObject(parent)
     , mPathsLoaded(false)
+    , mResourceListModel(new ResourceListModel(this))
 {
     // TODO: This takes about 400 ms on my system. Doing it here prevents
     // experiencing this hickup later on when the the network access manager is
@@ -164,6 +166,7 @@ void ResourceManager::removeResource(Resource *resource)
     Q_ASSERT(mResources.contains(resource->url()));
 
     mResources.remove(resource->url());
+    mResourceListModel->removeResource(resource);
     delete resource;
 }
 
@@ -186,6 +189,7 @@ SpriteDefinition *ResourceManager::requestSpriteDefinition(
     if (!sprite) {
         sprite = new SpriteDefinition(this, url, variant);
         mResources.insert(url, sprite);
+        mResourceListModel->addResource(sprite);
     }
 
     sprite->incRef();
@@ -200,6 +204,7 @@ ImageResource *ResourceManager::requestImage(const QString &path)
     if (!image) {
         image = new ImageResource(url, this);
         mResources.insert(url, image);
+        mResourceListModel->addResource(image);
     }
 
     image->incRef();

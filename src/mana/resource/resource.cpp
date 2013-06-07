@@ -39,6 +39,12 @@ Resource::~Resource()
 {
 }
 
+void Resource::incRef()
+{
+    ++mRefCount;
+    emit refCountChanged();
+}
+
 void Resource::setStatus(Status newStatus)
 {
     if (newStatus != mStatus) {
@@ -52,6 +58,8 @@ void Resource::decRef(OrphanPolicy orphanPolicy)
     Q_ASSERT(mRefCount > 0);
 
     --mRefCount;
+    emit refCountChanged();
+
     if (mRefCount > 0)
         return;
 

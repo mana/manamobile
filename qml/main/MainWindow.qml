@@ -4,6 +4,7 @@ import Mana 1.0
 Rectangle {
     id: window
     color: "#fffcf2"
+    focus: true;
 
     state: "serverSelect"
 
@@ -140,6 +141,15 @@ Rectangle {
                 easing.type: Easing.OutQuad;
             }
         }
+    }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_F10)
+            resourcesWindow.visible = !resourcesWindow.visible;
+    }
+
+    ResourcesWindow {
+        id: resourcesWindow
     }
 
     states: [

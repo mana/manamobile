@@ -38,6 +38,7 @@ include(src/enet/enet.pri)
 
 SOURCES += src/main.cpp \
     src/mana/accountclient.cpp \
+    src/mana/attributelistmodel.cpp \
     src/mana/being.cpp \
     src/mana/beinglistmodel.cpp \
     src/mana/character.cpp \
@@ -53,6 +54,7 @@ SOURCES += src/main.cpp \
     src/mana/npcdialogmanager.cpp \
     src/mana/resource/action.cpp \
     src/mana/resource/animation.cpp \
+    src/mana/resource/attributedb.cpp \
     src/mana/resource/hairdb.cpp \
     src/mana/resource/imageresource.cpp \
     src/mana/resource/imageset.cpp \
@@ -62,6 +64,7 @@ SOURCES += src/main.cpp \
     src/mana/resource/racedb.cpp \
     src/mana/resource/resource.cpp \
     src/mana/resource/spritedef.cpp \
+    src/mana/resourcelistmodel.cpp \
     src/mana/resourcemanager.cpp \
     src/mana/settings.cpp \
     src/mana/spriteitem.cpp \
@@ -83,13 +86,12 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tile.cpp \
     src/tiled/tilelayer.cpp \
-    src/tiled/tileset.cpp \
-    src/mana/resource/attributedb.cpp \
-    src/mana/attributelistmodel.cpp
+    src/tiled/tileset.cpp
 
 HEADERS += \
     src/durationlogger.h \
     src/mana/accountclient.h \
+    src/mana/attributelistmodel.h \
     src/mana/being.h \
     src/mana/beinglistmodel.h \
     src/mana/character.h \
@@ -106,6 +108,7 @@ HEADERS += \
     src/mana/protocol.h \
     src/mana/resource/action.h \
     src/mana/resource/animation.h \
+    src/mana/resource/attributedb.h \
     src/mana/resource/hairdb.h \
     src/mana/resource/imageresource.h \
     src/mana/resource/imageset.h \
@@ -115,6 +118,7 @@ HEADERS += \
     src/mana/resource/racedb.h \
     src/mana/resource/resource.h \
     src/mana/resource/spritedef.h \
+    src/mana/resourcelistmodel.h \
     src/mana/resourcemanager.h \
     src/mana/settings.h \
     src/mana/spriteitem.h \
@@ -145,9 +149,7 @@ HEADERS += \
     src/tiled/tiled_global.h \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
-    src/tiled/tileset.h \
-    src/mana/resource/attributedb.h \
-    src/mana/attributelistmodel.h
+    src/tiled/tileset.h
 
 
 # Please do not modify the following two lines. Required for deployment.

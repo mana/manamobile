@@ -33,7 +33,9 @@ class Resource : public QObject
 
     Q_ENUMS(Status)
 
+    Q_PROPERTY(QUrl url READ url CONSTANT)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(int referenceCount READ refCount NOTIFY refCountChanged)
 
 public:
     enum Status {
@@ -68,6 +70,7 @@ public:
 
 signals:
     void statusChanged(Resource::Status newStatus);
+    void refCountChanged();
 
 private:
     unsigned mRefCount;
@@ -77,9 +80,6 @@ private:
     Status mStatus;
 };
 
-
-inline void Resource::incRef()
-{ ++mRefCount; }
 
 inline const QUrl &Resource::url() const
 { return mUrl; }
