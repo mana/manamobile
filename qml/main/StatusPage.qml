@@ -11,8 +11,10 @@ Rectangle {
             width: parent.width;
             height: 50;
             Text {
-                text: parent.attributeInfo.name + " " + model.value.modified +
-                      " (+" +( model.value.modified - model.value.base) + ")";
+                text: parent.attributeInfo.id + ": "
+                      + parent.attributeInfo.name + " "
+                      + model.value.modified
+                      + " (+" +( model.value.modified - model.value.base) + ")";
             }
         }
     }

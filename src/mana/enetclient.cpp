@@ -26,7 +26,7 @@
 #include <QtEndian>
 
 enum {
-    debug_enetclient = 0
+    debug_enetclient = 1
 };
 
 namespace Mana {
