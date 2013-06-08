@@ -85,7 +85,7 @@ public:
 
     QMap<int, AttributeValue *> attributes() const {return mAttributeValues; }
 
-    static qreal tpsToPixelPerTick(qreal speed);
+    static qreal tpsToPixelsPerSecond(qreal speed);
 
 private:
     QMap<int, AttributeValue *> mAttributeValues;
@@ -95,10 +95,10 @@ private:
     QHash<int, QByteArray> mRoleNames;
 };
 
-inline qreal AttributeListModel::tpsToPixelPerTick(qreal speed)
+inline qreal AttributeListModel::tpsToPixelsPerSecond(qreal speed)
 {
     // TODO: dehardcode the tilesize
-    return speed * 32 * 0.016;
+    return speed * 32;
 }
 
 } // namespace Mana

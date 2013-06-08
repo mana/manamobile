@@ -88,7 +88,7 @@ public:
 
     QString chatMessage() const { return mChatMessage; }
 
-    virtual qreal walkSpeed() const { return mWalkSpeed; }
+    qreal walkSpeed() const { return mWalkSpeed; }
     void setWalkSpeed(qreal walkSpeed) { mWalkSpeed = walkSpeed; }
 
     const QString &action() const { return mAction; }

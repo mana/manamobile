@@ -50,6 +50,7 @@ BeingListModel::BeingListModel(QObject *parent)
 #endif
 
     mBeingUpdateTimer = startTimer(16);
+    mFrameDurationTimer.start();
 }
 
 int BeingListModel::rowCount(const QModelIndex &parent) const
@@ -204,7 +205,7 @@ void BeingListModel::handleBeingsMove(MessageIn &message)
              * to keep it transferable in a byte.
              */
             const qreal tps = (qreal) speed / 10;
-            being->setWalkSpeed(AttributeListModel::tpsToPixelPerTick(tps));
+            being->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(tps));
         }
 
         if (flags & MOVING_DESTINATION) {
@@ -296,25 +297,25 @@ void BeingListModel::timerEvent(QTimerEvent *event)
     if (event->timerId() != mBeingUpdateTimer)
         return;
 
+    // Don't jump ahead more than 1 second
+    qreal dt = qMin(qreal(1), mFrameDurationTimer.restart() / qreal(1000));
+
     for (int i = 0, end = mBeings.size(); i < end; ++i) {
         Being *being = mBeings.at(i);
 
         const QPointF pos = being->position();
+        const qreal walkDistance = being->walkSpeed() * dt;
 
         if (being == mPlayerCharacter) {
-            // Temponary hack since we currently do not know the walkspeed
-            // before the being walked once. Remove as soon the attribute system
-            // is implemented
-            const qreal walkSpeed = being->walkSpeed();
             QVector2D direction = mPlayerWalkDirection;
 
-            if (direction.lengthSquared() == 0 || !walkSpeed) {
+            if (direction.isNull() || !walkDistance) {
                 being->setAction(SpriteAction::STAND);
                 continue;
             }
 
             direction.normalize();
-            direction *= walkSpeed;
+            direction *= walkDistance;
             QPointF newPos(pos.x() + direction.x(), pos.y() + direction.y());
             being->lookAt(newPos);
             being->setPosition(newPos);
@@ -333,16 +334,15 @@ void BeingListModel::timerEvent(QTimerEvent *event)
             being->setAction(SpriteAction::WALK);
         }
 
-        const qreal walkSpeed = being->walkSpeed();
         QVector2D direction(target - pos);
 
-        if (direction.lengthSquared() < walkSpeed * walkSpeed) {
+        if (direction.lengthSquared() < walkDistance * walkDistance) {
             being->setPosition(target);
             continue;
         }
 
         direction.normalize();
-        direction *= walkSpeed;
+        direction *= walkDistance;
         QPointF newPos = pos + direction.toPointF();
         being->lookAt(newPos);
         being->setPosition(newPos);

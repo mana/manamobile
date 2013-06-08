@@ -23,8 +23,8 @@
 #define BEINGLISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QElapsedTimer>
 #include <QVector2D>
-
 
 namespace Mana {
 
@@ -99,6 +99,8 @@ private:
     QVector2D mPlayerWalkDirection;
 
     QHash<int, QByteArray> mRoleNames;
+
+    QElapsedTimer mFrameDurationTimer;
 };
 
 } // namespace Mana
