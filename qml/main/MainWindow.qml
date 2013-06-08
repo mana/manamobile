@@ -105,13 +105,13 @@ Rectangle {
                 PropertyAnimation {
                     target: animation.target;
                     property: "opacity";
-                    from: 1; to: 0;
+                    to: 0;
                     easing.type: Easing.OutQuad;
                 }
                 PropertyAnimation {
                     target: animation.target;
                     property: "x";
-                    from: 0; to: -50;
+                    to: -50;
                     easing.type: Easing.OutQuad;
                 }
             }
