@@ -9,9 +9,9 @@ Rectangle {
 
     Text {
         id: message;
-        anchors.top: parent.top;
-        anchors.left: parent.left;
+        anchors.fill: parent;
         anchors.margins: 10;
+        wrapMode: TextEdit.WordWrap;
         text: gameClient.npcDialogManager.currentText;
     }
 
