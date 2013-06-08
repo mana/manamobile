@@ -145,11 +145,17 @@ Rectangle {
 
     Keys.onPressed: {
         if (event.key === Qt.Key_F10)
-            resourcesWindow.visible = !resourcesWindow.visible;
+            resourcesWindowLoader.active = !resourcesWindowLoader.active;
     }
 
-    ResourcesWindow {
-        id: resourcesWindow
+    Component {
+        id: resourcesWindowComponent
+        ResourcesWindow {}
+    }
+    Loader {
+        id: resourcesWindowLoader
+        sourceComponent: resourcesWindowComponent
+        active: false;
     }
 
     states: [

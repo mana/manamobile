@@ -7,13 +7,14 @@ Window {
     width: 800;
     height: 800;
     title: "Resources";
+    visible: true;
 
     ListView {
         focus: true;
 
         Keys.onPressed: {
             if (event.key === Qt.Key_F10)
-                resourcesWindow.visible = !resourcesWindow.visible;
+                resourcesWindowLoader.active = !resourcesWindowLoader.active;
         }
 
         anchors.fill: parent;
