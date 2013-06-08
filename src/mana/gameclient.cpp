@@ -24,6 +24,7 @@
 #include "being.h"
 #include "beinglistmodel.h"
 #include "character.h"
+#include "inventorylistmodel.h"
 #include "messagein.h"
 #include "messageout.h"
 #include "npcdialogmanager.h"
@@ -39,6 +40,7 @@ GameClient::GameClient(QObject *parent)
     , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
     , mNpcDialogManager(new NpcDialogManager(this))
+    , mInventoryListModel(new InventoryListModel(this))
 {
     QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
                      this, SIGNAL(playerChanged()));
@@ -57,6 +59,8 @@ GameClient::GameClient(QObject *parent)
                      this, SIGNAL(playerWalkDirectionChanged()));
     QObject::connect(mBeingListModel, SIGNAL(playerPositionChanged()),
                      this, SLOT(playerPositionChanged()));
+    QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
+                     this, SIGNAL(playerChanged()));
 }
 
 GameClient::~GameClient()
@@ -72,6 +76,12 @@ Character *GameClient::player() const
 {
     return mBeingListModel->player();
 }
+
+InventoryListModel *GameClient::inventoryListModel() const
+{
+    return mInventoryListModel;
+}
+
 
 QPointF GameClient::playerWalkDirection() const
 {
@@ -152,6 +162,20 @@ void GameClient::restoreWalkingSpeed()
     }
 }
 
+void GameClient::equip(unsigned slot)
+{
+    MessageOut message(PGMSG_EQUIP);
+    message.writeInt16(slot);
+    send(message);
+}
+
+void GameClient::unequip(unsigned slot)
+{
+    MessageOut message(PGMSG_UNEQUIP);
+    message.writeInt16(slot);
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -160,6 +184,19 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
+        break;
+
+    case GPMSG_INVENTORY:
+        mInventoryListModel->handleInventory(message);
+        break;
+    case GPMSG_INVENTORY_FULL:
+        mInventoryListModel->handleInventoryFull(message);
+        break;
+    case GPMSG_EQUIP:
+        mInventoryListModel->handleEquip(message);
+        break;
+    case GPMSG_UNEQUIP:
+        mInventoryListModel->handleUnEquip(message);
         break;
 
     case GPMSG_BEING_ENTER:

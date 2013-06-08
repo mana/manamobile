@@ -47,6 +47,8 @@ Project {
                 "mana/enetclient.h",
                 "mana/gameclient.cpp",
                 "mana/gameclient.h",
+                "mana/inventorylistmodel.cpp",
+                "mana/inventorylistmodel.h",
                 "mana/mapitem.cpp",
                 "mana/mapitem.h",
                 "mana/messagein.cpp",

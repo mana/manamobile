@@ -46,6 +46,7 @@ SOURCES += src/main.cpp \
     src/mana/chatclient.cpp \
     src/mana/enetclient.cpp \
     src/mana/gameclient.cpp \
+    src/mana/inventorylistmodel.cpp \
     src/mana/mapitem.cpp \
     src/mana/messagein.cpp \
     src/mana/messageout.cpp \
@@ -99,6 +100,7 @@ HEADERS += \
     src/mana/chatclient.h \
     src/mana/enetclient.h \
     src/mana/gameclient.h \
+    src/mana/inventorylistmodel.h \
     src/mana/mapitem.h \
     src/mana/messagein.h \
     src/mana/messageout.h \
