@@ -147,7 +147,7 @@ void GameClient::restoreWalkingSpeed()
     const AttributeValue *attribute =
             mAttributeListModel->attribute(ATTR_MOVE_SPEED_TPS);
     if (attribute && player()) {
-        qreal speed = AttributeListModel::tpsToPixelPerTick(attribute->modified());
+        qreal speed = AttributeListModel::tpsToPixelsPerSecond(attribute->modified());
         player()->setWalkSpeed(speed);
     }
 }
@@ -266,7 +266,7 @@ void GameClient::handlePlayerAttributeChange(MessageIn &message)
         const qreal mod = message.readInt32() / 256;
 
         if (id == ATTR_MOVE_SPEED_TPS)
-            player()->setWalkSpeed(AttributeListModel::tpsToPixelPerTick(base));
+            player()->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(base));
 
         mAttributeListModel->setAttribute(id, base, mod);
     }
