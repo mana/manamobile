@@ -37,6 +37,7 @@ else:LIBS += -lz
 include(src/enet/enet.pri)
 
 SOURCES += src/main.cpp \
+    src/mana/abilitylistmodel.cpp \
     src/mana/accountclient.cpp \
     src/mana/attributelistmodel.cpp \
     src/mana/being.cpp \
@@ -52,6 +53,7 @@ SOURCES += src/main.cpp \
     src/mana/monster.cpp \
     src/mana/npc.cpp \
     src/mana/npcdialogmanager.cpp \
+    src/mana/resource/abilitydb.cpp \
     src/mana/resource/action.cpp \
     src/mana/resource/animation.cpp \
     src/mana/resource/attributedb.cpp \
@@ -59,13 +61,13 @@ SOURCES += src/main.cpp \
     src/mana/resource/imageresource.cpp \
     src/mana/resource/imageset.cpp \
     src/mana/resource/itemdb.cpp \
+    src/mana/resourcelistmodel.cpp \
+    src/mana/resourcemanager.cpp \
     src/mana/resource/monsterdb.cpp \
     src/mana/resource/npcdb.cpp \
     src/mana/resource/racedb.cpp \
     src/mana/resource/resource.cpp \
     src/mana/resource/spritedef.cpp \
-    src/mana/resourcelistmodel.cpp \
-    src/mana/resourcemanager.cpp \
     src/mana/settings.cpp \
     src/mana/spriteitem.cpp \
     src/mana/spritelistmodel.cpp \
@@ -86,16 +88,11 @@ SOURCES += src/main.cpp \
     src/tiled/staggeredrenderer.cpp \
     src/tiled/tile.cpp \
     src/tiled/tilelayer.cpp \
-    src/tiled/tileset.cpp \
-    src/mana/resource/attributedb.cpp \
-    src/mana/attributelistmodel.cpp \
-    src/tilelayeritem.cpp \
-    src/mana/npcdialogmanager.cpp \
-    src/mana/resource/abilitydb.cpp \
-    src/mana/abilitylistmodel.cpp
+    src/tiled/tileset.cpp
 
 HEADERS += \
     src/durationlogger.h \
+    src/mana/abilitylistmodel.h \
     src/mana/accountclient.h \
     src/mana/attributelistmodel.h \
     src/mana/being.h \
@@ -109,9 +106,10 @@ HEADERS += \
     src/mana/messagein.h \
     src/mana/messageout.h \
     src/mana/monster.h \
-    src/mana/npc.h \
     src/mana/npcdialogmanager.h \
+    src/mana/npc.h \
     src/mana/protocol.h \
+    src/mana/resource/abilitydb.h \
     src/mana/resource/action.h \
     src/mana/resource/animation.h \
     src/mana/resource/attributedb.h \
@@ -119,13 +117,13 @@ HEADERS += \
     src/mana/resource/imageresource.h \
     src/mana/resource/imageset.h \
     src/mana/resource/itemdb.h \
+    src/mana/resourcelistmodel.h \
+    src/mana/resourcemanager.h \
     src/mana/resource/monsterdb.h \
     src/mana/resource/npcdb.h \
     src/mana/resource/racedb.h \
     src/mana/resource/resource.h \
     src/mana/resource/spritedef.h \
-    src/mana/resourcelistmodel.h \
-    src/mana/resourcemanager.h \
     src/mana/settings.h \
     src/mana/spriteitem.h \
     src/mana/spritelistmodel.h \
@@ -151,21 +149,11 @@ HEADERS += \
     src/tiled/properties.h \
     src/tiled/staggeredrenderer.h \
     src/tiled/terrain.h \
-    src/tiled/tiled.h \
     src/tiled/tiled_global.h \
+    src/tiled/tiled.h \
     src/tiled/tile.h \
     src/tiled/tilelayer.h \
-<<<<<<< HEAD
     src/tiled/tileset.h
-=======
-    src/tiled/tileset.h \
-    src/mana/resource/attributedb.h \
-    src/mana/attributelistmodel.h \
-    src/tilelayeritem.h \
-    src/mana/npcdialogmanager.h \
-    src/mana/resource/abilitydb.h \
-    src/mana/abilitylistmodel.h
->>>>>>> Added first version of abilities
 
 
 # Please do not modify the following two lines. Required for deployment.
