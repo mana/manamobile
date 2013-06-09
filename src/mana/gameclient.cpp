@@ -240,10 +240,10 @@ void GameClient::handleAuthenticationResponse(MessageIn &message)
 void GameClient::handlePlayerMapChanged(MessageIn &message)
 {
     const QString name = message.readString();
-    const int x = message.readInt16();
-    const int y = message.readInt16();
+    mPlayerStartX = message.readInt16();
+    mPlayerStartY = message.readInt16();
 
-    qDebug() << "Arrived at" << name << x << y;
+    qDebug() << "Arrived at" << name << mPlayerStartX << mPlayerStartY;
 
     mCurrentMap = QLatin1String("maps/");
     mCurrentMap += name;
@@ -252,10 +252,10 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     if (!mCurrentMap.endsWith(mapExtension))
         mCurrentMap += mapExtension;
 
-    emit mapChanged(mCurrentMap, x, y);
-
     // None of the beings are valid on the new map, including the player
     mBeingListModel->clear();
+
+    emit mapChanged(mCurrentMap, mPlayerStartX, mPlayerStartY);
 }
 
 void GameClient::handlePlayerAttributeChange(MessageIn &message)

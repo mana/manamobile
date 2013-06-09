@@ -9,41 +9,47 @@ Item {
 
     property real centerX: width / 2;
     property real centerY: height / 2;
+    property real playerX: gameClient.player ? gameClient.player.x : gameClient.playerStartX;
+    property real playerY: gameClient.player ? gameClient.player.y : gameClient.playerStartY;
 
-    // This fast running timer may not be the best solution. One problem
-    // with it is that it is not framerate agnostic.
-    Timer {
-        id: cameraTimer;
-        interval: 10;
-        running: gameClient.player !== null;
-        repeat: true;
-        onTriggered: {
-            var containerX = viewport.centerX - gameClient.player.x;
-            var containerY = viewport.centerY - gameClient.player.y;
-            map.smoothX += (containerX - map.smoothX) * 0.1;
-            map.smoothY += (containerY - map.smoothY) * 0.1;
+    // There seems to be no good way to temporarily disable a Behavior. So in
+    // order to avoid the smooth following of the player on warps, this
+    // this component is re-created, resetting the animation to start from the
+    // new player location.
+    Component {
+        id: smoothFollowComponent;
+        Item {
+            id: smoothFollow;
+            property real mapX: viewport.centerX - viewport.playerX;
+            property real mapY: viewport.centerY - viewport.playerY;
+
+            Behavior on mapX { SpringAnimation { spring: 3; damping: 1 } }
+            Behavior on mapY { SpringAnimation { spring: 3; damping: 1 } }
+
+            // Math.floor is used to avoid tile drawing glitches
+            Binding { target: map; property: "x"; value: Math.floor(smoothFollow.mapX); }
+            Binding { target: map; property: "y"; value: Math.floor(smoothFollow.mapY); }
         }
     }
 
+    property var smoothFollowInstance;
+
+    function resetSmoothFollow() {
+        if (smoothFollowInstance)
+            smoothFollowInstance.destroy();
+
+        smoothFollowInstance = smoothFollowComponent.createObject(viewport);
+    }
+
+    Component.onCompleted: resetSmoothFollow();
     Connections {
         target: gameClient;
-        onMapChanged: {
-            // Immediately center the camera on the new player position
-            map.smoothX = viewport.centerX - x;
-            map.smoothY = viewport.centerY - y;
-        }
+        onMapChanged: resetSmoothFollow();
     }
 
     TileMap {
         id: map;
         source: gameClient.currentMap;
-
-        property real smoothX;
-        property real smoothY;
-
-        // Remove fraction to avoid tile drawing glitches
-        x: Math.floor(smoothX);
-        y: Math.floor(smoothY);
 
         visibleArea: Qt.rect(-map.x,
                              -map.y,

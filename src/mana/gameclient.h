@@ -46,6 +46,8 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
+    Q_PROPERTY(int playerStartX READ playerStartX NOTIFY mapChanged)
+    Q_PROPERTY(int playerStartY READ playerStartY NOTIFY mapChanged)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
     Q_PROPERTY(Mana::Character *player READ player NOTIFY playerChanged)
     Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
@@ -60,7 +62,11 @@ public:
     ~GameClient();
 
     bool authenticated() const { return mAuthenticated; }
+
     QString currentMap() const { return mCurrentMap; }
+    int playerStartX() const { return mPlayerStartX; }
+    int playerStartY() const { return mPlayerStartY; }
+
     BeingListModel *beingListModel() const;
     Character *player() const;
 
@@ -107,6 +113,8 @@ private:
 
     bool mAuthenticated;
     QString mCurrentMap;
+    int mPlayerStartX;
+    int mPlayerStartY;
 
     AttributeListModel *mAttributeListModel;
     BeingListModel *mBeingListModel;
