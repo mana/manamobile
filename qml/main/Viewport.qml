@@ -72,49 +72,11 @@ Item {
                 y: model.being.y;
                 z: y;
 
-                Rectangle {
-                    anchors.fill: chat;
-                    anchors.margins: -4;
-                    radius: 10;
-                    color: Qt.rgba(0, 0, 0, 0.2);
-                    opacity: chat.opacity;
-                }
-                TextShadow { target: chat; }
-                Text {
-                    id: chat;
-                    anchors.bottom: sprite.bottom;
-                    anchors.bottomMargin: sprite.maxHeight;
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    text: model.being.chatMessage;
-                    color: "white";
-                    opacity: 0;
-                    font.pixelSize: 15;
-
-                    onTextChanged: {
-                        opacity = 1;
-                        chatAnimation.restart();
-                    }
-
-                    SequentialAnimation {
-                        id: chatAnimation;
-                        PauseAnimation { duration: Math.min(10000, 2500 + chat.text.length * 50); }
-                        NumberAnimation { target: chat; property: "opacity"; to: 0; }
-                    }
-                }
-
                 CompoundSprite {
                     id: sprite;
                     sprites: model.being.spriteListModel;
                     action: model.being.action;
                     direction: model.being.spriteDirection;
-                }
-
-                Text {
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 5
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: model.being.name;
-                    font.pixelSize: 12;
                 }
 
                 MouseArea {
@@ -127,6 +89,28 @@ Item {
                     onClicked: {
                         if (model.being.type === Being.OBJECT_NPC)
                             gameClient.npcDialogManager.startTalkingTo(model.being);
+                    }
+                }
+
+                // Player name and chat messages are displayed above the map
+                Item {
+                    parent: map;
+                    x: model.being.x;
+                    y: model.being.y;
+                    z: 65537; // Layers above the Fringe layer have z 65536
+
+                    OverheadChatMessage {
+                        text: model.being.chatMessage;
+                        anchors.bottom: parent.bottom;
+                        anchors.bottomMargin: sprite.maxHeight;
+                    }
+
+                    Text {
+                        anchors.top: parent.bottom
+                        anchors.topMargin: 5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: model.being.name;
+                        font.pixelSize: 12;
                     }
                 }
             }
