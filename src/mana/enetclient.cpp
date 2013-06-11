@@ -111,6 +111,16 @@ void ENetClient::service()
     if (isNull())
         return;
 
+    switch (mState) {
+    case Disconnected:
+    case HostLookup:
+        return;
+    case Connecting:
+    case Connected:
+    case Disconnecting:
+        break;
+    }
+
     ENetEvent event;
 
     while (enet_host_service(mHost, &event, 0) > 0)
