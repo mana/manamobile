@@ -22,8 +22,42 @@ INCLUDEPATH += src
 # mark the Tiled classes as being imported.
 DEFINES += TILED_LIBRARY
 
-win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
-else:LIBS += -lz
+win32 {
+    win32-g++* {
+        # Get the zlib installer at:
+        #
+        #   http://gnuwin32.sourceforge.net/packages/zlib.htm
+        #
+
+        # If there is an environment variable, take that
+        isEmpty(ZLIB_PATH):ZLIB_PATH = "$$(ZLIB_PATH)"
+
+        # When the variable is not set, check for common install locations
+        isEmpty(ZLIB_PATH):exists("C:/Program Files (x86)/GnuWin32/include/zlib.h") {
+            ZLIB_PATH = "C:/Program Files (x86)/GnuWin32"
+        }
+        isEmpty(ZLIB_PATH):exists("C:/Program Files/GnuWin32/include/zlib.h") {
+            ZLIB_PATH = "C:/Program Files/GnuWin32"
+        }
+
+        isEmpty(ZLIB_PATH) {
+            error("ZLIB_PATH not defined and could not be auto-detected")
+        }
+
+        INCLUDEPATH += $${ZLIB_PATH}/include
+        LIBS += $${ZLIB_PATH}/lib/libz.a
+    }
+    win32-msvc* {
+        # Zlib for MSVC 2010 included in repository, obtained from
+        # http://www.winimage.com/zLibDll/index.html
+        DEFINES += ZLIB_WINAPI
+        INCLUDEPATH += $$PWD/windows/zlib/include
+        LIBS += $$PWD/windows/zlib/dll32/zlibwapi.lib
+    }
+} else {
+    # On other platforms it is necessary to link to zlib explicitly
+    LIBS += -lz
+}
 
 !win32-msvc2010 {
     # Silence compile warnings in ENet code

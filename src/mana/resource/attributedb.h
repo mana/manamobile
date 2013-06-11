@@ -44,8 +44,8 @@ class AttributeInfo : public QObject
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString description READ description CONSTANT)
     Q_PROPERTY(bool modifiable READ modifiable CONSTANT)
-    Q_PROPERTY(qreal min READ min CONSTANT)
-    Q_PROPERTY(qreal max READ max CONSTANT)
+    Q_PROPERTY(qreal minimum READ minimum CONSTANT)
+    Q_PROPERTY(qreal maximum READ maximum CONSTANT)
 
 public:
     AttributeInfo(int id,
@@ -68,8 +68,8 @@ public:
     QString name() const { return mName; }
     QString description() const { return mDescription; }
     bool modifiable() const { return mModifiable; }
-    qreal min() const { return mMinimum; }
-    qreal max() const { return mMaximum; }
+    qreal minimum() const { return mMinimum; }
+    qreal maximum() const { return mMaximum; }
 
 private:
     int mId;
