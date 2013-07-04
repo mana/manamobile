@@ -1,22 +1,20 @@
 /*
- *  Mana server protocol constants
- *  Copyright (C) 2004-2009  The Mana World Development Team
- *  Copyright (C) 2009-2010  The Mana Developers
+ * Mana server protocol constants
+ * Copyright (C) 2004-2009  The Mana World Development Team
+ * Copyright (C) 2009-2010  The Mana Developers
  *
- *  This file is part of manalib.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  any later version.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef LIBMANA_PROTOCOL_H
@@ -53,10 +51,10 @@ enum ValueType {
  * - GAMSG_*: from game server to account server
  *
  * Components: B byte, W word, D double word, S variable-size string
- *             C tile-based coordinates (B*3)
+ *            C tile-based coordinates (B*3)
  *
  * Hosts:      P (player's client), A (account server), C (chat server),
- *             G (game server)
+ *            G (game server)
  *
  * TODO - Document specific error codes for each packet
  */
