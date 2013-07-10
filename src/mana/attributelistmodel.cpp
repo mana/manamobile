@@ -40,9 +40,6 @@ AttributeListModel::AttributeListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     mRoleNames.insert(AttributeRole, "value");
-#if QT_VERSION < 0x050000
-    setRoleNames(mRoleNames);
-#endif
 }
 
 int AttributeListModel::rowCount(const QModelIndex &parent) const
