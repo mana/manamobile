@@ -28,7 +28,10 @@ Project {
             name: "qmldir"
             qbs.install: true
             qbs.installDir: "bin/qml/Mana/"
-            files: ["qmldir"]
+            files: [
+                "qmldir",
+                "ServerListModel.qml",
+            ]
             prefix: "qml/Mana/"
         }
 
