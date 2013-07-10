@@ -92,10 +92,6 @@ Item {
         if (pressed && event.key == Qt.Key_1)
             gameClient.useAbility(1, Qt.point(mouse.mouseX,
                                               mouse.mouseY));
-
-        if (pressed && event.key == Qt.Key_2)
-            gameClient.useAbility(3, Qt.point(mouse.mouseX,
-                                              mouse.mouseY));
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
