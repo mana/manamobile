@@ -2,33 +2,42 @@ import qbs 1.0
 import qbs.probes as Probes
 
 Project {
-    CppApplication {
-        name: "manamobile"
-
-        Probes.IncludeProbe {
-            id: enetIncludes
-            names: "enet/enet.h"
-        }
+    DynamicLibrary {
+        name: "libmana"
+        destinationDirectory: "Mana"
+        targetName: "mana"
 
         Depends {
-            name: "Qt";
+            name: "Qt"
             submodules: [
                 "network",
                 "quick",
             ]
         }
+
+        Depends { name: "cpp" }
+
         Group {
             name: "Binaries"
             qbs.install: true
-            qbs.installDir: "bin"
-            fileTagsFilter: "application"
+            qbs.installDir: "bin/qml/Mana/"
+            fileTagsFilter: "dynamiclibrary"
         }
 
         Group {
-            name: "Manamobile C++ code"
+            name: "qmldir"
+            qbs.install: true
+            qbs.installDir: "bin/qml/Mana/"
             files: [
-                "durationlogger.h",
-                "main.cpp",
+                "qmldir",
+                "ServerListModel.qml",
+            ]
+            prefix: "qml/Mana/"
+        }
+
+        Group {
+            name: "C++ QML elements"
+            files: [
                 "mana/accountclient.cpp",
                 "mana/accountclient.h",
                 "mana/attributelistmodel.cpp",
@@ -47,6 +56,8 @@ Project {
                 "mana/enetclient.h",
                 "mana/gameclient.cpp",
                 "mana/gameclient.h",
+                "mana/manaplugin.cpp",
+                "mana/manaplugin.h",
                 "mana/mapitem.cpp",
                 "mana/mapitem.h",
                 "mana/messagein.cpp",
@@ -142,28 +153,6 @@ Project {
             ]
             prefix: "src/"
         }
-
-        Group {
-            name: "QML files"
-            qbs.install: true
-            qbs.installDir: "bin/qml/main"
-            files: ["*.qml"]
-            prefix: "qml/main/"
-        }
-        Group {
-            name: "Images"
-            qbs.install: true
-            qbs.installDir: "bin/qml/main/images"
-            files: ["*.png", "*.svg"]
-            prefix: "qml/main/images/"
-        }
-
-        Group {
-            name: "QML application viewer"
-            files: ["qtquick2applicationviewer.cpp", "qtquick2applicationviewer.h"]
-            prefix: "qtquick2applicationviewer/"
-        }
-
         Group {
             name: "enet code"
             condition: !enetIncludes.found
@@ -192,7 +181,7 @@ Project {
         }
 
         cpp.includePaths: {
-            var paths = ["src", "qtquick2applicationviewer"];
+            var paths = ["src"];
             if (!enetIncludes.found)
                 paths.push("libs/enet/");
             return paths;
@@ -204,5 +193,60 @@ Project {
                 libraries.push("enet")
             return libraries;
         }
+    }
+
+    CppApplication {
+        name: "manamobile"
+
+        Probes.IncludeProbe {
+            id: enetIncludes
+            names: "enet/enet.h"
+        }
+
+        Depends {
+            name: "Qt";
+            submodules: [
+                "network",
+                "quick",
+            ]
+        }
+
+        Group {
+            name: "Binaries"
+            qbs.install: true
+            qbs.installDir: "bin"
+            fileTagsFilter: "application"
+        }
+
+        Group {
+            name: "Manamobile C++ code"
+            files: [
+                "main.cpp",
+            ]
+            prefix: "example/"
+        }
+
+        Group {
+            name: "QML files"
+            qbs.install: true
+            qbs.installDir: "bin/qml/main"
+            files: ["*.qml"]
+            prefix: "example/qml/main/"
+        }
+        Group {
+            name: "Images"
+            qbs.install: true
+            qbs.installDir: "bin/qml/main/images"
+            files: ["*.png", "*.svg"]
+            prefix: "example/qml/main/images/"
+        }
+
+        Group {
+            name: "QML application viewer"
+            files: ["qtquick2applicationviewer.cpp", "qtquick2applicationviewer.h"]
+            prefix: "example/qtquick2applicationviewer/"
+        }
+
+        cpp.includePaths: ["example/qtquick2applicationviewer/"]
     }
 }

@@ -1,0 +1,3 @@
+module Mana
+plugin mana
+ServerListModel 1.0 ServerListModel.qml
