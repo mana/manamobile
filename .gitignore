@@ -4,7 +4,7 @@ ui_*.h
 moc_*.cpp
 Makefile*
 manamobile
-qml/
+/qml/
 
 # Qt Creator artifacts
 *.pro.user*

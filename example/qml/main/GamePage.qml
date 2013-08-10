@@ -87,6 +87,14 @@ Item {
     Keys.onReleased: handleKeyEvent(event, false);
     Keys.onPressed: handleKeyEvent(event, true);
 
+    Joystick {
+        id: joystick;
+        anchors.left: parent.left;
+        anchors.bottom: parent.bottom;
+        anchors.leftMargin: 50;
+        anchors.bottomMargin: 50;
+    }
+
     NpcDialog {
         id: npcDialog;
         width: parent.width / 2;
