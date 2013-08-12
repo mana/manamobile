@@ -286,10 +286,11 @@ static void drawTileLayer(QSGNode *parent,
                 continue;
 
             const QSize size = cell.tile->size();
+            const QPoint offset = tileset->tileOffset();
 
             TileData data;
-            data.x = x * tileWidth;
-            data.y = (y + 1) * tileHeight - tileset->tileHeight();
+            data.x = x * tileWidth + offset.x();
+            data.y = (y + 1) * tileHeight - tileset->tileHeight() + offset.y();
             data.width = size.width();
             data.height = size.height();
             helper.setTextureCoordinates(data, cell);
