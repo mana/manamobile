@@ -38,18 +38,34 @@ int main(int argc, char *argv[])
     viewer.setClearBeforeRendering(false);
 
     QStringList arguments = app.arguments();
-    QString customServerListPath = "";
+
+    QString customServerListPath;
+    QString customServer;
+    ushort customPort = 9601;
+
     for (int i = 1, max = arguments.length(); i < max; ++i) {
         if (arguments[i] == "--serverlist") {
             if (i + 1 < max)
                 customServerListPath = arguments[++i];
             else
                 qWarning() << "Missing argument for --serverlist";
+        } else if (arguments[i] == "--server") {
+            if (i + 1 < max)
+                customServer = arguments[++i];
+            else
+                qWarning() << "Missing argument for --server";
+        } else if (arguments[i] == "--port") {
+            if (i + 1 < max)
+                customPort = arguments[++i].toUShort();
+            else
+                qWarning() << "Missing argument for --port";
         }
     }
 
     QQmlContext* context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
+    context->setContextProperty("customServer", customServer);
+    context->setContextProperty("customPort", customPort);
 
     viewer.engine()->addImportPath(app.applicationDirPath() +
                                    QLatin1String("/qml/"));

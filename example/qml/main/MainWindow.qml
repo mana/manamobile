@@ -81,7 +81,14 @@ Rectangle {
         currentPage = newPage;
     }
 
-    Component.onCompleted: gotoPage(serverPage);
+    Component.onCompleted: {
+        if (customServer === "") {
+            gotoPage(serverPage);
+        } else {
+            serverName = customServer;
+            accountClient.connect(customServer, customPort);
+        }
+    }
 
     Component { id: serverPage; ServerPage {} }
     Component { id: loginPage; LoginPage {} }
