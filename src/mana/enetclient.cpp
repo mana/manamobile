@@ -58,7 +58,6 @@ void ENetClient::connect(const QString &hostName, quint16 port)
     }
 
     mPort = port;
-    qDebug() << Q_FUNC_INFO << hostName << mPort;
 
     setState(HostLookup);
 

@@ -1,7 +1,7 @@
 /*
  * Mana Mobile
- * Copyright (C) 2010-2013  Thorbjørn Lindeijer 
- * Copyright (C) 2012  Erik Schilling 
+ * Copyright (C) 2010-2013  Thorbjørn Lindeijer
+ * Copyright (C) 2012  Erik Schilling
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -164,14 +164,12 @@ QNetworkReply *ResourceManager::requestFile(const QString &fileName)
     QNetworkRequest request(resolve(fileName));
     request.setAttribute(requestedFileAttribute(), fileName);
 
-    qDebug() << "Retrieving" << request.url();
     return mNetworkAccessManager.get(request);
 }
 
 QNetworkReply *ResourceManager::requestFile(const QUrl &url)
 {
     QNetworkRequest request(url);
-    qDebug() << "Retrieving" << request.url();
     return mNetworkAccessManager.get(request);
 }
 

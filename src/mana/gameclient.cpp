@@ -1,6 +1,6 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2010  Thorbjørn Lindeijer 
+ * Copyright (C) 2010  Thorbjørn Lindeijer
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -240,8 +240,6 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     const QString name = message.readString();
     mPlayerStartX = message.readInt16();
     mPlayerStartY = message.readInt16();
-
-    qDebug() << "Arrived at" << name << mPlayerStartX << mPlayerStartY;
 
     mCurrentMap = QLatin1String("maps/");
     mCurrentMap += name;

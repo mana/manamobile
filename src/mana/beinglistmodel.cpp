@@ -1,7 +1,7 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2010  Thorbjørn Lindeijer 
- * Copyright (C) 2012  Erik Schilling 
+ * Copyright (C) 2010  Thorbjørn Lindeijer
+ * Copyright (C) 2012  Erik Schilling
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -138,7 +138,6 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     being->setAction(action);
     being->setDirection(direction);
 
-    qDebug() << Q_FUNC_INFO << being->name() << being->id() << being->x() << being->y();
     addBeing(being);
 
     // Emit playerChanged after the player has been fully initialized and added
@@ -235,7 +234,6 @@ void BeingListModel::handleHair(Character *ch, MessageIn &message)
 
 void BeingListModel::handleBeingLooksChange(MessageIn &message)
 {
-    qDebug() << Q_FUNC_INFO;
     const int id = message.readInt16();
     if (Being *being = beingById(id)) {
         SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);

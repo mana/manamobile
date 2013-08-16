@@ -1,6 +1,6 @@
 /*
  * Mana Mobile
- * Copyright (C) 2010  Thorbjørn Lindeijer 
+ * Copyright (C) 2010  Thorbjørn Lindeijer
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -49,7 +49,6 @@ MapItem::MapItem(QQuickItem *parent)
 
 void MapItem::setSource(const QString &source)
 {
-    qDebug() << Q_FUNC_INFO << source << isComponentComplete();
     if (mSource == source)
         return;
 
@@ -92,8 +91,6 @@ void MapItem::setStatus(Status status)
 
 void MapItem::load()
 {
-    qDebug() << Q_FUNC_INFO << mSource;
-
     // Clean up ourselves (maybe wait until the map is available?)
     qDeleteAll(mTileLayerItems);
     mTileLayerItems.clear();
@@ -140,7 +137,6 @@ QNetworkReply *MapItem::finishReply()
 void MapItem::checkReady()
 {
     if (mStatus == Loading) {
-        qDebug() << Q_FUNC_INFO << mPendingResources.size() << mPendingImageResources.size();
         if (mPendingResources.isEmpty() && mPendingImageResources.isEmpty())
             setStatus(Ready);
     }

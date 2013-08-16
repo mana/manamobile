@@ -1,6 +1,6 @@
 /*
  * Mana QML plugin
- * Copyright (C) 2010  Thorbjørn Lindeijer 
+ * Copyright (C) 2010  Thorbjørn Lindeijer
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -368,11 +368,6 @@ void AccountClient::handleCharacterSelectResponse(MessageIn &message)
         emit tokenChanged();
         emit gameServerChanged();
         emit chatServerChanged();
-
-        qDebug() << "Game server: " << mGameServerHost << ":"
-                << mGameServerPort;
-        qDebug() << "Chat server: " << mChatServerHost << ":"
-                << mChatServerPort;
 
         if (mPlayerName != mPendingPlayerName) {
             mPlayerName = mPendingPlayerName;
