@@ -1,5 +1,4 @@
 import qbs 1.0
-import qbs.probes as Probes
 
 Project {
     DynamicLibrary {
@@ -155,7 +154,6 @@ Project {
         }
         Group {
             name: "enet code"
-            condition: !enetIncludes.found
             files: [
                 "callbacks.c",
                 "compress.c",
@@ -182,26 +180,18 @@ Project {
 
         cpp.includePaths: {
             var paths = ["src"];
-            if (!enetIncludes.found)
-                paths.push("libs/enet/");
+            paths.push("libs/enet/");
             return paths;
         }
 
         cpp.dynamicLibraries: {
             var libraries = ["z"];
-            if (enetIncludes.found)
-                libraries.push("enet")
             return libraries;
         }
     }
 
     CppApplication {
         name: "manamobile"
-
-        Probes.IncludeProbe {
-            id: enetIncludes
-            names: "enet/enet.h"
-        }
 
         Depends {
             name: "Qt";
