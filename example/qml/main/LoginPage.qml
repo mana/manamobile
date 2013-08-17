@@ -115,7 +115,6 @@ Item {
                 anchors.left: parent.left;
 
                 KeyNavigation.up: passwordEdit;
-                tabTarget: nameEdit;
 
                 enabled: accountClient.state == AccountClient.Connected &&
                          !loggingIn && !loggedIn;
