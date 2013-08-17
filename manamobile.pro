@@ -1,10 +1,30 @@
-# Check the Qt version. If QT_VERSION is not set, it is probably Qt 3.
-isEmpty(QT_VERSION) {
-    error("QT_VERSION not defined. Mana Mobile requires Qt 5.")
+# Nice test taken from qtcreator.pri
+defineTest(minQtVersion) {
+    maj = $$1
+    min = $$2
+    patch = $$3
+    isEqual(QT_MAJOR_VERSION, $$maj) {
+        isEqual(QT_MINOR_VERSION, $$min) {
+            isEqual(QT_PATCH_VERSION, $$patch) {
+                return(true)
+            }
+            greaterThan(QT_PATCH_VERSION, $$patch) {
+                return(true)
+            }
+        }
+        greaterThan(QT_MINOR_VERSION, $$min) {
+            return(true)
+        }
+    }
+    greaterThan(QT_MAJOR_VERSION, $$maj) {
+        return(true)
+    }
+    return(false)
 }
-contains(QT_VERSION, ^4\\..*) {
-    message("Cannot build Mana Mobile with Qt version $$QT_VERSION")
-    error("Use at least Qt 5.0")
+
+!minQtVersion(5, 1, 0) {
+    message("Cannot build Mana Mobile with Qt version $${QT_VERSION}")
+    error("Use at least Qt 5.1.0")
 }
 
 TEMPLATE = subdirs
