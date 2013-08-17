@@ -31,7 +31,7 @@ Project {
                 "qmldir",
                 "ServerListModel.qml",
             ]
-            prefix: "qml/Mana/"
+            prefix: "src/mana/qml/Mana/"
         }
 
         Group {
