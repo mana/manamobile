@@ -38,9 +38,33 @@ void HairDB::load()
 
 void HairDB::unload()
 {
-    qDeleteAll(mHairs);
-    mHairs.clear();
+    qDeleteAll(mHairMap);
+    mHairMap.clear();
+    mHairList.clear();
 
     mLoaded = false;
     emit hairsChanged();
+}
+
+void HairDB::setInfo(int id, HairInfo *info)
+{
+    mHairMap[id] = info;
+    mHairList.append(info);
+}
+
+QQmlListProperty<HairInfo> HairDB::hairs()
+{
+    return QQmlListProperty<HairInfo>(this, 0,
+                                      HairDB::hairs_count,
+                                      HairDB::hairs_at);
+}
+
+int HairDB::hairs_count(QQmlListProperty<HairInfo> *)
+{
+    return mInstance->mHairList.size();
+}
+
+HairInfo *HairDB::hairs_at(QQmlListProperty<HairInfo> *, int index)
+{
+    return mInstance->mHairList.at(index);
 }

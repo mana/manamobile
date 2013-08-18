@@ -87,8 +87,8 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
     const QString &action = SpriteAction::actionByInt(message.readInt8());
     const int x = message.readInt16();
     const int y = message.readInt16();
-    BeingDirection direction = (BeingDirection)message.readInt8();
-    BeingGender gender = (BeingGender)message.readInt8();
+    BeingDirection direction = static_cast<BeingDirection>(message.readInt8());
+    Being::BeingGender gender = static_cast<Being::BeingGender>(message.readInt8());
 
     Being *being;
     Character *playerCharacter = 0;

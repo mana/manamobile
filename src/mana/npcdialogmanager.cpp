@@ -53,7 +53,6 @@ void NpcDialogManager::startTalkingTo(Being *being)
     ASSERT_ELSE(being->type() == OBJECT_NPC)
         return;
 
-
     if (!mNpc) {
         mNpc = static_cast<NPC *>(being);
         emit npcChanged();

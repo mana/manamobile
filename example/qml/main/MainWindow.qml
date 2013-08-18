@@ -99,6 +99,7 @@ Rectangle {
         }
     }
     Component { id: characterPage; CharacterPage {} }
+    Component { id: newCharacterPage; NewCharacterPage {} }
     Component { id: gamePage; GamePage {} }
 
     Component {
@@ -186,6 +187,12 @@ Rectangle {
             name: "chooseCharacter"
             StateChangeScript {
                 script: gotoPage(characterPage);
+            }
+        },
+        State {
+            name: "createCharacter"
+            StateChangeScript {
+                script: gotoPage(newCharacterPage);
             }
         },
         State {

@@ -22,6 +22,7 @@
 #include <QList>
 #include <QMap>
 #include <QObject>
+#include <QQmlListProperty>
 
 #include "spritedef.h"
 
@@ -36,7 +37,7 @@ class HairInfo;
 class HairDB : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QList<HairInfo *> hairs READ hairs NOTIFY hairsChanged)
+    Q_PROPERTY(QQmlListProperty<Mana::HairInfo> hairs READ hairs NOTIFY hairsChanged)
 
     friend class ItemDB;
 
@@ -47,13 +48,12 @@ public:
     Q_INVOKABLE void unload();
     bool isLoaded() const { return mLoaded; }
 
-    Q_INVOKABLE const HairInfo *getInfo(int id) const
-    { return mHairs[id]; }
+    Q_INVOKABLE const Mana::HairInfo *getInfo(int id) const
+    { return mHairMap[id]; }
 
-    void setInfo(int id, HairInfo *info)
-    { mHairs[id] = info; }
+    void setInfo(int id, HairInfo *info);
 
-    QList<HairInfo *> hairs() const { return mHairs.values(); }
+    QQmlListProperty<HairInfo> hairs();
 
     static HairDB *instance() { return mInstance; }
 
@@ -62,12 +62,16 @@ signals:
     void loaded();
 
 private:
+    static int hairs_count(QQmlListProperty<HairInfo> *);
+    static HairInfo *hairs_at(QQmlListProperty<HairInfo> *, int index);
+
     static HairDB *mInstance;
 
     bool mLoaded;
     ~HairDB() { unload(); }
 
-    QMap<int, HairInfo *> mHairs;
+    QMap<int, HairInfo *> mHairMap;
+    QList<HairInfo *> mHairList;
 };
 
 class HairInfo : public QObject
@@ -107,5 +111,7 @@ private:
 };
 
 } // namespace Mana
+
+Q_DECLARE_METATYPE(Mana::HairInfo*)
 
 #endif // HAIRDB_H

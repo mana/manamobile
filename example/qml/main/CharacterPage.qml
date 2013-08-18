@@ -66,7 +66,7 @@ Item {
                     id: sprites;
                     sprites: model.character.spriteListModel;
                     action: "stand";
-                    direction: 2;
+                    direction: Action.DIRECTION_DOWN;
 
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.bottom: parent.bottom;
@@ -107,6 +107,12 @@ Item {
                 border.color: "black";
                 border.width: 1;
             }
+        }
+
+        Button {
+            text: qsTr("New");
+            onClicked: window.state = "createCharacter";
+            enabled: characterList.count < accountClient.maxCharacters;
         }
     }
 

@@ -33,7 +33,7 @@ Being::Being(int type)
     , mWalkSpeed(0.0)
     , mAction(SpriteAction::STAND)
     , mDirection(DOWN)
-    , mGender(GENDER_UNSPECIFIED)
+    , mGender(Mana::GENDER_UNSPECIFIED)
 {
     mSpriteList = new SpriteListModel(this);
 }

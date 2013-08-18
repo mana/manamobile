@@ -30,6 +30,7 @@
 #include "resource/action.h"
 
 namespace Mana {
+
 class HairInfo;
 class SpriteListModel;
 
@@ -49,15 +50,14 @@ class Being : public QObject
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString chatMessage READ chatMessage NOTIFY chatMessageChanged)
     Q_PROPERTY(QString action READ action WRITE setAction NOTIFY actionChanged)
-    Q_PROPERTY(BeingGender gender READ gender CONSTANT)
+    Q_PROPERTY(BeingGender gender READ gender WRITE setGender NOTIFY genderChanged)
     Q_PROPERTY(Mana::SpriteListModel *spriteListModel READ spriteListModel CONSTANT)
 
-    Q_ENUMS(EntityType)
+    Q_ENUMS(EntityType BeingGender)
 
 public:
     // Keep in sync with protocol
-    enum EntityType
-    {
+    enum EntityType {
         OBJECT_ITEM = 0,
         OBJECT_ACTOR,
         OBJECT_NPC,
@@ -65,6 +65,13 @@ public:
         OBJECT_CHARACTER,
         OBJECT_EFFECT,
         OBJECT_OTHER
+    };
+
+    // Keep in sync with protocol
+    enum BeingGender {
+        GENDER_MALE = 0,
+        GENDER_FEMALE,
+        GENDER_UNSPECIFIED
     };
 
     Being(int type);
@@ -100,8 +107,8 @@ public:
 
     void say(const QString &text);
 
-    BeingGender gender() const { return mGender; }
-    virtual void setGender(BeingGender gender) { mGender = gender; }
+    BeingGender gender() const;
+    virtual void setGender(BeingGender gender);
 
     void lookAt(const QPointF &point);
 
@@ -113,6 +120,7 @@ signals:
     void nameChanged();
     void chatMessageChanged();
     void actionChanged();
+    void genderChanged();
 
 protected:
     int mType;
@@ -125,8 +133,21 @@ protected:
     QString mName;
     QString mChatMessage;
     SpriteListModel *mSpriteList;
-    BeingGender mGender;
+    Mana::BeingGender mGender;
 };
+
+inline Being::BeingGender Being::gender() const
+{
+    return static_cast<BeingGender>(mGender);
+}
+
+inline void Being::setGender(BeingGender gender)
+{
+    if (mGender != static_cast<Mana::BeingGender>(gender)) {
+        mGender = static_cast<Mana::BeingGender>(gender);
+        emit genderChanged();
+    }
+}
 
 } // namespace Mana
 

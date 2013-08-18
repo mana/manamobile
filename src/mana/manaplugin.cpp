@@ -85,13 +85,14 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::GameClient>(uri, 1, 0, "GameClient");
     qmlRegisterType<Mana::Settings>(uri, 1, 0, "Settings");
     qmlRegisterType<Mana::SpriteItem>(uri, 1, 0, "Sprite");
+    qmlRegisterUncreatableType<Mana::Action>(uri, 1, 0, "Action",
+                                             "Only exposed for direction enum");
 
     qmlRegisterType<Mana::CharacterListModel>();
     qmlRegisterType<Mana::BeingListModel>();
     qmlRegisterUncreatableType<Mana::Being>(uri, 1, 0, "Being",
                                             "Managed on C++ side");
-    qmlRegisterUncreatableType<Mana::Character>(uri, 1, 0, "Character",
-                                                "Managed on C++ side");
+    qmlRegisterType<Mana::Character>(uri, 1, 0, "Character");
 
     qmlRegisterType<Mana::NpcDialogManager>(uri, 1, 0, "NpcDialogManager");
 
@@ -113,6 +114,7 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::MonsterDB>();
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();
+    qmlRegisterType<Mana::HairInfo>();
 
     qmlRegisterType<Mana::MapItem>(uri, 1, 0, "TileMap");
 }

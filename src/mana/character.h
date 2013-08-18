@@ -27,6 +27,9 @@ class Character : public Being
 {
     Q_OBJECT
 
+    Q_PROPERTY(int hairStyle READ hairStyle WRITE setHairStyle NOTIFY hairChanged)
+    Q_PROPERTY(int hairColor READ hairColor WRITE setHairColor NOTIFY hairChanged)
+
 public:
     enum SlotLayer {
         SLOT_RACE = 0,
@@ -41,8 +44,12 @@ public:
     QMap<int, int> &equipmentSlots() { return mEquipmentSlots; }
 
     void setHairStyle(int style, int color);
+
     int hairStyle() const { return mHairStyle; }
+    void setHairStyle(int style);
+
     int hairColor() const { return mHairColor; }
+    void setHairColor(int color);
 
     virtual void setGender(BeingGender gender);
 
@@ -70,7 +77,17 @@ private:
     int mLevel;
 };
 
+inline void Character::setHairStyle(int style)
+{
+    setHairStyle(style, mHairColor);
 }
+
+inline void Character::setHairColor(int color)
+{
+    setHairStyle(mHairStyle, color);
+}
+
+} // namespace Mana
 
 Q_DECLARE_METATYPE(Mana::Character*)
 

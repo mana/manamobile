@@ -124,16 +124,38 @@ void AccountClient::login(const QString &username,
     send(loginMessage);
 }
 
+static bool slotAvailable(const QList<Character *> &chars, int slot)
+{
+    for (int i = 0; i < chars.size(); ++i)
+        if (chars.at(i)->characterSlot() == slot)
+            return false;
+
+    return true;
+}
+
+static int nextFreeSlot(const QList<Character *> &chars, int maxChars)
+{
+    for (int slot = 1; slot <= maxChars; ++slot)
+        if (slotAvailable(chars, slot))
+            return slot;
+
+    return -1;
+}
+
 void AccountClient::createCharacter(const QString &name,
-                                    bool gender,
+                                    int gender,
                                     int hairStyle, int hairColor,
                                     const QList<int> &stats)
 {
+    const int slot = nextFreeSlot(mCharacters, mMaxCharacters);
+    SAFE_ASSERT(slot != -1, return)
+
     MessageOut createMessage(PAMSG_CHAR_CREATE);
     createMessage.writeString(name);
     createMessage.writeInt8(hairStyle);
     createMessage.writeInt8(hairColor);
     createMessage.writeInt8(gender);
+    createMessage.writeInt8(slot);
     foreach (int stat, stats)
         createMessage.writeInt16(stat);
     send(createMessage);
@@ -328,13 +350,21 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
 {
     Character *character = new Character;
 
-    character->setCharacterSlot(message.readInt8());
-    character->setName(message.readString());
-    character->setGender((BeingGender)message.readInt8());
-    character->setHairStyle(message.readInt8(), message.readInt8());
-    character->setLevel(message.readInt16());
+    const int slot = message.readInt8();
+    const QString name = message.readString();
+    const Being::BeingGender gender =
+            static_cast<Being::BeingGender>(message.readInt8());
+    const int hairStyle = message.readInt8();
+    const int hairColor = message.readInt8();
+    const int level = message.readInt16();
     message.readInt16(); // character points
     message.readInt16(); // correction points
+
+    character->setCharacterSlot(slot);
+    character->setName(name);
+    character->setGender(gender);
+    character->setHairStyle(hairStyle, hairColor);
+    character->setLevel(level);
 
     while (message.unreadLength() > 0) {
         const unsigned id = message.readInt32();
@@ -342,8 +372,9 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
         int base = message.readInt32() / 256.0;
         int mod = message.readInt32() / 256.0;
 
-        Q_UNUSED(base);
-        Q_UNUSED(mod);
+        Q_UNUSED(id)
+        Q_UNUSED(base)
+        Q_UNUSED(mod)
 
         // TODO: Extract the money attribute from here and display it
     }

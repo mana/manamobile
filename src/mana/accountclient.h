@@ -92,7 +92,7 @@ public:
                            const QString &password);
 
     Q_INVOKABLE void createCharacter(const QString &name,
-                                     bool gender,
+                                     int gender,
                                      int hairStyle,
                                      int hairColor,
                                      const QList<int> &stats);

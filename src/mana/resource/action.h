@@ -33,8 +33,7 @@ class Action : public QObject
     Q_ENUMS(SpriteDirection)
 
 public:
-    enum SpriteDirection
-    {
+    enum SpriteDirection {
         DIRECTION_DEFAULT = 0,
         DIRECTION_UP,
         DIRECTION_DOWN,
@@ -52,7 +51,6 @@ public:
 
 private:
     QMap<int, Animation *> mAnimations;
-
 };
 
 }
