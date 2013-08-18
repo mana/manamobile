@@ -17,8 +17,12 @@ Item {
     }
 
     function createCharacter() {
+        var name = nameEdit.text;
+        if (name === "")
+            return;
+
         errorLabel.clear();
-        accountClient.createCharacter(name.text,
+        accountClient.createCharacter(name,
                                       character.gender,
                                       character.hairStyle,
                                       character.hairColor,
@@ -54,12 +58,13 @@ Item {
     }
 
     LineEdit {
-        id: name
+        id: nameEdit
         placeholderText: qsTr("Name")
         focus: true
         width: 300
         anchors.horizontalCenter: characterPreview.horizontalCenter
         anchors.bottom: parent.bottom
+        onAccepted: createCharacter()
     }
 
     Button {
@@ -87,7 +92,7 @@ Item {
         text: qsTr("Create")
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        enabled: name.text != ""
+        enabled: nameEdit.text != ""
         onClicked: createCharacter()
     }
 
@@ -98,6 +103,6 @@ Item {
     }
 
     Component.onCompleted: {
-        name.focus = true;
+        nameEdit.focus = true;
     }
 }
