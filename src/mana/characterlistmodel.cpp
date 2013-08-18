@@ -26,9 +26,6 @@ CharacterListModel::CharacterListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     mRoleNames.insert(CharRole, "character");
-#if QT_VERSION < 0x050000
-    setRoleNames(mRoleNames);
-#endif
 }
 
 int CharacterListModel::rowCount(const QModelIndex &parent) const
