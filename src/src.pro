@@ -155,3 +155,6 @@ copy_qmldir.commands = $(COPY_DIR) $$replace(copy_qmldir.path, /, $$QMAKE_DIR_SE
 QMAKE_EXTRA_TARGETS += copy_qmldir
 PRE_TARGETDEPS += $$copy_qmldir.target
 
+OTHER_FILES += \
+    mana/qml/Mana/ServerListModel.qml \
+    mana/qml/Mana/qmldir
