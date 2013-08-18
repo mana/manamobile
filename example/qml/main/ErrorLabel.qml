@@ -16,7 +16,7 @@ Text {
     }
 
     function clear() {
-        errorLabel.text = " ";  // Needs a space or it won't clear correctly?
+        errorLabel.text = "";
     }
 
     ParallelAnimation {

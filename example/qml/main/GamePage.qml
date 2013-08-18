@@ -6,17 +6,6 @@ Item {
 
     state: "game";
 
-    // Workaround for QTBUG-28288 / QTBUG-25644, can be removed once Qt 4.8.5
-    // or Qt 5.1.0 have been released.
-    property bool chatBarHasActiveFocus: false;
-    Timer {
-        id: focusTimer;
-        interval: 100;
-        repeat: true;
-        running: true;
-        onTriggered: chatBarHasActiveFocus = chatBar.activeFocus;
-    }
-
     Component.onCompleted: gamePage.forceActiveFocus();
 
     Viewport {
@@ -134,7 +123,7 @@ Item {
             states: [
                 State {
                     name: "opened";
-                    when: chatBarHasActiveFocus;
+                    when: chatBar.activeFocus;
                     PropertyChanges {
                         target: chatInput;
                         y: -chatInput.height - 5;
