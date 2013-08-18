@@ -6,6 +6,8 @@ Rectangle {
     height: 200;
     radius: 20;
     opacity: 0.5;
+    border.color: "black";
+    border.width: 2;
 
     MouseArea {
         id: hitArea;
@@ -21,6 +23,8 @@ Rectangle {
                 height: 20;
                 radius: 10;
                 anchors.centerIn: parent;
+                border.color: "black";
+                border.width: 2;
             }
 
             states: [

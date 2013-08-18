@@ -8,12 +8,19 @@ Item {
 
     Component.onCompleted: gamePage.forceActiveFocus();
 
-    Viewport {
-        id: viewport;
-        width: parent.width / scale;
-        height: parent.height / scale;
-        scale: Math.ceil(Math.max(parent.width / 1200, parent.height / 1200));
-        transformOrigin: Item.TopLeft;
+    Item {
+        anchors.top: parent.top;
+        anchors.left: statusPage.right;
+        anchors.right: parent.right;
+        anchors.bottom: parent.bottom;
+
+        Viewport {
+            id: viewport;
+            width: parent.width / scale;
+            height: parent.height / scale;
+            scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
+            transformOrigin: Item.TopLeft;
+        }
     }
 
     Rectangle {
@@ -69,12 +76,14 @@ Item {
 
         updateWalkDirection();
 
-        if (pressed && event.key == Qt.Key_C)
-            gamePage.state = "status";
+        if (pressed && event.key === Qt.Key_C)
+            statusPage.toggle();
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
     Keys.onPressed: handleKeyEvent(event, true);
+
+    StatusPage { id: statusPage; }
 
     Joystick {
         id: joystick;
@@ -149,32 +158,12 @@ Item {
         }
     }
 
-    StatusPage {
-        id: statusPage;
-        anchors.fill: parent;
-        visible: false;
-    }
-
     states: [
         State {
             name: "game";
             PropertyChanges {
                 target: gamePage;
                 focus: true;
-            }
-            PropertyChanges {
-                target: statusPage;
-                focus: false;
-                opacity: 0;
-            }
-        },
-        State {
-            name: "status";
-            PropertyChanges {
-                target: statusPage;
-                focus: true;
-                visible: true;
-                opacity: 1;
             }
         }
     ]

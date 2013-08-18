@@ -20,11 +20,13 @@ Item {
         id: smoothFollowComponent;
         Item {
             id: smoothFollow;
-            property real mapX: viewport.centerX - viewport.playerX;
-            property real mapY: viewport.centerY - viewport.playerY;
+            property real smoothPlayerX: viewport.playerX;
+            property real smoothPlayerY: viewport.playerY;
+            property real mapX: viewport.centerX - smoothPlayerX;
+            property real mapY: viewport.centerY - smoothPlayerY;
 
-            Behavior on mapX { SpringAnimation { spring: 3; damping: 1 } }
-            Behavior on mapY { SpringAnimation { spring: 3; damping: 1 } }
+            Behavior on smoothPlayerX { SpringAnimation { spring: 3; damping: 1 } }
+            Behavior on smoothPlayerY { SpringAnimation { spring: 3; damping: 1 } }
 
             // Math.floor is used to avoid tile drawing glitches
             Binding { target: map; property: "x"; value: Math.floor(smoothFollow.mapX); }
