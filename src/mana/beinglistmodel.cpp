@@ -43,9 +43,6 @@ BeingListModel::BeingListModel(QObject *parent)
     , mPlayerCharacter(0)
 {
     mRoleNames.insert(BeingRole, "being");
-#if QT_VERSION < 0x050000
-    setRoleNames(mRoleNames);
-#endif
 
     mBeingUpdateTimer = startTimer(16);
     mFrameDurationTimer.start();

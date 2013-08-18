@@ -20,11 +20,7 @@
 #include "resourcemanager.h"
 
 #include <QDateTime>
-#if QT_VERSION >= 0x050000
 #include <QStandardPaths>
-#else
-#include <QDesktopServices>
-#endif
 #include <QNetworkConfigurationManager>
 #include <QNetworkDiskCache>
 #include <QNetworkReply>
@@ -57,13 +53,8 @@ ResourceManager::ResourceManager(QObject *parent)
     mNetworkAccessManager.setConfiguration(manager.defaultConfiguration());
 
     // Use a disk cache to avoid re-downloading data all the time
-#if QT_VERSION >= 0x050000
     QString cacheLocation =
             QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-#else
-    QString cacheLocation =
-            QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
-#endif
 
     if (!cacheLocation.isEmpty()) {
         cacheLocation += QLatin1String("/httpCache");

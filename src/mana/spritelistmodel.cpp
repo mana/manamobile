@@ -25,9 +25,6 @@ SpriteListModel::SpriteListModel(QObject *parent) :
 {
     mRoleNames.insert(SpriteRole, "sprite");
     mRoleNames.insert(SlotRole, "slot");
-#if QT_VERSION < 0x050000
-    setRoleNames(mRoleNames);
-#endif
 }
 
 int SpriteListModel::rowCount(const QModelIndex &parent) const
