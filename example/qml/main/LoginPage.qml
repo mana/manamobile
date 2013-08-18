@@ -42,7 +42,7 @@ Item {
             width: window.width * 0.5;
             anchors.top: serverNameDisplay.bottom;
             focus: true;
-            labelText: qsTr("Username");
+            placeholderText: qsTr("Username");
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase;
             maximumLength: accountClient.maximumNameLength;
 
@@ -53,13 +53,13 @@ Item {
             }
 
             KeyNavigation.down: passwordEdit;
-            backtabTarget: loginButton;
         }
         LineEdit {
             id: emailEdit;
             width: nameEdit.width;
             anchors.top: nameEdit.bottom;
-            labelText: qsTr("Email");
+            placeholderText: qsTr("Email");
+            visible: false;
             opacity: 0;
             height: 0;
             inputMethodHints: Qt.ImhEmailCharactersOnly;
@@ -71,7 +71,7 @@ Item {
             id: passwordEdit;
             width: nameEdit.width;
             anchors.top: emailEdit.bottom;
-            labelText: qsTr("Password");
+            placeholderText: qsTr("Password");
             echoMode: TextInput.Password;
             inputMethodHints: Qt.ImhHiddenText | Qt.ImhSensitiveData |
                               Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText |
@@ -84,15 +84,15 @@ Item {
             id: passwordConfirmEdit;
             width: nameEdit.width;
             anchors.top: passwordEdit.bottom;
-            labelText: qsTr("Password");
+            placeholderText: qsTr("Password");
             echoMode: TextInput.Password;
             inputMethodHints: passwordEdit.inputMethodHints;
+            visible: false;
             opacity: 0;
             height: 0;
 
             KeyNavigation.up: passwordEdit;
             KeyNavigation.down: loginButton;
-            tabTarget: cancelButton;
         }
         Item {
             id: buttons;
@@ -104,6 +104,7 @@ Item {
             Button {
                 id: cancelButton;
                 text: qsTr("Cancel");
+                visible: false;
                 opacity: 0;
                 onClicked: loginPage.state = "";
                 KeyNavigation.up: passwordConfirmEdit;
@@ -150,6 +151,7 @@ Item {
         source: "images/bottombar.png";
         width: parent.width;
         y: parent.height;
+        visible: false;
 
         TextShadow { target: questionText; }
         Text {
@@ -181,11 +183,20 @@ Item {
                 PropertyChanges {
                     target: registrationBar;
                     y: parent.height - height;
+                    visible: true;
                 }
             }
         ]
         transitions: [
             Transition {
+                to: ""
+                SequentialAnimation {
+                    NumberAnimation { property: "y"; easing.type: Easing.OutQuad; }
+                    PropertyAction { property: "visible"; }
+                }
+            },
+            Transition {
+                to: "visible"
                 NumberAnimation {
                     property: "y";
                     easing.type: Easing.OutQuad;
@@ -198,14 +209,14 @@ Item {
         State {
             name: "register"
             PropertyChanges { target: nameEdit; KeyNavigation.down: emailEdit; }
-            PropertyChanges { target: emailEdit; opacity: 1; height: 70; }
+            PropertyChanges { target: emailEdit; visible: true; opacity: 1; height: emailEdit.implicitHeight; }
             PropertyChanges {
                 target: passwordEdit;
                 KeyNavigation.up: emailEdit;
                 KeyNavigation.down: passwordConfirmEdit;
             }
-            PropertyChanges { target: passwordConfirmEdit; opacity: 1; height: 70; }
-            PropertyChanges { target: cancelButton; opacity: 1; }
+            PropertyChanges { target: passwordConfirmEdit; visible: true; opacity: 1; height: passwordConfirmEdit.implicitHeight; }
+            PropertyChanges { target: cancelButton; visible: true; opacity: 1; }
             AnchorChanges { target: loginButton; anchors.left: cancelButton.right; }
             PropertyChanges {
                 target: loginButton;
@@ -229,10 +240,15 @@ Item {
         },
         Transition {
             to: "";
-            PropertyAction { property: "text"; }
-            NumberAnimation { properties: "opacity"; easing.type: Easing.OutQuart; }
-            NumberAnimation { properties: "height,y,leftMargin"; easing.type: Easing.InOutQuad; }
-            AnchorAnimation { easing.type: Easing.InOutQuad; }
+            SequentialAnimation {
+                ParallelAnimation {
+                    PropertyAction { property: "text"; }
+                    NumberAnimation { properties: "opacity"; easing.type: Easing.OutQuart; }
+                    NumberAnimation { properties: "height,y,leftMargin"; easing.type: Easing.InOutQuad; }
+                    AnchorAnimation { easing.type: Easing.InOutQuad; }
+                }
+                PropertyAction { property: "visible"; }
+            }
         }
     ]
 }

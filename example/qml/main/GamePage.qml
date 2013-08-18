@@ -130,7 +130,6 @@ Item {
             id: chatInput;
             anchors.left: parent.left;
             anchors.right: sayButton.left;
-            tabTarget: sayButton;
 
             states: [
                 State {
