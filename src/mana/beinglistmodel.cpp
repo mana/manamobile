@@ -43,9 +43,6 @@ BeingListModel::BeingListModel(QObject *parent)
     , mPlayerCharacter(0)
 {
     mRoleNames.insert(BeingRole, "being");
-
-    mBeingUpdateTimer = startTimer(16);
-    mFrameDurationTimer.start();
 }
 
 int BeingListModel::rowCount(const QModelIndex &parent) const
@@ -285,19 +282,13 @@ void BeingListModel::clear()
     }
 }
 
-void BeingListModel::timerEvent(QTimerEvent *event)
+void BeingListModel::update(qreal deltaTime)
 {
-    if (event->timerId() != mBeingUpdateTimer)
-        return;
-
-    // Don't jump ahead more than 1 second
-    qreal dt = qMin(qreal(1), mFrameDurationTimer.restart() / qreal(1000));
-
     for (int i = 0, end = mBeings.size(); i < end; ++i) {
         Being *being = mBeings.at(i);
 
         const QPointF pos = being->position();
-        const qreal walkDistance = being->walkSpeed() * dt;
+        const qreal walkDistance = being->walkSpeed() * deltaTime;
 
         if (being == mPlayerCharacter) {
             QVector2D direction = mPlayerWalkDirection;

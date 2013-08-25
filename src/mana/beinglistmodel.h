@@ -21,7 +21,6 @@
 #define BEINGLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QElapsedTimer>
 #include <QVector2D>
 
 namespace Mana {
@@ -75,8 +74,8 @@ signals:
     void playerPositionChanged();
     void playerWalkDirectionChanged();
 
-protected:
-    void timerEvent(QTimerEvent *);
+public slots:
+    void update(qreal deltaTime);
 
 private:
     Being *beingAt(int index) const { return mBeings.at(index); }
@@ -91,14 +90,11 @@ private:
 
     QList<Being*> mBeings;
 
-    int mBeingUpdateTimer;
     QString mPlayerName;
     Character *mPlayerCharacter;
     QVector2D mPlayerWalkDirection;
 
     QHash<int, QByteArray> mRoleNames;
-
-    QElapsedTimer mFrameDurationTimer;
 };
 
 } // namespace Mana

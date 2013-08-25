@@ -30,6 +30,7 @@ class AttributeListModel;
 class Being;
 class BeingListModel;
 class Character;
+class LogicDriver;
 class NpcDialogManager;
 
 /**
@@ -117,6 +118,7 @@ private:
     AttributeListModel *mAttributeListModel;
     BeingListModel *mBeingListModel;
     NpcDialogManager *mNpcDialogManager;
+    LogicDriver *mLogicDriver;
 };
 
 inline AttributeListModel *GameClient::attributeListModel() const

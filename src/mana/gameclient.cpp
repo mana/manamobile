@@ -22,6 +22,7 @@
 #include "being.h"
 #include "beinglistmodel.h"
 #include "character.h"
+#include "logicdriver.h"
 #include "messagein.h"
 #include "messageout.h"
 #include "npcdialogmanager.h"
@@ -37,6 +38,7 @@ GameClient::GameClient(QObject *parent)
     , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
     , mNpcDialogManager(new NpcDialogManager(this))
+    , mLogicDriver(new LogicDriver(this))
 {
     QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
                      this, SIGNAL(playerChanged()));
@@ -55,6 +57,9 @@ GameClient::GameClient(QObject *parent)
                      this, SIGNAL(playerWalkDirectionChanged()));
     QObject::connect(mBeingListModel, SIGNAL(playerPositionChanged()),
                      this, SLOT(playerPositionChanged()));
+
+    QObject::connect(mLogicDriver, SIGNAL(update(qreal)),
+                     mBeingListModel, SLOT(update(qreal)));
 }
 
 GameClient::~GameClient()
@@ -209,6 +214,7 @@ void GameClient::messageReceived(MessageIn &message)
 
 void GameClient::playerPositionChanged()
 {
+    // TODO: Rate-limit these calls
     const Being *ch = player();
     walkTo(ch->x(), ch->y());
 }
@@ -229,6 +235,7 @@ void GameClient::handleAuthenticationResponse(MessageIn &message)
     case ERRMSG_OK:
         if (!mAuthenticated) {
             mAuthenticated = true;
+            mLogicDriver->start(); // start driving logic
             emit authenticatedChanged();
         }
         break;

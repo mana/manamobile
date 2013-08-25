@@ -40,6 +40,7 @@ SOURCES += \
     mana/chatclient.cpp \
     mana/enetclient.cpp \
     mana/gameclient.cpp \
+    mana/logicdriver.cpp \
     mana/manaplugin.cpp \
     mana/mapitem.cpp \
     mana/messagein.cpp \
@@ -94,6 +95,7 @@ HEADERS += \
     mana/chatclient.h \
     mana/enetclient.h \
     mana/gameclient.h \
+    mana/logicdriver.h \
     mana/manaplugin.h \
     mana/mapitem.h \
     mana/messagein.h \

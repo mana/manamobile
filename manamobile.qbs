@@ -55,6 +55,8 @@ Project {
                 "mana/enetclient.h",
                 "mana/gameclient.cpp",
                 "mana/gameclient.h",
+                "mana/logicdriver.cpp",
+                "mana/logicdriver.h",
                 "mana/manaplugin.cpp",
                 "mana/manaplugin.h",
                 "mana/mapitem.cpp",
