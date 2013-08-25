@@ -1,5 +1,6 @@
 TEMPLATE = lib
 CONFIG += qt plugin
+linux*:QMAKE_LFLAGS += $$QMAKE_LFLAGS_NOUNDEF
 
 DESTDIR = qml/Mana/
 TARGET = mana
