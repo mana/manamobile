@@ -29,8 +29,20 @@ Item {
             Behavior on smoothPlayerY { SpringAnimation { spring: 3; damping: 1 } }
 
             // Math.floor is used to avoid tile drawing glitches
-            Binding { target: map; property: "x"; value: Math.floor(smoothFollow.mapX); }
-            Binding { target: map; property: "y"; value: Math.floor(smoothFollow.mapY); }
+            Binding {
+                target: map; property: "x";
+                value: {
+                    var scale = viewport.scale;
+                    Math.floor(smoothFollow.mapX * scale) / scale;
+                }
+            }
+            Binding {
+                target: map; property: "y";
+                value: {
+                    var scale = viewport.scale;
+                    Math.floor(smoothFollow.mapY * scale) / scale;
+                }
+            }
         }
     }
 
