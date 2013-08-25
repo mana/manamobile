@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG += qt plugin
 
-DESTDIR = ../qml/Mana/
+DESTDIR = qml/Mana/
 TARGET = mana
 
 QT += network qml quick
@@ -146,15 +146,10 @@ HEADERS += \
     tiled/tilelayer.h \
     tiled/tileset.h
 
+folder_Mana.source = mana/qml/Mana
+folder_Mana.target = qml
+DEPLOYMENTFOLDERS = folder_Mana
 
-copy_qmldir.target = ../qml/Mana/qmldir
-copy_qmldir.destination = ../qml/
-copy_qmldir.path = $$_PRO_FILE_PWD_/mana/qml/Mana
-
-copy_qmldir.commands = $(COPY_DIR) $$replace(copy_qmldir.path, /, $$QMAKE_DIR_SEP) $$replace(copy_qmldir.destination, /, $$QMAKE_DIR_SEP)
-QMAKE_EXTRA_TARGETS += copy_qmldir
-PRE_TARGETDEPS += $$copy_qmldir.target
-
-OTHER_FILES += \
-    mana/qml/Mana/ServerListModel.qml \
-    mana/qml/Mana/qmldir
+# Please do not modify the following two lines. Required for deployment.
+include(../example/qtquick2applicationviewer/qtquick2applicationviewer.pri)
+qtcAddDeployment()

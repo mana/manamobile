@@ -18,6 +18,7 @@
  */
 
 #include <QDebug>
+#include <QDir>
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -67,9 +68,16 @@ int main(int argc, char *argv[])
     context->setContextProperty("customServer", customServer);
     context->setContextProperty("customPort", customPort);
 
+#ifdef Q_OS_ANDROID
+    viewer.engine()->addImportPath(QLatin1String("assets:/qml"));
+    viewer.engine()->addPluginPath(QDir::homePath() + "/../lib");
+#else
     viewer.engine()->addImportPath(app.applicationDirPath() +
-                                   QLatin1String("/qml/"));
+                                   QLatin1String("/../src/qml/"));
+#endif
+
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
+
     viewer.showExpanded();
 
     return app.exec();
