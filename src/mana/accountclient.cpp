@@ -356,7 +356,6 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
             static_cast<Being::BeingGender>(message.readInt8());
     const int hairStyle = message.readInt8();
     const int hairColor = message.readInt8();
-    const int level = message.readInt16();
     message.readInt16(); // character points
     message.readInt16(); // correction points
 
@@ -364,7 +363,6 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     character->setName(name);
     character->setGender(gender);
     character->setHairStyle(hairStyle, hairColor);
-    character->setLevel(level);
 
     while (message.unreadLength() > 0) {
         const unsigned id = message.readInt32();

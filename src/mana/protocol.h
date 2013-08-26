@@ -76,7 +76,7 @@ enum {
     APMSG_CHAR_CREATE_RESPONSE     = 0x0021, // B error
     PAMSG_CHAR_DELETE              = 0x0022, // B slot
     APMSG_CHAR_DELETE_RESPONSE     = 0x0023, // B error
-    // B slot, S name, B gender, B hair style, B hair color, W level,
+    // B slot, S name, B gender, B hair style, B hair color,
     // W character points, W correction points,
     // {D attr id, D base value (in 1/256ths) D mod value (in 256ths) }*
     APMSG_CHAR_INFO                = 0x0024, // ^

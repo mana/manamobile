@@ -194,6 +194,8 @@ Project {
             var libraries = ["z"];
             return libraries;
         }
+
+        cpp.defines: ["DEBUG_NETWORK"]
     }
 
     CppApplication {
