@@ -72,9 +72,9 @@ public:
     QByteArray readByteArray(int length = -1);
 
     /**
-     * Returns the length of unread data.
+     * Returns whether there still is unread data.
      */
-    int unreadLength() const { return mLength - mPos; }
+    bool unreadData() const { return mPos < mLength; }
 
 private:
     bool readValueType(ValueType type);

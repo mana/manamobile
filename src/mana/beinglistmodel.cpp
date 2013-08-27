@@ -96,7 +96,7 @@ void BeingListModel::handleBeingEnter(MessageIn &message)
 
         handleHair(ch, message);
 
-        if (message.unreadLength())
+        if (message.unreadData())
             handleLooks(ch, message);
 
         // Match the being by name to see whether it's the current player
@@ -166,7 +166,7 @@ void BeingListModel::handleBeingDirChange(MessageIn &message)
 
 void BeingListModel::handleBeingsMove(MessageIn &message)
 {
-    while (message.unreadLength() > 0) {
+    while (message.unreadData()) {
         const int id = message.readInt16();
         const int flags = message.readInt8();
 
@@ -235,7 +235,7 @@ void BeingListModel::handleBeingLooksChange(MessageIn &message)
         handleLooks(ch, message);
 
         // Further data is hair (if available)
-        if (message.unreadLength())
+        if (message.unreadData())
             handleHair(ch, message);
     }
 }

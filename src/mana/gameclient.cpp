@@ -287,7 +287,7 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
 
 void GameClient::handleAbilityStatus(MessageIn &messageIn)
 {
-    while (messageIn.unreadLength() > 0) {
+    while (messageIn.unreadData()) {
         unsigned id = messageIn.readInt8();
         unsigned remainingTicks = messageIn.readInt32();
         mAbilityListModel->setAbilityStatus(id, remainingTicks * 100);
@@ -296,7 +296,7 @@ void GameClient::handleAbilityStatus(MessageIn &messageIn)
 
 void GameClient::handlePlayerAttributeChange(MessageIn &message)
 {
-    while (message.unreadLength()) {
+    while (message.unreadData()) {
         const int id = message.readInt16();
         const qreal base = message.readInt32() / 256;
         const qreal mod = message.readInt32() / 256;

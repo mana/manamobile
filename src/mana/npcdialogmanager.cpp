@@ -105,7 +105,7 @@ void NpcDialogManager::handleNpcChoice(MessageIn &message)
 
     int id = message.readInt16();
 
-    while (message.unreadLength())
+    while (message.unreadData())
         mCurrentChoices.append(message.readString());
 
     mExpectedInput = EXPECT_CHOICE;

@@ -364,7 +364,7 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     character->setGender(gender);
     character->setHairStyle(hairStyle, hairColor);
 
-    while (message.unreadLength() > 0) {
+    while (message.unreadData()) {
         const unsigned id = message.readInt32();
 
         int base = message.readInt32() / 256.0;

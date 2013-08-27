@@ -244,7 +244,7 @@ std::ostream &operator <<(std::ostream &os, const MessageIn &msg)
 
         MessageIn m(msg.mData, msg.mLength);
 
-        while (m.unreadLength() > 0)
+        while (m.unreadData())
         {
             if (m.mPos > 3)
                 os << ", ";
