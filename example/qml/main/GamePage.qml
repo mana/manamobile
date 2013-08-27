@@ -20,17 +20,18 @@ Item {
             height: parent.height / scale;
             scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
             transformOrigin: Item.TopLeft;
-        }
-    }
 
-    MouseArea {
-        anchors.fill: parent;
-        onClicked: {
-            if (actionBar.selectedButton != -1) {
-                gameClient.useAbility(actionBar.selectedButton + 1,
-                                      viewport.getAbsolutePosition(
-                                         Qt.point(mouse.x, mouse.y)));
-                actionBar.selectedButton = -1;
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: {
+                    var ability = actionBar.selectedAbility();
+                    if (ability) {
+                        var mapPos = viewport.toMapPos(mouse.x, mouse.y);
+                        gameClient.useAbility(ability, mapPos.x, mapPos.y);
+
+                        actionBar.reset();
+                    }
+                }
             }
         }
     }

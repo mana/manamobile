@@ -63,7 +63,6 @@ Item {
                 height: 64 + name.height;
 
                 CompoundSprite {
-                    id: sprites;
                     sprites: model.character.spriteListModel;
                     action: "stand";
                     direction: Action.DIRECTION_DOWN;

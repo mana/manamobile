@@ -125,12 +125,12 @@ void GameClient::say(const QString &text)
     send(message);
 }
 
-void GameClient::useAbility(unsigned id, QPointF target)
+void GameClient::useAbility(unsigned id, int x, int y)
 {
     MessageOut message(PGMSG_USE_ABILITY_ON_POINT);
     message.writeInt8(id);
-    message.writeInt16(target.x());
-    message.writeInt16(target.y());
+    message.writeInt16(x);
+    message.writeInt16(y);
     send(message);
 }
 

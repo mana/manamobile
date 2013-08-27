@@ -46,8 +46,8 @@ Item {
         }
     }
 
-    function getAbsolutePosition(relativePoint) {
-        return Qt.point(relativePoint.x - map.x, relativePoint.y - map.y)
+    function toMapPos(viewportX, viewportY) {
+        return viewport.mapToItem(map, viewportX, viewportY);
     }
 
     property var smoothFollowInstance;

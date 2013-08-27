@@ -33,7 +33,6 @@
 
 #include <safeassert.h>
 
-#include <QTimerEvent>
 #include <QVector2D>
 #include <QDebug>
 

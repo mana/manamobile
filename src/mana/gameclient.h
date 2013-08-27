@@ -80,7 +80,7 @@ public:
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
-    Q_INVOKABLE void useAbility(unsigned id, QPointF target);
+    Q_INVOKABLE void useAbility(unsigned id, int x, int y);
 
     AbilityListModel *abilityListModel() const { return mAbilityListModel; }
     AttributeListModel *attributeListModel() const;

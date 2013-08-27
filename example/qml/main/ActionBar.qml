@@ -4,6 +4,17 @@ import QtQuick.Controls 1.0
 Item {
     property int selectedButton: -1;
 
+    function selectedAbility() {
+        if (selectedButton != -1)
+            return selectedButton + 1;
+
+        return false;
+    }
+
+    function reset() {
+        selectedButton = -1;
+    }
+
     width: 32 * 10 + 9 * 10;
     height: 32;
 
