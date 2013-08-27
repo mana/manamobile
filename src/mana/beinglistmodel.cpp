@@ -341,7 +341,6 @@ void BeingListModel::update(qreal deltaTime)
             QVector2D direction = mPlayerWalkDirection;
 
             if (direction.isNull() || !walkDistance) {
-                being->setAction(SpriteAction::STAND);
                 if (being->action() == SpriteAction::WALK)
                     being->setAction(SpriteAction::STAND);
                 continue;
