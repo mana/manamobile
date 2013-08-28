@@ -93,7 +93,7 @@ void ENetClient::send(const MessageOut &message, unsigned char channel)
     }
 
     if (debug_enetclient)
-        qDebug() << "(ENetClient::send) Sending " << message;
+        qDebug() << "(ENetClient::send) Sending" << message;
 
     ENetPacket *packet;
     packet = enet_packet_create(message.data(),
@@ -137,7 +137,7 @@ void ENetClient::service()
                                   event.packet->dataLength);
 
                 if (debug_enetclient)
-                    qDebug() << "(ENetClient::service) Received " << message;
+                    qDebug() << "(ENetClient::service) Received" << message;
 
                 messageReceived(message);
             }
