@@ -99,9 +99,11 @@ SpriteItem::SpriteItem(QQuickItem *parent)
     , mAnimation(0)
     , mFrameIndex(0)
     , mFrame(0)
+    , mDisplayedFrame(0)
+    , mUnusedTime(0)
+    , mRunning(false)
 {
     setFlag(ItemHasContents);
-    connect(&mTimer, SIGNAL(timeout()), this, SLOT(timerTick()));
 }
 
 SpriteItem::~SpriteItem()
@@ -139,7 +141,13 @@ void SpriteItem::reset()
 {
     mFrameIndex = 0;
     mFrame = mAnimation->frame(0);
-    updateTimer();
+    mRunning = mAnimation->length() > 1;
+
+    if (mRunning) {
+        mTimer.start();
+        mUnusedTime = 0;
+    }
+
     update();
 }
 
@@ -171,7 +179,7 @@ void SpriteItem::playAnimation(const Action *action)
     mAction = action;
     const Animation *animation = mAction->animation(mDirection);
 
-    if (animation && animation != mAnimation && animation->length() > 0) {
+    if (animation && animation != mAnimation && animation->duration() > 0) {
         mAnimation = animation;
         reset();
     }
@@ -181,10 +189,17 @@ QSGNode *SpriteItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 {
     SubRectTextureNode *n = static_cast<SubRectTextureNode *>(node);
 
-    if (!mFrame) {
-        delete n;
-        return 0;
-    } else {
+    if (mRunning)
+        advance();
+
+    if (mFrame != mDisplayedFrame) {
+        mDisplayedFrame = mFrame;
+
+        if (!mFrame) {
+            delete n;
+            return 0;
+        }
+
         if (!n) {
             n = new SubRectTextureNode;
             n->setFlag(QSGNode::OwnedByParent);
@@ -199,6 +214,9 @@ QSGNode *SpriteItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
         n->setTexture(texture);
         n->setRects(rect, mFrame->clip);
     }
+
+    if (mRunning)
+        update();
 
     return n;
 }
@@ -218,19 +236,24 @@ void SpriteItem::setDirection(Action::SpriteDirection direction)
     emit directionChanged();
 }
 
-void SpriteItem::timerTick()
+void SpriteItem::advance()
 {
-    mFrameIndex++;
-    if (mFrameIndex == mAnimation->length())
-        reset();
-    else {
-        mFrame = mAnimation->frame(mFrameIndex);
-        updateTimer();
+    // TODO: Since every sprite item is keeping its own QElapsedTimer, there
+    // is a small chance that the frames of the sprites in a CompoundSprite
+    // will not match up.
+    mUnusedTime += mTimer.restart();
 
-        if (Animation::isTerminator(*mFrame))
+    while (mUnusedTime > mFrame->delay) {
+        mUnusedTime -= mFrame->delay;
+        mFrameIndex = (mFrameIndex + 1) % mAnimation->length();
+        mFrame = mAnimation->frame(mFrameIndex);
+
+        // Automatically go back to standing after finishing an animation
+        if (Animation::isTerminator(*mFrame)) {
             setAction(SpriteAction::STAND);
-        else
-            update();
+            if (!mRunning)
+                break;
+        }
     }
 }
 
@@ -246,11 +269,6 @@ void SpriteItem::statusChanged(Resource::Status status)
         mSprite->decRef();
         mSprite = 0;
     }
-}
-
-void SpriteItem::updateTimer()
-{
-    mTimer.start(mFrame->delay);
 }
 
 void SpriteItem::updateSize()

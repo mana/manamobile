@@ -23,7 +23,7 @@
 #include "mana/resource/spritedef.h"
 
 #include <QQuickItem>
-#include <QTimer>
+#include <QElapsedTimer>
 
 namespace Mana {
 
@@ -59,12 +59,11 @@ signals:
     void directionChanged();
 
 private slots:
-    void timerTick();
+    void advance();
     void statusChanged(Resource::Status status);
 
 private:
     void playAnimation(const Action *action);
-    void updateTimer();
     void updateSize();
 
     const SpriteReference *mSpriteRef;
@@ -78,7 +77,10 @@ private:
     const Animation *mAnimation;
     int mFrameIndex;
     const Frame *mFrame;
-    QTimer mTimer;
+    const Frame *mDisplayedFrame;
+    QElapsedTimer mTimer;
+    qint64 mUnusedTime;
+    bool mRunning;
 };
 
 } // namespace Mana

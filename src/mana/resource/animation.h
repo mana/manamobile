@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QRect>
+#include <QVector>
 
 namespace Mana {
 
@@ -52,7 +53,6 @@ public:
     const Frame *frame(int index) const { return &(mFrames[index]); }
 
     int length() const { return mFrames.size(); }
-
     int duration() const { return mDuration; }
 
     static bool isTerminator(const Frame &frame);
@@ -60,10 +60,10 @@ public:
 
 private:
     int mDuration;
-    QList<Frame> mFrames;
+    QVector<Frame> mFrames;
 
 };
 
-}
+} // namespace Mana
 
 #endif // ANIMATION_H
