@@ -18,7 +18,7 @@ Item {
     // new player location.
     Component {
         id: smoothFollowComponent;
-        Item {
+        QtObject {
             id: smoothFollow;
             property real smoothPlayerX: viewport.playerX;
             property real smoothPlayerY: viewport.playerY;
@@ -29,14 +29,14 @@ Item {
             Behavior on smoothPlayerY { SpringAnimation { spring: 3; damping: 1 } }
 
             // Math.floor is used to avoid tile drawing glitches
-            Binding {
+            property QtObject bindingX: Binding {
                 target: map; property: "x";
                 value: {
                     var scale = viewport.scale;
                     Math.floor(smoothFollow.mapX * scale) / scale;
                 }
             }
-            Binding {
+            property QtObject bindingY: Binding {
                 target: map; property: "y";
                 value: {
                     var scale = viewport.scale;
@@ -50,7 +50,7 @@ Item {
         return viewport.mapToItem(map, viewportX, viewportY);
     }
 
-    property var smoothFollowInstance;
+    property QtObject smoothFollowInstance;
 
     function resetSmoothFollow() {
         if (smoothFollowInstance)
