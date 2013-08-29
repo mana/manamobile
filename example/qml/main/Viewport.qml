@@ -106,7 +106,7 @@ Item {
 
                     onClicked: {
                         if (model.being.type === Being.OBJECT_NPC)
-                            gameClient.npcDialogManager.startTalkingTo(model.being);
+                            gameClient.talkToNpc(model.being);
                     }
                 }
 

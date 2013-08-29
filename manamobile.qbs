@@ -70,8 +70,6 @@ Project {
                 "mana/monster.cpp",
                 "mana/monster.h",
                 "mana/npc.cpp",
-                "mana/npcdialogmanager.cpp",
-                "mana/npcdialogmanager.h",
                 "mana/npc.h",
                 "mana/protocol.h",
                 "mana/resource/abilitydb.cpp",

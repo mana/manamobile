@@ -21,7 +21,6 @@
 #define BEINGLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QVector2D>
 
 namespace Mana {
 
@@ -39,63 +38,24 @@ public:
         BeingRole = Qt::UserRole
     };
 
-    enum SpriteLayer
-    {
-        SPRITE_LAYER_BASE = 0,
-        SPRITE_LAYER_HAIR,
-        FIXED_SPRITE_LAYER_SIZE
-    };
-
     explicit BeingListModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    QString playerName() const { return mPlayerName; }
-    void setPlayerName(const QString &name) { mPlayerName = name; }
-
-    Character *player() const { return mPlayerCharacter; }
-
-    QVector2D playerWalkDirection() const { return mPlayerWalkDirection; }
-    void setPlayerWalkDirection(QVector2D direction);
-
-    void handleBeingEnter(MessageIn &message);
-    void handleBeingLeave(MessageIn &message);
-    void handleBeingDirChange(MessageIn &message);
-    void handleBeingsMove(MessageIn &message);
-    void handleBeingLooksChange(MessageIn &message);
-    void handleBeingActionChange(MessageIn &message);
-    void handleBeingSay(MessageIn &message);
-    void handleBeingAbilityOnPoint(MessageIn &message);
-    void handleBeingAbilityOnBeing(MessageIn &message);
-
-    void clear();
-signals:
-    void playerChanged();
-    void playerPositionChanged();
-    void playerWalkDirectionChanged();
-
-public slots:
-    void update(qreal deltaTime);
-
-private:
-    Being *beingAt(int index) const { return mBeings.at(index); }
     Being *beingById(int id) const;
     void addBeing(Being *being);
     void removeBeing(int id);
-    int indexOfBeing(int id) const;
     const QList<Being*> &beings() const { return mBeings; }
 
-    void handleLooks(Character *being, MessageIn &message);
-    void handleHair(Character *ch, MessageIn &message);
+    void clear();
+
+private:
+    Being *beingAt(int index) const { return mBeings.at(index); }
+    int indexOfBeing(int id) const;
 
     QList<Being*> mBeings;
-
-    QString mPlayerName;
-    Character *mPlayerCharacter;
-    QVector2D mPlayerWalkDirection;
-
     QHash<int, QByteArray> mRoleNames;
 };
 

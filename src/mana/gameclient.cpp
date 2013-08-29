@@ -26,8 +26,15 @@
 #include "logicdriver.h"
 #include "messagein.h"
 #include "messageout.h"
-#include "npcdialogmanager.h"
+#include "monster.h"
+#include "npc.h"
 #include "protocol.h"
+
+#include "resource/abilitydb.h"
+#include "resource/hairdb.h"
+#include "resource/spritedef.h"
+
+#include <safeassert.h>
 
 #include <iostream>
 
@@ -36,69 +43,56 @@ namespace Mana {
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
+    , mPlayerStartX(0)
+    , mPlayerStartY(0)
+    , mPlayerCharacter(0)
+    , mNpcState(NoNpc)
+    , mNpc(0)
+    , mBeingListModel(new BeingListModel(this))
     , mAbilityListModel(new AbilityListModel(this))
     , mAttributeListModel(new AttributeListModel(this))
-    , mBeingListModel(new BeingListModel(this))
-    , mNpcDialogManager(new NpcDialogManager(this))
     , mLogicDriver(new LogicDriver(this))
 {
-    QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
-                     this, SIGNAL(playerChanged()));
-    QObject::connect(mBeingListModel, SIGNAL(playerChanged()),
-                     this, SLOT(restoreWalkingSpeed()));
-
-
-    QObject::connect(mNpcDialogManager, SIGNAL(startTalking(int)),
-                     this, SLOT(startedTalkingToNpc(int)));
-    QObject::connect(mNpcDialogManager, SIGNAL(nextMessage(int)),
-                     this, SLOT(nextNpcTalk(int)));
-    QObject::connect(mNpcDialogManager, SIGNAL(doChoice(int,int)),
-                     this, SLOT(doNpcChoice(int,int)));
-
-    QObject::connect(mBeingListModel, SIGNAL(playerWalkDirectionChanged()),
-                     this, SIGNAL(playerWalkDirectionChanged()));
-    QObject::connect(mBeingListModel, SIGNAL(playerPositionChanged()),
-                     this, SLOT(playerPositionChanged()));
-
     QObject::connect(mLogicDriver, SIGNAL(update(qreal)),
-                     mBeingListModel, SLOT(update(qreal)));
+                     this, SLOT(update(qreal)));
 }
 
 GameClient::~GameClient()
 {
 }
 
-BeingListModel *GameClient::beingListModel() const
-{
-    return mBeingListModel;
-}
-
 Character *GameClient::player() const
 {
-    return mBeingListModel->player();
+    return mPlayerCharacter;
 }
 
 QPointF GameClient::playerWalkDirection() const
 {
-    return mBeingListModel->playerWalkDirection().toPointF();
+    return mPlayerWalkDirection.toPointF();
 }
 
 void GameClient::setPlayerWalkDirection(QPointF direction)
 {
-    mBeingListModel->setPlayerWalkDirection(QVector2D(direction));
+    const QVector2D directionV(direction);
+
+    if (mPlayerWalkDirection != directionV) {
+        mPlayerWalkDirection = directionV;
+
+        emit playerWalkDirectionChanged();
+    }
 }
 
 QString GameClient::playerName() const
 {
-    return mBeingListModel->playerName();
+    return mPlayerName;
 }
 
 void GameClient::setPlayerName(const QString &name)
 {
-    if (mBeingListModel->playerName() == name)
+    if (mPlayerName == name)
         return;
 
-    mBeingListModel->setPlayerName(name);
+    mPlayerName = name;
     emit playerNameChanged();
 }
 
@@ -125,6 +119,37 @@ void GameClient::say(const QString &text)
     send(message);
 }
 
+void GameClient::talkToNpc(Being *being)
+{
+    SAFE_ASSERT(being->type() == OBJECT_NPC && !mNpc, return);
+
+    mNpc = static_cast<NPC *>(being);
+    emit npcChanged();
+
+    MessageOut message(PGMSG_NPC_TALK);
+    message.writeInt16(mNpc->id());
+    send(message);
+}
+
+void GameClient::nextNpcMessage()
+{
+    SAFE_ASSERT(mNpcState == NpcAwaitNext && mNpc, return);
+
+    MessageOut message(PGMSG_NPC_TALK_NEXT);
+    message.writeInt16(mNpc->id());
+    send(message);
+}
+
+void GameClient::chooseNpcOption(int choice)
+{
+    SAFE_ASSERT(mNpcState == NpcAwaitChoice && mNpc, return);
+
+    MessageOut message(PGMSG_NPC_SELECT);
+    message.writeInt16(mNpc->id());
+    message.writeInt8(choice);
+    send(message);
+}
+
 void GameClient::useAbility(unsigned id, int x, int y)
 {
     MessageOut message(PGMSG_USE_ABILITY_ON_POINT);
@@ -132,38 +157,6 @@ void GameClient::useAbility(unsigned id, int x, int y)
     message.writeInt16(x);
     message.writeInt16(y);
     send(message);
-}
-
-void GameClient::startedTalkingToNpc(int npcId)
-{
-    MessageOut message(PGMSG_NPC_TALK);
-    message.writeInt16(npcId);
-    send(message);
-}
-
-void GameClient::nextNpcTalk(int npcId)
-{
-    MessageOut message(PGMSG_NPC_TALK_NEXT);
-    message.writeInt16(npcId);
-    send(message);
-}
-
-void GameClient::doNpcChoice(int npcId, int choice)
-{
-    MessageOut message(PGMSG_NPC_SELECT);
-    message.writeInt16(npcId);
-    message.writeInt8(choice);
-    send(message);
-}
-
-void GameClient::restoreWalkingSpeed()
-{
-    const AttributeValue *attribute =
-            mAttributeListModel->attribute(ATTR_MOVE_SPEED_TPS);
-    if (attribute && player()) {
-        qreal speed = AttributeListModel::tpsToPixelsPerSecond(attribute->modified());
-        player()->setWalkSpeed(speed);
-    }
 }
 
 void GameClient::messageReceived(MessageIn &message)
@@ -177,45 +170,41 @@ void GameClient::messageReceived(MessageIn &message)
         break;
 
     case GPMSG_BEING_ENTER:
-        mBeingListModel->handleBeingEnter(message);
+        handleBeingEnter(message);
         break;
     case GPMSG_BEING_LEAVE:
-        mBeingListModel->handleBeingLeave(message);
+        handleBeingLeave(message);
         break;
     case GPMSG_BEING_DIR_CHANGE:
-        mBeingListModel->handleBeingDirChange(message);
+        handleBeingDirChange(message);
         break;
     case GPMSG_BEINGS_MOVE:
-        mBeingListModel->handleBeingsMove(message);
+        handleBeingsMove(message);
         break;
     case GPMSG_BEING_LOOKS_CHANGE:
-        mBeingListModel->handleBeingLooksChange(message);
+        handleBeingLooksChange(message);
         break;
     case GPMSG_BEING_ACTION_CHANGE:
-        mBeingListModel->handleBeingActionChange(message);
-        break;
-    case GPMSG_BEING_ABILITY_POINT:
-        mBeingListModel->handleBeingAbilityOnPoint(message);
-        break;
-    case GPMSG_BEING_ABILITY_BEING:
-        mBeingListModel->handleBeingAbilityOnBeing(message);
+        handleBeingActionChange(message);
         break;
     case GPMSG_SAY:
-        mBeingListModel->handleBeingSay(message);
+        handleBeingSay(message);
+        break;
+    case GPMSG_BEING_ABILITY_POINT:
+        handleBeingAbilityOnPoint(message);
+        break;
+    case GPMSG_BEING_ABILITY_BEING:
+        handleBeingAbilityOnBeing(message);
         break;
 
     case GPMSG_NPC_MESSAGE:
-        mNpcDialogManager->handleNpcMessage(message);
+        handleNpcMessage(message);
         break;
     case GPMSG_NPC_CHOICE:
-        mNpcDialogManager->handleNpcChoice(message);
+        handleNpcChoice(message);
         break;
     case GPMSG_NPC_CLOSE:
-        mNpcDialogManager->handleNpcClose(message);
-        break;
-
-    case GPMSG_PLAYER_ATTRIBUTE_CHANGE:
-        handlePlayerAttributeChange(message);
+        handleNpcClose(message);
         break;
 
     case GPMSG_ABILITY_STATUS:
@@ -223,6 +212,10 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case GPMSG_ABILITY_REMOVED:
         handleAbilityRemoved(message);
+        break;
+
+    case GPMSG_PLAYER_ATTRIBUTE_CHANGE:
+        handlePlayerAttributeChange(message);
         break;
 
     case XXMSG_INVALID:
@@ -236,11 +229,71 @@ void GameClient::messageReceived(MessageIn &message)
     }
 }
 
+void GameClient::update(qreal deltaTime)
+{
+    foreach (Being *being, mBeingListModel->beings()) {
+        const QPointF pos = being->position();
+        const qreal walkDistance = being->walkSpeed() * deltaTime;
+
+        if (being == mPlayerCharacter) {
+            QVector2D direction = mPlayerWalkDirection;
+
+            if (direction.isNull() || !walkDistance) {
+                if (being->action() == SpriteAction::WALK)
+                    being->setAction(SpriteAction::STAND);
+                continue;
+            }
+
+            direction.normalize();
+            direction *= walkDistance;
+            QPointF newPos(pos.x() + direction.x(), pos.y() + direction.y());
+            being->lookAt(newPos);
+            being->setPosition(newPos);
+
+            playerPositionChanged();
+            being->setAction(SpriteAction::WALK);
+            continue;
+        }
+
+        const QPointF target = being->serverPosition();
+        if (pos == target) {
+            if (being->action() == SpriteAction::WALK)
+                being->setAction(SpriteAction::STAND);
+            continue;
+        } else {
+            being->setAction(SpriteAction::WALK);
+        }
+
+        QVector2D direction(target - pos);
+
+        if (direction.lengthSquared() < walkDistance * walkDistance) {
+            being->setPosition(target);
+            continue;
+        }
+
+        direction.normalize();
+        direction *= walkDistance;
+        QPointF newPos = pos + direction.toPointF();
+        being->lookAt(newPos);
+        being->setPosition(newPos);
+    }
+}
+
 void GameClient::playerPositionChanged()
 {
     // TODO: Rate-limit these calls
     const Being *ch = player();
     walkTo(ch->x(), ch->y());
+}
+
+void GameClient::restoreWalkingSpeed()
+{
+    const AttributeValue *attribute =
+            mAttributeListModel->attribute(ATTR_MOVE_SPEED_TPS);
+    if (attribute && mPlayerCharacter) {
+        qreal speed = AttributeListModel::tpsToPixelsPerSecond(attribute->modified());
+        mPlayerCharacter->setWalkSpeed(speed);
+    }
 }
 
 void GameClient::handleAuthenticationResponse(MessageIn &message)
@@ -279,10 +332,296 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     if (!mCurrentMap.endsWith(mapExtension))
         mCurrentMap += mapExtension;
 
+    // Reset the player being before it gets deleted
+    if (mPlayerCharacter) {
+        mPlayerCharacter = 0;
+        emit playerChanged();
+    }
+
     // None of the beings are valid on the new map, including the player
     mBeingListModel->clear();
 
     emit mapChanged(mCurrentMap, mPlayerStartX, mPlayerStartY);
+}
+
+static void handleLooks(Character *ch, MessageIn &message)
+{
+    int numberOfChanges = message.readInt8();
+
+    while (numberOfChanges-- > 0) {
+        int slot = message.readInt8();
+        int itemId = message.readInt16();
+
+        ch->setEquipmentSlot(slot, itemId);
+    }
+}
+
+static void handleHair(Character *ch, MessageIn &message)
+{
+    int hairstyle = message.readInt8();
+    int haircolor = message.readInt8();
+
+    ch->setHairStyle(hairstyle, haircolor);
+}
+
+void GameClient::handleBeingEnter(MessageIn &message)
+{
+    const int type = message.readInt8();
+    const int id = message.readInt16();
+    const QString &action = SpriteAction::actionByInt(message.readInt8());
+    const int x = message.readInt16();
+    const int y = message.readInt16();
+    BeingDirection direction = static_cast<BeingDirection>(message.readInt8());
+    Being::BeingGender gender = static_cast<Being::BeingGender>(message.readInt8());
+
+    Being *being;
+    Character *playerCharacter = 0;
+
+    if (type == OBJECT_CHARACTER) {
+        Character *ch = new Character;
+        QString name = message.readString();
+
+        ch->setName(name);
+        ch->setGender(gender);
+
+        handleHair(ch, message);
+
+        if (message.unreadData())
+            handleLooks(ch, message);
+
+        // Match the being by name to see whether it's the current player
+        if (ch->name() == mPlayerName)
+            playerCharacter = ch;
+
+        being = ch;
+    } else if (type == OBJECT_NPC) {
+        int spriteId = message.readInt16();
+        QString name = message.readString();
+
+        NPC *npc = new NPC(spriteId);
+        npc->setName(name);
+        npc->setGender(gender);
+
+        being = npc;
+    } else if (type == OBJECT_MONSTER) {
+        int monsterId = message.readInt16();
+        QString name = message.readString();
+
+        Monster *monster = new Monster(monsterId);
+        monster->setName(name);
+        monster->setGender(gender);
+
+        being = monster;
+    } else {
+        return;
+    }
+
+    being->setId(id);
+    being->setPosition(QPointF(x, y));
+    being->setServerPosition(QPointF(x, y));
+    being->setAction(action);
+    being->setDirection(direction);
+
+    mBeingListModel->addBeing(being);
+
+    // Emit playerChanged after the player has been fully initialized and added
+    if (playerCharacter) {
+        mPlayerCharacter = playerCharacter;
+        restoreWalkingSpeed();
+        emit playerChanged();
+    }
+}
+
+void GameClient::handleBeingLeave(MessageIn &message)
+{
+    const int id = message.readInt16();
+
+    if (mPlayerCharacter && mPlayerCharacter->id() == id) {
+        mPlayerCharacter = 0;
+        emit playerChanged();
+    }
+
+    mBeingListModel->removeBeing(id);
+}
+
+void GameClient::handleBeingDirChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const BeingDirection dir = static_cast<BeingDirection>(message.readInt8());
+
+    if (Being *being = mBeingListModel->beingById(id))
+        being->setDirection(dir);
+}
+
+void GameClient::handleBeingsMove(MessageIn &message)
+{
+    while (message.unreadData()) {
+        const int id = message.readInt16();
+        const int flags = message.readInt8();
+
+        if (!(flags & (MOVING_POSITION | MOVING_DESTINATION)))
+            continue;
+
+        int dx = 0, dy = 0, speed = 0;
+
+        if (flags & MOVING_POSITION) {
+            message.readInt16(); // unused previous x position
+            message.readInt16(); // unused previous y position
+        }
+
+        if (flags & MOVING_DESTINATION) {
+            dx = message.readInt16();
+            dy = message.readInt16();
+            speed = message.readInt8();
+        }
+
+        Being *being = mBeingListModel->beingById(id);
+        if (!being)
+            continue;
+
+        if (speed) {
+            /*
+             * The being's speed is transfered in tiles per second * 10
+             * to keep it transferable in a byte.
+             */
+            const qreal tps = (qreal) speed / 10;
+            being->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(tps));
+        }
+
+        if (flags & MOVING_DESTINATION) {
+            QPointF pos(dx, dy);
+            being->setServerPosition(pos);
+        }
+    }
+}
+
+void GameClient::handleBeingLooksChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    if (being) {
+        SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);
+        Character *ch = static_cast<Character *>(being);
+        handleLooks(ch, message);
+
+        // Further data is hair (if available)
+        if (message.unreadData())
+            handleHair(ch, message);
+    }
+}
+
+void GameClient::handleBeingActionChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    if (being) {
+        int actionAsInt = message.readInt8();
+        const QString &newAction = SpriteAction::actionByInt(actionAsInt);
+
+        if (newAction == SpriteAction::STAND &&
+                being->action() == SpriteAction::WALK)
+            return; // Client knows when to stop movement
+        being->setAction(newAction);
+    }
+}
+
+void GameClient::handleBeingSay(MessageIn &message)
+{
+    const int id = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    if (being) {
+        const QString text = message.readString();
+        being->say(text);
+    }
+}
+
+void GameClient::handleBeingAbilityOnPoint(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const int abilityId = message.readInt8();
+    const int x = message.readInt16();
+    const int y = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    qDebug() << Q_FUNC_INFO << abilityId << x << y;
+
+    if (being) {
+        being->lookAt(QPointF(x, y));
+        const AbilityInfo *abilityInfo =
+                AbilityDB::instance()->getInfo(abilityId);
+        if (!abilityInfo) {
+            qWarning() << Q_FUNC_INFO << "The server sent unknown ability"
+                       << " as being used. Mismatching world data?";
+            return;
+        }
+        being->setAction(abilityInfo->useAction());
+    }
+}
+
+void GameClient::handleBeingAbilityOnBeing(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const int abilityId = message.readInt8();
+    const int otherBeingId = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+    Being *otherBeing = mBeingListModel->beingById(otherBeingId);
+
+    qDebug() << Q_FUNC_INFO << abilityId << id << otherBeingId;
+
+    if (being && otherBeing) {
+        being->lookAt(otherBeing->position());
+        const AbilityInfo *abilityInfo =
+                AbilityDB::instance()->getInfo(abilityId);
+        if (!abilityInfo) {
+            qWarning() << Q_FUNC_INFO << "The server sent unknown ability"
+                       << " as being used. Mismatching world data?";
+            return;
+        }
+        being->setAction(abilityInfo->useAction());
+    }
+}
+
+void GameClient::handleNpcMessage(MessageIn &message)
+{
+    int id = message.readInt16();
+    QString text = message.readString();
+
+    mNpcMessage = text;
+    mNpcState = NpcAwaitNext;
+    emit npcMessageChanged();
+    emit npcStateChanged();
+}
+
+void GameClient::handleNpcClose(MessageIn &message)
+{
+    int id = message.readInt16();
+
+    mNpcState = NoNpc;
+    mNpc = 0;
+    emit npcStateChanged();
+    emit npcChanged();
+}
+
+void GameClient::handleNpcChoice(MessageIn &message)
+{
+    mNpcChoices.clear();
+
+    int id = message.readInt16();
+
+    while (message.unreadData())
+        mNpcChoices.append(message.readString());
+
+    mNpcState = NpcAwaitChoice;
+    emit npcChoicesChanged();
+    emit npcStateChanged();
 }
 
 void GameClient::handleAbilityStatus(MessageIn &messageIn)
@@ -292,6 +631,12 @@ void GameClient::handleAbilityStatus(MessageIn &messageIn)
         unsigned remainingTicks = messageIn.readInt32();
         mAbilityListModel->setAbilityStatus(id, remainingTicks * 100);
     }
+}
+
+void GameClient::handleAbilityRemoved(MessageIn &messageIn)
+{
+    unsigned id = messageIn.readInt8();
+    mAbilityListModel->takeAbility(id);
 }
 
 void GameClient::handlePlayerAttributeChange(MessageIn &message)
@@ -306,12 +651,6 @@ void GameClient::handlePlayerAttributeChange(MessageIn &message)
 
         mAttributeListModel->setAttribute(id, base, mod);
     }
-}
-
-void GameClient::handleAbilityRemoved(MessageIn &messageIn)
-{
-    unsigned id = messageIn.readInt8();
-    mAbilityListModel->takeAbility(id);
 }
 
 } // namespace Mana

@@ -22,6 +22,7 @@
 #include "enetclient.h"
 
 #include <QPoint>
+#include <QStringList>
 #include <QVector2D>
 
 namespace Mana {
@@ -32,12 +33,12 @@ class Being;
 class BeingListModel;
 class Character;
 class LogicDriver;
-class NpcDialogManager;
+class NPC;
 
 /**
  * The game client allows interacting with the game server.
  *
- * The player name should be set so that the game server can identify who the
+ * The player name should be set so that the client can identify who the
  * current player is.
  */
 class GameClient : public ENetClient
@@ -54,11 +55,23 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
+    Q_PROPERTY(QString npcMessage READ npcMessage NOTIFY npcMessageChanged)
+    Q_PROPERTY(QStringList npcChoices READ npcChoices NOTIFY npcChoicesChanged)
+    Q_PROPERTY(Mana::NPC *npc READ npc NOTIFY npcChanged)
+    Q_PROPERTY(NpcState npcState READ npcState NOTIFY npcStateChanged)
+
     Q_PROPERTY(Mana::AbilityListModel *abilityListModel READ abilityListModel CONSTANT)
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
-    Q_PROPERTY(Mana::NpcDialogManager *npcDialogManager READ npcDialogManager CONSTANT)
+
+    Q_ENUMS(NpcState)
 
 public:
+    enum NpcState {
+        NoNpc,
+        NpcAwaitNext,
+        NpcAwaitChoice
+    };
+
     GameClient(QObject *parent = 0);
     ~GameClient();
 
@@ -68,7 +81,6 @@ public:
     int playerStartX() const { return mPlayerStartX; }
     int playerStartY() const { return mPlayerStartY; }
 
-    BeingListModel *beingListModel() const;
     Character *player() const;
 
     QPointF playerWalkDirection() const;
@@ -77,14 +89,24 @@ public:
     QString playerName() const;
     void setPlayerName(const QString &name);
 
+    QString npcMessage() const { return mNpcMessage; }
+    QStringList npcChoices() const { return mNpcChoices; }
+    NPC *npc() const { return mNpc; }
+    NpcState npcState() const { return mNpcState; }
+
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
+
+    Q_INVOKABLE void talkToNpc(Being *being);
+    Q_INVOKABLE void nextNpcMessage();
+    Q_INVOKABLE void chooseNpcOption(int choice);
+
     Q_INVOKABLE void useAbility(unsigned id, int x, int y);
 
-    AbilityListModel *abilityListModel() const { return mAbilityListModel; }
+    BeingListModel *beingListModel() const;
+    AbilityListModel *abilityListModel() const;
     AttributeListModel *attributeListModel() const;
-    NpcDialogManager *npcDialogManager() const { return mNpcDialogManager; }
 
 signals:
     void authenticationFailed(const QString &errorMessage);
@@ -96,22 +118,39 @@ signals:
 
     void playerNameChanged();
 
+    void npcMessageChanged();
+    void npcChoicesChanged();
+    void npcChanged();
+    void npcStateChanged();
+
     void kicked();
 
 protected:
     void messageReceived(MessageIn &message);
 
 private slots:
-    void startedTalkingToNpc(int npcId);
-    void nextNpcTalk(int npcId);
-    void playerPositionChanged();
-    void doNpcChoice(int npcId, int choice);
-
-    void restoreWalkingSpeed();
+    void update(qreal deltaTime);
 
 private:
+    void playerPositionChanged();
+    void restoreWalkingSpeed();
+
     void handleAuthenticationResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
+
+    void handleBeingEnter(MessageIn &message);
+    void handleBeingLeave(MessageIn &message);
+    void handleBeingDirChange(MessageIn &message);
+    void handleBeingsMove(MessageIn &message);
+    void handleBeingLooksChange(MessageIn &message);
+    void handleBeingActionChange(MessageIn &message);
+    void handleBeingSay(MessageIn &message);
+    void handleBeingAbilityOnPoint(MessageIn &message);
+    void handleBeingAbilityOnBeing(MessageIn &message);
+
+    void handleNpcMessage(MessageIn &message);
+    void handleNpcClose(MessageIn &message);
+    void handleNpcChoice(MessageIn &message);
 
     void handleAbilityStatus(MessageIn &messageIn);
     void handleAbilityRemoved(MessageIn &messageIn);
@@ -123,12 +162,31 @@ private:
     int mPlayerStartX;
     int mPlayerStartY;
 
+    QString mPlayerName;
+    Character *mPlayerCharacter;
+    QVector2D mPlayerWalkDirection;
+
+    NpcState mNpcState;
+    QString mNpcMessage;
+    QStringList mNpcChoices;
+    NPC *mNpc;
+
+    BeingListModel *mBeingListModel;
     AbilityListModel *mAbilityListModel;
     AttributeListModel *mAttributeListModel;
-    BeingListModel *mBeingListModel;
-    NpcDialogManager *mNpcDialogManager;
     LogicDriver *mLogicDriver;
 };
+
+
+inline BeingListModel *GameClient::beingListModel() const
+{
+    return mBeingListModel;
+}
+
+inline AbilityListModel *GameClient::abilityListModel() const
+{
+    return mAbilityListModel;
+}
 
 inline AttributeListModel *GameClient::attributeListModel() const
 {

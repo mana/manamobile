@@ -27,7 +27,6 @@
 #include "enetclient.h"
 #include "gameclient.h"
 #include "mapitem.h"
-#include "npcdialogmanager.h"
 #include "settings.h"
 #include "spriteitem.h"
 #include "spritelistmodel.h"
@@ -96,8 +95,6 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Mana::Being>(uri, 1, 0, "Being",
                                             "Managed on C++ side");
     qmlRegisterType<Mana::Character>(uri, 1, 0, "Character");
-
-    qmlRegisterType<Mana::NpcDialogManager>(uri, 1, 0, "NpcDialogManager");
 
     qmlRegisterType<Mana::SpriteListModel>();
     qmlRegisterType<const Mana::SpriteReference>();

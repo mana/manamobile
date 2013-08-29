@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Mana 1.0
 
 Rectangle {
-    opacity: gameClient.npcDialogManager.expectedInput != NpcDialogManager.EXPECT_NOTHING ? 1 : 0;
+    visible: gameClient.npcState !== GameClient.NoNpc;
 
     radius: 10;
     color: "grey";
@@ -14,15 +14,15 @@ Rectangle {
         anchors.right: parent.right;
         anchors.margins: 10;
         wrapMode: TextEdit.WordWrap;
-        text: gameClient.npcDialogManager.currentText;
+        text: gameClient.npcMessage;
     }
 
     MouseArea {
         anchors.fill: parent;
 
         onClicked: {
-            if (gameClient.npcDialogManager.expectedInput == NpcDialogManager.EXPECT_NEXT)
-                gameClient.npcDialogManager.next();
+            if (gameClient.npcState === GameClient.NpcAwaitNext)
+                gameClient.nextNpcMessage();
         }
     }
 
@@ -36,8 +36,8 @@ Rectangle {
 
         clip: true;
 
-        model: gameClient.npcDialogManager.currentChoices;
-        opacity: gameClient.npcDialogManager.expectedInput == NpcDialogManager.EXPECT_CHOICE ? 1 : 0;
+        model: gameClient.npcChoices;
+        visible: gameClient.npcState === GameClient.NpcAwaitChoice;
 
         delegate: Item {
             width: parent.width;
@@ -53,11 +53,8 @@ Rectangle {
                 id: mouseArea;
                 anchors.fill: parent;
                 hoverEnabled: true;
-                onClicked: {
-                    gameClient.npcDialogManager.choose(model.index + 1);
-                }
+                onClicked: gameClient.chooseNpcOption(model.index + 1);
             }
         }
     }
-
 }

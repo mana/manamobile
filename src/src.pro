@@ -48,7 +48,6 @@ SOURCES += \
     mana/messageout.cpp \
     mana/monster.cpp \
     mana/npc.cpp \
-    mana/npcdialogmanager.cpp \
     mana/resource/abilitydb.cpp \
     mana/resource/action.cpp \
     mana/resource/animation.cpp \
@@ -105,7 +104,6 @@ HEADERS += \
     mana/messageout.h \
     mana/monster.h \
     mana/npc.h \
-    mana/npcdialogmanager.h \
     mana/protocol.h \
     mana/resource/abilitydb.h \
     mana/resource/action.h \
