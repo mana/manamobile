@@ -77,8 +77,7 @@ void Being::setName(const QString &name)
 
 void Being::say(const QString &text)
 {
-    mChatMessage = text;
-    emit chatMessageChanged();
+    emit chatMessage(text);
 }
 
 void Being::setAction(const QString &action)

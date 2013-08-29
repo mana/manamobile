@@ -118,7 +118,7 @@ Item {
                     z: 65537; // Layers above the Fringe layer have z 65536
 
                     OverheadChatMessage {
-                        text: model.being.chatMessage;
+                        id: chatLabel;
                         anchors.bottom: parent.bottom;
                         anchors.bottomMargin: sprite.maxHeight;
                     }
@@ -130,6 +130,11 @@ Item {
                         text: model.being.name;
                         font.pixelSize: 12;
                     }
+                }
+
+                Connections {
+                    target: model.being;
+                    onChatMessage: chatLabel.showText(message);
                 }
             }
         }

@@ -48,7 +48,6 @@ class Being : public QObject
     Q_PROPERTY(int direction READ direction NOTIFY directionChanged)
     Q_PROPERTY(int spriteDirection READ spriteDirection NOTIFY directionChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString chatMessage READ chatMessage NOTIFY chatMessageChanged)
     Q_PROPERTY(QString action READ action WRITE setAction NOTIFY actionChanged)
     Q_PROPERTY(BeingGender gender READ gender WRITE setGender NOTIFY genderChanged)
     Q_PROPERTY(Mana::SpriteListModel *spriteListModel READ spriteListModel CONSTANT)
@@ -91,8 +90,6 @@ public:
     QString name() const { return mName; }
     void setName(const QString &name);
 
-    QString chatMessage() const { return mChatMessage; }
-
     qreal walkSpeed() const { return mWalkSpeed; }
     void setWalkSpeed(qreal walkSpeed) { mWalkSpeed = walkSpeed; }
 
@@ -118,9 +115,10 @@ signals:
     void positionChanged();
     void directionChanged(BeingDirection newDirection);
     void nameChanged();
-    void chatMessageChanged();
     void actionChanged();
     void genderChanged();
+
+    void chatMessage(const QString &message);
 
 protected:
     int mType;
@@ -131,7 +129,6 @@ protected:
     BeingDirection mDirection;
     QPointF mServerPosition;
     QString mName;
-    QString mChatMessage;
     SpriteListModel *mSpriteList;
     Mana::BeingGender mGender;
 };
