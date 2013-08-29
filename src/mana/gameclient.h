@@ -98,7 +98,7 @@ public:
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
 
-    Q_INVOKABLE void talkToNpc(Being *being);
+    Q_INVOKABLE void talkToNpc(Mana::Being *being);
     Q_INVOKABLE void nextNpcMessage();
     Q_INVOKABLE void chooseNpcOption(int choice);
 

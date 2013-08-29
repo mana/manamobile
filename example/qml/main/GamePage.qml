@@ -23,14 +23,14 @@ Item {
 
             MouseArea {
                 anchors.fill: parent;
+                enabled: actionBar.selectedAbility();
+
                 onClicked: {
                     var ability = actionBar.selectedAbility();
-                    if (ability) {
-                        var mapPos = viewport.toMapPos(mouse.x, mouse.y);
-                        gameClient.useAbility(ability, mapPos.x, mapPos.y);
+                    var mapPos = viewport.toMapPos(mouse.x, mouse.y);
+                    gameClient.useAbility(ability, mapPos.x, mapPos.y);
 
-                        actionBar.reset();
-                    }
+                    actionBar.reset();
                 }
             }
         }
