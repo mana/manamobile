@@ -27,6 +27,8 @@
 #include "enetclient.h"
 #include "gameclient.h"
 #include "mapitem.h"
+#include "resourcelistmodel.h"
+#include "resourcemanager.h"
 #include "settings.h"
 #include "spriteitem.h"
 #include "spritelistmodel.h"
@@ -35,8 +37,7 @@
 #include "resource/attributedb.h"
 #include "resource/hairdb.h"
 #include "resource/itemdb.h"
-#include "resourcelistmodel.h"
-#include "resourcemanager.h"
+#include "resource/mapresource.h"
 #include "resource/monsterdb.h"
 #include "resource/npcdb.h"
 #include "resource/racedb.h"
@@ -106,6 +107,7 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::ResourceManager>();
     qmlRegisterUncreatableType<Mana::Resource>(uri, 1, 0, "Resource",
                                                "Base of all resources");
+    qmlRegisterType<Mana::MapResource>();
     qmlRegisterType<Mana::ResourceListModel>();
 
     qmlRegisterType<Mana::AbilityDB>();

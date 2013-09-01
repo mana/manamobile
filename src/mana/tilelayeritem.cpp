@@ -25,6 +25,7 @@
 
 #include "mana/mapitem.h"
 #include "mana/resource/imageresource.h"
+#include "mana/resource/mapresource.h"
 
 #include <QSGGeometryNode>
 #include <QSGTextureMaterial>
@@ -151,7 +152,7 @@ void TilesNode::processTileData(const QVector<TileData> &tileData)
 static QRect visibleTiles(const TileLayer *layer,
                           const MapItem *mapItem)
 {
-    const Map *map = mapItem->map();
+    const Map *map = mapItem->mapResource()->map();
 
     const int tileWidth = map->tileWidth();
     const int tileHeight = map->tileHeight();
@@ -181,7 +182,7 @@ static inline QSGTexture *tilesetTexture(Tileset *tileset,
                                          const MapItem *mapItem,
                                          QQuickWindow *window)
 {
-    if (const ImageResource *image = mapItem->tilesetImage(tileset))
+    if (const ImageResource *image = mapItem->mapResource()->tilesetImage(tileset))
         if (image->isReady())
             return image->texture(window);
     return 0;
@@ -258,7 +259,7 @@ static void drawTileLayer(QSGNode *parent,
 {
     TilesetHelper helper(mapItem);
 
-    const Map *map = mapItem->map();
+    const Map *map = mapItem->mapResource()->map();
     const int tileWidth = map->tileWidth();
     const int tileHeight = map->tileHeight();
 

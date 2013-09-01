@@ -33,6 +33,7 @@ class Being;
 class BeingListModel;
 class Character;
 class LogicDriver;
+class MapResource;
 class NPC;
 
 /**
@@ -46,7 +47,8 @@ class GameClient : public ENetClient
     Q_OBJECT
 
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
-    Q_PROPERTY(QString currentMap READ currentMap NOTIFY mapChanged)
+    Q_PROPERTY(QString currentMapName READ currentMapName NOTIFY mapChanged)
+    Q_PROPERTY(Mana::MapResource *currentMapResource READ currentMapResource NOTIFY mapChanged)
     Q_PROPERTY(int playerStartX READ playerStartX NOTIFY mapChanged)
     Q_PROPERTY(int playerStartY READ playerStartY NOTIFY mapChanged)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
@@ -77,7 +79,8 @@ public:
 
     bool authenticated() const { return mAuthenticated; }
 
-    QString currentMap() const { return mCurrentMap; }
+    QString currentMapName() const { return mCurrentMap; }
+    MapResource *currentMapResource() const { return mMapResource; }
     int playerStartX() const { return mPlayerStartX; }
     int playerStartY() const { return mPlayerStartY; }
 
@@ -159,6 +162,7 @@ private:
 
     bool mAuthenticated;
     QString mCurrentMap;
+    MapResource *mMapResource;
     int mPlayerStartX;
     int mPlayerStartY;
 

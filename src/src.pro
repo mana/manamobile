@@ -56,6 +56,7 @@ SOURCES += \
     mana/resource/imageresource.cpp \
     mana/resource/imageset.cpp \
     mana/resource/itemdb.cpp \
+    mana/resource/mapresource.cpp \
     mana/resource/monsterdb.cpp \
     mana/resource/npcdb.cpp \
     mana/resource/racedb.cpp \
@@ -113,6 +114,7 @@ HEADERS += \
     mana/resource/imageresource.h \
     mana/resource/imageset.h \
     mana/resource/itemdb.h \
+    mana/resource/mapresource.h \
     mana/resource/monsterdb.h \
     mana/resource/npcdb.h \
     mana/resource/racedb.h \

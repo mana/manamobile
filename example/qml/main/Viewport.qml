@@ -67,7 +67,7 @@ Item {
 
     TileMap {
         id: map;
-        source: gameClient.currentMap;
+        mapResource: gameClient.currentMapResource;
 
         visibleArea: Qt.rect(-map.x,
                              -map.y,

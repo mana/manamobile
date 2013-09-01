@@ -29,10 +29,10 @@
 #include "monster.h"
 #include "npc.h"
 #include "protocol.h"
+#include "resourcemanager.h"
 
 #include "resource/abilitydb.h"
-#include "resource/hairdb.h"
-#include "resource/spritedef.h"
+#include "resource/mapresource.h"
 
 #include <safeassert.h>
 
@@ -246,6 +246,7 @@ void GameClient::update(qreal deltaTime)
 
             direction.normalize();
             direction *= walkDistance;
+            // TODO: Check whether we can walk there
             QPointF newPos(pos.x() + direction.x(), pos.y() + direction.y());
             being->lookAt(newPos);
             being->setPosition(newPos);
@@ -321,16 +322,14 @@ void GameClient::handleAuthenticationResponse(MessageIn &message)
 
 void GameClient::handlePlayerMapChanged(MessageIn &message)
 {
-    const QString name = message.readString();
+    mCurrentMap = message.readString();
     mPlayerStartX = message.readInt16();
     mPlayerStartY = message.readInt16();
 
-    mCurrentMap = QLatin1String("maps/");
-    mCurrentMap += name;
+    if (mMapResource)
+        mMapResource->decRef();
 
-    const QLatin1String mapExtension(".tmx");
-    if (!mCurrentMap.endsWith(mapExtension))
-        mCurrentMap += mapExtension;
+    mMapResource = ResourceManager::instance()->requestMap(mCurrentMap);
 
     // Reset the player being before it gets deleted
     if (mPlayerCharacter) {

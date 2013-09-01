@@ -92,6 +92,8 @@ Project {
                 "mana/resourcelistmodel.h",
                 "mana/resourcemanager.cpp",
                 "mana/resourcemanager.h",
+                "mana/resource/mapresource.cpp",
+                "mana/resource/mapresource.h",
                 "mana/resource/monsterdb.cpp",
                 "mana/resource/monsterdb.h",
                 "mana/resource/npcdb.cpp",

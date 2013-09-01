@@ -49,7 +49,7 @@ Item {
         anchors.top: parent.top;
         anchors.left: parent.left;
         anchors.margins: 2;
-        text: "Current map: " + gameClient.currentMap;
+        text: "Current map: " + gameClient.currentMapName;
     }
 
     Keys.onReturnPressed: chatBar.open();

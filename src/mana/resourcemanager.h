@@ -27,6 +27,7 @@
 namespace Mana {
 
 class ImageResource;
+class MapResource;
 class Resource;
 class ResourceListModel;
 class SpriteDefinition;
@@ -73,6 +74,7 @@ public:
 
     Q_INVOKABLE void cleanUpResources();
 
+    MapResource *requestMap(const QString &path);
     SpriteDefinition *requestSpriteDefinition(const QString &path,
                                               int variant = 0);
 

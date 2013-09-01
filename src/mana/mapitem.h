@@ -19,7 +19,6 @@
 #ifndef MAPITEM_H
 #define MAPITEM_H
 
-#include <QHash>
 #include <QQuickItem>
 
 class QNetworkReply;
@@ -34,6 +33,7 @@ class Tileset;
 namespace Mana {
 
 class ImageResource;
+class MapResource;
 class TileLayerItem;
 
 /**
@@ -44,7 +44,7 @@ class MapItem : public QQuickItem
     Q_OBJECT
     Q_ENUMS(Status)
 
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(Mana::MapResource *mapResource READ mapResource WRITE setMapResource NOTIFY mapChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QRectF visibleArea READ visibleArea WRITE setVisibleArea NOTIFY visibleAreaChanged)
 
@@ -58,10 +58,10 @@ public:
 
     explicit MapItem(QQuickItem *parent = 0);
 
-    QString source() const { return mSource; }
-    void setSource(const QString &source);
+    MapResource *mapResource() const;
+    void setMapResource(MapResource *mapResource);
 
-    Status status() const { return mStatus; }
+    Status status() const;
 
     const QRectF &visibleArea() const;
     void setVisibleArea(const QRectF &visibleArea);
@@ -70,48 +70,30 @@ public:
 
     void componentComplete();
 
-    const Tiled::Map *map() const;
-    const ImageResource *tilesetImage(Tiled::Tileset *tileset) const;
-
 signals:
-    void sourceChanged(const QString &source);
+    void mapChanged();
     void statusChanged();
     void visibleAreaChanged();
 
 private slots:
-    void mapFinished();
-    void tilesetFinished();
-    void imageStatusChanged();
+    void mapStatusChanged();
 
 private:
     void setStatus(Status status);
-    void load();
-    QNetworkReply *finishReply();
-    void checkReady();
-    void requestTilesetImage(Tiled::Tileset *tileset);
+    void refresh();
 
-    QString mSource;
-    Status mStatus;
+    MapResource *mMapResource;
     QRectF mVisibleArea;
 
-    Tiled::Map *mMap;
     Tiled::MapRenderer *mRenderer;
-
-    QNetworkReply* mMapReply;
-    QList<QNetworkReply*> mPendingResources;
-    QSet<ImageResource*> mPendingImageResources;
-    QHash<Tiled::Tileset*, ImageResource*> mImageResources;
     QList<TileLayerItem*> mTileLayerItems;
 };
 
 inline const QRectF &MapItem::visibleArea() const
 { return mVisibleArea; }
 
-inline const Tiled::Map *MapItem::map() const
-{ return mMap; }
-
-inline const ImageResource *MapItem::tilesetImage(Tiled::Tileset *tileset) const
-{ return mImageResources.value(tileset); }
+inline MapResource *MapItem::mapResource() const
+{ return mMapResource; }
 
 } // namespace Mana
 

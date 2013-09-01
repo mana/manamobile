@@ -31,6 +31,7 @@
 #include "mana/resourcelistmodel.h"
 
 #include "mana/resource/imageresource.h"
+#include "mana/resource/mapresource.h"
 #include "mana/resource/spritedef.h"
 
 using namespace Mana;
@@ -181,6 +182,27 @@ void ResourceManager::cleanUpResources()
     foreach (Resource *resource, mResources)
         if (resource->refCount() == 0 && resource->releaseTime() < releaseTime)
             removeResource(resource);
+}
+
+MapResource *ResourceManager::requestMap(const QString &path)
+{
+    QString fullPath = QLatin1String("maps/");
+    fullPath += path;
+
+    const QLatin1String mapExtension(".tmx");
+    if (!fullPath.endsWith(mapExtension))
+        fullPath += mapExtension;
+
+    const QUrl url = resolve(fullPath);
+    MapResource *map = find<MapResource>(url);
+    if (!map) {
+        map = new MapResource(url, fullPath, this);
+        mResources.insert(url, map);
+        mResourceListModel->addResource(map);
+    }
+
+    map->incRef();
+    return map;
 }
 
 SpriteDefinition *ResourceManager::requestSpriteDefinition(
