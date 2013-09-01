@@ -28,6 +28,7 @@
 #include "tiled/tileset.h"
 
 #include <QDebug>
+#include <QFileInfo>
 #include <QNetworkReply>
 
 namespace Mana {
@@ -36,6 +37,7 @@ MapResource::MapResource(const QUrl &url,
                          const QString &path,
                          QObject *parent)
     : Resource(url, parent)
+    , mPath(QFileInfo(path).path())
     , mMap(0)
     , mCollisionLayer(0)
 {
