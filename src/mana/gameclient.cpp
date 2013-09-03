@@ -23,6 +23,7 @@
 #include "being.h"
 #include "beinglistmodel.h"
 #include "character.h"
+#include "collisionhelper.h"
 #include "logicdriver.h"
 #include "messagein.h"
 #include "messageout.h"
@@ -232,31 +233,12 @@ void GameClient::messageReceived(MessageIn &message)
 void GameClient::update(qreal deltaTime)
 {
     foreach (Being *being, mBeingListModel->beings()) {
-        const QPointF pos = being->position();
-        const qreal walkDistance = being->walkSpeed() * deltaTime;
-
-        if (being == mPlayerCharacter) {
-            QVector2D direction = mPlayerWalkDirection;
-
-            if (direction.isNull() || !walkDistance) {
-                if (being->action() == SpriteAction::WALK)
-                    being->setAction(SpriteAction::STAND);
-                continue;
-            }
-
-            direction.normalize();
-            direction *= walkDistance;
-            // TODO: Check whether we can walk there
-            QPointF newPos(pos.x() + direction.x(), pos.y() + direction.y());
-            being->lookAt(newPos);
-            being->setPosition(newPos);
-
-            playerPositionChanged();
-            being->setAction(SpriteAction::WALK);
+        if (being == mPlayerCharacter)
             continue;
-        }
 
+        const QPointF pos = being->position();
         const QPointF target = being->serverPosition();
+
         if (pos == target) {
             if (being->action() == SpriteAction::WALK)
                 being->setAction(SpriteAction::STAND);
@@ -265,6 +247,7 @@ void GameClient::update(qreal deltaTime)
             being->setAction(SpriteAction::WALK);
         }
 
+        const qreal walkDistance = being->walkSpeed() * deltaTime;
         QVector2D direction(target - pos);
 
         if (direction.lengthSquared() < walkDistance * walkDistance) {
@@ -278,6 +261,59 @@ void GameClient::update(qreal deltaTime)
         being->lookAt(newPos);
         being->setPosition(newPos);
     }
+
+    if (mPlayerCharacter)
+        updatePlayer(deltaTime);
+}
+
+void GameClient::updatePlayer(qreal deltaTime)
+{
+    const Tiled::TileLayer *collisionLayer = mMapResource->collisionLayer();
+    if (!collisionLayer)
+        return;
+
+    const qreal walkDistance = mPlayerCharacter->walkSpeed() * deltaTime;
+    QVector2D direction = mPlayerWalkDirection;
+
+    if (direction.isNull() || !walkDistance) {
+        if (mPlayerCharacter->action() == SpriteAction::WALK)
+            mPlayerCharacter->setAction(SpriteAction::STAND);
+        return;
+    }
+
+    direction.normalize();
+    direction *= walkDistance;
+
+    const QPointF pos = mPlayerCharacter->position();
+
+    // The radius is smaller than half a tile to make narrow passages usable
+    CollisionHelper collisionHelper(collisionLayer);
+    QPointF newPos = collisionHelper.adjustMove(pos, direction.toPointF(), 14);
+
+    if (newPos == pos) {
+        // Player is not allowed to walk, but direction should still change
+        mPlayerCharacter->lookAt(pos + mPlayerWalkDirection.toPointF());
+        if (mPlayerCharacter->action() == SpriteAction::WALK)
+            mPlayerCharacter->setAction(SpriteAction::STAND);
+        return;
+    }
+
+    // Try to move straight at maximum speed if the player could not move in
+    // the intended non-straight direction.
+    if (direction.x() != 0 && direction.y() != 0) {
+        if (newPos.x() == pos.x())
+            direction.setY(direction.y() < 0 ? -walkDistance : walkDistance);
+        else if (newPos.y() == pos.y())
+            direction.setX(direction.x() < 0 ? -walkDistance : walkDistance);
+
+        newPos = collisionHelper.adjustMove(pos, direction.toPointF(), 14);
+    }
+
+    mPlayerCharacter->lookAt(newPos);
+    mPlayerCharacter->setPosition(newPos);
+
+    playerPositionChanged();
+    mPlayerCharacter->setAction(SpriteAction::WALK);
 }
 
 void GameClient::playerPositionChanged()

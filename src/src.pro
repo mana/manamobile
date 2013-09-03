@@ -39,6 +39,7 @@ SOURCES += \
     mana/character.cpp \
     mana/characterlistmodel.cpp \
     mana/chatclient.cpp \
+    mana/collisionhelper.cpp \
     mana/enetclient.cpp \
     mana/gameclient.cpp \
     mana/logicdriver.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     mana/character.h \
     mana/characterlistmodel.h \
     mana/chatclient.h \
+    mana/collisionhelper.h \
     mana/enetclient.h \
     mana/gameclient.h \
     mana/logicdriver.h \

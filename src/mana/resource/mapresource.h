@@ -46,6 +46,7 @@ public:
                          QObject *parent = 0);
 
     const Tiled::Map *map() const;
+    const Tiled::TileLayer *collisionLayer() const;
     const ImageResource *tilesetImage(Tiled::Tileset *tileset) const;
 
 private slots:
@@ -70,6 +71,9 @@ private:
 
 inline const Tiled::Map *MapResource::map() const
 { return mMap; }
+
+inline const Tiled::TileLayer *MapResource::collisionLayer() const
+{ return mCollisionLayer; }
 
 inline const ImageResource *MapResource::tilesetImage(Tiled::Tileset *tileset) const
 { return mImageResources.value(tileset); }

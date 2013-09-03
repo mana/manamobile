@@ -53,6 +53,8 @@ Project {
                 "mana/characterlistmodel.h",
                 "mana/chatclient.cpp",
                 "mana/chatclient.h",
+                "mana/collisionhelper.cpp",
+                "mana/collisionhelper.h",
                 "mana/enetclient.cpp",
                 "mana/enetclient.h",
                 "mana/gameclient.cpp",

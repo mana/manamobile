@@ -135,6 +135,7 @@ private slots:
     void update(qreal deltaTime);
 
 private:
+    void updatePlayer(qreal deltaTime);
     void playerPositionChanged();
     void restoreWalkingSpeed();
 
