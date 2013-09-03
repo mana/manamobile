@@ -52,8 +52,11 @@ namespace Mana {
 QPointF CollisionHelper::adjustMove(QPointF pos, QPointF distance, qreal radius) const
 {
     const Tiled::Map *map = mCollisionLayer->map();
-    const int tw = map->tileWidth();
-    const int th = map->tileHeight();
+    const int tileWidth = map->tileWidth();
+    const int tileHeight = map->tileHeight();
+    bool blocked = false;
+    bool reachedNewTileX = false;
+    bool reachedNewTileY = false;
 
     const QRectF rect(pos.x() - radius,
                       pos.y() - radius,
@@ -63,51 +66,75 @@ QPointF CollisionHelper::adjustMove(QPointF pos, QPointF distance, qreal radius)
     QPointF newPos = pos + distance;
 
     if (distance.x() > 0) {
-        int currentTileX = qCeil(rect.right() / tw) - 1;
-        int newTileX = qCeil((rect.right() + distance.x()) / tw) - 1;
+        const int currentTileX = qCeil(rect.right() / tileWidth) - 1;
+        const int newTileX = qCeil((rect.right() + distance.x()) / tileWidth) - 1;
 
         if (newTileX != currentTileX) {
-            int minTileY = qFloor(rect.top() / th);
-            int maxTileY = qCeil(rect.bottom() / th) - 1;
+            reachedNewTileX = true;
+            const int minTileY = qFloor(rect.top() / tileHeight);
+            const int maxTileY = qCeil(rect.bottom() / tileHeight) - 1;
 
-            if (!freeSpace(mCollisionLayer, newTileX, minTileY, newTileX, maxTileY))
-                newPos.setX((currentTileX + 1) * tw - radius);
+            if (!freeSpace(mCollisionLayer, newTileX, minTileY, newTileX, maxTileY)) {
+                newPos.setX((currentTileX + 1) * tileWidth - radius);
+                blocked = true;
+            }
         }
     } else if (distance.x() < 0) {
-        int currentTileX = qFloor(rect.left()) / tw;
-        int newTileX = qFloor(rect.left() + distance.x()) / tw;
+        const int currentTileX = qFloor(rect.left()) / tileWidth;
+        const int newTileX = qFloor(rect.left() + distance.x()) / tileWidth;
 
         if (currentTileX != newTileX) {
-            int minTileY = qFloor(rect.top() / th);
-            int maxTileY = qCeil(rect.bottom() / th) - 1;
+            reachedNewTileX = true;
+            const int minTileY = qFloor(rect.top() / tileHeight);
+            const int maxTileY = qCeil(rect.bottom() / tileHeight) - 1;
 
-            if (!freeSpace(mCollisionLayer, newTileX, minTileY, newTileX, maxTileY))
-                newPos.setX(currentTileX * tw + radius);
+            if (!freeSpace(mCollisionLayer, newTileX, minTileY, newTileX, maxTileY)) {
+                newPos.setX(currentTileX * tileWidth + radius);
+                blocked = true;
+            }
         }
     }
 
     if (distance.y() > 0) {
-        int currentTileY = qCeil(rect.bottom() / th) - 1;
-        int newTileY = qCeil((rect.bottom() + distance.y()) / th) - 1;
+        const int currentTileY = qCeil(rect.bottom() / tileHeight) - 1;
+        const int newTileY = qCeil((rect.bottom() + distance.y()) / tileHeight) - 1;
 
         if (currentTileY != newTileY) {
-            int minTileX = qFloor(rect.left() / tw);
-            int maxTileX = qCeil(rect.right() / tw) - 1;
+            reachedNewTileY = true;
+            const int minTileX = qFloor(rect.left() / tileWidth);
+            const int maxTileX = qCeil(rect.right() / tileWidth) - 1;
 
-            if (!freeSpace(mCollisionLayer, minTileX, newTileY, maxTileX, newTileY))
-                newPos.setY((currentTileY + 1) * th - radius);
+            if (!freeSpace(mCollisionLayer, minTileX, newTileY, maxTileX, newTileY)) {
+                newPos.setY((currentTileY + 1) * tileHeight - radius);
+                blocked = true;
+            }
         }
     } else if (distance.y() < 0) {
-        int currentTileY = qFloor(qFloor(rect.top() / th));
-        int newTileY = qFloor(rect.top() + distance.y()) / th;
+        const int currentTileY = qFloor(qFloor(rect.top() / tileHeight));
+        const int newTileY = qFloor(rect.top() + distance.y()) / tileHeight;
 
         if (currentTileY != newTileY) {
-            int minTileX = qFloor(rect.left() / tw);
-            int maxTileX = qCeil(rect.right() / tw) - 1;
+            reachedNewTileY = true;
+            const int minTileX = qFloor(rect.left() / tileWidth);
+            const int maxTileX = qCeil(rect.right() / tileWidth) - 1;
 
-            if (!freeSpace(mCollisionLayer, minTileX, newTileY, maxTileX, newTileY))
-                newPos.setY(currentTileY * th + radius);
+            if (!freeSpace(mCollisionLayer, minTileX, newTileY, maxTileX, newTileY)) {
+                newPos.setY(currentTileY * tileHeight + radius);
+                blocked = true;
+            }
         }
+    }
+
+    // This is a little unclean, but prevents walking into a tile by its corner.
+    if (reachedNewTileX && reachedNewTileY && !blocked) {
+        const QRectF newRect = rect.translated(distance);
+        const int left = qFloor(newRect.left() / tileWidth);
+        const int top = qFloor(newRect.top() / tileHeight);
+        const int right = qCeil(newRect.right() / tileWidth) - 1;
+        const int bottom = qCeil(newRect.bottom() / tileHeight) - 1;
+
+        if (!freeSpace(mCollisionLayer, left, top, right, bottom))
+            newPos.setX(pos.x());
     }
 
     return newPos;
