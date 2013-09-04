@@ -90,6 +90,8 @@ void MapResource::mapFinished()
             requestTilesetImage(tileset);
         }
     }
+
+    checkReady();
 }
 
 void MapResource::tilesetFinished()
