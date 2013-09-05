@@ -78,12 +78,15 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    AttributeValue *attribute(int id) const;
+    Q_INVOKABLE Mana::AttributeValue *attribute(int id) const;
     void setAttribute(int id, qreal base, qreal mod);
 
-    QMap<int, AttributeValue *> attributes() const {return mAttributeValues; }
+    QMap<int, AttributeValue *> attributes() const { return mAttributeValues; }
 
     static qreal tpsToPixelsPerSecond(qreal speed);
+
+signals:
+    void attributeAdded(int id, Mana::AttributeValue *attribute);
 
 private:
     QMap<int, AttributeValue *> mAttributeValues;

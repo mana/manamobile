@@ -8,6 +8,8 @@ Item {
 
     Component.onCompleted: gamePage.forceActiveFocus();
 
+    PlayerAttributes { id: playerAttributes }
+
     Item {
         anchors.top: parent.top;
         anchors.left: statusPage.right;
@@ -20,6 +22,11 @@ Item {
             height: parent.height / scale;
             scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
             transformOrigin: Item.TopLeft;
+
+            HealthBar {
+                y: 5;
+                anchors.horizontalCenter: parent.horizontalCenter;
+            }
 
             MouseArea {
                 anchors.fill: parent;

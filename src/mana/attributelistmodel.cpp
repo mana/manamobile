@@ -81,6 +81,8 @@ void AttributeListModel::setAttribute(int id, qreal base, qreal mod)
     value->setBase(base);
     value->setModified(mod);
 
-    if (needInsert)
+    if (needInsert) {
         endInsertRows();
+        emit attributeAdded(id, value);
+    }
 }
