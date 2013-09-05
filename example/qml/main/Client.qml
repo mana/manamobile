@@ -8,7 +8,7 @@ import Mana 1.0
 Item {
     property string serverName: "ManaSource!";
 
-    property variant accountClient: AccountClient {
+    property AccountClient accountClient: AccountClient {
         onConnected: requestRegistrationInfo();
         onLoginSucceeded: {
             resourceManager.dataUrl = dataUrl;
@@ -27,10 +27,10 @@ Item {
             gameClient.connect(gameServerHost, gameServerPort);
         }
     }
-    property variant chatClient: ChatClient {
+    property ChatClient chatClient: ChatClient {
         onConnected: authenticate(accountClient.token);
     }
-    property variant gameClient: GameClient {
+    property GameClient gameClient: GameClient {
         playerName: accountClient.playerName;
         onConnected: authenticate(accountClient.token);
     }
