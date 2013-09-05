@@ -129,6 +129,14 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: model.being.name;
                         font.pixelSize: 12;
+                        visible: {
+                            var type = model.being.type;
+                            if (type === Being.OBJECT_NPC)
+                                return true;
+                            if (type === Being.OBJECT_CHARACTER)
+                                return model.being !== gameClient.player;
+                            return false;
+                        }
                     }
                 }
 
