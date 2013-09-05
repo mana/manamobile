@@ -33,6 +33,7 @@ using namespace Mana;
 MapItem::MapItem(QQuickItem *parent)
     : QQuickItem(parent)
     , mMapResource(0)
+    , mHideCollisionLayer(true)
     , mRenderer(0)
 {
 }
@@ -66,6 +67,17 @@ void MapItem::setVisibleArea(const QRectF &visibleArea)
 {
     mVisibleArea = visibleArea;
     emit visibleAreaChanged();
+}
+
+void MapItem::setHideCollisionLayer(bool hideCollisionLayer)
+{
+    if (mHideCollisionLayer == hideCollisionLayer)
+        return;
+
+    mHideCollisionLayer = hideCollisionLayer;
+    refresh();
+
+    emit hideCollisionLayerChanged();
 }
 
 QRectF MapItem::boundingRect() const
@@ -119,8 +131,9 @@ void MapItem::refresh()
     bool seenFringe = false;
     foreach (Tiled::Layer *layer, map->layers()) {
         if (Tiled::TileLayer *tl = layer->asTileLayer()) {
-            if (tl->name().compare(QLatin1String("collision"), Qt::CaseInsensitive) == 0)
-                continue;
+            if (mHideCollisionLayer)
+                if (tl->name().compare(QLatin1String("collision"), Qt::CaseInsensitive) == 0)
+                    continue;
 
             TileLayerItem *layerItem = new TileLayerItem(tl, mRenderer, this);
             if (seenFringe)

@@ -47,6 +47,7 @@ class MapItem : public QQuickItem
     Q_PROPERTY(Mana::MapResource *mapResource READ mapResource WRITE setMapResource NOTIFY mapChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QRectF visibleArea READ visibleArea WRITE setVisibleArea NOTIFY visibleAreaChanged)
+    Q_PROPERTY(bool hideCollisionLayer READ hideCollisionLayer WRITE setHideCollisionLayer NOTIFY hideCollisionLayerChanged)
 
 public:
     enum Status {
@@ -66,6 +67,9 @@ public:
     const QRectF &visibleArea() const;
     void setVisibleArea(const QRectF &visibleArea);
 
+    bool hideCollisionLayer() const;
+    void setHideCollisionLayer(bool hideCollisionLayer);
+
     QRectF boundingRect() const;
 
     void componentComplete();
@@ -74,6 +78,7 @@ signals:
     void mapChanged();
     void statusChanged();
     void visibleAreaChanged();
+    void hideCollisionLayerChanged();
 
 private slots:
     void mapStatusChanged();
@@ -84,6 +89,7 @@ private:
 
     MapResource *mMapResource;
     QRectF mVisibleArea;
+    bool mHideCollisionLayer;
 
     Tiled::MapRenderer *mRenderer;
     QList<TileLayerItem*> mTileLayerItems;
@@ -91,6 +97,9 @@ private:
 
 inline const QRectF &MapItem::visibleArea() const
 { return mVisibleArea; }
+
+inline bool MapItem::hideCollisionLayer() const
+{ return mHideCollisionLayer; }
 
 inline MapResource *MapItem::mapResource() const
 { return mMapResource; }
