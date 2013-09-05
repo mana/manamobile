@@ -1,11 +1,13 @@
 import QtQuick 2.0
 import Mana 1.0
 
-Rectangle {
+BorderImage {
     visible: gameClient.npcState !== GameClient.NoNpc;
 
-    radius: 10;
-    color: "grey";
+    source: "images/scroll_thin.png";
+    border.left: 33; border.top: 33;
+    border.right: 34; border.bottom: 27;
+    smooth: false;
 
     Text {
         id: message;

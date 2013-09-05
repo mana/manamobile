@@ -15,6 +15,7 @@ Item {
         source: "images/simpleframe.png"
         border.left: 5; border.top: 5;
         border.right: 5; border.bottom: 5;
+        smooth: false;
     }
     Rectangle {
         anchors.left: frame.left;

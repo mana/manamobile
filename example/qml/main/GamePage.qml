@@ -40,6 +40,15 @@ Item {
                     actionBar.reset();
                 }
             }
+
+            NpcDialog {
+                id: npcDialog;
+                width: Math.max(parent.width / 2, Math.min(300, parent.width - 20));
+                height: 100;
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom;
+                anchors.bottomMargin: 5;
+            }
         }
     }
 
@@ -111,14 +120,6 @@ Item {
         anchors.bottom: parent.bottom;
         anchors.leftMargin: 50;
         anchors.bottomMargin: 50;
-    }
-
-    NpcDialog {
-        id: npcDialog;
-        width: parent.width / 2;
-        height: 100;
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom;
     }
 
     FocusScope {
