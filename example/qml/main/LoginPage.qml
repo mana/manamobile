@@ -28,8 +28,11 @@ Item {
 
     Item {
         id: positioner;
-        y: parent.height * 0.1;
-        x: parent.width * 0.45;
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -50
+        width: Math.min(window.width - 100, 400);
+        height: childrenRect.height
 
         Text {
             id: serverNameDisplay;
@@ -39,7 +42,8 @@ Item {
         }
         LineEdit {
             id: nameEdit;
-            width: window.width * 0.5;
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.top: serverNameDisplay.bottom;
             focus: true;
             placeholderText: qsTr("Username");
@@ -56,7 +60,8 @@ Item {
         }
         LineEdit {
             id: emailEdit;
-            width: nameEdit.width;
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.top: nameEdit.bottom;
             placeholderText: qsTr("Email");
             visible: false;
@@ -69,7 +74,8 @@ Item {
         }
         LineEdit {
             id: passwordEdit;
-            width: nameEdit.width;
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.top: emailEdit.bottom;
             placeholderText: qsTr("Password");
             echoMode: TextInput.Password;
@@ -82,7 +88,8 @@ Item {
         }
         LineEdit {
             id: passwordConfirmEdit;
-            width: nameEdit.width;
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.top: passwordEdit.bottom;
             placeholderText: qsTr("Password");
             echoMode: TextInput.Password;
@@ -226,7 +233,6 @@ Item {
                 KeyNavigation.up: passwordConfirmEdit;
                 onClicked: register();
             }
-            PropertyChanges { target: positioner; y: parent.height * 0.065; }
         }
     ]
 

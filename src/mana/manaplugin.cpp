@@ -52,6 +52,8 @@ ManaPlugin::ManaPlugin(QObject *parent) :
 
 void ManaPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
+    Q_UNUSED(uri)
+
     Mana::ResourceManager *resourceManager = new Mana::ResourceManager(engine);
     Mana::AbilityDB *abilityDB = new Mana::AbilityDB(engine);
     Mana::AttributeDB *attributeDB = new Mana::AttributeDB(engine);

@@ -4,8 +4,12 @@ import Mana 1.0
 /**
  * The main viewport, showing the map and entities.
  */
-Item {
+Rectangle {
     id: viewport;
+
+    // TODO: Take background color from the map when available. Maybe having
+    // MapItem draw a background when necessary.
+    color: "black"
 
     property real centerX: width / 2;
     property real centerY: height / 2;
@@ -123,12 +127,23 @@ Item {
                         anchors.bottomMargin: sprite.maxHeight;
                     }
 
+                    TextShadow {
+                        target: nameLabel
+                    }
                     Text {
+                        id: nameLabel
                         anchors.top: parent.bottom
                         anchors.topMargin: 5
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: model.being.name;
                         font.pixelSize: 12;
+                        color: {
+                            if (model.being.type === Being.OBJECT_NPC)
+                                return "DeepSkyBlue";
+                            else
+                                return "white";
+                        }
+                        font.bold: true
                         visible: {
                             var type = model.being.type;
                             if (type === Being.OBJECT_NPC)

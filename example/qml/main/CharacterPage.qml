@@ -38,9 +38,8 @@ Item {
 
     Column {
         id: column;
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         spacing: 10
-        x: parent.width * 0.5
 
         Text {
             id: title;

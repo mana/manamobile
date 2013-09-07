@@ -1,7 +1,8 @@
-import QtQuick 2.0
+import QtQuick 2.1
 import Mana 1.0
 
 Item {
+    readonly property real characterScale: window.backgroundScale;
     readonly property int numHairStyles: hairDB.hairs.length
     property int hairIndex: 0
 
@@ -51,10 +52,10 @@ Item {
         sprites: character.spriteListModel
         action: "stand"
         direction: Action.DIRECTION_DOWN
-        scale: 2
+        scale: characterScale
 
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: maxHeight / 2
+        anchors.verticalCenterOffset: maxHeight * characterScale / 2
     }
 
     LineEdit {
@@ -62,8 +63,8 @@ Item {
         placeholderText: qsTr("Name")
         focus: true
         width: 300
+        y: parent.height / 4 - height;
         anchors.horizontalCenter: characterPreview.horizontalCenter
-        anchors.bottom: parent.bottom
         onAccepted: createCharacter()
     }
 
@@ -103,6 +104,7 @@ Item {
     }
 
     Component.onCompleted: {
-        nameEdit.focus = true;
+        if (Qt.platform.os !== "android")
+            nameEdit.focus = true;
     }
 }

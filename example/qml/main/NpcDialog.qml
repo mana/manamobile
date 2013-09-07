@@ -17,6 +17,7 @@ BorderImage {
         anchors.margins: 10;
         wrapMode: TextEdit.WordWrap;
         text: gameClient.npcMessage;
+        font.pixelSize: 12;
     }
 
     MouseArea {
@@ -50,6 +51,7 @@ BorderImage {
                 wrapMode:Text.WordWrap;
                 width: parent.width;
                 text: "> " + modelData;
+                font.pixelSize: 12;
             }
             MouseArea {
                 id: mouseArea;

@@ -1,12 +1,18 @@
 import QtQuick 2.0
 import Mana 1.0
 
-Rectangle {
+Image {
     id: window
-    color: "#fffcf2"
-    focus: true;
 
     state: "serverSelect"
+
+    source: "images/login_background.png"
+    smooth: false
+    fillMode: Image.PreserveAspectCrop
+    focus: true;
+
+    readonly property real backgroundScale: Math.max(width / sourceSize.width,
+                                                     height / sourceSize.height);
 
     property bool loggingIn: false
     property bool loggedIn: false
@@ -38,17 +44,6 @@ Rectangle {
             if (resourceManager.pathsLoaded && state == "loadingPaths")
                 state = "chooseCharacter";
         }
-    }
-
-    Image {
-        x: -width * 0.1
-        y: parent.height - height * 0.9
-        sourceSize: Qt.size(parent.width / 2.2,
-                            parent.width / 2.2)
-        width: sourceSize.width;
-        height: sourceSize.height;
-        source: "images/mana.svg"
-        opacity: 0.5
     }
 
     ProgressIndicator {
@@ -202,6 +197,18 @@ Rectangle {
             StateChangeScript {
                 script: gotoPage(gamePage);
             }
+            PropertyChanges {
+                target: window
+                source: "";
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            to: "game"
+            PauseAnimation { duration: 500 }
+            PropertyAction { property: "source"; }
         }
     ]
 }
