@@ -8,19 +8,22 @@ import Mana 1.0
 Item {
     property string serverName: "ManaSource!";
 
+    function setDataUrl(dataUrl) {
+        resourceManager.dataUrl = dataUrl;
+
+        attributeDB.load();
+        abilityDB.load();
+        hairDB.load();
+        itemDB.load();
+        monsterDB.load();
+        npcDB.load();
+        raceDB.load();
+    }
+
     property AccountClient accountClient: AccountClient {
         onConnected: requestRegistrationInfo();
-        onLoginSucceeded: {
-            resourceManager.dataUrl = dataUrl;
-            attributeDB.load();
-            abilityDB.load();
-            hairDB.load();
-            itemDB.load();
-            monsterDB.load();
-            npcDB.load();
-            raceDB.load();
-        }
-        onRegistrationSucceeded: resourceManager.dataUrl = dataUrl;
+        onLoginSucceeded: setDataUrl(dataUrl);
+        onRegistrationSucceeded: setDataUrl(dataUrl);
         onChooseCharacterSucceeded: {
             // Connect to chat and game servers
             chatClient.connect(chatServerHost, chatServerPort);
