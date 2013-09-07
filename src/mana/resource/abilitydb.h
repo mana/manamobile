@@ -19,15 +19,8 @@
 #ifndef ABILITYDB_H
 #define ABILITYDB_H
 
-#include <QList>
 #include <QMap>
 #include <QObject>
-
-#include "spritedef.h"
-
-#include "mana/protocol.h"
-
-class QNetworkReply;
 
 namespace Mana {
 

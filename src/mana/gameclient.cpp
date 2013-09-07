@@ -34,6 +34,7 @@
 
 #include "resource/abilitydb.h"
 #include "resource/mapresource.h"
+#include "resource/spritedef.h"
 
 #include <safeassert.h>
 
