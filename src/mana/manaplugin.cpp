@@ -116,10 +116,15 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::ResourceListModel>();
 
     qmlRegisterType<Mana::AbilityDB>();
+    qmlRegisterUncreatableType<Mana::AbilityInfo>(uri, 1, 0, "AbilityInfo",
+                                                  "Managed on C++ side");
+
     qmlRegisterType<Mana::AttributeDB>();
+
     qmlRegisterType<Mana::ItemDB>();
     qmlRegisterType<Mana::ItemInfo>();
     qmlRegisterType<Mana::ItemInstance>();
+
     qmlRegisterType<Mana::MonsterDB>();
     qmlRegisterType<Mana::NpcDB>();
     qmlRegisterType<Mana::RaceDB>();

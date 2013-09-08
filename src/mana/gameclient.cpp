@@ -154,12 +154,20 @@ void GameClient::chooseNpcOption(int choice)
     send(message);
 }
 
-void GameClient::useAbility(unsigned id, int x, int y)
+void GameClient::useAbilityOnPoint(unsigned id, int x, int y)
 {
     MessageOut message(Protocol::PGMSG_USE_ABILITY_ON_POINT);
     message.writeInt8(id);
     message.writeInt16(x);
     message.writeInt16(y);
+    send(message);
+}
+
+void GameClient::useAbilityOnDirection(unsigned id)
+{
+    MessageOut message(Protocol::PGMSG_USE_ABILITY_ON_DIRECTION);
+    message.writeInt8(id);
+    message.writeInt8(mPlayerCharacter->direction());
     send(message);
 }
 

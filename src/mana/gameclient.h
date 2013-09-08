@@ -107,7 +107,8 @@ public:
     Q_INVOKABLE void nextNpcMessage();
     Q_INVOKABLE void chooseNpcOption(int choice);
 
-    Q_INVOKABLE void useAbility(unsigned id, int x, int y);
+    Q_INVOKABLE void useAbilityOnPoint(unsigned id, int x, int y);
+    Q_INVOKABLE void useAbilityOnDirection(unsigned id);
 
     AbilityListModel *abilityListModel() const;
     AttributeListModel *attributeListModel() const;

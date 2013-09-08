@@ -129,9 +129,9 @@ public:
         GPMSG_LOWER_ATTRIBUTE_RESPONSE = 0x0171, // B error, W attribute
         PGMSG_RESPAWN                  = 0x0180, // -
         GPMSG_BEING_ENTER              = 0x0200, // B type, W being id, B action, W*2 position, B direction, B gender
-        // character: S name, B hair style, B hair color, B sprite layers changed, { B slot type, W item id }*
-        // monster: W type id
-        // npc: W type id
+                                                 // character: S name, B hair style, B hair color, B sprite layers changed, { B slot type, W item id }*
+                                                 // monster: W type id
+                                                 // npc: W type id
         GPMSG_BEING_LEAVE              = 0x0201, // W being id
         GPMSG_ITEM_APPEAR              = 0x0202, // W item id, W*2 position
         GPMSG_BEING_LOOKS_CHANGE       = 0x0210, // B hairstyle, B haircolor, B sprite layers changed, { B slot type, W item id }*
@@ -152,6 +152,7 @@ public:
         PGMSG_USE_ABILITY_ON_POINT     = 0x0294, // B abilityID, W*2 position
         GPMSG_ABILITY_REMOVED          = 0x0295, // B abilityID
         GPMSG_ABILITY_COOLDOWN         = 0x0296, // W ticks to wait
+        PGMSG_USE_ABILITY_ON_DIRECTION = 0x0297, // B abilityID, B direction
         PGMSG_SAY                      = 0x02A0, // S text
         GPMSG_SAY                      = 0x02A1, // W being id, S text
         GPMSG_NPC_CHOICE               = 0x02B0, // W being id, { S text }*

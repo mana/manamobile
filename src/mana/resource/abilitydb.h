@@ -38,7 +38,8 @@ class AbilityInfo : public QObject
 public:
     enum AbilityTargetType {
         TARGET_BEING,
-        TARGET_POINT
+        TARGET_POINT,
+        TARGET_DIRECTION
     };
 
     explicit AbilityInfo(int id, QObject *parent = 0);
@@ -72,7 +73,7 @@ public:
     Q_INVOKABLE void unload();
     bool isLoaded() const { return mLoaded; }
 
-    Q_INVOKABLE const AbilityInfo *getInfo(int id) const
+    Q_INVOKABLE Mana::AbilityInfo *getInfo(int id) const
     { return mAbilities[id]; }
 
     void setInfo(int id, AbilityInfo *info)

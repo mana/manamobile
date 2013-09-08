@@ -58,6 +58,18 @@ void AbilityDB::unload()
     emit abilitiesChanged();
 }
 
+static AbilityInfo::AbilityTargetType targetTypeFromString(const QString &value)
+{
+    if (value == "being")
+        return AbilityInfo::TARGET_BEING;
+    else if (value == "point")
+        return AbilityInfo::TARGET_POINT;
+    else if (value == "direction")
+        return AbilityInfo::TARGET_DIRECTION;
+
+    return AbilityInfo::TARGET_BEING;
+}
+
 void AbilityDB::fileReady()
 {
     QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
@@ -79,11 +91,8 @@ void AbilityDB::fileReady()
         QString useAction = atts.value("useaction").toString();
 
         QString targetAsString = atts.value("target").toString();
-        AbilityInfo::AbilityTargetType targetType;
-        if (targetAsString == "being")
-            targetType = AbilityInfo::TARGET_BEING;
-        else
-            targetType = AbilityInfo::TARGET_POINT;
+        AbilityInfo::AbilityTargetType targetType =targetTypeFromString(
+                    targetAsString);
 
         if (id == 0 || name.isEmpty()) {
             qWarning() << "Bad ability at " << xml.lineNumber()

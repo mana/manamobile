@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import Mana 1.0
 
 Item {
     property int selectedButton: -1;
@@ -28,10 +29,15 @@ Item {
                 text: "A" + (model.index + 1);
                 scale: selectedButton === model.index ? 1.5 : 1;
                 onClicked: {
-                    if (selectedButton === model.index)
-                        selectedButton = -1
-                    else
-                        selectedButton = model.index
+                    var abilityInfo = abilityDB.getInfo(model.index + 1);
+                    if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
+                        gameClient.useAbilityOnDirection(model.index + 1);
+                    } else {
+                        if (selectedButton === model.index)
+                            selectedButton = -1;
+                        else
+                            selectedButton = model.index;
+                    }
                 }
             }
         }
