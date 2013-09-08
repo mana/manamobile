@@ -56,6 +56,8 @@ Project {
                 "mana/mapitem.h",
                 "mana/messagein.cpp",
                 "mana/messagein.h",
+                "mana/messagenames.cpp",
+                "mana/messagenames.h",
                 "mana/messageout.cpp",
                 "mana/messageout.h",
                 "mana/monster.cpp",

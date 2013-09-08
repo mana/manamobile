@@ -19,6 +19,8 @@
 
 #include "messagein.h"
 
+#include "messagenames.h"
+
 #include <enet/enet.h>
 
 #include <cstring>
@@ -231,8 +233,11 @@ bool MessageIn::readValueType(ValueType type)
 
 std::ostream &operator <<(std::ostream &os, const MessageIn &msg)
 {
-    os << std::setw(6) << std::hex << std::showbase << std::internal
-       << std::setfill('0') << msg.id() << std::dec;
+    if (const char *name = messageName(msg.id()))
+        os << name;
+    else
+        os << std::setw(6) << std::hex << std::showbase << std::internal
+           << std::setfill('0') << msg.id() << std::dec;
 
     if (!msg.mDebugMode)
     {
