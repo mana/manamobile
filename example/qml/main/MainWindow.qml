@@ -55,7 +55,7 @@ Image {
         z: 1;
     }
 
-    property variant currentPage;
+    property Item currentPage;
 
     function gotoPage(component) {
         var properties = {

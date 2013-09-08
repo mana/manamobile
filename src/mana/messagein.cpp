@@ -240,7 +240,6 @@ static const char *messageName(unsigned short id)
 
 std::ostream &operator <<(std::ostream &os, const MessageIn &msg)
 {
-
     if (const char *name = messageName(msg.id()))
         os << name;
     else

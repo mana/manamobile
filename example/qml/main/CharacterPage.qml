@@ -68,7 +68,7 @@ Item {
 
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.bottom: parent.bottom;
-                    anchors.bottomMargin: name.height;
+                    anchors.bottomMargin: name.height + 8;
                 }
 
                 Text {
