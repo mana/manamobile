@@ -610,12 +610,15 @@ void GameClient::handleBeingActionChange(MessageIn &message)
 void GameClient::handleBeingSay(MessageIn &message)
 {
     const int id = message.readInt16();
+    const QString text = message.readString();
 
-    Being *being = mBeingListModel->beingById(id);
-
-    if (being) {
-        const QString text = message.readString();
-        being->say(text);
+    if (id) {
+        if (Being *being = mBeingListModel->beingById(id)) {
+            being->say(text);
+            emit chatMessage(being, text);
+        }
+    } else {
+        emit chatMessage(0, text); // message from server
     }
 }
 

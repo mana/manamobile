@@ -49,6 +49,16 @@ Item {
                 anchors.bottom: parent.bottom;
                 anchors.bottomMargin: 5;
             }
+
+            ChatLog {
+                anchors.top: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.leftMargin: 20
+                anchors.rightMargin: 20
+                anchors.bottomMargin: 10
+            }
         }
     }
 

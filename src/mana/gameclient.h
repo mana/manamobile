@@ -126,6 +126,8 @@ signals:
     void playerChanged();
     void playerWalkDirectionChanged();
 
+    void chatMessage(Mana::Being *being, const QString &message);
+
     void playerNameChanged();
 
     void npcMessageChanged();
