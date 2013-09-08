@@ -71,7 +71,7 @@ void AttributeDB::fileReady()
     while (xml.readNextStartElement()) {
         if (xml.name() == "attribute") {
             const QXmlStreamAttributes atts = xml.attributes();
-            int id = atts.value("id").toString().toInt();
+            int id = atts.value("id").toInt();
             QString name = atts.value("name").toString();
             QString description = atts.value("desc").toString();
             bool modifiable = atts.value("modifiable", "false").toString()

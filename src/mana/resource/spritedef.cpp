@@ -43,7 +43,7 @@ SpriteReference *SpriteReference::readSprite(XmlReader &xml, QObject *parent)
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == "sprite");
 
-    int variant = xml.attributes().value("variant").toString().toInt();
+    int variant = xml.attributes().value("variant").toInt();
     QString file = xml.readElementText();
 
     return new SpriteReference(parent, file, variant);
@@ -158,8 +158,8 @@ void SpriteDefinition::readSprite(XmlReader &xml, XmlReader *parent)
 
         if (xml.name() == "sprite") {
             const QXmlStreamAttributes attr = xml.attributes();
-            mVariantCount = attr.value("variants").toString().toInt();
-            mVariantOffset = attr.value("variant_offset").toString().toInt();
+            mVariantCount = attr.value("variants").toInt();
+            mVariantOffset = attr.value("variant_offset").toInt();
         } else if (xml.name() == "include") {
             const QString filename = xml.attributes().value("file").toString();
             ResourceManager *resMan = ResourceManager::instance();
@@ -258,9 +258,9 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
         const QXmlStreamAttributes attr = xml.attributes();
 
         bool delayOk;
-        int delay = attr.value("delay").toString().toInt(&delayOk);
-        int offsetX = attr.value("offsetX").toString().toInt();
-        int offsetY = attr.value("offsetY").toString().toInt();
+        int delay = attr.value("delay").toInt(&delayOk);
+        int offsetX = attr.value("offsetX").toInt();
+        int offsetY = attr.value("offsetY").toInt();
 
         if (!delayOk)
             delay = DEFAULT_FRAME_DELAY;
@@ -270,7 +270,7 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
 
         if (xml.name() == "frame") {
             bool indexOk;
-            const int index = attr.value("index").toString().toInt(&indexOk);
+            const int index = attr.value("index").toInt(&indexOk);
             if (!indexOk || index < 0) {
                 qWarning() << Q_FUNC_INFO << "No valid value for 'index'!";
                 xml.skipCurrentElement();
@@ -282,8 +282,8 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
             xml.skipCurrentElement();
         } else if (xml.name() == "sequence") {
             bool startOk, endOk;
-            int start = attr.value("start").toString().toInt(&startOk);
-            const int end = attr.value("end").toString().toInt(&endOk);
+            int start = attr.value("start").toInt(&startOk);
+            const int end = attr.value("end").toInt(&endOk);
 
             if (!startOk || !endOk || start < 0 || end < 0) {
                 qWarning() << Q_FUNC_INFO
@@ -327,10 +327,10 @@ bool SpriteDefinition::readImageSet(XmlReader &xml)
         return false;
     }
 
-    const int width = attr.value("width").toString().toInt();
-    const int height = attr.value("height").toString().toInt();
-    const int offsetX = attr.value("offsetX").toString().toInt();
-    const int offsetY = attr.value("offsetY").toString().toInt();
+    const int width = attr.value("width").toInt();
+    const int height = attr.value("height").toInt();
+    const int offsetX = attr.value("offsetX").toInt();
+    const int offsetY = attr.value("offsetY").toInt();
     QString imageSrc = attr.value("src").toString();
 
     // TODO: Dye

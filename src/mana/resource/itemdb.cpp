@@ -114,7 +114,7 @@ ItemInfo *ItemDB::getInfo(int id) const
 ItemInfo *ItemDB::readItem(XmlReader &xml)
 {
     const QXmlStreamAttributes attr = xml.attributes();
-    int id = attr.value("id").toString().toInt();
+    int id = attr.value("id").toInt();
 
     if (!id) {
         qDebug() << "Bad or missing item id at line " << xml.lineNumber();
@@ -173,7 +173,7 @@ ItemInfo *ItemDB::readItem(XmlReader &xml)
     item->setType(itemTypeFromString(attr.value("type")));
     item->setName(attr.value("name").toString());
     item->setDescription(attr.value("description").toString());
-    item->setWeight(attr.value("weight").toString().toInt());
+    item->setWeight(attr.value("weight").toInt());
 
     SpriteDisplay display;
     item->setImage(attr.value("image").toString());
@@ -184,7 +184,7 @@ ItemInfo *ItemDB::readItem(XmlReader &xml)
     QStringList effects;
 
     for (int i = 0; i < int(sizeof(fields) / sizeof(fields[0])); ++i) {
-        int value = attr.value(fields[i].tag).toString().toInt();
+        int value = attr.value(fields[i].tag).toInt();
         if (value)
             effects.append(fields[i].format.arg(value));
     }

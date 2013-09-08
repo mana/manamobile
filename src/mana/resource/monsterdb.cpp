@@ -74,7 +74,7 @@ void MonsterDB::fileReady()
 
         const QXmlStreamAttributes attr = xml.attributes();
 
-        const int id = attr.value("id").toString().toInt();
+        const int id = attr.value("id").toInt();
         const QString name = attr.value("name").toString();
 
         if (!id) {

@@ -71,7 +71,7 @@ void NpcDB::fileReady()
     while (xml.readNextStartElement()) {
         if (xml.name() == "npc") {
             const QXmlStreamAttributes atts = xml.attributes();
-            int id = atts.value("id").toString().toInt();
+            int id = atts.value("id").toInt();
 
             if (!id) {
                 qWarning() << "Bad NPC id at line " << xml.lineNumber();

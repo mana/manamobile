@@ -74,7 +74,7 @@ void AbilityDB::fileReady()
             xml.skipCurrentElement();
 
         const QXmlStreamAttributes atts = xml.attributes();
-        unsigned id = atts.value("id").toString().toInt();
+        unsigned id = atts.value("id").toInt();
         QString name = atts.value("name").toString();
         QString useAction = atts.value("useaction").toString();
 
