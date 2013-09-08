@@ -36,7 +36,7 @@ ChatClient::ChatClient(QObject *parent)
 void ChatClient::authenticate(const QString &token)
 {
     // Send in the security token
-    MessageOut msg(PCMSG_CONNECT);
+    MessageOut msg(Protocol::PCMSG_CONNECT);
     msg.writeString(token, 32);
     send(msg);
 }
@@ -44,10 +44,10 @@ void ChatClient::authenticate(const QString &token)
 void ChatClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
-    case CPMSG_CONNECT_RESPONSE:
+    case Protocol::CPMSG_CONNECT_RESPONSE:
         handleAuthenticationResponse(message);
         break;
-    case XXMSG_INVALID:
+    case Protocol::XXMSG_INVALID:
         qWarning() << "(ChatClient::messageReceived) Invalid received! "
                       "Did we send an invalid message?";
         break;

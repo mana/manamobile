@@ -54,7 +54,7 @@ AccountClient::~AccountClient()
 
 void AccountClient::requestRegistrationInfo()
 {
-    send(MessageOut(PAMSG_REQUEST_REGISTER_INFO));
+    send(MessageOut(Protocol::PAMSG_REQUEST_REGISTER_INFO));
 }
 
 static QByteArray passwordHash(const QString &username,
@@ -81,7 +81,7 @@ void AccountClient::registerAccount(const QString &username,
                                     const QString &email,
                                     const QString &captchaResponse)
 {
-    MessageOut registerMessage(PAMSG_REGISTER);
+    MessageOut registerMessage(Protocol::PAMSG_REGISTER);
     registerMessage.writeInt32(PROTOCOL_VERSION);
     registerMessage.writeString(username);
     registerMessage.writeString(passwordHash(username, password));
@@ -95,7 +95,7 @@ void AccountClient::registerAccount(const QString &username,
 void AccountClient::unregisterAccount(const QString &username,
                                       const QString &password)
 {
-    MessageOut unregisterMessage(PAMSG_UNREGISTER);
+    MessageOut unregisterMessage(Protocol::PAMSG_UNREGISTER);
     unregisterMessage.writeString(username);
     unregisterMessage.writeString(passwordHash(username, password));
     send(unregisterMessage);
@@ -104,7 +104,7 @@ void AccountClient::unregisterAccount(const QString &username,
 void AccountClient::login(const QString &username,
                           const QString &password)
 {
-    MessageOut saltMessage(PAMSG_LOGIN_RNDTRGR);
+    MessageOut saltMessage(Protocol::PAMSG_LOGIN_RNDTRGR);
     saltMessage.writeString(username);
 
     send(saltMessage);
@@ -117,7 +117,7 @@ void AccountClient::login(const QString &username,
                           const QString &password,
                           const QByteArray &salt)
 {
-    MessageOut loginMessage(PAMSG_LOGIN);
+    MessageOut loginMessage(Protocol::PAMSG_LOGIN);
     loginMessage.writeInt32(PROTOCOL_VERSION);
     loginMessage.writeString(username);
     loginMessage.writeString(passwordSaltedHash(username, password, salt));
@@ -150,7 +150,7 @@ void AccountClient::createCharacter(const QString &name,
     const int slot = nextFreeSlot(mCharacters, mMaxCharacters);
     SAFE_ASSERT(slot != -1, return)
 
-    MessageOut createMessage(PAMSG_CHAR_CREATE);
+    MessageOut createMessage(Protocol::PAMSG_CHAR_CREATE);
     createMessage.writeString(name);
     createMessage.writeInt8(hairStyle);
     createMessage.writeInt8(hairColor);
@@ -168,7 +168,7 @@ void AccountClient::deleteCharacter(int index)
 
     mDeleteIndex = index;
 
-    MessageOut m(PAMSG_CHAR_DELETE);
+    MessageOut m(Protocol::PAMSG_CHAR_DELETE);
     m.writeInt8(character->characterSlot());
     send(m);
 }
@@ -178,7 +178,7 @@ void AccountClient::chooseCharacter(int index)
     SAFE_ASSERT(index >= 0 && index < mCharacters.size(), return);
     const Character *character = mCharacters.at(index);
 
-    MessageOut m(PAMSG_CHAR_SELECT);
+    MessageOut m(Protocol::PAMSG_CHAR_SELECT);
     m.writeInt8(character->characterSlot());
     send(m);
 
@@ -187,7 +187,7 @@ void AccountClient::chooseCharacter(int index)
 
 void AccountClient::changeEmail(const QString &email)
 {
-    MessageOut msg(PAMSG_EMAIL_CHANGE);
+    MessageOut msg(Protocol::PAMSG_EMAIL_CHANGE);
     msg.writeString(email);
     send(msg);
 }
@@ -195,7 +195,7 @@ void AccountClient::changeEmail(const QString &email)
 void AccountClient::changePassword(const QString &oldPassword,
                                    const QString &newPassword)
 {
-    MessageOut msg(PAMSG_PASSWORD_CHANGE);
+    MessageOut msg(Protocol::PAMSG_PASSWORD_CHANGE);
     msg.writeString(passwordHash(mUsername, oldPassword));
     msg.writeString(passwordHash(mUsername, newPassword));
     send(msg);
@@ -204,40 +204,40 @@ void AccountClient::changePassword(const QString &oldPassword,
 void AccountClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
-    case APMSG_REGISTER_INFO_RESPONSE:
+    case Protocol::APMSG_REGISTER_INFO_RESPONSE:
         handleRegistrationInfo(message);
         break;
-    case APMSG_REGISTER_RESPONSE:
+    case Protocol::APMSG_REGISTER_RESPONSE:
         handleRegisterResponse(message);
         break;
-    case APMSG_UNREGISTER_RESPONSE:
+    case Protocol::APMSG_UNREGISTER_RESPONSE:
         handleUnregisterResponse(message);
         break;
-    case APMSG_LOGIN_RESPONSE:
+    case Protocol::APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
         break;
-    case APMSG_LOGIN_RNDTRGR_RESPONSE:
+    case Protocol::APMSG_LOGIN_RNDTRGR_RESPONSE:
         handleSaltResponse(message);
         break;
-    case APMSG_CHAR_CREATE_RESPONSE:
+    case Protocol::APMSG_CHAR_CREATE_RESPONSE:
         handleCharacterCreateResponse(message);
         break;
-    case APMSG_CHAR_DELETE_RESPONSE:
+    case Protocol::APMSG_CHAR_DELETE_RESPONSE:
         handleCharacterDeleteResponse(message);
         break;
-    case APMSG_CHAR_INFO:
+    case Protocol::APMSG_CHAR_INFO:
         handleCharacterInfo(message);
         break;
-    case APMSG_CHAR_SELECT_RESPONSE:
+    case Protocol::APMSG_CHAR_SELECT_RESPONSE:
         handleCharacterSelectResponse(message);
         break;
-    case APMSG_EMAIL_CHANGE_RESPONSE:
+    case Protocol::APMSG_EMAIL_CHANGE_RESPONSE:
         handleEmailChangeResponse(message);
         break;
-    case APMSG_PASSWORD_CHANGE_RESPONSE:
+    case Protocol::APMSG_PASSWORD_CHANGE_RESPONSE:
         handlePasswordChangeResponse(message);
         break;
-    case XXMSG_INVALID:
+    case Protocol::XXMSG_INVALID:
         qWarning() << "(AccountClient::messageReceived) Invalid received! "
                 "Did we send an invalid message?";
         break;

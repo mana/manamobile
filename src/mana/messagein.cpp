@@ -19,7 +19,7 @@
 
 #include "messagein.h"
 
-#include "messagenames.h"
+#include <QMetaEnum>
 
 #include <enet/enet.h>
 
@@ -52,8 +52,8 @@ MessageIn::MessageIn(const char *data, int length):
     mId = readInt16();
 
     // Read and clear the debug flag
-    mDebugMode = mId & XXMSG_DEBUG_FLAG;
-    mId &= ~XXMSG_DEBUG_FLAG;
+    mDebugMode = mId & Protocol::XXMSG_DEBUG_FLAG;
+    mId &= ~Protocol::XXMSG_DEBUG_FLAG;
 }
 
 int MessageIn::readInt8()
@@ -231,8 +231,16 @@ bool MessageIn::readValueType(ValueType type)
     return false;
 }
 
+static const char *messageName(unsigned short id)
+{
+    static const int index = Protocol::staticMetaObject.indexOfEnumerator("MessageIds");
+    static QMetaEnum enumerator = Protocol::staticMetaObject.enumerator(index);
+    return enumerator.valueToKey(id);
+}
+
 std::ostream &operator <<(std::ostream &os, const MessageIn &msg)
 {
+
     if (const char *name = messageName(msg.id()))
         os << name;
     else

@@ -47,7 +47,6 @@ SOURCES += \
     mana/manaplugin.cpp \
     mana/mapitem.cpp \
     mana/messagein.cpp \
-    mana/messagenames.cpp \
     mana/messageout.cpp \
     mana/monster.cpp \
     mana/npc.cpp \
@@ -107,7 +106,6 @@ HEADERS += \
     mana/manaplugin.h \
     mana/mapitem.h \
     mana/messagein.h \
-    mana/messagenames.h \
     mana/messageout.h \
     mana/monster.h \
     mana/npc.h \

@@ -103,14 +103,14 @@ void GameClient::setPlayerName(const QString &name)
 void GameClient::authenticate(const QString &token)
 {
     // Send in the security token
-    MessageOut msg(PGMSG_CONNECT);
+    MessageOut msg(Protocol::PGMSG_CONNECT);
     msg.writeString(token, 32);
     send(msg);
 }
 
 void GameClient::walkTo(int x, int y)
 {
-    MessageOut message(PGMSG_WALK);
+    MessageOut message(Protocol::PGMSG_WALK);
     message.writeInt16(x);
     message.writeInt16(y);
     send(message);
@@ -118,7 +118,7 @@ void GameClient::walkTo(int x, int y)
 
 void GameClient::say(const QString &text)
 {
-    MessageOut message(PGMSG_SAY);
+    MessageOut message(Protocol::PGMSG_SAY);
     message.writeString(text);
     send(message);
 }
@@ -130,7 +130,7 @@ void GameClient::talkToNpc(Being *being)
     mNpc = static_cast<NPC *>(being);
     emit npcChanged();
 
-    MessageOut message(PGMSG_NPC_TALK);
+    MessageOut message(Protocol::PGMSG_NPC_TALK);
     message.writeInt16(mNpc->id());
     send(message);
 }
@@ -139,7 +139,7 @@ void GameClient::nextNpcMessage()
 {
     SAFE_ASSERT(mNpcState == NpcAwaitNext && mNpc, return);
 
-    MessageOut message(PGMSG_NPC_TALK_NEXT);
+    MessageOut message(Protocol::PGMSG_NPC_TALK_NEXT);
     message.writeInt16(mNpc->id());
     send(message);
 }
@@ -148,7 +148,7 @@ void GameClient::chooseNpcOption(int choice)
 {
     SAFE_ASSERT(mNpcState == NpcAwaitChoice && mNpc, return);
 
-    MessageOut message(PGMSG_NPC_SELECT);
+    MessageOut message(Protocol::PGMSG_NPC_SELECT);
     message.writeInt16(mNpc->id());
     message.writeInt8(choice);
     send(message);
@@ -156,7 +156,7 @@ void GameClient::chooseNpcOption(int choice)
 
 void GameClient::useAbility(unsigned id, int x, int y)
 {
-    MessageOut message(PGMSG_USE_ABILITY_ON_POINT);
+    MessageOut message(Protocol::PGMSG_USE_ABILITY_ON_POINT);
     message.writeInt8(id);
     message.writeInt16(x);
     message.writeInt16(y);
@@ -165,14 +165,14 @@ void GameClient::useAbility(unsigned id, int x, int y)
 
 void GameClient::equip(unsigned slot)
 {
-    MessageOut message(PGMSG_EQUIP);
+    MessageOut message(Protocol::PGMSG_EQUIP);
     message.writeInt16(slot);
     send(message);
 }
 
 void GameClient::unequip(unsigned slot)
 {
-    MessageOut message(PGMSG_UNEQUIP);
+    MessageOut message(Protocol::PGMSG_UNEQUIP);
     message.writeInt16(slot);
     send(message);
 }
@@ -180,76 +180,76 @@ void GameClient::unequip(unsigned slot)
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
-    case GPMSG_CONNECT_RESPONSE:
+    case Protocol::GPMSG_CONNECT_RESPONSE:
         handleAuthenticationResponse(message);
         break;
-    case GPMSG_PLAYER_MAP_CHANGE:
+    case Protocol::GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
         break;
 
-    case GPMSG_INVENTORY:
+    case Protocol::GPMSG_INVENTORY:
         handleInventory(message);
         break;
-    case GPMSG_INVENTORY_FULL:
+    case Protocol::GPMSG_INVENTORY_FULL:
         handleInventoryFull(message);
         break;
-    case GPMSG_EQUIP:
+    case Protocol::GPMSG_EQUIP:
         handleEquip(message);
         break;
-    case GPMSG_UNEQUIP:
+    case Protocol::GPMSG_UNEQUIP:
         handleUnEquip(message);
         break;
 
-    case GPMSG_BEING_ENTER:
+    case Protocol::GPMSG_BEING_ENTER:
         handleBeingEnter(message);
         break;
-    case GPMSG_BEING_LEAVE:
+    case Protocol::GPMSG_BEING_LEAVE:
         handleBeingLeave(message);
         break;
-    case GPMSG_BEING_DIR_CHANGE:
+    case Protocol::GPMSG_BEING_DIR_CHANGE:
         handleBeingDirChange(message);
         break;
-    case GPMSG_BEINGS_MOVE:
+    case Protocol::GPMSG_BEINGS_MOVE:
         handleBeingsMove(message);
         break;
-    case GPMSG_BEING_LOOKS_CHANGE:
+    case Protocol::GPMSG_BEING_LOOKS_CHANGE:
         handleBeingLooksChange(message);
         break;
-    case GPMSG_BEING_ACTION_CHANGE:
+    case Protocol::GPMSG_BEING_ACTION_CHANGE:
         handleBeingActionChange(message);
         break;
-    case GPMSG_SAY:
+    case Protocol::GPMSG_SAY:
         handleBeingSay(message);
         break;
-    case GPMSG_BEING_ABILITY_POINT:
+    case Protocol::GPMSG_BEING_ABILITY_POINT:
         handleBeingAbilityOnPoint(message);
         break;
-    case GPMSG_BEING_ABILITY_BEING:
+    case Protocol::GPMSG_BEING_ABILITY_BEING:
         handleBeingAbilityOnBeing(message);
         break;
 
-    case GPMSG_NPC_MESSAGE:
+    case Protocol::GPMSG_NPC_MESSAGE:
         handleNpcMessage(message);
         break;
-    case GPMSG_NPC_CHOICE:
+    case Protocol::GPMSG_NPC_CHOICE:
         handleNpcChoice(message);
         break;
-    case GPMSG_NPC_CLOSE:
+    case Protocol::GPMSG_NPC_CLOSE:
         handleNpcClose(message);
         break;
 
-    case GPMSG_ABILITY_STATUS:
+    case Protocol::GPMSG_ABILITY_STATUS:
         handleAbilityStatus(message);
         break;
-    case GPMSG_ABILITY_REMOVED:
+    case Protocol::GPMSG_ABILITY_REMOVED:
         handleAbilityRemoved(message);
         break;
 
-    case GPMSG_PLAYER_ATTRIBUTE_CHANGE:
+    case Protocol::GPMSG_PLAYER_ATTRIBUTE_CHANGE:
         handlePlayerAttributeChange(message);
         break;
 
-    case XXMSG_INVALID:
+    case Protocol::XXMSG_INVALID:
         qWarning() << "(GameClient::messageReceived) Invalid received! "
                       "Did we send an invalid message?";
         break;

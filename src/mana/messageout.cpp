@@ -46,7 +46,7 @@ MessageOut::MessageOut(int id):
     mDataSize = INITIAL_DATA_CAPACITY;
 
     if (debugModeEnabled)
-        id |= XXMSG_DEBUG_FLAG;
+        id |= Protocol::XXMSG_DEBUG_FLAG;
 
     writeInt16(id);
     mDebugMode = debugModeEnabled;
