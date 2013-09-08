@@ -80,8 +80,8 @@ QPointF CollisionHelper::adjustMove(QPointF pos, QPointF distance, qreal radius)
             }
         }
     } else if (distance.x() < 0) {
-        const int currentTileX = qFloor(rect.left()) / tileWidth;
-        const int newTileX = qFloor(rect.left() + distance.x()) / tileWidth;
+        const int currentTileX = qFloor(rect.left() / tileWidth);
+        const int newTileX = qFloor((rect.left() + distance.x()) / tileWidth);
 
         if (currentTileX != newTileX) {
             reachedNewTileX = true;
@@ -110,8 +110,8 @@ QPointF CollisionHelper::adjustMove(QPointF pos, QPointF distance, qreal radius)
             }
         }
     } else if (distance.y() < 0) {
-        const int currentTileY = qFloor(qFloor(rect.top() / tileHeight));
-        const int newTileY = qFloor(rect.top() + distance.y()) / tileHeight;
+        const int currentTileY = qFloor(rect.top() / tileHeight);
+        const int newTileY = qFloor((rect.top() + distance.y()) / tileHeight);
 
         if (currentTileY != newTileY) {
             reachedNewTileY = true;
