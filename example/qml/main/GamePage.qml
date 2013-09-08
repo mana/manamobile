@@ -35,7 +35,7 @@ Item {
                 onClicked: {
                     var ability = actionBar.selectedAbility();
                     var mapPos = viewport.toMapPos(mouse.x, mouse.y);
-                    gameClient.useAbility(ability, mapPos.x, mapPos.y);
+                    gameClient.useAbilityOnPoint(ability, mapPos.x, mapPos.y);
 
                     actionBar.reset();
                 }
