@@ -31,7 +31,6 @@ ItemInstance::ItemInstance(unsigned slot, unsigned id,
     , mAmount(amount)
     , mEquipmentSlot(equipmentSlot)
 {
-    qDebug() << Q_FUNC_INFO << id;
 }
 
 void ItemInstance::setAmount(unsigned newAmount)
@@ -134,7 +133,6 @@ void InventoryListModel::unequip(unsigned slot)
 void InventoryListModel::addItem(unsigned slot, unsigned id,
                                  unsigned amount, unsigned equipmentSlot)
 {
-    qDebug() << Q_FUNC_INFO << slot << id << amount << equipmentSlot;
     beginInsertRows(QModelIndex(), mItems.size(), mItems.size());
     mItems.append(new ItemInstance(slot, id, amount, equipmentSlot, this));
     endInsertRows();
