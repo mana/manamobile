@@ -158,6 +158,7 @@ private:
     void handleBeingSay(MessageIn &message);
     void handleBeingAbilityOnPoint(MessageIn &message);
     void handleBeingAbilityOnBeing(MessageIn &message);
+    void handleBeingAbilityOnDirection(MessageIn &message);
 
     void handleNpcMessage(MessageIn &message);
     void handleNpcClose(MessageIn &message);

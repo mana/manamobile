@@ -235,6 +235,10 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_BEING_ABILITY_BEING:
         handleBeingAbilityOnBeing(message);
         break;
+    case Protocol::GPMSG_BEING_ABILITY_DIRECTION:
+        handleBeingAbilityOnDirection(message);
+        break;
+
 
     case Protocol::GPMSG_NPC_MESSAGE:
         handleNpcMessage(message);
@@ -624,8 +628,6 @@ void GameClient::handleBeingAbilityOnPoint(MessageIn &message)
 
     Being *being = mBeingListModel->beingById(id);
 
-    qDebug() << Q_FUNC_INFO << abilityId << x << y;
-
     if (being) {
         being->lookAt(QPointF(x, y));
         const AbilityInfo *abilityInfo =
@@ -648,10 +650,29 @@ void GameClient::handleBeingAbilityOnBeing(MessageIn &message)
     Being *being = mBeingListModel->beingById(id);
     Being *otherBeing = mBeingListModel->beingById(otherBeingId);
 
-    qDebug() << Q_FUNC_INFO << abilityId << id << otherBeingId;
-
     if (being && otherBeing) {
         being->lookAt(otherBeing->position());
+        const AbilityInfo *abilityInfo =
+                AbilityDB::instance()->getInfo(abilityId);
+        if (!abilityInfo) {
+            qWarning() << Q_FUNC_INFO << "The server sent unknown ability"
+                       << " as being used. Mismatching world data?";
+            return;
+        }
+        being->setAction(abilityInfo->useAction());
+    }
+}
+
+void GameClient::handleBeingAbilityOnDirection(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const int abilityId = message.readInt8();
+    BeingDirection direction = (BeingDirection)message.readInt8();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    if (being) {
+        being->setDirection(direction);
         const AbilityInfo *abilityInfo =
                 AbilityDB::instance()->getInfo(abilityId);
         if (!abilityInfo) {
