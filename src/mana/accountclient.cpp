@@ -364,6 +364,18 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     character->setGender(gender);
     character->setHairStyle(hairStyle, hairColor);
 
+    int numberOfItems = message.readInt8();
+
+    QMap<int, int> equipment;
+
+    while (numberOfItems--) {
+        int slot = message.readInt16();
+        int itemId = message.readInt16();
+        equipment[slot] = itemId;
+    }
+
+    character->setEquipmentSlots(equipment);
+
     while (message.unreadData()) {
         const unsigned id = message.readInt32();
 
