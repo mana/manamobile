@@ -41,15 +41,6 @@ Item {
                 }
             }
 
-            NpcDialog {
-                id: npcDialog;
-                width: Math.max(parent.width / 2, Math.min(300, parent.width - 20));
-                height: 100;
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom;
-                anchors.bottomMargin: 5;
-            }
-
             ChatLog {
                 anchors.top: parent.verticalCenter
                 anchors.left: parent.left
@@ -58,6 +49,15 @@ Item {
                 anchors.leftMargin: 20
                 anchors.rightMargin: 20
                 anchors.bottomMargin: 10
+            }
+
+            NpcDialog {
+                id: npcDialog;
+                width: Math.max(parent.width / 2, Math.min(300, parent.width - 20));
+                height: 100;
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom;
+                anchors.bottomMargin: 5;
             }
         }
     }
