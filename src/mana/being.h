@@ -43,8 +43,8 @@ class Being : public QObject
 
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(int type READ type CONSTANT)
-    Q_PROPERTY(int x READ x NOTIFY positionChanged)
-    Q_PROPERTY(int y READ y NOTIFY positionChanged)
+    Q_PROPERTY(qreal x READ x NOTIFY positionChanged)
+    Q_PROPERTY(qreal y READ y NOTIFY positionChanged)
     Q_PROPERTY(int direction READ direction NOTIFY directionChanged)
     Q_PROPERTY(int spriteDirection READ spriteDirection NOTIFY directionChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -80,8 +80,8 @@ public:
     int id() const { return mId; }
     void setId(int value) { mId = value; }
 
-    int x() const { return mPosition.x(); }
-    int y() const { return mPosition.y(); }
+    qreal x() const { return mPosition.x(); }
+    qreal y() const { return mPosition.y(); }
 
     BeingDirection direction() const { return mDirection; }
     Action::SpriteDirection spriteDirection() const;
