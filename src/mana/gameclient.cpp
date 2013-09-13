@@ -757,9 +757,8 @@ void GameClient::handleInventory(MessageIn &message)
         unsigned slot = message.readInt16();
         int id = message.readInt16(); // 0 id means removal of slot
         unsigned amount = id ? message.readInt16() : 0;
-        unsigned equipmentSlot = id ? message.readInt16() : 0;
 
-        mInventoryListModel->setItemSlot(slot, id, amount, equipmentSlot);
+        mInventoryListModel->setItemSlot(slot, id, amount, 0);
     }
 }
 
