@@ -19,7 +19,6 @@
 #include "abilitylistmodel.h"
 
 #include <QTimerEvent>
-#include <QDebug>
 
 using namespace Mana;
 

@@ -107,7 +107,6 @@ void ItemDB::unload()
 
 ItemInfo *ItemDB::getInfo(int id) const
 {
-    qDebug() << id << mItems.value(id);
     return mItems.value(id);
 }
 
