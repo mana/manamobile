@@ -50,6 +50,7 @@ SOURCES += \
     mana/messageout.cpp \
     mana/monster.cpp \
     mana/npc.cpp \
+    mana/questloglistmodel.cpp \
     mana/resource/abilitydb.cpp \
     mana/resource/action.cpp \
     mana/resource/animation.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     mana/monster.h \
     mana/npc.h \
     mana/protocol.h \
+    mana/questloglistmodel.h \
     mana/resource/abilitydb.h \
     mana/resource/action.h \
     mana/resource/animation.h \

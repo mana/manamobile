@@ -27,10 +27,8 @@ Item {
         Repeater {
             model: gameClient.abilityListModel;
 
-            Button {
+            ScrollImageButton {
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
-                width: 32;
-                height: 32;
                 scale: selectedAbilityId === model.ability.id ? 1.5 : 1;
                 onClicked: {
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
@@ -42,10 +40,8 @@ Item {
                             selectedAbilityId = model.ability.id;
                     }
                 }
-                Image {
-                    anchors.fill: parent;
-                    source: resourceManager.dataUrl + "/" + abilityInfo.icon;
-                }
+
+                imagePath: resourceManager.dataUrl + "/" + abilityInfo.icon;
             }
         }
     }

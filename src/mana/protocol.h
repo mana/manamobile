@@ -256,8 +256,11 @@ public:
         PCMSG_USER_MODE                   = 0x0465, // W channel id, S name, B mode
         PCMSG_KICK_USER                   = 0x0466, // W channel id, S name
 
+        // -- Questlog
+        GPMSG_QUESTLOG_STATUS       = 0x0470, // W quest id, B flags, [B status], [S questname], [S questdescription]
+
         // Inter-server
-        GAMSG_REGISTER              = 0x0500, // S address, W port, S password, D items db revision, { W map id }*
+        GAMSG_REGISTER              = 0x0500, // S address, W port, S password, D items db revision
         AGMSG_REGISTER_RESPONSE     = 0x0501, // W item version, W password response, { S globalvar_key, S globalvar_value }
         AGMSG_ACTIVE_MAP            = 0x0502, // W map id, W Number of mapvar_key mapvar_value sent, { S mapvar_key, S mapvar_value }, W Number of map items, { D item Id, W amount, W posX, W posY }
         AGMSG_PLAYER_ENTER          = 0x0510, // B*32 token, D id, S name, serialised character data
@@ -418,6 +421,13 @@ enum {
     GUILD_EVENT_LEAVING_PLAYER,
     GUILD_EVENT_ONLINE_PLAYER,
     GUILD_EVENT_OFFLINE_PLAYER
+};
+
+enum {
+    QUESTLOG_UPDATE_STATE = 1,
+    QUESTLOG_UPDATE_TITLE = 2,
+    QUESTLOG_UPDATE_DESCRIPTION = 4,
+    QUESTLOG_SHOW_NOTIFICATION = 8
 };
 
 /**

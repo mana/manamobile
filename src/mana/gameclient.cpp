@@ -32,6 +32,7 @@
 #include "npc.h"
 #include "protocol.h"
 #include "resourcemanager.h"
+#include "questloglistmodel.h"
 
 #include "resource/abilitydb.h"
 #include "resource/mapresource.h"
@@ -56,6 +57,7 @@ GameClient::GameClient(QObject *parent)
     , mBeingListModel(new BeingListModel(this))
     , mInventoryListModel(new InventoryListModel(this))
     , mLogicDriver(new LogicDriver(this))
+    , mQuestlogListModel(new QuestlogListModel(this))
 {
     QObject::connect(mLogicDriver, SIGNAL(update(qreal)),
                      this, SLOT(update(qreal)));
@@ -259,6 +261,10 @@ void GameClient::messageReceived(MessageIn &message)
 
     case Protocol::GPMSG_PLAYER_ATTRIBUTE_CHANGE:
         handlePlayerAttributeChange(message);
+        break;
+
+    case Protocol::GPMSG_QUESTLOG_STATUS:
+        handleQuestlog(message);
         break;
 
     case Protocol::XXMSG_INVALID:
@@ -785,5 +791,17 @@ void GameClient::handleUnEquip(MessageIn &message)
     mInventoryListModel->unequip(slot);
 }
 
+void GameClient::handleQuestlog(MessageIn &message)
+{
+    int id = message.readInt16();
+    int flags = message.readInt8();
+    Quest *quest = questlogListModel()->createOrGetQuest(id);
+    if (flags | QUESTLOG_UPDATE_STATE)
+        quest->setState((Quest::State)message.readInt8());
+    if (flags | QUESTLOG_UPDATE_TITLE)
+        quest->setTitle(message.readString());
+    if (flags | QUESTLOG_UPDATE_DESCRIPTION)
+        quest->setDescription(message.readString());
+}
 
 } // namespace Mana

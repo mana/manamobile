@@ -34,6 +34,7 @@
 #include "settings.h"
 #include "spriteitem.h"
 #include "spritelistmodel.h"
+#include "questloglistmodel.h"
 
 #include "resource/abilitydb.h"
 #include "resource/attributedb.h"
@@ -117,6 +118,10 @@ void ManaPlugin::registerTypes(const char *uri)
                                                "Base of all resources");
     qmlRegisterType<Mana::MapResource>();
     qmlRegisterType<Mana::ResourceListModel>();
+
+    qmlRegisterUncreatableType<Mana::Quest>(uri, 1, 0, "Quest",
+                                            "Managed on C++ side");
+    qmlRegisterType<Mana::QuestlogListModel>();
 
     qmlRegisterType<Mana::Ability>();
     qmlRegisterType<Mana::AbilityDB>();

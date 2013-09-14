@@ -36,6 +36,7 @@ class InventoryListModel;
 class LogicDriver;
 class MapResource;
 class NPC;
+class QuestlogListModel;
 
 /**
  * The game client allows interacting with the game server.
@@ -66,6 +67,7 @@ class GameClient : public ENetClient
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
     Q_PROPERTY(Mana::InventoryListModel *inventoryListModel READ inventoryListModel CONSTANT)
+    Q_PROPERTY(Mana::QuestlogListModel *questlogListModel READ questlogListModel CONSTANT)
 
     Q_ENUMS(NpcState)
 
@@ -114,6 +116,7 @@ public:
     AttributeListModel *attributeListModel() const;
     BeingListModel *beingListModel() const;
     InventoryListModel *inventoryListModel() const;
+    QuestlogListModel *questlogListModel() const;
 
     Q_INVOKABLE void equip(unsigned slot);
     Q_INVOKABLE void unequip(unsigned slot);
@@ -176,6 +179,8 @@ private:
     void handleEquip(MessageIn &message);
     void handleUnEquip(MessageIn &message);
 
+    void handleQuestlog(MessageIn &message);
+
     bool mAuthenticated;
     QString mCurrentMap;
     MapResource *mMapResource;
@@ -196,6 +201,7 @@ private:
     BeingListModel *mBeingListModel;
     InventoryListModel *mInventoryListModel;
     LogicDriver *mLogicDriver;
+    QuestlogListModel *mQuestlogListModel;
 };
 
 
@@ -216,6 +222,11 @@ inline BeingListModel *GameClient::beingListModel() const
 inline InventoryListModel *GameClient::inventoryListModel() const
 {
     return mInventoryListModel;
+}
+
+inline QuestlogListModel *GameClient::questlogListModel() const
+{
+    return mQuestlogListModel;
 }
 
 } // namespace Mana

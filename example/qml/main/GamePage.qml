@@ -118,8 +118,11 @@ Item {
         if (pressed && event.key === Qt.Key_C)
             statusPage.toggle();
 
-        if (pressed && event.key == Qt.Key_I)
+        if (pressed && event.key === Qt.Key_I)
             inventoryPage.toggle();
+
+        if (pressed && event.key === Qt.Key_Q)
+            questPage.toggle();
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
@@ -128,6 +131,8 @@ Item {
     StatusPage { id: statusPage; }
 
     InventoryPage { id: inventoryPage; }
+
+    QuestPage { id: questPage; }
 
     Joystick {
         id: joystick;
