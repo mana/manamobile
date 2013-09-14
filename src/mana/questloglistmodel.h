@@ -102,38 +102,14 @@ inline Quest::State Quest::state() const
     return mState;
 }
 
-inline void Quest::setState(Quest::State state)
-{
-    if (mState != state) {
-        mState = state;
-        emit stateChanged();
-    }
-}
-
 inline const QString &Quest::title() const
 {
     return mTitle;
 }
 
-inline void Quest::setTitle(const QString &value)
-{
-    if (mTitle != value) {
-        mTitle = value;
-        emit titleChanged();
-    }
-}
-
 inline const QString &Quest::description() const
 {
     return mDescription;
-}
-
-inline void Quest::setDescription(const QString &value)
-{
-    if (mDescription != value) {
-        mDescription = value;
-        emit descriptionChanged();
-    }
 }
 
 }
