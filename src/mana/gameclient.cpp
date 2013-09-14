@@ -433,11 +433,7 @@ static void handleLooks(Character *ch, MessageIn &message)
 {
     handleHair(ch, message);
 
-    if (!message.unreadData())
-        return;
-
     int numberOfChanges = message.readInt8();
-
     QMap<int, int> equippedSlots;
 
     while (numberOfChanges-- > 0) {
