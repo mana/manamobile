@@ -5,17 +5,17 @@ import Mana 1.0
 Item {
     id: actionBar;
 
-    property int selectedButton: -1;
+    property int selectedAbilityId: -1;
 
     function selectedAbility() {
-        if (selectedButton != -1)
-            return selectedButton;
+        if (selectedAbilityId != -1)
+            return selectedAbilityId;
 
         return false;
     }
 
     function reset() {
-        selectedButton = -1;
+        selectedAbilityId = -1;
     }
 
     width: gameClient.abilityListModel.count * (64 + 10);
@@ -31,15 +31,15 @@ Item {
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
                 width: 32;
                 height: 32;
-                scale: selectedButton === model.ability.id ? 1.5 : 1;
+                scale: selectedAbilityId === model.ability.id ? 1.5 : 1;
                 onClicked: {
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
                         gameClient.useAbilityOnDirection(model.ability.id);
                     } else {
-                        if (selectedButton === model.ability.id)
-                            selectedButton = -1;
+                        if (selectedAbilityId === model.ability.id)
+                            selectedAbilityId = -1;
                         else
-                            selectedButton = model.ability.id;
+                            selectedAbilityId = model.ability.id;
                     }
                 }
                 Image {
