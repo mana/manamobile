@@ -3,11 +3,13 @@ import QtQuick.Controls 1.0
 import Mana 1.0
 
 Item {
+    id: actionBar;
+
     property int selectedButton: -1;
 
     function selectedAbility() {
         if (selectedButton != -1)
-            return selectedButton + 1;
+            return selectedButton;
 
         return false;
     }
@@ -16,27 +18,28 @@ Item {
         selectedButton = -1;
     }
 
-    width: 32 * 10 + 9 * 10;
+    width: gameClient.abilityListModel.count * (64 + 10);
     height: 32;
 
     Row {
         spacing: 10;
 
         Repeater {
-            model: 10
+            model: gameClient.abilityListModel;
+
             Button {
-                width: 32;
-                text: "A" + (model.index + 1);
+                property variant abilityInfo: abilityDB.getInfo(model.ability.id);
+                width: 64;
+                text: abilityInfo.name
                 scale: selectedButton === model.index ? 1.5 : 1;
                 onClicked: {
-                    var abilityInfo = abilityDB.getInfo(model.index + 1);
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
-                        gameClient.useAbilityOnDirection(model.index + 1);
+                        gameClient.useAbilityOnDirection(model.ability.id);
                     } else {
-                        if (selectedButton === model.index)
+                        if (selectedButton === model.ability.id)
                             selectedButton = -1;
                         else
-                            selectedButton = model.index;
+                            selectedButton = model.ability.id;
                     }
                 }
             }

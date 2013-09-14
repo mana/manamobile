@@ -19,6 +19,7 @@
 
 #include "manaplugin.h"
 
+#include "abilitylistmodel.h"
 #include "accountclient.h"
 #include "attributelistmodel.h"
 #include "beinglistmodel.h"
@@ -103,6 +104,8 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::SpriteListModel>();
     qmlRegisterType<const Mana::SpriteReference>();
 
+    qmlRegisterType<Mana::AbilityListModel>();
+
     qmlRegisterType<Mana::AttributeListModel>();
     qmlRegisterType<Mana::AttributeInfo>();
     qmlRegisterType<Mana::AttributeValue>();
@@ -115,6 +118,7 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::MapResource>();
     qmlRegisterType<Mana::ResourceListModel>();
 
+    qmlRegisterType<Mana::Ability>();
     qmlRegisterType<Mana::AbilityDB>();
     qmlRegisterUncreatableType<Mana::AbilityInfo>(uri, 1, 0, "AbilityInfo",
                                                   "Managed on C++ side");

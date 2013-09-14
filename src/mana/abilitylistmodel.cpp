@@ -44,7 +44,12 @@ AbilityListModel::AbilityListModel(QObject *parent):
 
 int AbilityListModel::rowCount(const QModelIndex &parent) const
 {
-    return parent.isValid() ? 0 : mAbilitiesList.size();
+    return parent.isValid() ? 0 : count();
+}
+
+int AbilityListModel::count() const
+{
+    return mAbilities.size();
 }
 
 QVariant AbilityListModel::data(const QModelIndex &index, int role) const
@@ -78,6 +83,7 @@ void AbilityListModel::setAbilityStatus(unsigned id,
         mAbilities[id] = ability;
         mAbilitiesList.append(ability);
         endInsertRows();
+        emit countChanged();
     }
 }
 
@@ -92,6 +98,7 @@ void AbilityListModel::takeAbility(unsigned id)
     mAbilities.remove(id);
     delete mAbilitiesList.takeAt(index);
     endRemoveRows();
+    emit countChanged();
 }
 
 void AbilityListModel::timerEvent(QTimerEvent *event)
