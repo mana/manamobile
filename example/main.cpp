@@ -63,6 +63,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    customServer = "87.250.159.246";
+
     QQmlContext* context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("customServer", customServer);

@@ -63,6 +63,12 @@ Item {
 
             StatusPage { id: statusPage; }
             InventoryPage { id: inventoryPage; }
+
+            ActionBar {
+                id: actionBar;
+                anchors.bottom: parent.bottom;
+                anchors.right: parent.right;
+            }
         }
     }
 
@@ -197,12 +203,6 @@ Item {
             onClicked: chatBar.sayText();
             KeyNavigation.left: chatInput;
         }
-    }
-
-    ActionBar {
-        id: actionBar;
-        anchors.bottom: parent.bottom;
-        anchors.right: parent.right;
     }
 
     states: [

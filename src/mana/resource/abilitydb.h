@@ -71,6 +71,8 @@ class AbilityDB : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool isLoaded READ isLoaded NOTIFY abilitiesChanged)
+
 public:
     AbilityDB(QObject *parent);
 

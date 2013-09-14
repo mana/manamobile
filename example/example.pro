@@ -38,4 +38,5 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/src/org/kde/necessitas/ministro/IMinistro.aidl \
     android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
-    android/src/org/qtproject/qt5/android/bindings/QtActivity.java
+    android/src/org/qtproject/qt5/android/bindings/QtActivity.java \
+    qml/main/ImageButton.qml

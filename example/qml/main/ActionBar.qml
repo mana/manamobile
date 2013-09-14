@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
 import Mana 1.0
 
 Item {
@@ -18,16 +17,18 @@ Item {
         selectedAbilityId = -1;
     }
 
-    width: gameClient.abilityListModel.count * (64 + 10);
-    height: 32;
+    width: repeater.count * 64;
 
     Row {
         spacing: 10;
 
-        Repeater {
-            model: gameClient.abilityListModel;
+        anchors.bottom: parent.bottom;
 
-            ScrollImageButton {
+        Repeater {
+            id: repeater;
+            model: abilityDB.isLoaded ? gameClient.abilityListModel : 0;
+
+            ImageButton {
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
                 scale: selectedAbilityId === model.ability.id ? 1.5 : 1;
                 onClicked: {

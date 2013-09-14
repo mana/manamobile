@@ -44,12 +44,7 @@ AbilityListModel::AbilityListModel(QObject *parent):
 
 int AbilityListModel::rowCount(const QModelIndex &parent) const
 {
-    return parent.isValid() ? 0 : count();
-}
-
-int AbilityListModel::count() const
-{
-    return mAbilities.size();
+    return parent.isValid() ? 0 : mAbilitiesList.size();
 }
 
 QVariant AbilityListModel::data(const QModelIndex &index, int role) const

@@ -50,8 +50,6 @@ class AbilityListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
-
 public:
     enum SpriteRoles {
         AbilityRole = Qt::UserRole
@@ -60,7 +58,6 @@ public:
     explicit AbilityListModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent) const;
-    int count() const;
 
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
