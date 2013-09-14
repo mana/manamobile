@@ -193,7 +193,6 @@ Image {
         State {
             name: "game"
             when: chatClient.authenticated && gameClient.authenticated
-            extend: "chooseCharacter"
             StateChangeScript {
                 script: gotoPage(gamePage);
             }

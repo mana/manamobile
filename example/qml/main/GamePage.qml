@@ -12,8 +12,8 @@ Item {
 
     Item {
         anchors.top: parent.top;
-        anchors.left: statusPage.right;
-        anchors.right: inventoryPage.left;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
         anchors.bottom: parent.bottom;
 
         Viewport {
@@ -22,6 +22,7 @@ Item {
             height: parent.height / scale;
             scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
             transformOrigin: Item.TopLeft;
+            centerX: (statusPage.x + statusPage.width + inventoryPage.x) / 2;
 
             HealthBar {
                 y: 5;
@@ -59,6 +60,9 @@ Item {
                 anchors.bottom: parent.bottom;
                 anchors.bottomMargin: 5;
             }
+
+            StatusPage { id: statusPage; }
+            InventoryPage { id: inventoryPage; }
         }
     }
 
@@ -127,10 +131,6 @@ Item {
 
     Keys.onReleased: handleKeyEvent(event, false);
     Keys.onPressed: handleKeyEvent(event, true);
-
-    StatusPage { id: statusPage; }
-
-    InventoryPage { id: inventoryPage; }
 
     QuestPage { id: questPage; }
 
