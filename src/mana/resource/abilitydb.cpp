@@ -89,6 +89,7 @@ void AbilityDB::fileReady()
         unsigned id = atts.value("id").toInt();
         QString name = atts.value("name").toString();
         QString useAction = atts.value("useaction").toString();
+        QString iconPath = atts.value("icon").toString();
 
         QString targetAsString = atts.value("target").toString();
         AbilityInfo::AbilityTargetType targetType =targetTypeFromString(
@@ -112,6 +113,7 @@ void AbilityDB::fileReady()
         info->setName(name);
         info->setTargetType(targetType);
         info->setUseAction(useAction);
+        info->setIcon(iconPath);
 
         xml.skipCurrentElement();
 

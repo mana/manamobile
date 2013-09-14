@@ -29,9 +29,9 @@ Item {
 
             Button {
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
-                width: 64;
-                text: abilityInfo.name
-                scale: selectedButton === model.index ? 1.5 : 1;
+                width: 32;
+                height: 32;
+                scale: selectedButton === model.ability.id ? 1.5 : 1;
                 onClicked: {
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
                         gameClient.useAbilityOnDirection(model.ability.id);
@@ -41,6 +41,10 @@ Item {
                         else
                             selectedButton = model.ability.id;
                     }
+                }
+                Image {
+                    anchors.fill: parent;
+                    source: resourceManager.dataUrl + "/" + abilityInfo.icon;
                 }
             }
         }

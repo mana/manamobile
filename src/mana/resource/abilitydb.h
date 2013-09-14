@@ -32,6 +32,7 @@ class AbilityInfo : public QObject
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(AbilityTargetType targetType READ targetType CONSTANT)
     Q_PROPERTY(QString useAction READ useAction CONSTANT)
+    Q_PROPERTY(QString icon READ icon CONSTANT)
 
     Q_ENUMS(AbilityTargetType)
 
@@ -55,11 +56,15 @@ public:
     const QString &useAction() const;
     void setUseAction(const QString &actionName);
 
+    const QString &icon() const;
+    void setIcon(const QString &iconPath);
+
 private:
     int mId;
     QString mName;
     AbilityTargetType mTargetType;
     QString mUseAction;
+    QString mIcon;
 };
 
 class AbilityDB : public QObject
@@ -138,6 +143,16 @@ inline const QString &AbilityInfo::useAction() const
 inline void AbilityInfo::setUseAction(const QString &actionName)
 {
     mUseAction = actionName;
+}
+
+inline const QString &AbilityInfo::icon() const
+{
+    return mIcon;
+}
+
+inline void AbilityInfo::setIcon(const QString &iconPath)
+{
+    mIcon = iconPath;
 }
 
 } // namespace Mana
