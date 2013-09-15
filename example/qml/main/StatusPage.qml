@@ -3,6 +3,38 @@ import QtQuick 2.0
 Item {
     id: statusPanel;
 
+    Image {
+        id: tab
+        source: "images/tab.png"
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.right
+        anchors.leftMargin: -3
+        smooth: false
+    }
+    Image {
+        source: "images/tab_icon_character.png"
+        anchors.centerIn: tab
+        smooth: false
+    }
+    MouseArea {
+        id: handle;
+
+        anchors.fill: tab
+        anchors.margins: -5
+
+        drag.target: statusPanel;
+        drag.axis: Drag.XAxis;
+        drag.minimumX: -statusPanel.width;
+        drag.maximumX: 0;
+
+        onClicked: toggle();
+        onReleased: {
+            var open = -statusPanel.x < statusPanel.width / 2;
+            statusPanel.x = open ? 0 : -statusPanel.width;
+            statusPanel.state = open ? "open" : "closed";
+        }
+    }
+
     BorderImage {
         anchors.fill: parent
         anchors.leftMargin: -33;
@@ -28,18 +60,22 @@ Item {
 
     Item {
         id: contents
+
         anchors.fill: parent
         anchors.topMargin: 12
         anchors.bottomMargin: 7
         anchors.rightMargin: 25
+
         clip: true
 
         ListView {
             anchors.fill: parent;
-            leftMargin: 5
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+
             topMargin: 5
             bottomMargin: 5
-            rightMargin: 5
+
             model: attributeDB.isLoaded ? gameClient.attributeListModel : null;
             delegate: Item {
                 anchors.left: parent.left;
@@ -61,41 +97,9 @@ Item {
                     color: diff > 0 ? "green" : "red";
                     font.pixelSize: 12
                     anchors.left: parent.right;
-                    anchors.leftMargin: -100;
+                    anchors.leftMargin: -50;
                 }
             }
-        }
-    }
-
-    Image {
-        id: tab
-        source: "images/tab_right.png"
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.right
-        smooth: false
-    }
-    Image {
-        source: "images/tab_icon_character.png"
-        anchors.centerIn: tab
-        anchors.horizontalCenterOffset: -1
-        smooth: false
-    }
-
-    MouseArea {
-        id: handle;
-
-        anchors.fill: tab
-
-        drag.target: statusPanel;
-        drag.axis: Drag.XAxis;
-        drag.minimumX: -statusPanel.width;
-        drag.maximumX: 0;
-
-        onClicked: toggle();
-        onReleased: {
-            var open = -statusPanel.x < statusPanel.width / 2;
-            statusPanel.x = open ? 0 : -statusPanel.width;
-            statusPanel.state = open ? "open" : "closed";
         }
     }
 

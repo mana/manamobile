@@ -3,9 +3,42 @@ import QtQuick 2.0
 Item {
     id: inventoryPanel;
 
+    Image {
+        id: tab
+        source: "images/tab.png"
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.left
+        anchors.rightMargin: -3
+        smooth: false
+    }
+    Image {
+        source: "images/tab_icon_inventory.png"
+        anchors.centerIn: tab
+        smooth: false
+    }
+    MouseArea {
+        id: handle;
+
+        anchors.fill: tab
+        anchors.margins: -5
+
+        drag.target: inventoryPanel;
+        drag.axis: Drag.XAxis;
+        drag.minimumX: inventoryPanel.parent.width - inventoryPanel.width;
+        drag.maximumX: inventoryPanel.parent.width;
+
+        onClicked: toggle();
+        onReleased: {
+            var open = inventoryPanel.x < inventoryPanel.parent.width - inventoryPanel.width / 2;
+            inventoryPanel.x = open ? inventoryPanel.parent.width - inventoryPanel.width
+                                    : inventoryPanel.parent.width;
+            inventoryPanel.state = open ? "open" : "closed";
+        }
+    }
+
     BorderImage {
         anchors.fill: parent
-        anchors.leftMargin: -22;
+        anchors.leftMargin: -1
         anchors.rightMargin: -33;
 
         source: "images/scroll_medium_horizontal.png"
@@ -28,27 +61,29 @@ Item {
 
     Item {
         id: contents
+
         anchors.fill: parent
         anchors.topMargin: 12
         anchors.bottomMargin: 7
-        anchors.leftMargin: 9
-        anchors.rightMargin: 5
+        anchors.leftMargin: 25
+
         clip: true
 
         ListView {
             anchors.fill: parent;
-            leftMargin: 5
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+
             topMargin: 5
             bottomMargin: 5
-            rightMargin: 5
 
             id: inventoryList;
 
-            width: window.width;
-            height: window.height;
             model: itemDB.isLoaded ? gameClient.inventoryListModel : null;
             delegate: Item {
                 id: itemInfo;
+                anchors.left: parent.left
+                anchors.right: parent.right
                 property variant info: itemDB.getInfo(model.item.id);
 
                 height: 30;
@@ -80,14 +115,13 @@ Item {
                 }
 
                 MouseArea {
-                    height: 30;
-                    width: 100;
+                    anchors.fill: parent
 
-                    onDoubleClicked: {
-                        if (model.item.equipmentSlot == 0)
-                            gameClient.equip(model.item.slot);
-                        else
+                    onClicked: {
+                        if (model.item.isEquipped)
                             gameClient.unequip(model.item.slot);
+                        else
+                            gameClient.equip(model.item.slot);
                     }
                 }
             }
@@ -95,7 +129,8 @@ Item {
             highlight: Rectangle {
                 color: "black";
                 opacity: 0.2;
-                width: inventoryList.width;
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
 
             onCountChanged: {
@@ -103,37 +138,6 @@ Item {
                 if (currentIndex == -1 && count > 0)
                     currentIndex = 0;
             }
-        }
-    }
-
-    MouseArea {
-        id: handle;
-
-        width: 20;
-        anchors.top: parent.top;
-        anchors.bottom: parent.bottom;
-        anchors.right: parent.left;
-
-        drag.target: inventoryPanel;
-        drag.axis: Drag.XAxis;
-        drag.minimumX: inventoryPanel.parent.width - inventoryPanel.width;
-        drag.maximumX: inventoryPanel.parent.width;
-
-        onClicked: toggle();
-        onReleased: {
-            var open = inventoryPanel.x < inventoryPanel.parent.width - inventoryPanel.width / 2;
-            inventoryPanel.x = open ? inventoryPanel.parent.width - inventoryPanel.width
-                                    : inventoryPanel.parent.width;
-            inventoryPanel.state = open ? "open" : "closed";
-        }
-
-        Text {
-            text: qsTr("Inventory");
-            color: "#3f2b25";
-            rotation: -90;
-            font.bold: true;
-            font.pixelSize: 12
-            anchors.centerIn: parent;
         }
     }
 
