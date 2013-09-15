@@ -83,6 +83,7 @@ void ManaPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
 void ManaPlugin::registerTypes(const char *uri)
 {
+    // @uri Mana
     Q_ASSERT(uri == QLatin1String("Mana"));
 
     qmlRegisterUncreatableType<Mana::ENetClient>(uri, 1, 0, "ENetClient",
