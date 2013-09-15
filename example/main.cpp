@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     QStringList arguments = app.arguments();
 
     QString customServerListPath;
-    QString customServer;
+    QString customServer = "87.250.159.246";
     ushort customPort = 9601;
     bool fullScreen = false;
 
@@ -65,8 +65,6 @@ int main(int argc, char *argv[])
                 qWarning() << "Missing argument for --port";
         }
     }
-
-    customServer = "87.250.159.246";
 
     QQmlContext* context = viewer.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
