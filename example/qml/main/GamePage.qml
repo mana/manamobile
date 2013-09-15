@@ -72,22 +72,6 @@ Item {
         }
     }
 
-    Rectangle {
-        color: "black";
-        opacity: 0.5;
-        anchors.fill: mapName;
-        anchors.margins: -4;
-        radius: 4;
-    }
-    Text {
-        id: mapName;
-        color: "white";
-        anchors.top: parent.top;
-        anchors.left: parent.left;
-        anchors.margins: 2;
-        text: "Current map: " + gameClient.currentMapName;
-    }
-
     Keys.onReturnPressed: chatBar.open();
     Keys.onEnterPressed: chatBar.open();
 
