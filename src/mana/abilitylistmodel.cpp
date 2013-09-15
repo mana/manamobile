@@ -75,7 +75,6 @@ void AbilityListModel::setAbilityStatus(unsigned id,
         mAbilities[id] = ability;
         mAbilitiesList.append(ability);
         endInsertRows();
-        emit countChanged();
     }
 }
 
@@ -90,7 +89,6 @@ void AbilityListModel::takeAbility(unsigned id)
     mAbilities.remove(id);
     delete mAbilitiesList.takeAt(index);
     endRemoveRows();
-    emit countChanged();
 }
 
 void AbilityListModel::timerEvent(QTimerEvent *event)
