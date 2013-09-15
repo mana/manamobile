@@ -6,7 +6,7 @@ Item {
     BorderImage {
         anchors.fill: parent
         anchors.leftMargin: -33;
-        anchors.rightMargin: -22;
+        anchors.rightMargin: -1
 
         source: "images/scroll_medium_horizontal.png"
         border.left: 40; border.top: 31
@@ -31,6 +31,7 @@ Item {
         anchors.fill: parent
         anchors.topMargin: 12
         anchors.bottomMargin: 7
+        anchors.rightMargin: 25
         clip: true
 
         ListView {
@@ -66,13 +67,24 @@ Item {
         }
     }
 
+    Image {
+        id: tab
+        source: "images/tab_right.png"
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.right
+        smooth: false
+    }
+    Image {
+        source: "images/tab_icon_character.png"
+        anchors.centerIn: tab
+        anchors.horizontalCenterOffset: -1
+        smooth: false
+    }
+
     MouseArea {
         id: handle;
 
-        width: 20;
-        anchors.top: parent.top;
-        anchors.bottom: parent.bottom;
-        anchors.left: parent.right;
+        anchors.fill: tab
 
         drag.target: statusPanel;
         drag.axis: Drag.XAxis;
@@ -84,15 +96,6 @@ Item {
             var open = -statusPanel.x < statusPanel.width / 2;
             statusPanel.x = open ? 0 : -statusPanel.width;
             statusPanel.state = open ? "open" : "closed";
-        }
-
-        Text {
-            text: qsTr("Status");
-            color: "#3f2b25";
-            rotation: -90;
-            font.bold: true;
-            font.pixelSize: 12
-            anchors.centerIn: parent;
         }
     }
 
