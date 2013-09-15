@@ -112,6 +112,7 @@ Item {
                     font.bold: true;
                     x: itemGraphic.width / 2;
                     y: itemGraphic.height / 2;
+                    font.pixelSize: 12
                 }
 
                 MouseArea {
