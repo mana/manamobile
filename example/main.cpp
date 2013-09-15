@@ -43,9 +43,12 @@ int main(int argc, char *argv[])
     QString customServerListPath;
     QString customServer;
     ushort customPort = 9601;
+    bool fullScreen = false;
 
     for (int i = 1, max = arguments.length(); i < max; ++i) {
-        if (arguments[i] == "--serverlist") {
+        if (arguments[i] == "--fullscreen") {
+            fullScreen = true;
+        } else if (arguments[i] == "--serverlist") {
             if (i + 1 < max)
                 customServerListPath = arguments[++i];
             else
@@ -80,7 +83,10 @@ int main(int argc, char *argv[])
 
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
 
-    viewer.showExpanded();
+    if (fullScreen)
+        viewer.showFullScreen();
+    else
+        viewer.showExpanded();
 
     return app.exec();
 }
