@@ -68,9 +68,6 @@ public:
 protected:
     void timerEvent(QTimerEvent *event);
 
-signals:
-    void countChanged();
-
 private:
     QMap<int, Ability *> mAbilities;
     QList<Ability *> mAbilitiesList;
