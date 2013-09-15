@@ -67,7 +67,9 @@ Item {
             ActionBar {
                 id: actionBar;
                 anchors.bottom: parent.bottom;
+                anchors.bottomMargin: 16;
                 anchors.right: parent.right;
+                anchors.rightMargin: 16;
             }
         }
     }

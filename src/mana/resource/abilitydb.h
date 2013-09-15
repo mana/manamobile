@@ -33,6 +33,7 @@ class AbilityInfo : public QObject
     Q_PROPERTY(AbilityTargetType targetType READ targetType CONSTANT)
     Q_PROPERTY(QString useAction READ useAction CONSTANT)
     Q_PROPERTY(QString icon READ icon CONSTANT)
+    Q_PROPERTY(int priority READ priority CONSTANT)
 
     Q_ENUMS(AbilityTargetType)
 
@@ -59,12 +60,16 @@ public:
     const QString &icon() const;
     void setIcon(const QString &iconPath);
 
+    int priority() const;
+    void setPriority(int priority);
+
 private:
     int mId;
     QString mName;
     AbilityTargetType mTargetType;
     QString mUseAction;
     QString mIcon;
+    int mPriority;
 };
 
 class AbilityDB : public QObject
@@ -155,6 +160,16 @@ inline const QString &AbilityInfo::icon() const
 inline void AbilityInfo::setIcon(const QString &iconPath)
 {
     mIcon = iconPath;
+}
+
+inline int AbilityInfo::priority() const
+{
+    return mPriority;
+}
+
+inline void AbilityInfo::setPriority(int priority)
+{
+    mPriority = priority;
 }
 
 } // namespace Mana

@@ -90,6 +90,7 @@ void AbilityDB::fileReady()
         QString name = atts.value("name").toString();
         QString useAction = atts.value("useaction").toString();
         QString iconPath = atts.value("icon").toString();
+        int priority = atts.value("priority").toInt();
 
         QString targetAsString = atts.value("target").toString();
         AbilityInfo::AbilityTargetType targetType =targetTypeFromString(
@@ -114,6 +115,7 @@ void AbilityDB::fileReady()
         info->setTargetType(targetType);
         info->setUseAction(useAction);
         info->setIcon(iconPath);
+        info->setPriority(priority);
 
         xml.skipCurrentElement();
 
@@ -122,4 +124,5 @@ void AbilityDB::fileReady()
 
     mLoaded = true;
     emit abilitiesChanged();
+    emit loaded();
 }

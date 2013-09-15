@@ -20,6 +20,8 @@
 
 #include <QTimerEvent>
 
+#include "resource/abilitydb.h"
+
 using namespace Mana;
 
 static const int TIMER_DELAY = 100;
@@ -29,6 +31,9 @@ Ability::Ability(unsigned id, unsigned remainingMilliseconds, QObject *parent):
     mId(id),
     mRemainingMilliseconds(remainingMilliseconds)
 {
+    AbilityDB *abilityDb = AbilityDB::instance();
+    if (!abilityDb->isLoaded())
+        connect(abilityDb, SIGNAL(loaded()), this, SLOT(sortByPriority()));
 }
 
 AbilityListModel::AbilityListModel(QObject *parent):
@@ -59,6 +64,15 @@ QHash<int, QByteArray> AbilityListModel::roleNames() const
     return mRoleNames;
 }
 
+static bool abilityLessThan(Ability *lhs, Ability *rhs)
+{
+    AbilityDB *db = AbilityDB::instance();
+    AbilityInfo *lhsInfo = db->getInfo(lhs->id());
+    AbilityInfo *rhsInfo = db->getInfo(rhs->id());
+
+    return lhsInfo->priority() < rhsInfo->priority();
+}
+
 void AbilityListModel::setAbilityStatus(unsigned id,
                                         unsigned remainingMilliseconds)
 {
@@ -70,10 +84,19 @@ void AbilityListModel::setAbilityStatus(unsigned id,
         ability = new Ability(id, remainingMilliseconds, this);
 
     if (!existed) {
-        beginInsertRows(QModelIndex(), mAbilitiesList.size(),
-                        mAbilitiesList.size());
+        int index;
+        if (AbilityDB::instance()->isLoaded()) {
+            QList<Ability *>::iterator it = qLowerBound(mAbilitiesList.begin(),
+                                                        mAbilitiesList.end(),
+                                                        ability,
+                                                        abilityLessThan);
+            index = it - mAbilitiesList.begin();
+        } else {
+            index = mAbilitiesList.size();
+        }
+        beginInsertRows(QModelIndex(), index, index);
+        mAbilitiesList.insert(index, ability);
         mAbilities[id] = ability;
-        mAbilitiesList.append(ability);
         endInsertRows();
     }
 }
@@ -100,6 +123,13 @@ void AbilityListModel::timerEvent(QTimerEvent *event)
         remainingMilliseconds = std::max(remainingMilliseconds, 0U);
         ability->setRemainingMilliseconds(remainingMilliseconds);
     }
+}
+
+void AbilityListModel::sortByPriority()
+{
+    beginResetModel();
+    qSort(mAbilitiesList.begin(), mAbilitiesList.end(), abilityLessThan);
+    endResetModel();
 }
 
 

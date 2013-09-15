@@ -17,20 +17,52 @@ Item {
         selectedAbilityId = -1;
     }
 
-    width: repeater.count * 64;
+    width: 100 + 16 + 32;
+    height: width;
 
-    Row {
-        spacing: 10;
+    PathView {
+        model: abilityDB.isLoaded ? gameClient.abilityListModel : 0;
+        onCountChanged: positionViewAtIndex(0, PathView.Beginning);
+        interactive: false;
+        path: Path {
+            id: path;
+            startX: actionBar.width - 32;
+            startY: actionBar.height - 32;
+            PathAttribute {
+                name: "elementSize";
+                value: 2;
+            }
+            PathLine {
+                x: path.startX - 100;
+                y: path.startY;
+            }
+            PathAttribute {
+                name: "elementSize";
+                value: 1;
+            }
+            PathPercent {
+                value: 0.0001;
+            }
+            PathArc {
+                relativeX: 100;
+                relativeY: -100;
+                radiusX: 100;
+                radiusY: 100;
+            }
+            PathAttribute {
+                name: "elementSize";
+                value: 1;
+            }
+            PathPercent {
+                value: 1;
+            }
+        }
 
-        anchors.bottom: parent.bottom;
-
-        Repeater {
-            id: repeater;
-            model: abilityDB.isLoaded ? gameClient.abilityListModel : 0;
-
+        delegate: Item {
+            scale: PathView.elementSize;
             ImageButton {
+                anchors.centerIn: parent;
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
-                scale: selectedAbilityId === model.ability.id ? 1.5 : 1;
                 onClicked: {
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
                         gameClient.useAbilityOnDirection(model.ability.id);
@@ -46,4 +78,5 @@ Item {
             }
         }
     }
+
 }

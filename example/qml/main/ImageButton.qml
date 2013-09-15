@@ -33,8 +33,8 @@ Button {
             when: button.pressed
             PropertyChanges {
                 target: button;
-                x: 1;
-                y: 1;
+                anchors.horizontalCenterOffset: 1;
+                anchors.verticalCenterOffset: 1;
             }
         }
     ]

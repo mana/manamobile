@@ -68,6 +68,9 @@ public:
 protected:
     void timerEvent(QTimerEvent *event);
 
+private slots:
+    void sortByPriority();
+
 private:
     QMap<int, Ability *> mAbilities;
     QList<Ability *> mAbilitiesList;
