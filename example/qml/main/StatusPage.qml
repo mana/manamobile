@@ -6,7 +6,7 @@ Item {
     Image {
         id: tab
         source: "images/tab.png"
-        anchors.verticalCenter: parent.verticalCenter
+        y: parent.height / 4
         anchors.left: parent.right
         anchors.leftMargin: -3
         smooth: false

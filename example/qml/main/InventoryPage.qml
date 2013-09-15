@@ -6,7 +6,7 @@ Item {
     Image {
         id: tab
         source: "images/tab.png"
-        anchors.verticalCenter: parent.verticalCenter
+        y: parent.height / 4
         anchors.right: parent.left
         anchors.rightMargin: -3
         smooth: false
@@ -65,7 +65,7 @@ Item {
         anchors.fill: parent
         anchors.topMargin: 12
         anchors.bottomMargin: 7
-        anchors.leftMargin: 25
+        anchors.leftMargin: 26
 
         clip: true
 
@@ -86,32 +86,42 @@ Item {
                 anchors.right: parent.right
                 property variant info: itemDB.getInfo(model.item.id);
 
-                height: 30;
+                height: 36;
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: 1
+
+                    color: Qt.rgba(0, 0, 0, 0.2)
+                    border.color: Qt.rgba(0, 0, 0, 0.4)
+                    visible: item.isEquipped
+                }
 
                 Image {
                     id: itemGraphic;
+                    x: 2; y: 2
                     // TODO: use imageprovider for this + handling dye
                     source: resourceManager.dataUrl + resourceManager.itemIconsPrefix + info.image;
                     smooth: false
                 }
 
                 Text {
-                    x: itemGraphic.width;
                     text: info.name;
+
+                    anchors.left: itemGraphic.right
+                    anchors.leftMargin: 5
+                    anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: 12
                 }
 
                 Text {
-                    text: model.item.equipmentSlot;
-                    font.pixelSize: 12
-                }
+                    text: item.amount
+                    visible: item.amount > 1
 
-                Text {
-                    color: "red";
-                    text: model.item.amount > 1 ? model.item.amount : "";
+                    anchors.right: parent.right
+                    anchors.rightMargin: 4
+                    anchors.verticalCenter: parent.verticalCenter
                     font.bold: true;
-                    x: itemGraphic.width / 2;
-                    y: itemGraphic.height / 2;
                     font.pixelSize: 12
                 }
 
@@ -125,19 +135,6 @@ Item {
                             gameClient.equip(model.item.slot);
                     }
                 }
-            }
-
-            highlight: Rectangle {
-                color: "black";
-                opacity: 0.2;
-                anchors.left: parent.left
-                anchors.right: parent.right
-            }
-
-            onCountChanged: {
-                // Select first item when possible
-                if (currentIndex == -1 && count > 0)
-                    currentIndex = 0;
             }
         }
     }
