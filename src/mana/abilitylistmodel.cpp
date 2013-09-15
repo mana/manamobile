@@ -35,9 +35,6 @@ AbilityListModel::AbilityListModel(QObject *parent):
     QAbstractListModel(parent)
 {
     mRoleNames.insert(AbilityRole, "ability");
-#if QT_VERSION < 0x050000
-    setRoleNames(mRoleNames);
-#endif
 
     mAbilitiesUpdateTimer = startTimer(TIMER_DELAY);
 }
