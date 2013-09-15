@@ -108,8 +108,8 @@ Item {
                 Text {
                     text: info.name;
 
-                    anchors.left: itemGraphic.right
-                    anchors.leftMargin: 5
+                    anchors.left: parent.left
+                    anchors.leftMargin: 2 + 32 + 5
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: 12
                 }
