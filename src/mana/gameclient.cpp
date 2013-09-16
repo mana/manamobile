@@ -210,17 +210,15 @@ void GameClient::messageReceived(MessageIn &message)
         handleUnEquip(message);
         break;
 
+    case Protocol::GPMSG_PLAYER_ATTRIBUTE_CHANGE:
+        handlePlayerAttributeChange(message);
+        break;
+
     case Protocol::GPMSG_BEING_ENTER:
         handleBeingEnter(message);
         break;
     case Protocol::GPMSG_BEING_LEAVE:
         handleBeingLeave(message);
-        break;
-    case Protocol::GPMSG_BEING_DIR_CHANGE:
-        handleBeingDirChange(message);
-        break;
-    case Protocol::GPMSG_BEINGS_MOVE:
-        handleBeingsMove(message);
         break;
     case Protocol::GPMSG_BEING_LOOKS_CHANGE:
         handleBeingLooksChange(message);
@@ -228,8 +226,11 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_BEING_ACTION_CHANGE:
         handleBeingActionChange(message);
         break;
-    case Protocol::GPMSG_SAY:
-        handleBeingSay(message);
+    case Protocol::GPMSG_BEING_DIR_CHANGE:
+        handleBeingDirChange(message);
+        break;
+    case Protocol::GPMSG_BEINGS_MOVE:
+        handleBeingsMove(message);
         break;
     case Protocol::GPMSG_BEING_ABILITY_POINT:
         handleBeingAbilityOnPoint(message);
@@ -240,31 +241,28 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_BEING_ABILITY_DIRECTION:
         handleBeingAbilityOnDirection(message);
         break;
-
-
-    case Protocol::GPMSG_NPC_MESSAGE:
-        handleNpcMessage(message);
-        break;
-    case Protocol::GPMSG_NPC_CHOICE:
-        handleNpcChoice(message);
-        break;
-    case Protocol::GPMSG_NPC_CLOSE:
-        handleNpcClose(message);
-        break;
-
     case Protocol::GPMSG_ABILITY_STATUS:
         handleAbilityStatus(message);
         break;
     case Protocol::GPMSG_ABILITY_REMOVED:
         handleAbilityRemoved(message);
         break;
+    case Protocol::GPMSG_SAY:
+        handleBeingSay(message);
+        break;
 
-    case Protocol::GPMSG_PLAYER_ATTRIBUTE_CHANGE:
-        handlePlayerAttributeChange(message);
+    case Protocol::GPMSG_NPC_CHOICE:
+        handleNpcChoice(message);
+        break;
+    case Protocol::GPMSG_NPC_MESSAGE:
+        handleNpcMessage(message);
+        break;
+    case Protocol::GPMSG_NPC_CLOSE:
+        handleNpcClose(message);
         break;
 
     case Protocol::GPMSG_QUESTLOG_STATUS:
-        handleQuestlog(message);
+        handleQuestlogStatus(message);
         break;
 
     case Protocol::XXMSG_INVALID:
@@ -427,6 +425,58 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     emit mapChanged(mCurrentMap, mPlayerStartX, mPlayerStartY);
 }
 
+void GameClient::handleInventory(MessageIn &message)
+{
+    while (message.unreadData()) {
+        unsigned slot = message.readInt16();
+        int id = message.readInt16(); // 0 id means removal of slot
+        unsigned amount = id ? message.readInt16() : 0;
+
+        mInventoryListModel->setItemSlot(slot, id, amount, 0);
+    }
+}
+
+void GameClient::handleInventoryFull(MessageIn &message)
+{
+    mInventoryListModel->removeAllItems();
+
+    int count = message.readInt16();
+    while (count--) {
+        int slot = message.readInt16();
+        int id = message.readInt16();
+        int amount = message.readInt16();
+        int equipmentSlot = message.readInt16();
+        mInventoryListModel->setItemSlot(slot, id, amount, equipmentSlot);
+    }
+}
+
+void GameClient::handleEquip(MessageIn &message)
+{
+    const unsigned inventorySlot = message.readInt16();
+    const unsigned equipmentSlot = message.readInt16();
+    mInventoryListModel->equip(inventorySlot, equipmentSlot);
+}
+
+void GameClient::handleUnEquip(MessageIn &message)
+{
+    const unsigned slot = message.readInt16();
+    mInventoryListModel->unequip(slot);
+}
+
+void GameClient::handlePlayerAttributeChange(MessageIn &message)
+{
+    while (message.unreadData()) {
+        const int id = message.readInt16();
+        const qreal base = message.readInt32() / 256;
+        const qreal mod = message.readInt32() / 256;
+
+        if (id == ATTR_MOVE_SPEED_TPS)
+            player()->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(base));
+
+        mAttributeListModel->setAttribute(id, base, mod);
+    }
+}
+
 static void handleHair(Character *ch, MessageIn &message)
 {
     int hairstyle = message.readInt8();
@@ -528,6 +578,36 @@ void GameClient::handleBeingLeave(MessageIn &message)
     mBeingListModel->removeBeing(id);
 }
 
+void GameClient::handleBeingLooksChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    if (being) {
+        SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);
+        Character *ch = static_cast<Character *>(being);
+        handleLooks(ch, message);
+    }
+}
+
+void GameClient::handleBeingActionChange(MessageIn &message)
+{
+    const int id = message.readInt16();
+
+    Being *being = mBeingListModel->beingById(id);
+
+    if (being) {
+        int actionAsInt = message.readInt8();
+        const QString &newAction = SpriteAction::actionByInt(actionAsInt);
+
+        if (newAction == SpriteAction::STAND &&
+                being->action() == SpriteAction::WALK)
+            return; // Client knows when to stop movement
+        being->setAction(newAction);
+    }
+}
+
 void GameClient::handleBeingDirChange(MessageIn &message)
 {
     const int id = message.readInt16();
@@ -576,51 +656,6 @@ void GameClient::handleBeingsMove(MessageIn &message)
             QPointF pos(dx, dy);
             being->setServerPosition(pos);
         }
-    }
-}
-
-void GameClient::handleBeingLooksChange(MessageIn &message)
-{
-    const int id = message.readInt16();
-
-    Being *being = mBeingListModel->beingById(id);
-
-    if (being) {
-        SAFE_ASSERT(being->type() == OBJECT_CHARACTER, return);
-        Character *ch = static_cast<Character *>(being);
-        handleLooks(ch, message);
-    }
-}
-
-void GameClient::handleBeingActionChange(MessageIn &message)
-{
-    const int id = message.readInt16();
-
-    Being *being = mBeingListModel->beingById(id);
-
-    if (being) {
-        int actionAsInt = message.readInt8();
-        const QString &newAction = SpriteAction::actionByInt(actionAsInt);
-
-        if (newAction == SpriteAction::STAND &&
-                being->action() == SpriteAction::WALK)
-            return; // Client knows when to stop movement
-        being->setAction(newAction);
-    }
-}
-
-void GameClient::handleBeingSay(MessageIn &message)
-{
-    const int id = message.readInt16();
-    const QString text = message.readString();
-
-    if (id) {
-        if (Being *being = mBeingListModel->beingById(id)) {
-            being->say(text);
-            emit chatMessage(being, text);
-        }
-    } else {
-        emit chatMessage(0, text); // message from server
     }
 }
 
@@ -689,6 +724,50 @@ void GameClient::handleBeingAbilityOnDirection(MessageIn &message)
     }
 }
 
+void GameClient::handleAbilityStatus(MessageIn &messageIn)
+{
+    while (messageIn.unreadData()) {
+        unsigned id = messageIn.readInt8();
+        unsigned remainingTicks = messageIn.readInt32();
+        mAbilityListModel->setAbilityStatus(id, remainingTicks * 100);
+    }
+}
+
+void GameClient::handleAbilityRemoved(MessageIn &messageIn)
+{
+    unsigned id = messageIn.readInt8();
+    mAbilityListModel->takeAbility(id);
+}
+
+void GameClient::handleBeingSay(MessageIn &message)
+{
+    const int id = message.readInt16();
+    const QString text = message.readString();
+
+    if (id) {
+        if (Being *being = mBeingListModel->beingById(id)) {
+            emit being->chatMessage(text);
+            emit chatMessage(being, text);
+        }
+    } else {
+        emit chatMessage(0, text); // message from server
+    }
+}
+
+void GameClient::handleNpcChoice(MessageIn &message)
+{
+    mNpcChoices.clear();
+
+    int id = message.readInt16();
+
+    while (message.unreadData())
+        mNpcChoices.append(message.readString());
+
+    mNpcState = NpcAwaitChoice;
+    emit npcChoicesChanged();
+    emit npcStateChanged();
+}
+
 void GameClient::handleNpcMessage(MessageIn &message)
 {
     int id = message.readInt16();
@@ -710,88 +789,7 @@ void GameClient::handleNpcClose(MessageIn &message)
     emit npcChanged();
 }
 
-void GameClient::handleNpcChoice(MessageIn &message)
-{
-    mNpcChoices.clear();
-
-    int id = message.readInt16();
-
-    while (message.unreadData())
-        mNpcChoices.append(message.readString());
-
-    mNpcState = NpcAwaitChoice;
-    emit npcChoicesChanged();
-    emit npcStateChanged();
-}
-
-void GameClient::handleAbilityStatus(MessageIn &messageIn)
-{
-    while (messageIn.unreadData()) {
-        unsigned id = messageIn.readInt8();
-        unsigned remainingTicks = messageIn.readInt32();
-        mAbilityListModel->setAbilityStatus(id, remainingTicks * 100);
-    }
-}
-
-void GameClient::handleAbilityRemoved(MessageIn &messageIn)
-{
-    unsigned id = messageIn.readInt8();
-    mAbilityListModel->takeAbility(id);
-}
-
-void GameClient::handlePlayerAttributeChange(MessageIn &message)
-{
-    while (message.unreadData()) {
-        const int id = message.readInt16();
-        const qreal base = message.readInt32() / 256;
-        const qreal mod = message.readInt32() / 256;
-
-        if (id == ATTR_MOVE_SPEED_TPS)
-            player()->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(base));
-
-        mAttributeListModel->setAttribute(id, base, mod);
-    }
-}
-
-void GameClient::handleInventory(MessageIn &message)
-{
-    while (message.unreadData()) {
-        unsigned slot = message.readInt16();
-        int id = message.readInt16(); // 0 id means removal of slot
-        unsigned amount = id ? message.readInt16() : 0;
-
-        mInventoryListModel->setItemSlot(slot, id, amount, 0);
-    }
-}
-
-void GameClient::handleInventoryFull(MessageIn &message)
-{
-    mInventoryListModel->removeAllItems();
-
-    int count = message.readInt16();
-    while (count--) {
-        int slot = message.readInt16();
-        int id = message.readInt16();
-        int amount = message.readInt16();
-        int equipmentSlot = message.readInt16();
-        mInventoryListModel->setItemSlot(slot, id, amount, equipmentSlot);
-    }
-}
-
-void GameClient::handleEquip(MessageIn &message)
-{
-    const unsigned inventorySlot = message.readInt16();
-    const unsigned equipmentSlot = message.readInt16();
-    mInventoryListModel->equip(inventorySlot, equipmentSlot);
-}
-
-void GameClient::handleUnEquip(MessageIn &message)
-{
-    const unsigned slot = message.readInt16();
-    mInventoryListModel->unequip(slot);
-}
-
-void GameClient::handleQuestlog(MessageIn &message)
+void GameClient::handleQuestlogStatus(MessageIn &message)
 {
     int id = message.readInt16();
     int flags = message.readInt8();

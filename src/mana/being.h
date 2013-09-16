@@ -102,8 +102,6 @@ public:
     QPointF serverPosition() const { return mServerPosition; }
     void setServerPosition(QPointF position);
 
-    void say(const QString &text);
-
     BeingGender gender() const;
     virtual void setGender(BeingGender gender);
 

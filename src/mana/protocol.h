@@ -121,7 +121,7 @@ public:
         GPMSG_EQUIP                    = 0x0122, // W equipped inventory slot, W slot equipmentSlot
         GPMSG_EQUIP_RESPONSE           = 0x0123, // B error, W slot
         GPMSG_UNEQUIP                  = 0x0124, // W equipped inventory slot
-        GPMSG_UNEQUIP_RESPONE          = 0x0125, // B error, W slot
+        GPMSG_UNEQUIP_RESPONSE         = 0x0125, // B error, W slot
         GPMSG_PLAYER_ATTRIBUTE_CHANGE  = 0x0130, // { W attribute, D base value (in 1/256ths), D modified value (in 1/256ths)}*
         GPMSG_ATTRIBUTE_POINTS_STATUS  = 0x0140, // W character points, W correction points
         PGMSG_RAISE_ATTRIBUTE          = 0x0160, // W attribute

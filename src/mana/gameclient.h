@@ -154,32 +154,31 @@ private:
     void handleAuthenticationResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
 
-    void handleBeingEnter(MessageIn &message);
-    void handleBeingLeave(MessageIn &message);
-    void handleBeingDirChange(MessageIn &message);
-    void handleBeingsMove(MessageIn &message);
-    void handleBeingLooksChange(MessageIn &message);
-    void handleBeingActionChange(MessageIn &message);
-    void handleBeingSay(MessageIn &message);
-    void handleBeingAbilityOnPoint(MessageIn &message);
-    void handleBeingAbilityOnBeing(MessageIn &message);
-    void handleBeingAbilityOnDirection(MessageIn &message);
-
-    void handleNpcMessage(MessageIn &message);
-    void handleNpcClose(MessageIn &message);
-    void handleNpcChoice(MessageIn &message);
-
-    void handleAbilityStatus(MessageIn &messageIn);
-    void handleAbilityRemoved(MessageIn &messageIn);
-
-    void handlePlayerAttributeChange(MessageIn &message);
-
     void handleInventory(MessageIn &message);
     void handleInventoryFull(MessageIn &message);
     void handleEquip(MessageIn &message);
     void handleUnEquip(MessageIn &message);
 
-    void handleQuestlog(MessageIn &message);
+    void handlePlayerAttributeChange(MessageIn &message);
+
+    void handleBeingEnter(MessageIn &message);
+    void handleBeingLeave(MessageIn &message);
+    void handleBeingLooksChange(MessageIn &message);
+    void handleBeingActionChange(MessageIn &message);
+    void handleBeingDirChange(MessageIn &message);
+    void handleBeingsMove(MessageIn &message);
+    void handleBeingAbilityOnPoint(MessageIn &message);
+    void handleBeingAbilityOnBeing(MessageIn &message);
+    void handleBeingAbilityOnDirection(MessageIn &message);
+    void handleAbilityStatus(MessageIn &messageIn);
+    void handleAbilityRemoved(MessageIn &messageIn);
+    void handleBeingSay(MessageIn &message);
+
+    void handleNpcChoice(MessageIn &message);
+    void handleNpcMessage(MessageIn &message);
+    void handleNpcClose(MessageIn &message);
+
+    void handleQuestlogStatus(MessageIn &message);
 
     bool mAuthenticated;
     QString mCurrentMap;
