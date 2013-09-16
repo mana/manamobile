@@ -178,6 +178,8 @@ private:
     void handleNpcMessage(MessageIn &message);
     void handleNpcClose(MessageIn &message);
 
+    void handleBeingsDamage(MessageIn &message);
+
     void handleQuestlogStatus(MessageIn &message);
 
     bool mAuthenticated;

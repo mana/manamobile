@@ -158,6 +158,9 @@ Rectangle {
                 Connections {
                     target: model.being;
                     onChatMessage: chatLabel.showText(message);
+                    onDamageTaken: {
+                        console.log(being.name + " takes " + amount + " damage")
+                    }
                 }
             }
         }

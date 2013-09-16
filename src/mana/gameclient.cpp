@@ -261,6 +261,10 @@ void GameClient::messageReceived(MessageIn &message)
         handleNpcClose(message);
         break;
 
+    case Protocol::GPMSG_BEINGS_DAMAGE:
+        handleBeingsDamage(message);
+        break;
+
     case Protocol::GPMSG_QUESTLOG_STATUS:
         handleQuestlogStatus(message);
         break;
@@ -787,6 +791,17 @@ void GameClient::handleNpcClose(MessageIn &message)
     mNpc = 0;
     emit npcStateChanged();
     emit npcChanged();
+}
+
+void GameClient::handleBeingsDamage(MessageIn &message)
+{
+    while (message.unreadData()) {
+        const int beingId = message.readInt16();
+        const int amount = message.readInt16();
+
+        if (Being *being = mBeingListModel->beingById(beingId))
+            emit being->damageTaken(amount);
+    }
 }
 
 void GameClient::handleQuestlogStatus(MessageIn &message)

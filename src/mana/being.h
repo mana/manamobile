@@ -117,6 +117,7 @@ signals:
     void genderChanged();
 
     void chatMessage(const QString &message);
+    void damageTaken(int amount);
 
 protected:
     int mType;
