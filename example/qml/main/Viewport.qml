@@ -133,7 +133,7 @@ Rectangle {
                     Text {
                         id: nameLabel
                         anchors.top: parent.bottom
-                        anchors.topMargin: 5
+                        anchors.topMargin: 12
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: model.being.name;
                         font.pixelSize: 12;
