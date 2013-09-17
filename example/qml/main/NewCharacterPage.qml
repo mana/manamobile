@@ -55,7 +55,7 @@ Item {
         scale: characterScale
 
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: 16 * characterScale
+        anchors.verticalCenterOffset: 12 * characterScale
     }
 
     LineEdit {
