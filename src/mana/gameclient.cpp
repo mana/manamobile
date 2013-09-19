@@ -809,11 +809,11 @@ void GameClient::handleQuestlogStatus(MessageIn &message)
     int id = message.readInt16();
     int flags = message.readInt8();
     Quest *quest = questlogListModel()->createOrGetQuest(id);
-    if (flags | QUESTLOG_UPDATE_STATE)
+    if (flags & QUESTLOG_UPDATE_STATE)
         quest->setState((Quest::State)message.readInt8());
-    if (flags | QUESTLOG_UPDATE_TITLE)
+    if (flags & QUESTLOG_UPDATE_TITLE)
         quest->setTitle(message.readString());
-    if (flags | QUESTLOG_UPDATE_DESCRIPTION)
+    if (flags & QUESTLOG_UPDATE_DESCRIPTION)
         quest->setDescription(message.readString());
 }
 
