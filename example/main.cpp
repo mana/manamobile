@@ -22,6 +22,7 @@
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QFontDatabase>
 
 #include "qtquick2applicationviewer.h"
 
@@ -33,6 +34,12 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("manasource.org");
     app.setOrganizationName(QLatin1String("mana"));
     app.setApplicationVersion("0.1");
+
+    QFontDatabase::addApplicationFont("://fonts/DejaVuSerifCondensed.ttf");
+    QFontDatabase::addApplicationFont("://fonts/DejaVuSerifCondensed-Italic.ttf");
+    QFontDatabase::addApplicationFont("://fonts/DejaVuSerifCondensed-Bold.ttf");
+    QFontDatabase::addApplicationFont("://fonts/DejaVuSerifCondensed-BoldItalic.ttf");
+    app.setFont(QFont("DejaVu Serif"));
 
     QtQuick2ApplicationViewer viewer;
     viewer.setTitle(app.applicationName());
