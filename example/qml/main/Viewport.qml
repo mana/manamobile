@@ -160,6 +160,30 @@ Rectangle {
                     onChatMessage: chatLabel.showText(message);
                     onDamageTaken: {
                         console.log(being.name + " takes " + amount + " damage")
+                        hitAnimation.restart()
+                    }
+                }
+
+                SequentialAnimation {
+                    id: hitAnimation
+                    NumberAnimation {
+                        target: sprite; property: "x"; duration: 50; to: 5
+                        easing.type: Easing.InOutSine
+                    }
+                    SequentialAnimation {
+                        loops: 4
+                        NumberAnimation {
+                            target: sprite; property: "x"; duration: 50; to: -5
+                            easing.type: Easing.InOutSine
+                        }
+                        NumberAnimation {
+                            target: sprite; property: "x"; duration: 50; to: 5
+                            easing.type: Easing.InOutSine
+                        }
+                    }
+                    NumberAnimation {
+                        target: sprite; property: "x"; duration: 50; to: 0
+                        easing.type: Easing.InOutSine
                     }
                 }
             }
