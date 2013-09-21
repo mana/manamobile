@@ -57,13 +57,12 @@ class Being : public QObject
 public:
     // Keep in sync with protocol
     enum EntityType {
-        OBJECT_ITEM = 0,
-        OBJECT_ACTOR,
-        OBJECT_NPC,
-        OBJECT_MONSTER,
-        OBJECT_CHARACTER,
-        OBJECT_EFFECT,
-        OBJECT_OTHER
+        OBJECT_ITEM         = 0,
+        OBJECT_NPC          = 2,
+        OBJECT_MONSTER      = 3,
+        OBJECT_CHARACTER    = 4,
+        OBJECT_EFFECT       = 5,
+        OBJECT_OTHER        = 6
     };
 
     // Keep in sync with protocol
