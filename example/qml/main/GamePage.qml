@@ -14,7 +14,7 @@ Item {
         id: viewport;
         width: parent.width / scale;
         height: parent.height / scale;
-        scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
+        scale: Math.ceil(Math.max(gamePage.width / 959, gamePage.height / 959));
         transformOrigin: Item.TopLeft;
         centerX: (statusPage.x + statusPage.width + inventoryPage.x) / 2;
 
