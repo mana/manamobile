@@ -61,13 +61,13 @@ struct SpriteDisplay
 static const int DEFAULT_FRAME_DELAY = 75;
 
 namespace SpriteAction {
+
 static const QString DEFAULT        = "stand";
 static const QString STAND          = "stand";
 static const QString SIT            = "sit";
 static const QString SLEEP          = "sleep";
 static const QString DEAD           = "dead";
 static const QString WALK           = "walk";
-static const QString ATTACK         = "attack";
 static const QString HURT           = "hurt";
 static const QString USE_SPECIAL    = "special";
 static const QString CAST_MAGIC     = "magic";
@@ -85,8 +85,6 @@ static inline const QString &actionByInt(int integer)
         return DEAD;
     case Mana::WALK:
         return WALK;
-    case Mana::ATTACK:
-        return ATTACK;
     case Mana::HURT:
         return HURT;
     default:

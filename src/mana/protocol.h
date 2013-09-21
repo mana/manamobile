@@ -331,7 +331,6 @@ enum {
 enum {
     SYNC_CHARACTER_POINTS    = 0x01,       // D charId, D charPoints, D corrPoints
     SYNC_CHARACTER_ATTRIBUTE = 0x02,       // D charId, D attrId, DF base, DF mod
-    SYNC_CHARACTER_SKILL     = 0x03,       // D charId, B skillId, D skill value
     SYNC_ONLINE_STATUS       = 0x04        // D charId, B 0 = offline, 1 = online
 };
 
@@ -436,24 +435,9 @@ enum BeingAction
 {
     STAND,
     WALK,
-    ATTACK,
     SIT,
     DEAD,
     HURT
-};
-
-/**
-  * Moves enum for beings and actors for others players attack types.
-  * WARNING: Has to be in sync with the same enum in the Being class
-  * of the client!
-  */
-enum AttackType
-{
-    HIT = 0x00,
-    CRITICAL = 0x0a,
-    MULTI = 0x08,
-    REFLECT = 0x04,
-    FLEE = 0x0b
 };
 
 /**
