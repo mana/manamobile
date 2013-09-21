@@ -243,7 +243,7 @@ void SpriteItem::advance()
     // will not match up.
     mUnusedTime += mTimer.restart();
 
-    while (mUnusedTime > mFrame->delay) {
+    while (mFrame->delay >= 0 && mUnusedTime > mFrame->delay) {
         mUnusedTime -= mFrame->delay;
         mFrameIndex = (mFrameIndex + 1) % mAnimation->length();
         mFrame = mAnimation->frame(mFrameIndex);
