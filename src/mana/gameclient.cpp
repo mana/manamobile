@@ -40,8 +40,6 @@
 
 #include <safeassert.h>
 
-#include <iostream>
-
 namespace Mana {
 
 GameClient::GameClient(QObject *parent)
@@ -285,6 +283,8 @@ void GameClient::update(qreal deltaTime)
     foreach (Being *being, mBeingListModel->beings()) {
         if (being == mPlayerCharacter)
             continue;
+        if (being->action() == SpriteAction::DEAD)
+            continue;
 
         const QPointF pos = being->position();
         const QPointF target = being->serverPosition();
@@ -318,6 +318,9 @@ void GameClient::update(qreal deltaTime)
 
 void GameClient::updatePlayer(qreal deltaTime)
 {
+    if (mPlayerCharacter->action() == SpriteAction::DEAD)
+        return;
+
     const Tiled::TileLayer *collisionLayer = mMapResource->collisionLayer();
     if (!collisionLayer)
         return;
