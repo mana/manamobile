@@ -104,6 +104,7 @@ public:
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void say(const QString &text);
+    Q_INVOKABLE void respawn();
 
     Q_INVOKABLE void talkToNpc(Mana::Being *being);
     Q_INVOKABLE void nextNpcMessage();
@@ -128,6 +129,7 @@ signals:
     void mapChanged(const QString &name, int x, int y);
     void playerChanged();
     void playerWalkDirectionChanged();
+    void playerDied();
 
     void chatMessage(Mana::Being *being, const QString &message);
 

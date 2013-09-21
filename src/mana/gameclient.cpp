@@ -123,6 +123,11 @@ void GameClient::say(const QString &text)
     send(message);
 }
 
+void GameClient::respawn()
+{
+    send(MessageOut(Protocol::PGMSG_RESPAWN));
+}
+
 void GameClient::talkToNpc(Being *being)
 {
     SAFE_ASSERT(being->type() == OBJECT_NPC && !mNpc, return);
@@ -612,6 +617,9 @@ void GameClient::handleBeingActionChange(MessageIn &message)
                 being->action() == SpriteAction::WALK)
             return; // Client knows when to stop movement
         being->setAction(newAction);
+
+        if (actionAsInt == Mana::DEAD && being == mPlayerCharacter)
+            emit playerDied();
     }
 }
 

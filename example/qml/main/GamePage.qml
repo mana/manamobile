@@ -10,6 +10,11 @@ Item {
 
     PlayerAttributes { id: playerAttributes }
 
+    Connections {
+        target: gameClient
+        onPlayerDied: respawnButton.state = "visible"
+    }
+
     Viewport {
         id: viewport;
         width: parent.width / scale;
@@ -44,8 +49,14 @@ Item {
             }
         }
 
+        RespawnButton {
+            id: respawnButton
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: height / 2 + 16
+        }
+
         ChatLog {
-            anchors.top: parent.verticalCenter
+            anchors.top: respawnButton.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
