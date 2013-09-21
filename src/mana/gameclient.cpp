@@ -113,7 +113,7 @@ void GameClient::walkTo(int x, int y)
     MessageOut message(Protocol::PGMSG_WALK);
     message.writeInt16(x);
     message.writeInt16(y);
-    send(message);
+    enqueue(message);
 }
 
 void GameClient::say(const QString &text)

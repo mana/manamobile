@@ -85,10 +85,18 @@ public:
     Q_INVOKABLE void disconnect();
 
     /**
-     * Sends the given \a message to the server over the given \a channel
-     * (0 by default).
+     * Sends the given \a message immediately to the server over the given
+     * \a channel.
      */
     void send(const MessageOut &message, unsigned char channel = 0);
+
+    /**
+     * Queues the given \a message for sending to the server over the given
+     * \a channel.
+     *
+     * Returns whether the message was queued successfully.
+     */
+    bool enqueue(const MessageOut &message, unsigned char channel = 0);
 
     /**
      * Send and receive network packets.

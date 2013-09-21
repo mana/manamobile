@@ -87,20 +87,28 @@ void ENetClient::disconnect()
 
 void ENetClient::send(const MessageOut &message, unsigned char channel)
 {
+    if (enqueue(message, channel))
+        enet_host_flush(mHost);
+}
+
+bool ENetClient::enqueue(const MessageOut &message, unsigned char channel)
+{
     if (mState != Connected) {
-        qWarning() << "(ENetClient::send) Not connected!";
-        return;
+        qWarning() << "(ENetClient) Can't send message: not connected!";
+        return false;
     }
 
     if (debug_enetclient)
-        qDebug() << "(ENetClient::send) Sending" << message;
+        qDebug() << "(ENetClient) Sending" << message;
 
-    ENetPacket *packet;
-    packet = enet_packet_create(message.data(),
-                                message.length(),
-                                ENET_PACKET_FLAG_RELIABLE);
-    if (packet)
-        enet_peer_send(mPeer, channel, packet);
+    ENetPacket *packet = enet_packet_create(message.data(),
+                                            message.length(),
+                                            ENET_PACKET_FLAG_RELIABLE);
+    if (!packet)
+        return false;
+
+    enet_peer_send(mPeer, channel, packet);
+    return true;
 }
 
 void ENetClient::service()
@@ -108,9 +116,11 @@ void ENetClient::service()
     if (isNull())
         return;
 
+    enet_host_service(mHost, 0, 0);
+
     ENetEvent event;
 
-    while (enet_host_service(mHost, &event, 0) > 0)
+    while (enet_host_check_events(mHost, &event) > 0)
     {
         switch (event.type)
         {
