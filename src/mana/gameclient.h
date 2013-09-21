@@ -77,6 +77,9 @@ class GameClient : public ENetClient
     Q_PROPERTY(ShopMode shopMode READ shopMode NOTIFY shopOpened)
     Q_PROPERTY(Mana::ShopListModel *shopListModel READ shopListModel CONSTANT)
 
+    Q_PROPERTY(int attributePoints READ attributePoints NOTIFY attributePointsChanged)
+    Q_PROPERTY(int correctionPoints READ correctionPoints NOTIFY correctionPointsChanged)
+
     Q_PROPERTY(Mana::AbilityListModel *abilityListModel READ abilityListModel CONSTANT)
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
@@ -132,6 +135,9 @@ public:
 
     QDateTime abilityCooldown() const;
 
+    int attributePoints() const;
+    int correctionPoints() const;
+
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void lookAt(qreal x, qreal y);
@@ -182,6 +188,9 @@ signals:
 
     void shopOpened(ShopMode mode);
 
+    void attributePointsChanged();
+    void correctionPointsChanged();
+
     void kicked();
 
 protected:
@@ -206,6 +215,7 @@ private:
     void handleUnEquip(MessageIn &message);
 
     void handlePlayerAttributeChange(MessageIn &message);
+    void handleAttributePointsStatus(MessageIn &message);
 
     void handleBeingEnter(MessageIn &message);
     void handleBeingLeave(MessageIn &message);
@@ -260,6 +270,9 @@ private:
     ShopListModel *mShopListModel;
 
     QElapsedTimer mPickupTimer;
+
+    int mAttributePoints;
+    int mCorrectionPoints;
 
     AbilityListModel *mAbilityListModel;
     AttributeListModel *mAttributeListModel;
@@ -324,6 +337,16 @@ inline InventoryListModel *GameClient::inventoryListModel() const
 inline QuestlogListModel *GameClient::questlogListModel() const
 {
     return mQuestlogListModel;
+}
+
+inline int GameClient::attributePoints() const
+{
+    return mAttributePoints;
+}
+
+inline int GameClient::correctionPoints() const
+{
+    return mCorrectionPoints;
 }
 
 } // namespace Mana

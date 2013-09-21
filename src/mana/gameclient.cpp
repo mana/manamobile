@@ -288,6 +288,9 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_PLAYER_ATTRIBUTE_CHANGE:
         handlePlayerAttributeChange(message);
         break;
+    case Protocol::GPMSG_ATTRIBUTE_POINTS_STATUS:
+        handleAttributePointsStatus(message);
+        break;
 
     case Protocol::GPMSG_BEING_ENTER:
         handleBeingEnter(message);
@@ -655,6 +658,22 @@ void GameClient::handlePlayerAttributeChange(MessageIn &message)
             player()->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(base));
 
         mAttributeListModel->setAttribute(id, base, mod);
+    }
+}
+
+void GameClient::handleAttributePointsStatus(MessageIn &message)
+{
+    int characterPoints = message.readInt16();
+    int correctionPoints = message.readInt16();
+
+    if (mAttributePoints != characterPoints) {
+        mAttributePoints = characterPoints;
+        emit attributePointsChanged();
+    }
+
+    if (mCorrectionPoints != correctionPoints) {
+        mCorrectionPoints = correctionPoints;
+        emit correctionPointsChanged();
     }
 }
 
