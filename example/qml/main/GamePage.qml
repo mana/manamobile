@@ -10,67 +10,68 @@ Item {
 
     PlayerAttributes { id: playerAttributes }
 
-    Item {
-        anchors.top: parent.top;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        anchors.bottom: parent.bottom;
+    Viewport {
+        id: viewport;
+        width: parent.width / scale;
+        height: parent.height / scale;
+        scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
+        transformOrigin: Item.TopLeft;
+        centerX: (statusPage.x + statusPage.width + inventoryPage.x) / 2;
 
-        Viewport {
-            id: viewport;
-            width: parent.width / scale;
-            height: parent.height / scale;
-            scale: Math.ceil(Math.max(gamePage.width / 1200, gamePage.height / 1200));
-            transformOrigin: Item.TopLeft;
-            centerX: (statusPage.x + statusPage.width + inventoryPage.x) / 2;
+        Item {
+            id: visibleArea
+            anchors.top: parent.top
+            anchors.left: statusPage.right
+            anchors.right: inventoryPage.left
+            anchors.bottom: parent.bottom
+        }
 
-            HealthBar {
-                y: 5;
-                anchors.horizontalCenter: parent.horizontalCenter;
+        HealthBar {
+            y: 5;
+            anchors.horizontalCenter: visibleArea.horizontalCenter;
+        }
+
+        MouseArea {
+            anchors.fill: parent;
+            enabled: actionBar.selectedAbility();
+
+            onClicked: {
+                var ability = actionBar.selectedAbility();
+                var mapPos = viewport.toMapPos(mouse.x, mouse.y);
+                gameClient.useAbilityOnPoint(ability, mapPos.x, mapPos.y);
+
+                actionBar.reset();
             }
+        }
 
-            MouseArea {
-                anchors.fill: parent;
-                enabled: actionBar.selectedAbility();
+        ChatLog {
+            anchors.top: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 20
+            anchors.rightMargin: 20
+            anchors.bottomMargin: 10
+        }
 
-                onClicked: {
-                    var ability = actionBar.selectedAbility();
-                    var mapPos = viewport.toMapPos(mouse.x, mouse.y);
-                    gameClient.useAbilityOnPoint(ability, mapPos.x, mapPos.y);
+        NpcDialog {
+            id: npcDialog;
+            width: Math.max(parent.width / 2, Math.min(300, parent.width - 20));
+            height: 100;
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom;
+            anchors.bottomMargin: 5;
+        }
 
-                    actionBar.reset();
-                }
-            }
+        StatusPage { id: statusPage; }
+        InventoryPage { id: inventoryPage; }
 
-            ChatLog {
-                anchors.top: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.leftMargin: 20
-                anchors.rightMargin: 20
-                anchors.bottomMargin: 10
-            }
-
-            NpcDialog {
-                id: npcDialog;
-                width: Math.max(parent.width / 2, Math.min(300, parent.width - 20));
-                height: 100;
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom;
-                anchors.bottomMargin: 5;
-            }
-
-            StatusPage { id: statusPage; }
-            InventoryPage { id: inventoryPage; }
-
-            ActionBar {
-                id: actionBar;
-                anchors.bottom: parent.bottom;
-                anchors.bottomMargin: 16;
-                anchors.right: parent.right;
-                anchors.rightMargin: 16;
-            }
+        ActionBar {
+            id: actionBar;
+            anchors.bottom: parent.bottom;
+            anchors.bottomMargin: 16;
+            anchors.right: parent.right;
+            anchors.rightMargin: 16;
         }
     }
 
