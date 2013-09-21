@@ -68,6 +68,11 @@ AttributeValue *AttributeListModel::attribute(int id) const
     return mAttributeValues.value(id);
 }
 
+AttributeValue *AttributeListModel::attributeAt(int index) const
+{
+    return mCachedAttributeList.at(index);
+}
+
 void AttributeListModel::setAttribute(int id, qreal base, qreal mod)
 {
     AttributeValue *value = mAttributeValues.value(id);
