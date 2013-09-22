@@ -237,7 +237,7 @@ static Action::SpriteDirection directionByName(const QStringRef &name)
 
 void SpriteDefinition::readAnimation(XmlReader &xml,
                                      Action *action,
-                                     ImageSet *imageset)
+                                     ImageSet *imageSet)
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == "animation");
 
@@ -265,8 +265,8 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
         if (!delayOk)
             delay = DEFAULT_FRAME_DELAY;
 
-        offsetX += imageset->offsetX();
-        offsetY += imageset->offsetY();
+        offsetX += imageSet->offsetX();
+        offsetY += imageSet->offsetY();
 
         if (xml.name() == "frame") {
             bool indexOk;
@@ -277,7 +277,8 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
                 continue;
             }
 
-            animation->addFrame(index + mVariantOffset, imageset,
+            animation->addFrame(imageSet->imageResource(),
+                                imageSet->clip(index + mVariantOffset),
                                 delay, offsetX, offsetY);
             xml.skipCurrentElement();
         } else if (xml.name() == "sequence") {
@@ -293,7 +294,8 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
             }
 
             while (end >= start) {
-                animation->addFrame(start + mVariantOffset, imageset,
+                animation->addFrame(imageSet->imageResource(),
+                                    imageSet->clip(start + mVariantOffset),
                                     delay, offsetX, offsetY);
                 start++;
             }

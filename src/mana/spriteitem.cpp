@@ -21,7 +21,7 @@
 
 #include "mana/resource/action.h"
 #include "mana/resource/animation.h"
-#include "mana/resource/imageset.h"
+#include "mana/resource/imageresource.h"
 
 #include <QQuickWindow>
 #include <QSGGeometryNode>
@@ -205,7 +205,7 @@ QSGNode *SpriteItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
             n->setFlag(QSGNode::OwnedByParent);
         }
 
-        QSGTexture *texture = mFrame->imageset->texture(window());
+        QSGTexture *texture = mFrame->imageResource->texture(window());
         QRectF rect(mFrame->offsetX,
                     mFrame->offsetY,
                     mFrame->clip.width(),

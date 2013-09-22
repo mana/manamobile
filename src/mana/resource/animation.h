@@ -20,33 +20,34 @@
 #define ANIMATION_H
 
 #include <QObject>
-#include <QRect>
+#include <QRectF>
 #include <QVector>
 
 namespace Mana {
 
-class ImageSet;
+class ImageResource;
 
 struct Frame
 {
     QRectF clip;
-    ImageSet *imageset;
+    qreal offsetX;
+    qreal offsetY;
+    const ImageResource *imageResource;
     int delay;
-    int offsetX;
-    int offsetY;
 };
 
 class Animation : public QObject
 {
     Q_OBJECT
+
 public:
     explicit Animation(QObject *parent = 0);
 
-    void addFrame(int index,
-                  ImageSet *imageset,
+    void addFrame(const ImageResource *imageResource,
+                  const QRectF &clip,
                   int delay,
-                  int offsetX,
-                  int offsetY);
+                  qreal offsetX,
+                  qreal offsetY);
 
     void addTerminator();
 
@@ -57,11 +58,9 @@ public:
 
     static bool isTerminator(const Frame &frame);
 
-
 private:
     int mDuration;
     QVector<Frame> mFrames;
-
 };
 
 } // namespace Mana

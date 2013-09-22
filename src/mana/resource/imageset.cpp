@@ -46,15 +46,10 @@ ImageSet::~ImageSet()
     mImage->decRef();
 }
 
-QSGTexture *ImageSet::texture(const QQuickWindow *window) const
-{
-    return mImage->texture(window);
-}
-
-QRect ImageSet::clip(int index) const
+QRectF ImageSet::clip(int index) const
 {
     const int framesPerRow = mImage->image()->width() / mWidth;
-    int x = (index % framesPerRow) * mWidth;
-    int y = (index / framesPerRow) * mHeight;
-    return QRect(x, y, mWidth, mHeight);
+    const int x = (index % framesPerRow) * mWidth;
+    const int y = (index / framesPerRow) * mHeight;
+    return QRectF(x, y, mWidth, mHeight);
 }

@@ -47,9 +47,7 @@ public:
 
     const ImageResource *imageResource() const;
 
-    QSGTexture *texture(const QQuickWindow *window) const;
-
-    QRect clip(int index) const;
+    QRectF clip(int index) const;
 
 private:
     int mOffsetX;

@@ -18,8 +18,6 @@
 
 #include "animation.h"
 
-#include "imageset.h"
-
 using namespace Mana;
 
 Animation::Animation(QObject *parent)
@@ -28,24 +26,24 @@ Animation::Animation(QObject *parent)
 {
 }
 
-void Animation::addFrame(int index,
-                         ImageSet *imageset,
+void Animation::addFrame(const ImageResource *imageResource,
+                         const QRectF &clip,
                          int delay,
-                         int offsetX,
-                         int offsetY)
+                         qreal offsetX,
+                         qreal offsetY)
 {
-    Frame frame = { imageset->clip(index), imageset, delay, offsetX, offsetY };
+    Frame frame = { clip, offsetX, offsetY, imageResource, delay };
     mFrames.append(frame);
     mDuration += delay;
 }
 
 void Animation::addTerminator()
 {
-    Frame frame = { QRect(), 0, 0, 0, 0 };
+    Frame frame = { QRectF(), 0, 0, 0, 0 };
     mFrames.append(frame);
 }
 
 bool Animation::isTerminator(const Frame &frame)
 {
-    return frame.imageset == 0;
+    return frame.imageResource == 0;
 }
