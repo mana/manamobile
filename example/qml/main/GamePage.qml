@@ -10,11 +10,6 @@ Item {
 
     PlayerAttributes { id: playerAttributes }
 
-    Connections {
-        target: gameClient
-        onPlayerDied: respawnButton.state = "visible"
-    }
-
     Viewport {
         id: viewport;
         width: parent.width / scale;

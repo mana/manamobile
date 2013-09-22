@@ -16,6 +16,7 @@ Button {
     states: [
         State {
             name: "visible"
+            when: gameClient.player && gameClient.player.action === "dead"
             PropertyChanges {
                 target: respawnButton
                 opacity: 1
