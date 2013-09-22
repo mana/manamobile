@@ -264,6 +264,8 @@ void SpriteDefinition::readAnimation(XmlReader &xml,
 
         if (!delayOk)
             delay = DEFAULT_FRAME_DELAY;
+        else if (delay == 0)
+            continue; // 0-delay frames never show
 
         offsetX += imageSet->offsetX();
         offsetY += imageSet->offsetY();

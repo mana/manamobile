@@ -179,7 +179,7 @@ void SpriteItem::playAnimation(const Action *action)
     mAction = action;
     const Animation *animation = mAction->animation(mDirection);
 
-    if (animation && animation != mAnimation && animation->duration() > 0) {
+    if (animation && animation != mAnimation && animation->length() > 0) {
         mAnimation = animation;
         reset();
     }
@@ -243,7 +243,7 @@ void SpriteItem::advance()
     // will not match up.
     mUnusedTime += mTimer.restart();
 
-    while (mFrame->delay >= 0 && mUnusedTime > mFrame->delay) {
+    while (mFrame->delay > 0 && mUnusedTime > mFrame->delay) {
         mUnusedTime -= mFrame->delay;
         mFrameIndex = (mFrameIndex + 1) % mAnimation->length();
         mFrame = mAnimation->frame(mFrameIndex);

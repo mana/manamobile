@@ -26,12 +26,24 @@ Animation::Animation(QObject *parent)
 {
 }
 
+/**
+ * Adds a frame to the animation. The delay should be either positive or -1
+ * (in which case the frame will show forever).
+ *
+ * @param imageResource The image that includes the frame.
+ * @param clip          The bounding rectangle of the frame on the image.
+ * @param delay         The delay of the frame in ms.
+ * @param offsetX
+ * @param offsetY
+ */
 void Animation::addFrame(const ImageResource *imageResource,
                          const QRectF &clip,
                          int delay,
                          qreal offsetX,
                          qreal offsetY)
 {
+    Q_ASSERT(delay != 0);
+
     Frame frame = { clip, offsetX, offsetY, imageResource, delay };
     mFrames.append(frame);
     mDuration += delay;
