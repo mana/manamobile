@@ -157,6 +157,7 @@ Rectangle {
 
                 Connections {
                     target: model.being;
+                    onAbilityUsed: sprite.restartAction();
                     onChatMessage: chatLabel.showText(message);
                     onDamageTaken: {
                         console.log(being.name + " takes " + amount + " damage")

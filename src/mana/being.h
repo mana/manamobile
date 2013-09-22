@@ -115,6 +115,7 @@ signals:
     void actionChanged();
     void genderChanged();
 
+    void abilityUsed(int id);
     void chatMessage(const QString &message);
     void damageTaken(int amount);
 

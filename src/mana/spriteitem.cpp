@@ -236,6 +236,13 @@ void SpriteItem::setDirection(Action::SpriteDirection direction)
     emit directionChanged();
 }
 
+void SpriteItem::playAction(const QString &actionName)
+{
+    setAction(actionName);
+    if (mAction)
+        playAnimation(mAction);
+}
+
 void SpriteItem::advance()
 {
     // TODO: Since every sprite item is keeping its own QElapsedTimer, there

@@ -693,6 +693,7 @@ void GameClient::handleBeingAbilityOnPoint(MessageIn &message)
             return;
         }
         being->setAction(abilityInfo->useAction());
+        emit being->abilityUsed(abilityId);
     }
 }
 
@@ -715,6 +716,7 @@ void GameClient::handleBeingAbilityOnBeing(MessageIn &message)
             return;
         }
         being->setAction(abilityInfo->useAction());
+        emit being->abilityUsed(abilityId);
     }
 }
 
@@ -736,6 +738,7 @@ void GameClient::handleBeingAbilityOnDirection(MessageIn &message)
             return;
         }
         being->setAction(abilityInfo->useAction());
+        emit being->abilityUsed(abilityId);
     }
 }
 

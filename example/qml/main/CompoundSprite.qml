@@ -11,6 +11,12 @@ Item {
 
     property int maxHeight: childrenRect.height;
 
+    function restartAction() {
+        var spriteCount = repeater.count;
+        for (var i = 0; i < spriteCount; ++i)
+            repeater.itemAt(i).playAction(action);
+    }
+
     Repeater {
         id: repeater;
 

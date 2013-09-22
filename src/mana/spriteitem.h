@@ -51,6 +51,8 @@ public:
     void setDirection(Action::SpriteDirection direction);
     Action::SpriteDirection direction() const { return mDirection; }
 
+    Q_INVOKABLE void playAction(const QString &actionName);
+
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
 
 signals:
