@@ -73,6 +73,7 @@ Rectangle {
         id: map;
         mapResource: gameClient.currentMapResource;
 
+        visible: status == TileMap.Ready
         visibleArea: Qt.rect(-map.x,
                              -map.y,
                              viewport.width,

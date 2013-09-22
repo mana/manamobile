@@ -113,8 +113,8 @@ Image {
                 }
                 PropertyAnimation {
                     target: animation.target;
-                    property: "x";
-                    to: -50;
+                    property: "scale";
+                    to: 0.9;
                     easing.type: Easing.OutQuad;
                 }
             }
@@ -139,8 +139,8 @@ Image {
             }
             PropertyAnimation {
                 target: animation.target;
-                property: "x";
-                from: 50; to: 0;
+                property: "scale";
+                from: 1.1; to: 1;
                 easing.type: Easing.OutQuad;
             }
         }
