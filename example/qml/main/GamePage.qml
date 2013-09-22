@@ -52,8 +52,8 @@ Item {
 
         ChatLog {
             anchors.top: respawnButton.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.left: joystick.right
+            anchors.right: actionBar.left
             anchors.bottom: parent.bottom
             anchors.leftMargin: 20
             anchors.rightMargin: 20
@@ -71,6 +71,14 @@ Item {
 
         StatusPage { id: statusPage; }
         InventoryPage { id: inventoryPage; }
+
+        Joystick {
+            id: joystick
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 20
+            anchors.bottomMargin: 20
+        }
 
         ActionBar {
             id: actionBar;
@@ -132,14 +140,6 @@ Item {
     Keys.onPressed: handleKeyEvent(event, true);
 
     QuestPage { id: questPage; }
-
-    Joystick {
-        id: joystick;
-        anchors.left: parent.left;
-        anchors.bottom: parent.bottom;
-        anchors.leftMargin: 50;
-        anchors.bottomMargin: 50;
-    }
 
     FocusScope {
         id: chatBar;

@@ -2,12 +2,12 @@ import QtQuick 2.0
 import Mana 1.0
 
 Rectangle {
-    width: 200;
-    height: 200;
-    radius: 20;
+    width: 100
+    height: 100
+    radius: 10
     opacity: 0.5;
     border.color: "black";
-    border.width: 2;
+    border.width: 1
 
     MouseArea {
         id: hitArea;
@@ -19,12 +19,12 @@ Rectangle {
             state: "idle";
 
             Rectangle {
-                width: 20;
-                height: 20;
-                radius: 10;
+                width: 10
+                height: 10
+                radius: 5
                 anchors.centerIn: parent;
                 border.color: "black";
-                border.width: 2;
+                border.width: 1
             }
 
             states: [

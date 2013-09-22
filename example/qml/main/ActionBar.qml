@@ -17,8 +17,8 @@ Item {
         selectedAbilityId = -1;
     }
 
-    width: 100 + 16 + 32;
-    height: width;
+    width: 100
+    height: 100
 
     PathView {
         model: abilityDB.isLoaded ? gameClient.abilityListModel : 0;
@@ -26,6 +26,11 @@ Item {
         interactive: false;
         path: Path {
             id: path;
+
+            readonly property real radius: 60
+            readonly property real startAngle: 220 * Math.PI / 180
+            readonly property real endAngle: 50 * Math.PI / 180
+
             startX: actionBar.width - 32;
             startY: actionBar.height - 32;
             PathAttribute {
@@ -33,8 +38,8 @@ Item {
                 value: 2;
             }
             PathLine {
-                x: path.startX - 100;
-                y: path.startY;
+                x: path.startX + Math.cos(path.startAngle) * path.radius
+                y: path.startY - Math.sin(path.startAngle) * path.radius
             }
             PathAttribute {
                 name: "elementSize";
@@ -44,10 +49,10 @@ Item {
                 value: 0.0001;
             }
             PathArc {
-                relativeX: 100;
-                relativeY: -100;
-                radiusX: 100;
-                radiusY: 100;
+                x: path.startX + Math.cos(path.endAngle) * path.radius
+                y: path.startY - Math.sin(path.endAngle) * path.radius
+                radiusX: path.radius
+                radiusY: path.radius
             }
             PathAttribute {
                 name: "elementSize";
