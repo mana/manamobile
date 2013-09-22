@@ -155,6 +155,8 @@ QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 {
     QNetworkRequest request(resolve(fileName));
     request.setAttribute(requestedFileAttribute(), fileName);
+    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute,
+                         QNetworkRequest::PreferNetwork);
 
     return mNetworkAccessManager.get(request);
 }
@@ -162,6 +164,9 @@ QNetworkReply *ResourceManager::requestFile(const QString &fileName)
 QNetworkReply *ResourceManager::requestFile(const QUrl &url)
 {
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute,
+                         QNetworkRequest::PreferNetwork);
+
     return mNetworkAccessManager.get(request);
 }
 
