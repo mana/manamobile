@@ -88,10 +88,12 @@ void Being::lookAt(const QPointF &point)
     if (mPosition == point)
         return;
 
-    const QPointF diff = point - mPosition;
+    QPointF diff = point - mPosition;
+    qreal dx = std::abs(diff.x());
+    qreal dy = std::abs(diff.y());
 
-    if (std::abs(diff.x()) > std::abs(diff.y()))
-        setDirection((diff.x() < 0) ? LEFT : RIGHT);
+    if (dx < dy || (dx - dy) / dx < 0.1)
+        setDirection(diff.y() < 0 ? UP : DOWN);
     else
-        setDirection((diff.y() < 0) ? UP : DOWN);
+        setDirection(diff.x() < 0 ? LEFT : RIGHT);
 }
