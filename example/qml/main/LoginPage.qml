@@ -11,6 +11,7 @@ Item {
         errorLabel.clear();
         settings.setValue("username", nameEdit.text)
         accountClient.login(nameEdit.text, passwordEdit.text);
+        Qt.inputMethod.hide();
     }
 
     function register() {
