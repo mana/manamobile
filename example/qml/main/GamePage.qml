@@ -80,6 +80,15 @@ Item {
             anchors.bottomMargin: 20
         }
 
+        ImageButton {
+            imagePath: "images/chat_icon.png";
+            anchors.bottom: parent.bottom;
+            anchors.bottomMargin: 16;
+            anchors.right: actionBar.left;
+            anchors.rightMargin: 64;
+            onClicked: chatBar.open();
+        }
+
         ActionBar {
             id: actionBar;
             anchors.bottom: parent.bottom;
@@ -152,7 +161,6 @@ Item {
         Keys.onEnterPressed: sayText();
 
         function open() {
-            chatInput.focus = true;
             chatBar.focus = true;
         }
 
@@ -161,6 +169,9 @@ Item {
                 gameClient.say(chatInput.text);
                 chatInput.text = "";
             }
+
+            chatInput.focus = false;
+            Qt.inputMethod.hide();
             gamePage.focus = true;
         }
 
@@ -181,9 +192,14 @@ Item {
             ]
             transitions: [
                 Transition {
-                    NumberAnimation {
-                        property: "y";
-                        easing.type: Easing.InOutQuad;
+                    SequentialAnimation {
+                        NumberAnimation {
+                            property: "y";
+                            easing.type: Easing.InOutQuad;
+                        }
+                        ScriptAction {
+                            script: chatInput.focus = chatInput.y !== 0;
+                        }
                     }
                 }
             ]
