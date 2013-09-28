@@ -2,58 +2,80 @@ import QtQuick 2.0
 import Mana 1.0
 
 Rectangle {
+    id: joystick
+
     width: 100
     height: 100
+
     radius: 10
-    opacity: 0.5;
-    border.color: "black";
+    opacity: 0.5
+    border.color: "black"
     border.width: 1
 
+    readonly property real centerX: width / 2
+    readonly property real centerY: height / 2
+
+    property real targetX: centerX
+    property real targetY: centerY
+
     MouseArea {
-        id: hitArea;
-        anchors.fill: parent;
-        onReleased: updateWalkDirection();
+        id: mouseArea
+        anchors.fill: parent
+        enabled: Qt.platform.os !== "android"
+        onReleased: updateWalkDirection()
+    }
 
-        Item {
-            id: dot;
-            state: "idle";
+    MultiPointTouchArea {
+        id: touchArea
+        anchors.fill: parent
+        enabled: Qt.platform.os === "android"
+        onReleased: updateWalkDirection()
+        maximumTouchPoints: 1
+        touchPoints: [ TouchPoint { id: touchPoint } ]
+    }
 
-            Rectangle {
-                width: 10
-                height: 10
-                radius: 5
-                anchors.centerIn: parent;
-                border.color: "black";
-                border.width: 1
-            }
+    Item {
+        id: dot
 
-            states: [
-                State {
-                    name: "idle";
-                    AnchorChanges {
-                        target: dot;
-                        anchors.horizontalCenter: hitArea.horizontalCenter;
-                        anchors.verticalCenter: hitArea.verticalCenter;
-                    }
-                },
-                State {
-                    name: "pressed";
-                    when: hitArea.pressed;
-                    PropertyChanges {
-                        target: dot;
-                        x: Math.max(0, Math.min(hitArea.width, hitArea.mouseX));
-                        y: Math.max(0, Math.min(hitArea.height, hitArea.mouseY));
-                    }
-                }
-            ]
-        }
+        x: Math.max(0, Math.min(parent.width, targetX))
+        y: Math.max(0, Math.min(parent.height, targetY))
 
-        Binding {
-            when: hitArea.pressed;
-            target: gameClient;
-            property: "playerWalkDirection";
-            value: Qt.point(hitArea.mouseX - hitArea.width / 2,
-                            hitArea.mouseY - hitArea.height / 2);
+        Rectangle {
+            width: 10
+            height: 10
+            radius: 5
+            anchors.centerIn: parent;
+            border.color: "black";
+            border.width: 1
         }
     }
+
+    Binding {
+        when: joystick.state != ""
+        target: gameClient
+        property: "playerWalkDirection"
+        value: Qt.point(targetX - centerX,
+                        targetY - centerY)
+    }
+
+    states: [
+        State {
+            name: "mouseAreaPressed"
+            when: mouseArea.pressed
+            PropertyChanges {
+                target: joystick
+                targetX: mouseArea.mouseX
+                targetY: mouseArea.mouseY
+            }
+        },
+        State {
+            name: "touchPointPressed"
+            when: touchPoint.pressed
+            PropertyChanges {
+                target: joystick
+                targetX: touchPoint.x
+                targetY: touchPoint.y
+            }
+        }
+    ]
 }
