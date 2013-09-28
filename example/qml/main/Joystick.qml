@@ -34,6 +34,15 @@ Rectangle {
         touchPoints: [ TouchPoint { id: touchPoint } ]
     }
 
+    Rectangle {
+        width: 30
+        height: 30
+        radius: 5
+        anchors.centerIn: parent
+        color: "black"
+        opacity: 0.3
+    }
+
     Item {
         id: dot
 
@@ -58,8 +67,8 @@ Rectangle {
             var dx = targetX - centerX;
             var dy = targetY - centerY;
 
-            Qt.point(Math.abs(dx) > 20 ? dx : 0,
-                     Math.abs(dy) > 20 ? dy : 0);
+            Qt.point(Math.abs(dx) > 15 ? dx : 0,
+                     Math.abs(dy) > 15 ? dy : 0);
         }
     }
 
