@@ -66,9 +66,16 @@ Rectangle {
         value: {
             var dx = targetX - centerX;
             var dy = targetY - centerY;
+            var walkX = Math.abs(dx) > 15;
+            var walkY = Math.abs(dy) > 15;
 
-            Qt.point(Math.abs(dx) > 15 ? dx : 0,
-                     Math.abs(dy) > 15 ? dy : 0);
+            if (!walkX && !walkY && gameClient.player) {
+                gameClient.lookAt(gameClient.player.x + dx,
+                                  gameClient.player.y + dy);
+            }
+
+            Qt.point(walkX ? dx : 0,
+                     walkY ? dy : 0);
         }
     }
 

@@ -116,6 +116,22 @@ void GameClient::walkTo(int x, int y)
     enqueue(message);
 }
 
+void GameClient::lookAt(qreal x, qreal y)
+{
+    if (!mPlayerCharacter)
+        return;
+
+    const BeingDirection oldDirection = mPlayerCharacter->direction();
+    mPlayerCharacter->lookAt(QPointF(x, y));
+    const BeingDirection newDirection = mPlayerCharacter->direction();
+
+    if (oldDirection != newDirection) {
+        MessageOut message(Protocol::PGMSG_DIRECTION_CHANGE);
+        message.writeInt8(newDirection);
+        send(message);
+    }
+}
+
 void GameClient::say(const QString &text)
 {
     MessageOut message(Protocol::PGMSG_SAY);
