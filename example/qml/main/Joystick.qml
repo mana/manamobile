@@ -54,8 +54,13 @@ Rectangle {
         when: joystick.state != ""
         target: gameClient
         property: "playerWalkDirection"
-        value: Qt.point(targetX - centerX,
-                        targetY - centerY)
+        value: {
+            var dx = targetX - centerX;
+            var dy = targetY - centerY;
+
+            Qt.point(Math.abs(dx) > 20 ? dx : 0,
+                     Math.abs(dy) > 20 ? dy : 0);
+        }
     }
 
     states: [
