@@ -4,7 +4,8 @@ import QtQuick.Controls.Styles 1.0
 
 Button {
     id: button;
-    property string imagePath;
+
+    property alias imagePath: image.source
 
     width: 32;
     height: 32;
@@ -22,6 +23,7 @@ Button {
     }
 
     Image {
+        id: image
         smooth: false;
         anchors.centerIn: parent;
         source: imagePath;

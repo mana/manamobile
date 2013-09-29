@@ -79,9 +79,8 @@ Item {
                     }
                 }
 
-                imagePath: resourceManager.dataUrl + "/" + abilityInfo.icon;
+                imagePath: resourceManager.dataUrl + abilityInfo.icon;
             }
         }
     }
-
 }
