@@ -104,6 +104,7 @@ Item {
     }
 
     Component.onCompleted: {
+        forceActiveFocus();
         if (Qt.platform.os !== "android")
             nameEdit.focus = true;
     }

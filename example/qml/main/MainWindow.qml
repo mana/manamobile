@@ -143,12 +143,15 @@ Image {
     }
 
     function back() {
-        console.log("back", state);
         if (state === "loadingPaths" || state === "chooseCharacter") {
             accountClient.logout();
             state = "login";
             return true;
+        } else if (state === "createCharacter") {
+            state = "chooseCharacter";
+            return true;
         }
+
         return false;
     }
 
