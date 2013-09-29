@@ -21,6 +21,7 @@
 
 #include "enetclient.h"
 
+#include <QDateTime>
 #include <QPoint>
 #include <QStringList>
 #include <QVector2D>
@@ -57,6 +58,8 @@ class GameClient : public ENetClient
     Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
+
+    Q_PROPERTY(QDateTime abilityCooldown READ abilityCooldown NOTIFY abilityCooldownChanged)
 
     Q_PROPERTY(QString npcMessage READ npcMessage NOTIFY npcMessageChanged)
     Q_PROPERTY(QStringList npcChoices READ npcChoices NOTIFY npcChoicesChanged)
@@ -101,6 +104,8 @@ public:
     NPC *npc() const { return mNpc; }
     NpcState npcState() const { return mNpcState; }
 
+    QDateTime abilityCooldown() const;
+
     Q_INVOKABLE void authenticate(const QString &token);
     Q_INVOKABLE void walkTo(int x, int y);
     Q_INVOKABLE void lookAt(qreal x, qreal y);
@@ -131,6 +136,7 @@ signals:
     void playerChanged();
     void playerWalkDirectionChanged();
     void playerDied();
+    void abilityCooldownChanged();
 
     void chatMessage(Mana::Being *being, const QString &message);
 
@@ -175,6 +181,7 @@ private:
     void handleBeingAbilityOnDirection(MessageIn &message);
     void handleAbilityStatus(MessageIn &messageIn);
     void handleAbilityRemoved(MessageIn &messageIn);
+    void handleAbilityCooldown(MessageIn &messageIn);
     void handleBeingSay(MessageIn &message);
 
     void handleNpcChoice(MessageIn &message);
@@ -190,6 +197,8 @@ private:
     MapResource *mMapResource;
     int mPlayerStartX;
     int mPlayerStartY;
+
+    QDateTime mAbilityCooldown;
 
     QString mPlayerName;
     Character *mPlayerCharacter;

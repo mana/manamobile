@@ -91,6 +91,11 @@ QString GameClient::playerName() const
     return mPlayerName;
 }
 
+QDateTime GameClient::abilityCooldown() const
+{
+    return mAbilityCooldown;
+}
+
 void GameClient::setPlayerName(const QString &name)
 {
     if (mPlayerName == name)
@@ -110,6 +115,9 @@ void GameClient::authenticate(const QString &token)
 
 void GameClient::walkTo(int x, int y)
 {
+    if (mAbilityCooldown > QDateTime::currentDateTime())
+        return;
+
     MessageOut message(Protocol::PGMSG_WALK);
     message.writeInt16(x);
     message.writeInt16(y);
@@ -266,6 +274,9 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_ABILITY_REMOVED:
         handleAbilityRemoved(message);
         break;
+    case Protocol::GPMSG_ABILITY_COOLDOWN:
+        handleAbilityCooldown(message);
+        break;
     case Protocol::GPMSG_SAY:
         handleBeingSay(message);
         break;
@@ -339,7 +350,8 @@ void GameClient::update(qreal deltaTime)
 
 void GameClient::updatePlayer(qreal deltaTime)
 {
-    if (mPlayerCharacter->action() == SpriteAction::DEAD)
+    if (mPlayerCharacter->action() == SpriteAction::DEAD ||
+            mAbilityCooldown > QDateTime::currentDateTime())
         return;
 
     const Tiled::TileLayer *collisionLayer = mMapResource->collisionLayer();
@@ -771,6 +783,13 @@ void GameClient::handleAbilityRemoved(MessageIn &messageIn)
 {
     unsigned id = messageIn.readInt8();
     mAbilityListModel->takeAbility(id);
+}
+
+void GameClient::handleAbilityCooldown(MessageIn &messageIn)
+{
+    int ticksToWait = messageIn.readInt16();
+    mAbilityCooldown = QDateTime::currentDateTime().addMSecs(ticksToWait * 100);
+    emit abilityCooldownChanged();
 }
 
 void GameClient::handleBeingSay(MessageIn &message)
