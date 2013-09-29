@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     QStringList arguments = app.arguments();
 
     QString customServerListPath;
-    QString customServer = "87.250.159.246";
+    QString customServer = "server.sourceoftales.org";
     ushort customPort = 9601;
     bool fullScreen = false;
 
