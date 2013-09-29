@@ -113,6 +113,11 @@ void AccountClient::login(const QString &username,
     mPendingPassword = password;
 }
 
+void AccountClient::logout()
+{
+    send(MessageOut(Protocol::PAMSG_LOGOUT));
+}
+
 void AccountClient::login(const QString &username,
                           const QString &password,
                           const QByteArray &salt)
@@ -216,6 +221,9 @@ void AccountClient::messageReceived(MessageIn &message)
     case Protocol::APMSG_LOGIN_RESPONSE:
         handleLoginResponse(message);
         break;
+    case Protocol::APMSG_LOGOUT_RESPONSE:
+        handleLogoutResponse(message);
+        break;
     case Protocol::APMSG_LOGIN_RNDTRGR_RESPONSE:
         handleSaltResponse(message);
         break;
@@ -314,6 +322,24 @@ void AccountClient::handleLoginResponse(MessageIn &message)
     } else {
         emit loginFailed(error, loginErrorMessage(error));
     }
+}
+
+void AccountClient::handleLogoutResponse(MessageIn &)
+{
+    // Logout sends an error message when the client is not logged in, but
+    // that is not an interesting error to handle.
+
+    QList<Character *> charactersToDelete;
+    std::swap(mCharacters, charactersToDelete);
+    mCharacterListModel->setCharacters(mCharacters);
+    qDeleteAll(charactersToDelete);
+
+    mUsername.clear();
+    mPlayerName.clear();
+    emit usernameChanged();
+    emit playerNameChanged();
+
+    emit loggedOut();
 }
 
 void AccountClient::handleCharacterCreateResponse(MessageIn &message)

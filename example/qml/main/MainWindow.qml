@@ -14,15 +14,7 @@ Image {
     readonly property real backgroundScale: Math.max(width / sourceSize.width,
                                                      height / sourceSize.height);
 
-    property bool loggingIn: false
-    property bool loggedIn: false
     property bool characterChosen: false
-
-    function authenticated() {
-        loggedIn = true
-        loggingIn = false
-        state = "loadingPaths";
-    }
 
     ConnectionStatus {
         z: 1;
@@ -31,12 +23,15 @@ Image {
     }
 
     Connections {
-        target: accountClient;
-
-        onLoginSucceeded: authenticated();
-        onRegistrationSucceeded: authenticated();
-        onLoginFailed: loggingIn = false;
-        onRegistrationFailed: loggingIn = false;
+        target: client
+        onLoggedInChanged: {
+            if (client.loggedIn) {
+                if (resourceManager.pathsLoaded)
+                    state = "chooseCharacter";
+                else
+                    state = "loadingPaths";
+            }
+        }
     }
     Connections {
         target: resourceManager;
@@ -91,6 +86,7 @@ Image {
         id: loadingPathsPage;
         Item {
             Text { text: "Loading paths..."; anchors.centerIn: parent }
+            Component.onCompleted: window.forceActiveFocus();
         }
     }
     Component { id: characterPage; CharacterPage {} }
@@ -146,9 +142,25 @@ Image {
         }
     }
 
+    function back() {
+        console.log("back", state);
+        if (state === "loadingPaths" || state === "chooseCharacter") {
+            accountClient.logout();
+            state = "login";
+            return true;
+        }
+        return false;
+    }
+
     Keys.onPressed: {
         if (event.key === Qt.Key_F10)
             resourcesWindowLoader.active = !resourcesWindowLoader.active;
+        else if (event.key === Qt.Key_Backspace)
+            event.accepted = back();
+    }
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back)
+            event.accepted = back();
     }
 
     Component {

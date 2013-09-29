@@ -8,6 +8,9 @@ import Mana 1.0
 Item {
     property string serverName: "ManaSource!";
 
+    property bool loggingIn: false
+    property bool loggedIn: false
+
     function setDataUrl(dataUrl) {
         resourceManager.dataUrl = dataUrl;
 
@@ -22,13 +25,24 @@ Item {
 
     property AccountClient accountClient: AccountClient {
         onConnected: requestRegistrationInfo();
-        onLoginSucceeded: setDataUrl(dataUrl);
-        onRegistrationSucceeded: setDataUrl(dataUrl);
+        onLoginSucceeded: {
+            setDataUrl(dataUrl);
+            loggedIn = true
+            loggingIn = false
+        }
+        onLoginFailed: loggingIn = false;
+        onRegistrationSucceeded: {
+            setDataUrl(dataUrl);
+            loggedIn = true
+            loggingIn = false
+        }
+        onRegistrationFailed: loggingIn = false;
         onChooseCharacterSucceeded: {
             // Connect to chat and game servers
             chatClient.connect(chatServerHost, chatServerPort);
             gameClient.connect(gameServerHost, gameServerPort);
         }
+        onLoggedOut: loggedIn = false;
     }
     property ChatClient chatClient: ChatClient {
         onConnected: authenticate(accountClient.token);

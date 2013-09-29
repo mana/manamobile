@@ -90,6 +90,7 @@ public:
                                        const QString &password);
     Q_INVOKABLE void login(const QString &username,
                            const QString &password);
+    Q_INVOKABLE void logout();
 
     Q_INVOKABLE void createCharacter(const QString &name,
                                      int gender,
@@ -111,6 +112,8 @@ signals:
 
     void loginSucceeded();
     void loginFailed(int error, const QString &errorMessage);
+
+    void loggedOut();
 
     void createCharacterSucceeded();
     void createCharacterFailed(int error, const QString &errorMessage);
@@ -154,6 +157,7 @@ private:
     void handleRegisterResponse(MessageIn &message);
     void handleUnregisterResponse(MessageIn &message);
     void handleLoginResponse(MessageIn &message);
+    void handleLogoutResponse(MessageIn &message);
     void handleCharacterCreateResponse(MessageIn &message);
     void handleCharacterDeleteResponse(MessageIn &message);
     void handleCharacterInfo(MessageIn &message);
