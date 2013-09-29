@@ -1,16 +1,15 @@
 import QtQuick 2.0
 import Mana 1.0
 
-Rectangle {
+Image {
     id: joystick
 
-    width: 100
-    height: 100
+    width: 64
+    height: 64
 
-    radius: 10
-    opacity: 0.5
-    border.color: "black"
-    border.width: 1
+    smooth: false;
+
+    source: "images/joystick_frame.png"
 
     readonly property real centerX: width / 2
     readonly property real centerY: height / 2
@@ -34,28 +33,26 @@ Rectangle {
         touchPoints: [ TouchPoint { id: touchPoint } ]
     }
 
-    Rectangle {
-        width: 30
-        height: 30
-        radius: 5
-        anchors.centerIn: parent
-        color: "black"
-        opacity: 0.3
-    }
-
     Item {
         id: dot
 
-        x: Math.max(0, Math.min(parent.width, targetX))
-        y: Math.max(0, Math.min(parent.height, targetY))
+        function joystickPosition() {
+            var maxDistance = 10;
+            var moveVector = Qt.vector2d(targetX - centerX, targetY - centerY);
+            var newMoveVector = moveVector.normalized().times(maxDistance);
+            if (moveVector.length() > newMoveVector.length())
+                moveVector = newMoveVector;
 
-        Rectangle {
-            width: 10
-            height: 10
-            radius: 5
+            return moveVector.plus(Qt.vector2d(centerX, centerY));
+        }
+
+        x: joystickPosition().x;
+        y: joystickPosition().y;
+
+        Image {
+            source: "images/joystick.png";
             anchors.centerIn: parent;
-            border.color: "black";
-            border.width: 1
+            smooth: false;
         }
     }
 
