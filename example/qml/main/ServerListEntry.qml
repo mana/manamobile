@@ -44,7 +44,7 @@ Item {
         onClicked: {
             serverPage.serverChosen = true;
             serverName = entryTitle;
-            accountClient.connect(hostname, port);
+            client.connect(hostname, port);
         }
     }
 

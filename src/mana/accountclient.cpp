@@ -118,6 +118,13 @@ void AccountClient::logout()
     send(MessageOut(Protocol::PAMSG_LOGOUT));
 }
 
+void AccountClient::reconnect(const QString &token)
+{
+    MessageOut reconnectMessage(Protocol::PAMSG_RECONNECT);
+    reconnectMessage.writeString(token, 32);
+    send(reconnectMessage);
+}
+
 void AccountClient::login(const QString &username,
                           const QString &password,
                           const QByteArray &salt)
@@ -244,6 +251,9 @@ void AccountClient::messageReceived(MessageIn &message)
         break;
     case Protocol::APMSG_PASSWORD_CHANGE_RESPONSE:
         handlePasswordChangeResponse(message);
+        break;
+    case Protocol::APMSG_RECONNECT_RESPONSE:
+        handleReconnectResponse(message);
         break;
     case Protocol::XXMSG_INVALID:
         qWarning() << "(AccountClient::messageReceived) Invalid received! "
@@ -462,6 +472,15 @@ void AccountClient::handlePasswordChangeResponse(MessageIn &message)
         emit passwordChangeSucceeded();
     else
         emit passwordChangeFailed(error, passwordChangeErrorMessage(error));
+}
+
+void AccountClient::handleReconnectResponse(MessageIn &message)
+{
+    const int error = message.readInt8();
+    if (error == ERRMSG_OK)
+        emit reconnectSucceeded();
+    else
+        emit reconnectFailed();
 }
 
 void AccountClient::handleSaltResponse(MessageIn &message)

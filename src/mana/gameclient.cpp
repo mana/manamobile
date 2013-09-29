@@ -152,6 +152,13 @@ void GameClient::respawn()
     send(MessageOut(Protocol::PGMSG_RESPAWN));
 }
 
+void GameClient::leave()
+{
+    MessageOut message(Protocol::PGMSG_DISCONNECT);
+    message.writeInt8(1);   // reconnect to account server
+    send(message);
+}
+
 void GameClient::talkToNpc(Being *being)
 {
     SAFE_ASSERT(being->type() == OBJECT_NPC && !mNpc, return);
@@ -218,7 +225,10 @@ void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
     case Protocol::GPMSG_CONNECT_RESPONSE:
-        handleAuthenticationResponse(message);
+        handleConnectResponse(message);
+        break;
+    case Protocol::GPMSG_DISCONNECT_RESPONSE:
+        handleDisconnectResponse(message);
         break;
     case Protocol::GPMSG_PLAYER_MAP_CHANGE:
         handlePlayerMapChanged(message);
@@ -419,7 +429,49 @@ void GameClient::restoreWalkingSpeed()
     }
 }
 
-void GameClient::handleAuthenticationResponse(MessageIn &message)
+void GameClient::reset()
+{
+    if (mAuthenticated) {
+        mAuthenticated = false;
+        emit authenticatedChanged();
+    }
+
+    if (mNpcState != NoNpc) {
+        mNpcState = NoNpc;
+        mNpc = 0;
+        mNpcMessage.clear();
+        mNpcChoices.clear();
+
+        emit npcStateChanged();
+        emit npcChanged();
+        emit npcMessageChanged();
+        emit npcChoicesChanged();
+    }
+
+    if (mPlayerCharacter) {
+        mPlayerCharacter = 0;
+        emit playerChanged();
+    }
+
+    setPlayerWalkDirection(QPointF());
+
+    if (mMapResource) {
+        mCurrentMap.clear();
+        mMapResource->decRef();
+        mMapResource = 0;
+        mPlayerStartX = 0;
+        mPlayerStartY = 0;
+        emit mapChanged(QString(), 0, 0);
+    }
+
+    mBeingListModel->clear();
+    // TODO: mAbilityListModel->clear();
+    // TODO: mAttributeListModel->clear();
+    mInventoryListModel->removeAllItems();
+    // TODO: mQuestlogListModel->clear();
+}
+
+void GameClient::handleConnectResponse(MessageIn &message)
 {
     switch (message.readInt8()) {
     default:
@@ -440,6 +492,18 @@ void GameClient::handleAuthenticationResponse(MessageIn &message)
         }
         break;
     }
+}
+
+void GameClient::handleDisconnectResponse(MessageIn &message)
+{
+    if (message.readInt8() != ERRMSG_OK)
+        return;
+
+    mToken = message.readString(32);
+    emit tokenReceived(mToken);
+
+    reset();
+    disconnect();
 }
 
 void GameClient::handlePlayerMapChanged(MessageIn &message)

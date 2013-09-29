@@ -91,6 +91,7 @@ public:
     Q_INVOKABLE void login(const QString &username,
                            const QString &password);
     Q_INVOKABLE void logout();
+    Q_INVOKABLE void reconnect(const QString &token);
 
     Q_INVOKABLE void createCharacter(const QString &name,
                                      int gender,
@@ -112,6 +113,9 @@ signals:
 
     void loginSucceeded();
     void loginFailed(int error, const QString &errorMessage);
+
+    void reconnectSucceeded();
+    void reconnectFailed();
 
     void loggedOut();
 
@@ -164,6 +168,7 @@ private:
     void handleCharacterSelectResponse(MessageIn &message);
     void handleEmailChangeResponse(MessageIn &message);
     void handlePasswordChangeResponse(MessageIn &message);
+    void handleReconnectResponse(MessageIn &message);
     void handleSaltResponse(MessageIn &message);
 
     static QString standardErrorMessage(int error);

@@ -40,6 +40,7 @@ public:
     bool authenticated() const { return mAuthenticated; }
 
     Q_INVOKABLE void authenticate(const QString &token);
+    Q_INVOKABLE void leave();
 
 signals:
     void authenticationFailed(const QString &errorMessage);
@@ -50,7 +51,8 @@ protected:
     void messageReceived(MessageIn &message);
 
 private:
-    void handleAuthenticationResponse(MessageIn &message);
+    void handleConnectResponse(MessageIn &message);
+    void handleDisconnectResponse(MessageIn &message);
 
     bool mAuthenticated;
 };

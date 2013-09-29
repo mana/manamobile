@@ -4,12 +4,21 @@ import Mana 1.0
 Image {
     id: window
 
-    state: "serverSelect"
+    state: ""
 
     source: "images/login_background.png"
     smooth: false
     fillMode: Image.PreserveAspectCrop
     focus: true;
+
+    function initialize() {
+        if (customServer === "") {
+            state = "serverSelect";
+        } else {
+            serverName = customServer;
+            client.connect(customServer, customPort);
+        }
+    }
 
     readonly property real backgroundScale: Math.max(width / sourceSize.width,
                                                      height / sourceSize.height);
@@ -32,7 +41,20 @@ Image {
                     state = "loadingPaths";
             }
         }
+        onReconnectFailed: initialize()
     }
+    Connections {
+        target: accountClient
+        onConnected: {
+            if (!client.reconnecting)
+                state = "login";
+        }
+        onLoggedOut: {
+            if (state === "game")
+                accountClient.disconnect();
+        }
+    }
+
     Connections {
         target: resourceManager;
         onPathsLoadedChanged: {
@@ -71,14 +93,7 @@ Image {
         currentPage = newPage;
     }
 
-    Component.onCompleted: {
-        if (customServer === "") {
-            gotoPage(serverPage);
-        } else {
-            serverName = customServer;
-            accountClient.connect(customServer, customPort);
-        }
-    }
+    Component.onCompleted: initialize();
 
     Component { id: serverPage; ServerPage {} }
     Component { id: loginPage; LoginPage {} }
@@ -150,6 +165,12 @@ Image {
         } else if (state === "createCharacter") {
             state = "chooseCharacter";
             return true;
+        } else if (state === "game") {
+            gameClient.leave();
+            chatClient.leave();
+            characterChosen = false;
+            state = "chooseCharacter";
+            return true;
         }
 
         return false;
@@ -179,10 +200,12 @@ Image {
     states: [
         State {
             name: "serverSelect"
+            StateChangeScript {
+                script: gotoPage(serverPage);
+            }
         },
         State {
             name: "login"
-            when: accountClient.connected && !characterChosen
             StateChangeScript {
                 script: gotoPage(loginPage);
             }
@@ -209,7 +232,10 @@ Image {
             name: "game"
             when: chatClient.authenticated && gameClient.authenticated
             StateChangeScript {
-                script: gotoPage(gamePage);
+                script: {
+                    accountClient.logout();
+                    gotoPage(gamePage);
+                }
             }
             PropertyChanges {
                 target: window

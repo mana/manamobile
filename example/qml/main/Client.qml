@@ -6,10 +6,25 @@ import Mana 1.0
  * account, chat and game clients and provides access to them.
  */
 Item {
+    id: client
+
     property string serverName: "ManaSource!";
+
+    property string host
+    property int port
 
     property bool loggingIn: false
     property bool loggedIn: false
+    property bool reconnecting: false
+
+    signal reconnectFailed
+
+    function connect(_host, _port) {
+        reconnecting = false;
+        host = _host;
+        port = _port;
+        accountClient.connect(_host, _port);
+    }
 
     function setDataUrl(dataUrl) {
         resourceManager.dataUrl = dataUrl;
@@ -24,32 +39,50 @@ Item {
     }
 
     property AccountClient accountClient: AccountClient {
-        onConnected: requestRegistrationInfo();
+        onConnected: {
+            if (reconnecting)
+                reconnect(gameClient.token);
+            else
+                requestRegistrationInfo();
+        }
+
         onLoginSucceeded: {
             setDataUrl(dataUrl);
             loggedIn = true
             loggingIn = false
         }
         onLoginFailed: loggingIn = false;
+
         onRegistrationSucceeded: {
             setDataUrl(dataUrl);
             loggedIn = true
             loggingIn = false
         }
         onRegistrationFailed: loggingIn = false;
+
+        onReconnectFailed: client.reconnectFailed();
+
         onChooseCharacterSucceeded: {
             // Connect to chat and game servers
             chatClient.connect(chatServerHost, chatServerPort);
+            gameClient.playerName = accountClient.playerName;
             gameClient.connect(gameServerHost, gameServerPort);
         }
+
         onLoggedOut: loggedIn = false;
     }
     property ChatClient chatClient: ChatClient {
         onConnected: authenticate(accountClient.token);
     }
     property GameClient gameClient: GameClient {
-        playerName: accountClient.playerName;
         onConnected: authenticate(accountClient.token);
+        onTokenReceived: {
+            reconnecting = true;
+            if (accountClient.connected)
+                accountClient.reconnect(gameClient.token);
+            else
+                accountClient.connect(host, port);
+        }
     }
 
     Timer {

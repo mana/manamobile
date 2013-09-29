@@ -50,6 +50,7 @@ class GameClient : public ENetClient
     Q_OBJECT
 
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
+    Q_PROPERTY(QString token READ token NOTIFY tokenReceived)
     Q_PROPERTY(QString currentMapName READ currentMapName NOTIFY mapChanged)
     Q_PROPERTY(Mana::MapResource *currentMapResource READ currentMapResource NOTIFY mapChanged)
     Q_PROPERTY(int playerStartX READ playerStartX NOTIFY mapChanged)
@@ -85,6 +86,7 @@ public:
     ~GameClient();
 
     bool authenticated() const { return mAuthenticated; }
+    QString token() const { return mToken; }
 
     QString currentMapName() const { return mCurrentMap; }
     MapResource *currentMapResource() const { return mMapResource; }
@@ -111,6 +113,7 @@ public:
     Q_INVOKABLE void lookAt(qreal x, qreal y);
     Q_INVOKABLE void say(const QString &text);
     Q_INVOKABLE void respawn();
+    Q_INVOKABLE void leave();
 
     Q_INVOKABLE void talkToNpc(Mana::Being *being);
     Q_INVOKABLE void nextNpcMessage();
@@ -132,6 +135,7 @@ signals:
     void authenticationFailed(const QString &errorMessage);
 
     void authenticatedChanged();
+    void tokenReceived(const QString &token);
     void mapChanged(const QString &name, int x, int y);
     void playerChanged();
     void playerWalkDirectionChanged();
@@ -159,8 +163,10 @@ private:
     void updatePlayer(qreal deltaTime);
     void playerPositionChanged();
     void restoreWalkingSpeed();
+    void reset();
 
-    void handleAuthenticationResponse(MessageIn &message);
+    void handleConnectResponse(MessageIn &message);
+    void handleDisconnectResponse(MessageIn &message);
     void handlePlayerMapChanged(MessageIn &message);
 
     void handleInventory(MessageIn &message);
@@ -193,6 +199,7 @@ private:
     void handleQuestlogStatus(MessageIn &message);
 
     bool mAuthenticated;
+    QString mToken;
     QString mCurrentMap;
     MapResource *mMapResource;
     int mPlayerStartX;

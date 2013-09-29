@@ -41,11 +41,19 @@ void ChatClient::authenticate(const QString &token)
     send(msg);
 }
 
+void ChatClient::leave()
+{
+    send(MessageOut(Protocol::PCMSG_DISCONNECT));
+}
+
 void ChatClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
     case Protocol::CPMSG_CONNECT_RESPONSE:
-        handleAuthenticationResponse(message);
+        handleConnectResponse(message);
+        break;
+    case Protocol::CPMSG_DISCONNECT_RESPONSE:
+        handleDisconnectResponse(message);
         break;
     case Protocol::XXMSG_INVALID:
         qWarning() << "(ChatClient::messageReceived) Invalid received! "
@@ -58,7 +66,7 @@ void ChatClient::messageReceived(MessageIn &message)
     }
 }
 
-void ChatClient::handleAuthenticationResponse(MessageIn &message)
+void ChatClient::handleConnectResponse(MessageIn &message)
 {
     switch (message.readInt8()) {
     default:
@@ -75,6 +83,17 @@ void ChatClient::handleAuthenticationResponse(MessageIn &message)
         }
         break;
     }
+}
+
+void ChatClient::handleDisconnectResponse(MessageIn &message)
+{
+    if (message.readInt8() != ERRMSG_OK)
+        return;
+
+    mAuthenticated = false;
+    emit authenticatedChanged();
+
+    disconnect();
 }
 
 } // namespace Mana

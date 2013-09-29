@@ -51,6 +51,9 @@ ENetClient::~ENetClient()
 
 void ENetClient::connect(const QString &hostName, quint16 port)
 {
+    if (debug_enetclient)
+        qDebug() << "(ENetClient) Connecting to" << hostName << port;
+
     // Force a quick disconnect if a server is already connected
     if (mPeer) {
         enet_peer_disconnect_now(mPeer, 0);
