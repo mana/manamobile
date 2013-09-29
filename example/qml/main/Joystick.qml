@@ -37,7 +37,7 @@ Image {
         id: dot
 
         function joystickPosition() {
-            var maxDistance = 10;
+            var maxDistance = 20;
             var moveVector = Qt.vector2d(targetX - centerX, targetY - centerY);
             var newMoveVector = moveVector.normalized().times(maxDistance);
             if (moveVector.length() > newMoveVector.length())
