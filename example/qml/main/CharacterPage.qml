@@ -4,6 +4,7 @@ import Mana 1.0
 Item {
     Text {
         x: 10; y: x;
+        color: "beige"
         text: {
             if (accountClient.username != "")
                 "Logged in as " + accountClient.username;
@@ -29,88 +30,100 @@ Item {
     ErrorLabel {
         id: errorLabel;
 
-        anchors.bottom: column.top;
+        anchors.bottom: title.top
         anchors.bottomMargin: 20;
-        anchors.left: column.left;
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Component.onCompleted: characterList.forceActiveFocus();
 
-    Column {
-        id: column;
-        anchors.centerIn: parent
+    PathView {
+        id: characterList
+
+        model: accountClient.characterListModel
+
+        width: parent.width / scale
+        height: parent.height / scale
+        scale: backgroundScale
+        transformOrigin: Item.TopLeft
+
+        dragMargin: height / 2
+        preferredHighlightBegin: 0
+        preferredHighlightEnd: 0
+        highlightRangeMode: PathView.StrictlyEnforceRange;
+
+        focus: true
+        Keys.onLeftPressed: decrementCurrentIndex()
+        Keys.onRightPressed: incrementCurrentIndex()
+
+        path: Path {
+            id: path;
+
+            startX: characterList.width / 2
+            startY: characterList.height / 2 + 12
+
+            PathAttribute { name: "characterScale"; value: 1 }
+            PathQuad {
+                x: path.startX - 20; y: path.startY - 35
+                controlX: path.startX + 100; controlY: path.startY - 25
+            }
+            PathPercent { value: 0.5 }
+            PathAttribute { name: "characterScale"; value: 0.6 }
+            PathQuad {
+                x: path.startX; y: path.startY
+                controlX: path.startX - 100; controlY: path.startY - 25
+            }
+            PathAttribute { name: "characterScale"; value: 1 }
+        }
+
+        delegate: Item {
+            scale: PathView.characterScale
+            z: PathView.characterScale
+
+            CompoundSprite {
+                id: sprite
+                sprites: model.character.spriteListModel;
+                action: "stand";
+                direction: Action.DIRECTION_DOWN;
+            }
+
+            TextShadow { target: name }
+            Text {
+                id: name;
+                text: model.character.name;
+                color: "beige"
+                anchors.top: parent.bottom
+                anchors.topMargin: 12
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 12
+            }
+        }
+    }
+
+    Text {
+        id: title
+        anchors.top: parent.top
+        anchors.topMargin: parent.height / 10
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: qsTr("Choose your character...")
+        color: "beige"
+    }
+
+    Row {
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: parent.height / 10
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 10
-
-        Text {
-            id: title;
-            text: qsTr("Choose your character...")
-        }
-
-        GridView {
-            id: characterList;
-            flow: GridView.LeftToRight;
-
-            width: window.width * 0.3;
-            height: window.height * 0.3;
-
-            clip: true;
-
-            model: accountClient.characterListModel;
-            delegate: Item {
-                id: container;
-                width: 64;
-                height: 64 + name.height;
-
-                CompoundSprite {
-                    sprites: model.character.spriteListModel;
-                    action: "stand";
-                    direction: Action.DIRECTION_DOWN;
-
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    anchors.bottom: parent.bottom;
-                    anchors.bottomMargin: name.height + 12;
-                }
-
-                Text {
-                    id: name;
-                    text: model.character.name;
-                    anchors.bottom: parent.bottom;
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        characterList.currentIndex = model.index;
-                        chooseCharacter();
-                    }
-                }
-            }
-            highlight: Rectangle {
-                color: "black";
-                opacity: 0.2;
-                width: characterList.currentItem.width;
-                height: characterList.currentItem.height;
-            }
-
-            onCountChanged: {
-                // Select first item when possible
-                if (currentIndex == -1 && count > 0)
-                    currentIndex = 0;
-            }
-
-            Rectangle {
-                anchors.fill: parent;
-                color: "transparent";
-                border.color: "black";
-                border.width: 1;
-            }
-        }
 
         Button {
             text: qsTr("New");
             onClicked: window.state = "createCharacter";
             enabled: characterList.count < accountClient.maxCharacters;
+        }
+        Button {
+            text: qsTr("Play")
+            onClicked: chooseCharacter()
+            enabled: characterList.currentIndex >= 0
         }
     }
 
