@@ -356,10 +356,14 @@ void AccountClient::handleCharacterCreateResponse(MessageIn &message)
 {
     const int error = message.readInt8();
 
-    if (error == ERRMSG_OK)
-        emit createCharacterSucceeded();
-    else
+    if (error != ERRMSG_OK) {
         emit createCharacterFailed(error, createCharacterErrorMessage(error));
+        return;
+    }
+    emit createCharacterSucceeded();
+    readCharacterInfo(message);
+
+    mCharacterListModel->setCharacters(mCharacters);
 }
 
 void AccountClient::handleCharacterDeleteResponse(MessageIn &message)
@@ -383,6 +387,17 @@ void AccountClient::handleCharacterDeleteResponse(MessageIn &message)
 }
 
 void AccountClient::handleCharacterInfo(MessageIn &message)
+{
+    mCharacters.clear();
+
+    while (message.unreadData()) {
+        readCharacterInfo(message);
+    }
+
+    mCharacterListModel->setCharacters(mCharacters);
+}
+
+void AccountClient::readCharacterInfo(MessageIn &message)
 {
     Character *character = new Character;
 
@@ -412,7 +427,9 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
 
     character->setEquipmentSlots(equipment);
 
-    while (message.unreadData()) {
+    int numberOfAttributes = message.readInt8();
+
+    while (numberOfAttributes-- > 0) {
         const unsigned id = message.readInt32();
 
         int base = message.readInt32() / 256.0;
@@ -426,7 +443,6 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     }
 
     mCharacters.append(character);
-    mCharacterListModel->setCharacters(mCharacters);
 
     emit characterInfoReceived(character);
 }
