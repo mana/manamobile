@@ -52,7 +52,9 @@ class AccountClient : public ENetClient
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(QString playerName READ playerName NOTIFY playerNameChanged)
 
+
     Q_PROPERTY(int maxCharacters READ maxCharacters NOTIFY serverInfoChanged)
+    Q_PROPERTY(int numberOfCharacters READ numberOfCharacters NOTIFY characterInfoReceived)
     Q_PROPERTY(Mana::CharacterListModel *characterListModel READ characterListModel CONSTANT)
 
 public:
@@ -77,6 +79,7 @@ public:
     QString playerName() const { return mPlayerName; }
 
     int maxCharacters() const { return mMaxCharacters; }
+    int numberOfCharacters() const;
 
     CharacterListModel *characterListModel() const
     { return mCharacterListModel; }
@@ -138,6 +141,8 @@ signals:
     void passwordChangeFailed(int error, const QString &errorMessage);
 
     void registrationInfoChanged();
+
+    void characterDataReceived(int count);
 
     void serverInfoChanged();
     void tokenChanged();

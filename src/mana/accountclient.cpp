@@ -52,6 +52,11 @@ AccountClient::~AccountClient()
     qDeleteAll(mCharacters);
 }
 
+int AccountClient::numberOfCharacters() const
+{
+    return mCharacters.count();
+}
+
 void AccountClient::requestRegistrationInfo()
 {
     send(MessageOut(Protocol::PAMSG_REQUEST_REGISTER_INFO));
@@ -395,6 +400,8 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
     }
 
     mCharacterListModel->setCharacters(mCharacters);
+
+    emit characterDataReceived(mCharacters.count());
 }
 
 void AccountClient::readCharacterInfo(MessageIn &message)

@@ -135,4 +135,12 @@ Item {
             console.log(errorMessage);
         }
     }
+
+    Connections {
+        target: accountClient;
+        onCharacterDataReceived: {
+            if (accountClient.connected && characterList.count == 0)
+                window.state = "createCharacter";
+        }
+    }
 }

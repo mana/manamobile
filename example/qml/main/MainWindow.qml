@@ -31,12 +31,19 @@ Image {
         anchors.right: parent.right;
     }
 
+    function switchToChooseCharacter() {
+        if (client.accountClient.numberOfCharacters > 0)
+            state = "chooseCharacter";
+        else
+            state = "createCharacter";
+    }
+
     Connections {
         target: client
         onLoggedInChanged: {
             if (client.loggedIn) {
                 if (resourceManager.pathsLoaded)
-                    state = "chooseCharacter";
+                    switchToChooseCharacter()
                 else
                     state = "loadingPaths";
             }
@@ -59,7 +66,7 @@ Image {
         target: resourceManager;
         onPathsLoadedChanged: {
             if (resourceManager.pathsLoaded && state == "loadingPaths")
-                state = "chooseCharacter";
+                switchToChooseCharacter();
         }
     }
 
