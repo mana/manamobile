@@ -51,7 +51,7 @@ Item {
         }
 
         ChatLog {
-            anchors.top: respawnButton.bottom
+            maxHeight: window.height - respawnButton.y - respawnButton.height;
             anchors.left: joystick.right
             anchors.right: actionBar.left
             anchors.bottom: parent.bottom

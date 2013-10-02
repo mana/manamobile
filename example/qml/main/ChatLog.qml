@@ -3,6 +3,8 @@ import Mana 1.0
 
 Item {
     clip: true
+    property int maxHeight;
+    height: Math.min(maxHeight, chatView.childrenRect.height + chatView.anchors.margins * 2);
 
     ListModel { id: chatModel }
     Connections {
