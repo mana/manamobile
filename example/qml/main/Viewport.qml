@@ -103,6 +103,7 @@ Rectangle {
                     source: itemInfo ?
                                 resourceManager.dataUrl + resourceManager.itemIconsPrefix + itemInfo.image :
                                 undefined;
+                    smooth: false;
                 }
             }
         }
