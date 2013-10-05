@@ -13,6 +13,8 @@ Item {
         }
     }
 
+    property bool deletingCharacter: false
+
     function chooseCharacter() {
         if (window.characterChosen)
             return;
@@ -22,6 +24,14 @@ Item {
         window.characterChosen = true;
         errorLabel.clear()
         accountClient.chooseCharacter(characterList.currentIndex);
+    }
+
+    function deleteCharacter() {
+        if (characterList.currentIndex < 0)
+            return;
+
+        deletingCharacter = true;
+        accountClient.deleteCharacter(characterList.currentIndex);
     }
 
     Keys.onReturnPressed: chooseCharacter();
@@ -116,14 +126,19 @@ Item {
         spacing: 10
 
         Button {
+            text: qsTr("Delete")
+            onClicked: deleteCharacter()
+            enabled: characterList.currentIndex >= 0 && !characterChosen
+        }
+        Button {
             text: qsTr("New");
             onClicked: window.state = "createCharacter";
-            enabled: characterList.count < accountClient.maxCharacters;
+            enabled: characterList.count < accountClient.maxCharacters && !characterChosen
         }
         Button {
             text: qsTr("Play")
             onClicked: chooseCharacter()
-            enabled: characterList.currentIndex >= 0
+            enabled: characterList.currentIndex >= 0 && !characterChosen
         }
     }
 
@@ -134,10 +149,12 @@ Item {
             errorLabel.showError(errorMessage);
             console.log(errorMessage);
         }
-    }
-
-    Connections {
-        target: accountClient;
+        onDeleteCharacterFailed: {
+            deletingCharacter = false;
+            errorLabel.showError(errorMessage);
+            console.log(errorMessage);
+        }
+        onDeleteCharacterSucceeded: deletingCharacter = false;
         onCharacterDataReceived: {
             if (accountClient.connected && characterList.count == 0)
                 window.state = "createCharacter";
