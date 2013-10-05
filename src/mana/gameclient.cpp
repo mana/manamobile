@@ -61,6 +61,7 @@ GameClient::GameClient(QObject *parent)
 {
     QObject::connect(mLogicDriver, SIGNAL(update(qreal)),
                      this, SLOT(update(qreal)));
+    mPickupTimer.start();
 }
 
 GameClient::~GameClient()
@@ -395,7 +396,7 @@ void GameClient::updatePlayer(qreal deltaTime)
             dropsInRange.append(drop);
     }
 
-    if (!dropsInRange.empty() && mPickupTimer.elapsed() > 1000) {
+    if (!dropsInRange.empty() && mPickupTimer.hasExpired(1000)) {
         foreach (Drop *drop, dropsInRange)
             pickupDrop(drop);
 
