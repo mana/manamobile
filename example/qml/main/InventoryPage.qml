@@ -3,6 +3,12 @@ import QtQuick 2.0
 Item {
     id: inventoryPanel;
 
+    state: "closed"
+
+    function toggle() {
+        state = state === "closed" ? "open" : "closed";
+    }
+
     Image {
         id: tab
         source: "images/tab.png"
@@ -30,8 +36,7 @@ Item {
         onClicked: toggle();
         onReleased: {
             var open = inventoryPanel.x < inventoryPanel.parent.width - inventoryPanel.width / 2;
-            inventoryPanel.x = open ? inventoryPanel.parent.width - inventoryPanel.width
-                                    : inventoryPanel.parent.width;
+            inventoryPanel.state = ""  // hack to make sure to trigger transition
             inventoryPanel.state = open ? "open" : "closed";
         }
     }
@@ -45,18 +50,6 @@ Item {
         border.left: 40; border.top: 31
         border.right: 38; border.bottom: 32
         smooth: false
-    }
-
-    state: "closed";
-
-    width: parent.width / 2 - 22 - 32;
-    x: parent.width;
-
-    anchors.top: parent.top;
-    anchors.bottom: parent.bottom;
-
-    function toggle() {
-        state = state === "closed" ? "open" : "closed";
     }
 
     Item {
@@ -139,10 +132,6 @@ Item {
         }
     }
 
-    Behavior on x {
-        NumberAnimation { easing.type: Easing.OutQuad }
-    }
-
     states: [
         State {
             name: "open";
@@ -157,6 +146,12 @@ Item {
                 target: inventoryPanel;
                 x: inventoryPanel.parent.width;
             }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            NumberAnimation { property: "x"; easing.type: Easing.OutQuad }
         }
     ]
 }

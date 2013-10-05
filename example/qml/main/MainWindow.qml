@@ -20,6 +20,7 @@ Image {
         }
     }
 
+    readonly property real gameScale: Math.ceil(Math.max(width / 959, height / 959))
     readonly property real backgroundScale: Math.max(width / sourceSize.width,
                                                      height / sourceSize.height);
 

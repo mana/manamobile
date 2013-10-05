@@ -14,9 +14,9 @@ Item {
         id: viewport;
         width: parent.width / scale;
         height: parent.height / scale;
-        scale: Math.ceil(Math.max(gamePage.width / 959, gamePage.height / 959));
+        scale: window.gameScale
         transformOrigin: Item.TopLeft;
-        centerX: (statusPage.x + statusPage.width + inventoryPage.x) / 2;
+        centerX: visibleArea.x + visibleArea.width / 2;
 
         Item {
             id: visibleArea
@@ -69,8 +69,19 @@ Item {
             anchors.bottomMargin: 5;
         }
 
-        StatusPage { id: statusPage; }
-        InventoryPage { id: inventoryPage; }
+        StatusPage {
+            id: statusPage
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: viewport.width / 2 - 22 - 32
+        }
+
+        InventoryPage {
+            id: inventoryPage
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: viewport.width / 2 - 22 - 32
+        }
 
         Joystick {
             id: joystick

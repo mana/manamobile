@@ -3,6 +3,12 @@ import QtQuick 2.0
 Item {
     id: statusPanel;
 
+    state: "closed"
+
+    function toggle() {
+        state = state === "closed" ? "open" : "closed";
+    }
+
     Image {
         id: tab
         source: "images/tab.png"
@@ -30,7 +36,7 @@ Item {
         onClicked: toggle();
         onReleased: {
             var open = -statusPanel.x < statusPanel.width / 2;
-            statusPanel.x = open ? 0 : -statusPanel.width;
+            statusPanel.state = ""  // hack to make sure to trigger transition
             statusPanel.state = open ? "open" : "closed";
         }
     }
@@ -44,18 +50,6 @@ Item {
         border.left: 40; border.top: 31
         border.right: 38; border.bottom: 32
         smooth: false
-    }
-
-    state: "closed";
-
-    width: parent.width / 2 - 22 - 32;
-
-    anchors.top: parent.top;
-    anchors.bottom: parent.bottom;
-
-
-    function toggle() {
-        state = state === "closed" ? "open" : "closed";
     }
 
     Item {
@@ -103,10 +97,6 @@ Item {
         }
     }
 
-    Behavior on x {
-        NumberAnimation { easing.type: Easing.OutQuad }
-    }
-
     states: [
         State {
             name: "open";
@@ -122,6 +112,12 @@ Item {
                 target: statusPanel;
                 x: -statusPanel.width;
             }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            NumberAnimation { property: "x"; easing.type: Easing.OutQuad }
         }
     ]
 }
