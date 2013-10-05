@@ -68,6 +68,7 @@ void DropListModel::removeDrop(const QPoint &position)
     int index = it - mDropList.begin();
     beginRemoveRows(QModelIndex(), index, index);
     mDropList.removeAt(index);
+    endRemoveRows();
 }
 
 void DropListModel::clear()
