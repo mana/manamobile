@@ -22,6 +22,7 @@
 #include "enetclient.h"
 
 #include <QDateTime>
+#include <QElapsedTimer>
 #include <QPoint>
 #include <QStringList>
 #include <QVector2D>
@@ -33,6 +34,7 @@ class AttributeListModel;
 class Being;
 class BeingListModel;
 class Character;
+class Drop;
 class DropListModel;
 class InventoryListModel;
 class LogicDriver;
@@ -134,6 +136,8 @@ public:
     Q_INVOKABLE void equip(unsigned slot);
     Q_INVOKABLE void unequip(unsigned slot);
 
+    Q_INVOKABLE void pickupDrop(Mana::Drop *drop);
+
 signals:
     void authenticationFailed(const QString &errorMessage);
 
@@ -220,6 +224,8 @@ private:
     QString mNpcMessage;
     QStringList mNpcChoices;
     NPC *mNpc;
+
+    QElapsedTimer mPickupTimer;
 
     AbilityListModel *mAbilityListModel;
     AttributeListModel *mAttributeListModel;

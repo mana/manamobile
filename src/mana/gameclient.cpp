@@ -223,6 +223,14 @@ void GameClient::unequip(unsigned slot)
     send(message);
 }
 
+void GameClient::pickupDrop(Drop *drop)
+{
+    MessageOut message(Protocol::PGMSG_PICKUP);
+    message.writeInt16(drop->position().x());
+    message.writeInt16(drop->position().y());
+    send(message);
+}
+
 void GameClient::messageReceived(MessageIn &message)
 {
     switch (message.id()) {
@@ -375,6 +383,24 @@ void GameClient::updatePlayer(qreal deltaTime)
     const Tiled::TileLayer *collisionLayer = mMapResource->collisionLayer();
     if (!collisionLayer)
         return;
+
+    const QList<Drop *> &drops = dropListModel()->drops();
+    QList<Drop *> dropsInRange;
+
+    const QPointF &playerPosition = mPlayerCharacter->position();
+    foreach (Drop *drop, drops) {
+        QVector2D distance = QVector2D(playerPosition - drop->position());
+
+        if (distance.lengthSquared() < PICKUP_RANGE * PICKUP_RANGE)
+            dropsInRange.append(drop);
+    }
+
+    if (!dropsInRange.empty() && mPickupTimer.elapsed() > 1000) {
+        foreach (Drop *drop, dropsInRange)
+            pickupDrop(drop);
+
+        mPickupTimer.restart();
+    }
 
     const qreal walkDistance = mPlayerCharacter->walkSpeed() * deltaTime;
     QVector2D direction = mPlayerWalkDirection;

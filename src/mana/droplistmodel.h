@@ -63,6 +63,8 @@ public:
     void removeDrop(const QPoint &coordinates);
     void clear();
 
+    const QList<Drop *> &drops() const;
+
 private:
     QList<Drop *> mDropList;
 
@@ -85,6 +87,11 @@ inline unsigned Drop::id() const
 inline const QPoint &Drop::position() const
 {
     return mPosition;
+}
+
+inline const QList<Drop *> &DropListModel::drops() const
+{
+    return mDropList;
 }
 
 }
