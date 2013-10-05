@@ -22,7 +22,7 @@ Item {
             id: visibleArea
             anchors.top: parent.top
             anchors.left: statusPage.right
-            anchors.right: inventoryPage.left
+            anchors.right: rightPanel.left
             anchors.bottom: parent.bottom
         }
 
@@ -76,8 +76,8 @@ Item {
             width: viewport.width / 2 - 22 - 32
         }
 
-        InventoryPage {
-            id: inventoryPage
+        RightPanel {
+            id: rightPanel
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: viewport.width / 2 - 22 - 32
@@ -150,16 +150,14 @@ Item {
             statusPage.toggle();
 
         if (pressed && event.key === Qt.Key_I)
-            inventoryPage.toggle();
+            rightPanel.toggle();
 
         if (pressed && event.key === Qt.Key_Q)
-            questPage.toggle();
+            rightPanel.toggle();
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
     Keys.onPressed: handleKeyEvent(event, true);
-
-    QuestPage { id: questPage; }
 
     FocusScope {
         id: chatBar;
