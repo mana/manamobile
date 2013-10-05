@@ -33,6 +33,7 @@ class AttributeListModel;
 class Being;
 class BeingListModel;
 class Character;
+class DropListModel;
 class InventoryListModel;
 class LogicDriver;
 class MapResource;
@@ -70,6 +71,7 @@ class GameClient : public ENetClient
     Q_PROPERTY(Mana::AbilityListModel *abilityListModel READ abilityListModel CONSTANT)
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
+    Q_PROPERTY(Mana::DropListModel *dropListModel READ dropListModel CONSTANT)
     Q_PROPERTY(Mana::InventoryListModel *inventoryListModel READ inventoryListModel CONSTANT)
     Q_PROPERTY(Mana::QuestlogListModel *questlogListModel READ questlogListModel CONSTANT)
 
@@ -125,6 +127,7 @@ public:
     AbilityListModel *abilityListModel() const;
     AttributeListModel *attributeListModel() const;
     BeingListModel *beingListModel() const;
+    DropListModel *dropListModel() const;
     InventoryListModel *inventoryListModel() const;
     QuestlogListModel *questlogListModel() const;
 
@@ -178,10 +181,12 @@ private:
 
     void handleBeingEnter(MessageIn &message);
     void handleBeingLeave(MessageIn &message);
+    void handleItemAppear(MessageIn &message);
     void handleBeingLooksChange(MessageIn &message);
     void handleBeingActionChange(MessageIn &message);
     void handleBeingDirChange(MessageIn &message);
     void handleBeingsMove(MessageIn &message);
+    void handleItems(MessageIn &message);
     void handleBeingAbilityOnPoint(MessageIn &message);
     void handleBeingAbilityOnBeing(MessageIn &message);
     void handleBeingAbilityOnDirection(MessageIn &message);
@@ -219,6 +224,7 @@ private:
     AbilityListModel *mAbilityListModel;
     AttributeListModel *mAttributeListModel;
     BeingListModel *mBeingListModel;
+    DropListModel *mDropListModel;
     InventoryListModel *mInventoryListModel;
     LogicDriver *mLogicDriver;
     QuestlogListModel *mQuestlogListModel;
@@ -237,6 +243,11 @@ inline AttributeListModel *GameClient::attributeListModel() const
 inline BeingListModel *GameClient::beingListModel() const
 {
     return mBeingListModel;
+}
+
+inline DropListModel *GameClient::dropListModel() const
+{
+    return mDropListModel;
 }
 
 inline InventoryListModel *GameClient::inventoryListModel() const

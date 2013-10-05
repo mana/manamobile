@@ -89,6 +89,25 @@ Rectangle {
         }
 
         Repeater {
+            model: gameClient.dropListModel;
+            delegate: Item {
+                x: model.drop.position.x;
+                y: model.drop.position.y;
+                z: y;
+
+                property variant itemInfo: itemDB.isLoaded ?
+                                               itemDB.getInfo(model.drop.id) :
+                                               undefined;
+                Image {
+                    anchors.centerIn: parent;
+                    source: itemInfo ?
+                                resourceManager.dataUrl + resourceManager.itemIconsPrefix + itemInfo.image :
+                                undefined;
+                }
+            }
+        }
+
+        Repeater {
             model: gameClient.beingListModel;
             delegate: Item {
                 x: model.being.x;

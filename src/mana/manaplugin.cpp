@@ -25,6 +25,7 @@
 #include "beinglistmodel.h"
 #include "characterlistmodel.h"
 #include "chatclient.h"
+#include "droplistmodel.h"
 #include "enetclient.h"
 #include "gameclient.h"
 #include "inventorylistmodel.h"
@@ -111,6 +112,9 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::AttributeListModel>();
     qmlRegisterType<Mana::AttributeInfo>();
     qmlRegisterType<Mana::AttributeValue>();
+
+    qmlRegisterType<Mana::Drop>();
+    qmlRegisterType<Mana::DropListModel>();
 
     qmlRegisterType<Mana::InventoryListModel>();
 

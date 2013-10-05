@@ -40,6 +40,7 @@ SOURCES += \
     mana/characterlistmodel.cpp \
     mana/chatclient.cpp \
     mana/collisionhelper.cpp \
+    mana/droplistmodel.cpp \
     mana/enetclient.cpp \
     mana/gameclient.cpp \
     mana/inventorylistmodel.cpp \
@@ -100,6 +101,7 @@ HEADERS += \
     mana/characterlistmodel.h \
     mana/chatclient.h \
     mana/collisionhelper.h \
+    mana/droplistmodel.h \
     mana/enetclient.h \
     mana/gameclient.h \
     mana/inventorylistmodel.h \

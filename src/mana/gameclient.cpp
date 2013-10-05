@@ -23,6 +23,7 @@
 #include "being.h"
 #include "beinglistmodel.h"
 #include "character.h"
+#include "droplistmodel.h"
 #include "collisionhelper.h"
 #include "inventorylistmodel.h"
 #include "logicdriver.h"
@@ -53,6 +54,7 @@ GameClient::GameClient(QObject *parent)
     , mAbilityListModel(new AbilityListModel(this))
     , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
+    , mDropListModel(new DropListModel(this))
     , mInventoryListModel(new InventoryListModel(this))
     , mLogicDriver(new LogicDriver(this))
     , mQuestlogListModel(new QuestlogListModel(this))
@@ -257,6 +259,9 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_BEING_LEAVE:
         handleBeingLeave(message);
         break;
+    case Protocol::GPMSG_ITEM_APPEAR:
+        handleItemAppear(message);
+        break;
     case Protocol::GPMSG_BEING_LOOKS_CHANGE:
         handleBeingLooksChange(message);
         break;
@@ -268,6 +273,9 @@ void GameClient::messageReceived(MessageIn &message)
         break;
     case Protocol::GPMSG_BEINGS_MOVE:
         handleBeingsMove(message);
+        break;
+    case Protocol::GPMSG_ITEMS:
+        handleItems(message);
         break;
     case Protocol::GPMSG_BEING_ABILITY_POINT:
         handleBeingAbilityOnPoint(message);
@@ -526,6 +534,8 @@ void GameClient::handlePlayerMapChanged(MessageIn &message)
     // None of the beings are valid on the new map, including the player
     mBeingListModel->clear();
 
+    mDropListModel->clear();
+
     emit mapChanged(mCurrentMap, mPlayerStartX, mPlayerStartY);
 }
 
@@ -682,6 +692,15 @@ void GameClient::handleBeingLeave(MessageIn &message)
     mBeingListModel->removeBeing(id);
 }
 
+void GameClient::handleItemAppear(MessageIn &message)
+{
+    int id = message.readInt16();
+    int x = message.readInt16();
+    int y = message.readInt16();
+
+    mDropListModel->addDrop(id, QPoint(x, y));
+}
+
 void GameClient::handleBeingLooksChange(MessageIn &message)
 {
     const int id = message.readInt16();
@@ -763,6 +782,21 @@ void GameClient::handleBeingsMove(MessageIn &message)
             QPointF pos(dx, dy);
             being->setServerPosition(pos);
         }
+    }
+}
+
+void GameClient::handleItems(MessageIn &message)
+{
+    while (message.unreadData()) {
+        int id = message.readInt16();
+        int x = message.readInt16();
+        int y = message.readInt16();
+        QPoint position(x, y);
+
+        if (id == 0)
+            mDropListModel->removeDrop(position);
+        else
+            mDropListModel->addDrop(id, position);
     }
 }
 
