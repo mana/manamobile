@@ -5,83 +5,92 @@ Item {
 
     state: "closed"
 
-    function toggle(page) {
-        state = state === "closed" ? "open" : "closed";
+    property string page: "inventory"
+
+    property bool toggleOnClick: false
+
+    function toggle(_page) {
+        if (state == "closed") {
+            page = _page;
+            state = "open";
+        } else if (page !== _page) {
+            page = _page;
+        } else {
+            state = "closed";
+        }
     }
 
-    Column {
+    Image {
+        id: inventoryTab
+        source: "images/tab.png"
+        smooth: false
+
         anchors.right: parent.left
-        anchors.rightMargin: -3
+        anchors.rightMargin: -4
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -parent.height / 6
-        spacing: 10
+        z: page == "inventory" ? 1 : 0
 
         Image {
-            id: inventoryTab
-            source: "images/tab.png"
+            source: "images/tab_icon_inventory.png"
+            anchors.centerIn: parent
             smooth: false
+        }
+        MouseArea {
+            anchors.fill: parent
+            anchors.margins: -5
 
-            Image {
-                source: "images/tab_icon_inventory.png"
-                anchors.centerIn: parent
-                smooth: false
+            drag.target: rightPanel
+            drag.axis: Drag.XAxis
+            drag.minimumX: rightPanel.parent.width - rightPanel.width
+            drag.maximumX: rightPanel.parent.width
+
+            onPressed: {
+                toggleOnClick = rightPanel.state == "closed" || page == "inventory";
+                page = "inventory";
             }
-            MouseArea {
-                anchors.fill: parent
-                anchors.margins: -5
-
-                drag.target: rightPanel
-                drag.axis: Drag.XAxis
-                drag.minimumX: rightPanel.parent.width - rightPanel.width
-                drag.maximumX: rightPanel.parent.width
-
-                onClicked: {
-                    if (rightPanel.state === "closed" || inventoryPanel.visible)
-                        toggle();
-
-                    inventoryPanel.visible = true
-                    questPanel.visible = false
-                }
-                onReleased: {
-                    var open = rightPanel.x < rightPanel.parent.width - rightPanel.width / 2;
-                    rightPanel.state = ""  // hack to make sure to trigger transition
-                    rightPanel.state = open ? "open" : "closed";
-                }
+            onClicked: if (toggleOnClick) toggle("inventory");
+            onReleased: {
+                var open = rightPanel.x < rightPanel.parent.width - rightPanel.width / 2;
+                rightPanel.state = ""  // hack to make sure to trigger transition
+                rightPanel.state = open ? "open" : "closed";
             }
         }
+    }
+
+    Image {
+        id: questTab
+        source: "images/tab.png"
+        smooth: false
+
+        anchors.right: inventoryTab.right
+        anchors.top: inventoryTab.bottom
+        anchors.topMargin: 10
+        z: page == "quest" ? 1 : 0
 
         Image {
-            id: questTab
-            source: "images/tab.png"
-            anchors.rightMargin: -3
+            source: "images/tab_icon_questlog.png"
+            anchors.centerIn: parent
             smooth: false
+        }
+        MouseArea {
+            anchors.fill: parent
+            anchors.margins: -5
 
-            Image {
-                source: "images/tab_icon_questlog.png"
-                anchors.centerIn: parent
-                smooth: false
+            drag.target: rightPanel
+            drag.axis: Drag.XAxis
+            drag.minimumX: rightPanel.parent.width - rightPanel.width
+            drag.maximumX: rightPanel.parent.width
+
+            onPressed: {
+                toggleOnClick = rightPanel.state == "closed" || page == "quest";
+                page = "quest";
             }
-            MouseArea {
-                anchors.fill: parent
-                anchors.margins: -5
-
-                drag.target: rightPanel
-                drag.axis: Drag.XAxis
-                drag.minimumX: rightPanel.parent.width - rightPanel.width
-                drag.maximumX: rightPanel.parent.width
-
-                onClicked: {
-                    if (rightPanel.state === "closed" || questPanel.visible)
-                        toggle();
-
-                    inventoryPanel.visible = false
-                    questPanel.visible = true
-                }
-                onReleased: {
-                    var open = rightPanel.x < rightPanel.parent.width - rightPanel.width / 2;
-                    rightPanel.state = ""  // hack to make sure to trigger transition
-                    rightPanel.state = open ? "open" : "closed";
-                }
+            onClicked: if (toggleOnClick) toggle("quest");
+            onReleased: {
+                var open = rightPanel.x < rightPanel.parent.width - rightPanel.width / 2;
+                rightPanel.state = ""  // hack to make sure to trigger transition
+                rightPanel.state = open ? "open" : "closed";
             }
         }
     }
@@ -107,8 +116,14 @@ Item {
 
         clip: true
 
-        InventoryPanel { id: inventoryPanel }
-        QuestPanel { id: questPanel; visible: false }
+        InventoryPanel {
+            id: inventoryPanel
+            visible: page == "inventory"
+        }
+        QuestPanel {
+            id: questPanel
+            visible: page == "quest"
+        }
     }
 
     states: [

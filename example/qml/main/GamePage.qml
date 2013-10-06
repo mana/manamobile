@@ -150,10 +150,10 @@ Item {
             statusPage.toggle();
 
         if (pressed && event.key === Qt.Key_I)
-            rightPanel.toggle();
+            rightPanel.toggle("inventory");
 
         if (pressed && event.key === Qt.Key_Q)
-            rightPanel.toggle();
+            rightPanel.toggle("quest");
     }
 
     Keys.onReleased: handleKeyEvent(event, false);
