@@ -75,8 +75,10 @@ Image {
         anchors.right: window.right
         anchors.bottom: window.bottom
         anchors.margins: 10
-        running: accountClient.state === AccountClient.Connecting || loggingIn
-                 || (characterChosen && window.state != "game");
+        running: accountClient.state === AccountClient.Connecting ||
+                 accountClient.state === AccountClient.HostLookup ||
+                 loggingIn ||
+                 (characterChosen && window.state != "game");
         z: 1;
     }
 
