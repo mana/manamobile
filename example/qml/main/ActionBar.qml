@@ -33,17 +33,9 @@ Item {
 
             startX: actionBar.width - 32;
             startY: actionBar.height - 32;
-            PathAttribute {
-                name: "elementSize";
-                value: 2;
-            }
             PathLine {
                 x: path.startX + Math.cos(path.startAngle) * path.radius
                 y: path.startY - Math.sin(path.startAngle) * path.radius
-            }
-            PathAttribute {
-                name: "elementSize";
-                value: 1;
             }
             PathPercent {
                 value: 0.0001;
@@ -54,20 +46,18 @@ Item {
                 radiusX: path.radius
                 radiusY: path.radius
             }
-            PathAttribute {
-                name: "elementSize";
-                value: 1;
-            }
             PathPercent {
                 value: 1;
             }
         }
 
         delegate: Item {
-            scale: PathView.elementSize;
             ImageButton {
                 anchors.centerIn: parent;
+                baseName: index == 0 ? "images/bigroundbutton" : "images/roundbutton"
+
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
+
                 onClicked: {
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
                         gameClient.useAbilityOnDirection(model.ability.id);

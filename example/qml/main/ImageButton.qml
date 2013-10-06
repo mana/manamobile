@@ -5,16 +5,13 @@ import QtQuick.Controls.Styles 1.0
 Button {
     id: button;
 
+    property string baseName: "images/roundbutton"
     property alias imagePath: image.source
-
-    width: 32;
-    height: 32;
 
     style: ButtonStyle {
         background: Image {
             smooth: false;
             source: {
-                var baseName = "images/roundbutton";
                 if (control.pressed)
                     return baseName + "_pressed.png";
                 return baseName + ".png";
