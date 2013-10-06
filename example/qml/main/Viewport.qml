@@ -127,6 +127,7 @@ Rectangle {
                     height: 64;
 
                     anchors.bottom: parent.bottom;
+                    anchors.bottomMargin: -16
                     anchors.horizontalCenter: parent.horizontalCenter;
 
                     onClicked: {
