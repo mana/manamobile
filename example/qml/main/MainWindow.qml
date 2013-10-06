@@ -75,8 +75,8 @@ Image {
         anchors.right: window.right
         anchors.bottom: window.bottom
         anchors.margins: 10
-        running: accountClient.state === AccountClient.Connecting ||
-                 accountClient.state === AccountClient.HostLookup ||
+        running: accountClient.state === AccountClient.HostLookup ||
+                 accountClient.state === AccountClient.Connecting ||
                  loggingIn ||
                  (characterChosen && window.state != "game");
         z: 1;
