@@ -4,7 +4,7 @@ import Mana 1.0
 Item {
     clip: true
     property int maxHeight;
-    height: Math.min(maxHeight, chatView.childrenRect.height + chatView.anchors.margins * 2);
+    height: 100
 
     ListModel { id: chatModel }
     Connections {
@@ -17,12 +17,8 @@ Item {
     }
 
     Rectangle {
-        anchors.left: chatView.left
-        anchors.right: chatView.right
-        anchors.bottom: chatView.bottom
-        height: Math.min(chatView.contentHeight + 10, parent.height)
-        anchors.margins: -5
-        opacity: 0.5
+        anchors.fill: parent
+        color: Qt.rgba(0, 0, 0, 0.25)
     }
     ListView {
         id: chatView
@@ -34,20 +30,24 @@ Item {
             height: messageLabel.height
             anchors.left: parent.left
             anchors.right: parent.right
+            TextShadow { target: nameLabel }
+            TextShadow { target: messageLabel }
             Text {
                 id: nameLabel
+                color: "BurlyWood"
                 font.bold: true
                 font.pixelSize: 12
-                text: model.name
+                text: "<" + model.name + ">"
             }
             Text {
                 id: messageLabel
+                color: "beige"
                 font.pixelSize: 12
                 text: model.message
                 wrapMode: Text.Wrap
                 anchors.left: nameLabel.right
                 anchors.right: parent.right
-                anchors.leftMargin: 10
+                anchors.leftMargin: 5
             }
         }
     }

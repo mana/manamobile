@@ -23,7 +23,7 @@ Item {
             anchors.top: parent.top
             anchors.left: statusPage.right
             anchors.right: rightPanel.left
-            anchors.bottom: parent.bottom
+            anchors.bottom: chatLog.top
         }
 
         HealthBar {
@@ -51,13 +51,12 @@ Item {
         }
 
         ChatLog {
-            maxHeight: window.height - respawnButton.y - respawnButton.height;
+            id: chatLog
             anchors.left: joystick.right
             anchors.right: actionBar.left
             anchors.bottom: parent.bottom
-            anchors.leftMargin: 20
-            anchors.rightMargin: 20
-            anchors.bottomMargin: 10
+            anchors.leftMargin: 0
+            anchors.rightMargin: 0
         }
 
         NpcDialog {
@@ -72,14 +71,14 @@ Item {
         StatusPage {
             id: statusPage
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.bottom: chatLog.top
             width: viewport.width / 2 - 22 - 32
         }
 
         RightPanel {
             id: rightPanel
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.bottom: chatLog.top
             width: viewport.width / 2 - 22 - 32
         }
 
@@ -87,8 +86,6 @@ Item {
             id: joystick
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            anchors.leftMargin: 20
-            anchors.bottomMargin: 20
         }
 
         ImageButton {
@@ -103,9 +100,7 @@ Item {
         ActionBar {
             id: actionBar;
             anchors.bottom: parent.bottom;
-            anchors.bottomMargin: 16;
             anchors.right: parent.right;
-            anchors.rightMargin: 16;
         }
     }
 

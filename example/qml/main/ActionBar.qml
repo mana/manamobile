@@ -17,8 +17,8 @@ Item {
         selectedAbilityId = -1;
     }
 
-    width: 100
-    height: 100
+    width: 120
+    height: 120
 
     PathView {
         model: abilityDB.isLoaded ? gameClient.abilityListModel : 0;

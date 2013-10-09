@@ -1,15 +1,17 @@
 import QtQuick 2.0
 import Mana 1.0
 
-Image {
+Item {
     id: joystick
 
-    width: 64
-    height: 64
+    width: 120
+    height: 120
 
-    smooth: false;
-
-    source: "images/joystick_frame.png"
+    Image {
+        anchors.centerIn: parent
+        source: "images/star.png"
+        smooth: false
+    }
 
     readonly property real centerX: width / 2
     readonly property real centerY: height / 2
@@ -37,7 +39,7 @@ Image {
         id: dot
 
         function joystickPosition() {
-            var maxDistance = 20;
+            var maxDistance = 40;
             var moveVector = Qt.vector2d(targetX - centerX, targetY - centerY);
             var newMoveVector = moveVector.normalized().times(maxDistance);
             if (moveVector.length() > newMoveVector.length())
