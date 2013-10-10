@@ -73,17 +73,15 @@ Character *GameClient::player() const
     return mPlayerCharacter;
 }
 
-QPointF GameClient::playerWalkDirection() const
+QVector2D GameClient::playerWalkDirection() const
 {
-    return mPlayerWalkDirection.toPointF();
+    return mPlayerWalkDirection;
 }
 
-void GameClient::setPlayerWalkDirection(QPointF direction)
+void GameClient::setPlayerWalkDirection(QVector2D direction)
 {
-    const QVector2D directionV(direction);
-
-    if (mPlayerWalkDirection != directionV) {
-        mPlayerWalkDirection = directionV;
+    if (mPlayerWalkDirection != direction) {
+        mPlayerWalkDirection = direction;
 
         emit playerWalkDirectionChanged();
     }
@@ -488,7 +486,7 @@ void GameClient::reset()
         emit playerChanged();
     }
 
-    setPlayerWalkDirection(QPointF());
+    setPlayerWalkDirection(QVector2D());
 
     if (mMapResource) {
         mCurrentMap.clear();

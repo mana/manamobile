@@ -108,7 +108,7 @@ Item {
     Keys.onEnterPressed: chatBar.open();
 
     onFocusChanged: {
-        gameClient.playerWalkDirection = Qt.point(0, 0);
+        gameClient.playerWalkDirection = Qt.vector2d(0, 0);
     }
 
     property bool w_pressed: false;
@@ -125,7 +125,7 @@ Item {
         if (s_pressed) ++y;
         if (d_pressed) ++x;
 
-        gameClient.playerWalkDirection = Qt.point(x, y);
+        gameClient.playerWalkDirection = Qt.vector2d(x, y);
     }
 
     function handleKeyEvent(event, pressed) {

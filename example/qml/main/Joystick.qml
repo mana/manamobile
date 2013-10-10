@@ -73,8 +73,8 @@ Item {
                                   gameClient.player.y + dy);
             }
 
-            Qt.point(walkX ? dx : 0,
-                     walkY ? dy : 0);
+            Qt.vector2d(walkX ? dx : 0,
+                        walkY ? dy : 0);
         }
     }
 

@@ -59,7 +59,7 @@ class GameClient : public ENetClient
     Q_PROPERTY(int playerStartX READ playerStartX NOTIFY mapChanged)
     Q_PROPERTY(int playerStartY READ playerStartY NOTIFY mapChanged)
     Q_PROPERTY(Mana::Character *player READ player NOTIFY playerChanged)
-    Q_PROPERTY(QPointF playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
+    Q_PROPERTY(QVector2D playerWalkDirection READ playerWalkDirection WRITE setPlayerWalkDirection NOTIFY playerWalkDirectionChanged)
 
     Q_PROPERTY(QString playerName READ playerName WRITE setPlayerName NOTIFY playerNameChanged)
 
@@ -99,8 +99,8 @@ public:
 
     Character *player() const;
 
-    QPointF playerWalkDirection() const;
-    void setPlayerWalkDirection(QPointF direction);
+    QVector2D playerWalkDirection() const;
+    void setPlayerWalkDirection(QVector2D direction);
 
     QString playerName() const;
     void setPlayerName(const QString &name);
