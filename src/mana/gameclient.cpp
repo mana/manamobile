@@ -834,7 +834,7 @@ void GameClient::handleBeingAbilityOnPoint(MessageIn &message)
 
     Being *being = mBeingListModel->beingById(id);
 
-    if (being) {
+    if (being && being->action() != "dead") {
         being->lookAt(QPointF(x, y));
         const AbilityInfo *abilityInfo =
                 AbilityDB::instance()->getInfo(abilityId);
@@ -857,7 +857,7 @@ void GameClient::handleBeingAbilityOnBeing(MessageIn &message)
     Being *being = mBeingListModel->beingById(id);
     Being *otherBeing = mBeingListModel->beingById(otherBeingId);
 
-    if (being && otherBeing) {
+    if (being && otherBeing && being->action() != "dead") {
         being->lookAt(otherBeing->position());
         const AbilityInfo *abilityInfo =
                 AbilityDB::instance()->getInfo(abilityId);
@@ -879,7 +879,7 @@ void GameClient::handleBeingAbilityOnDirection(MessageIn &message)
 
     Being *being = mBeingListModel->beingById(id);
 
-    if (being) {
+    if (being && being->action() != "dead") {
         being->setDirection(direction);
         const AbilityInfo *abilityInfo =
                 AbilityDB::instance()->getInfo(abilityId);
