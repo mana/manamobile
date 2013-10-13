@@ -67,6 +67,9 @@ Item {
             anchors.bottom: parent.bottom;
             anchors.bottomMargin: 5;
         }
+        ShopWindow {
+            anchors.centerIn: visibleArea
+        }
 
         StatusPage {
             id: statusPage

@@ -69,6 +69,7 @@ SOURCES += \
     mana/resourcelistmodel.cpp \
     mana/resourcemanager.cpp \
     mana/settings.cpp \
+    mana/shoplistmodel.cpp \
     mana/spriteitem.cpp \
     mana/spritelistmodel.cpp \
     mana/tilelayeritem.cpp \
@@ -131,6 +132,7 @@ HEADERS += \
     mana/resourcelistmodel.h \
     mana/resourcemanager.h \
     mana/settings.h \
+    mana/shoplistmodel.h \
     mana/spriteitem.h \
     mana/spritelistmodel.h \
     mana/tilelayeritem.h \

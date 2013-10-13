@@ -11,7 +11,6 @@ ListView {
     model: itemDB.isLoaded ? gameClient.inventoryListModel : null
 
     delegate: Item {
-        id: itemInfo;
         anchors.left: parent.left
         anchors.right: parent.right
 

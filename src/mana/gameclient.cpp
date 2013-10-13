@@ -34,6 +34,7 @@
 #include "protocol.h"
 #include "resourcemanager.h"
 #include "questloglistmodel.h"
+#include "shoplistmodel.h"
 
 #include "resource/abilitydb.h"
 #include "resource/mapresource.h"
@@ -51,16 +52,18 @@ GameClient::GameClient(QObject *parent)
     , mPlayerCharacter(0)
     , mNpcState(NoNpc)
     , mNpc(0)
+    , mShopMode(NoShop)
+    , mShopListModel(new ShopListModel(this))
     , mAbilityListModel(new AbilityListModel(this))
     , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
     , mDropListModel(new DropListModel(this))
     , mInventoryListModel(new InventoryListModel(this))
-    , mLogicDriver(new LogicDriver(this))
     , mQuestlogListModel(new QuestlogListModel(this))
+    , mLogicDriver(new LogicDriver(this))
 {
-    QObject::connect(mLogicDriver, SIGNAL(update(qreal)),
-                     this, SLOT(update(qreal)));
+    QObject::connect(mLogicDriver, &LogicDriver::update,
+                     this, &GameClient::update);
     mPickupTimer.start();
 }
 
@@ -191,6 +194,18 @@ void GameClient::chooseNpcOption(int choice)
     send(message);
 }
 
+/**
+ * This is one function used for both buying and selling. What it does depends
+ * on current shop mode.
+ */
+void GameClient::buySell(int itemId, int amount)
+{
+    MessageOut message(Protocol::PGMSG_NPC_BUYSELL);
+    message.writeInt16(itemId);
+    message.writeInt16(amount);
+    send(message);
+}
+
 void GameClient::useAbilityOnPoint(unsigned id, int x, int y)
 {
     MessageOut message(Protocol::PGMSG_USE_ABILITY_ON_POINT);
@@ -312,8 +327,17 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_NPC_MESSAGE:
         handleNpcMessage(message);
         break;
+    case Protocol::GPMSG_NPC_BUY:
+        handleNpcBuy(message);
+        break;
+    case Protocol::GPMSG_NPC_SELL:
+        handleNpcSell(message);
+        break;
     case Protocol::GPMSG_NPC_CLOSE:
         handleNpcClose(message);
+        break;
+    case Protocol::GPMSG_NPC_BUYSELL_RESPONSE:
+        handleNpcBuySellResponse(message);
         break;
 
     case Protocol::GPMSG_BEINGS_DAMAGE:
@@ -934,7 +958,7 @@ void GameClient::handleNpcChoice(MessageIn &message)
 {
     mNpcChoices.clear();
 
-    int id = message.readInt16();
+    message.readInt16(); // npc entity id
 
     while (message.unreadData())
         mNpcChoices.append(message.readString());
@@ -946,7 +970,7 @@ void GameClient::handleNpcChoice(MessageIn &message)
 
 void GameClient::handleNpcMessage(MessageIn &message)
 {
-    int id = message.readInt16();
+    message.readInt16(); // npc entity id
     QString text = message.readString();
 
     mNpcMessage = text;
@@ -955,14 +979,55 @@ void GameClient::handleNpcMessage(MessageIn &message)
     emit npcStateChanged();
 }
 
+static QVector<TradedItem> readShopItems(MessageIn &message)
+{
+    QVector<TradedItem> items;
+
+    while (message.unreadData()) {
+        TradedItem item;
+        item.itemId = message.readInt16();
+        item.amount = message.readInt16();
+        item.cost = message.readInt16();
+        items.append(item);
+    }
+
+    return items;
+}
+
+void GameClient::handleNpcBuy(MessageIn &message)
+{
+    message.readInt16(); // shop entity id
+    mShopMode = BuyFromShop;
+    mShopListModel->setItems(readShopItems(message));
+    emit shopOpened(BuyFromShop);
+}
+
+void GameClient::handleNpcSell(MessageIn &message)
+{
+    message.readInt16(); // shop entity id
+    mShopMode = SellToShop;
+    mShopListModel->setItems(readShopItems(message));
+    emit shopOpened(SellToShop);
+}
+
 void GameClient::handleNpcClose(MessageIn &message)
 {
-    int id = message.readInt16();
+    message.readInt16(); // npc entity id
 
     mNpcState = NoNpc;
     mNpc = 0;
     emit npcStateChanged();
     emit npcChanged();
+}
+
+void GameClient::handleNpcBuySellResponse(MessageIn &message)
+{
+    if (message.readInt8() != ERRMSG_OK)
+        return;
+
+    const unsigned itemId = message.readInt16();
+    const int amount = message.readInt16();
+    mShopListModel->removeItem(itemId, amount);
 }
 
 void GameClient::handleBeingsDamage(MessageIn &message)

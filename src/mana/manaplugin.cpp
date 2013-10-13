@@ -33,6 +33,7 @@
 #include "resourcelistmodel.h"
 #include "resourcemanager.h"
 #include "settings.h"
+#include "shoplistmodel.h"
 #include "spriteitem.h"
 #include "spritelistmodel.h"
 #include "questloglistmodel.h"
@@ -117,6 +118,7 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::DropListModel>();
 
     qmlRegisterType<Mana::InventoryListModel>();
+    qmlRegisterType<Mana::ShopListModel>();
 
     qmlRegisterType<Mana::ResourceManager>();
     qmlRegisterUncreatableType<Mana::Resource>(uri, 1, 0, "Resource",

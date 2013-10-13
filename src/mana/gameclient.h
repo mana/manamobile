@@ -41,6 +41,7 @@ class LogicDriver;
 class MapResource;
 class NPC;
 class QuestlogListModel;
+class ShopListModel;
 
 /**
  * The game client allows interacting with the game server.
@@ -70,6 +71,9 @@ class GameClient : public ENetClient
     Q_PROPERTY(Mana::NPC *npc READ npc NOTIFY npcChanged)
     Q_PROPERTY(NpcState npcState READ npcState NOTIFY npcStateChanged)
 
+    Q_PROPERTY(ShopMode shopMode READ shopMode NOTIFY shopOpened)
+    Q_PROPERTY(Mana::ShopListModel *shopListModel READ shopListModel CONSTANT)
+
     Q_PROPERTY(Mana::AbilityListModel *abilityListModel READ abilityListModel CONSTANT)
     Q_PROPERTY(Mana::AttributeListModel *attributeListModel READ attributeListModel CONSTANT)
     Q_PROPERTY(Mana::BeingListModel *beingListModel READ beingListModel CONSTANT)
@@ -77,13 +81,19 @@ class GameClient : public ENetClient
     Q_PROPERTY(Mana::InventoryListModel *inventoryListModel READ inventoryListModel CONSTANT)
     Q_PROPERTY(Mana::QuestlogListModel *questlogListModel READ questlogListModel CONSTANT)
 
-    Q_ENUMS(NpcState)
+    Q_ENUMS(NpcState ShopMode)
 
 public:
     enum NpcState {
         NoNpc,
         NpcAwaitNext,
-        NpcAwaitChoice
+        NpcAwaitChoice,
+    };
+
+    enum ShopMode {
+        NoShop,
+        BuyFromShop,
+        SellToShop,
     };
 
     GameClient(QObject *parent = 0);
@@ -110,6 +120,9 @@ public:
     NPC *npc() const { return mNpc; }
     NpcState npcState() const { return mNpcState; }
 
+    ShopMode shopMode() const;
+    ShopListModel *shopListModel() const;
+
     QDateTime abilityCooldown() const;
 
     Q_INVOKABLE void authenticate(const QString &token);
@@ -122,6 +135,7 @@ public:
     Q_INVOKABLE void talkToNpc(Mana::Being *being);
     Q_INVOKABLE void nextNpcMessage();
     Q_INVOKABLE void chooseNpcOption(int choice);
+    Q_INVOKABLE void buySell(int itemId, int amount);
 
     Q_INVOKABLE void useAbilityOnPoint(unsigned id, int x, int y);
     Q_INVOKABLE void useAbilityOnDirection(unsigned id);
@@ -157,6 +171,8 @@ signals:
     void npcChoicesChanged();
     void npcChanged();
     void npcStateChanged();
+
+    void shopOpened(ShopMode mode);
 
     void kicked();
 
@@ -201,7 +217,10 @@ private:
 
     void handleNpcChoice(MessageIn &message);
     void handleNpcMessage(MessageIn &message);
+    void handleNpcBuy(MessageIn &message);
+    void handleNpcSell(MessageIn &message);
     void handleNpcClose(MessageIn &message);
+    void handleNpcBuySellResponse(MessageIn &message);
 
     void handleBeingsDamage(MessageIn &message);
 
@@ -225,6 +244,9 @@ private:
     QStringList mNpcChoices;
     NPC *mNpc;
 
+    ShopMode mShopMode;
+    ShopListModel *mShopListModel;
+
     QElapsedTimer mPickupTimer;
 
     AbilityListModel *mAbilityListModel;
@@ -232,10 +254,20 @@ private:
     BeingListModel *mBeingListModel;
     DropListModel *mDropListModel;
     InventoryListModel *mInventoryListModel;
-    LogicDriver *mLogicDriver;
     QuestlogListModel *mQuestlogListModel;
+    LogicDriver *mLogicDriver;
 };
 
+
+inline GameClient::ShopMode GameClient::shopMode() const
+{
+    return mShopMode;
+}
+
+inline ShopListModel *GameClient::shopListModel() const
+{
+    return mShopListModel;
+}
 
 inline AbilityListModel *GameClient::abilityListModel() const
 {
@@ -246,6 +278,7 @@ inline AttributeListModel *GameClient::attributeListModel() const
 {
     return mAttributeListModel;
 }
+
 inline BeingListModel *GameClient::beingListModel() const
 {
     return mBeingListModel;
