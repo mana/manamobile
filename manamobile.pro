@@ -29,4 +29,6 @@ defineTest(minQtVersion) {
 
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += src example
+
+SUBDIRS += src
+!tizen:SUBDIRS += example

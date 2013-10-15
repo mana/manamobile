@@ -6,8 +6,8 @@ import QtQuick 2.0
 Client {
     id: client
 
-    width: 800;
-    height: 480;
+    height: 1280;
+    width: 720;
 
     MainWindow { anchors.fill: parent; }
 }

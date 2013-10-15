@@ -81,12 +81,19 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     viewer.engine()->addImportPath(QLatin1String("assets:/qml"));
     viewer.engine()->addPluginPath(QDir::homePath() + "/../lib");
+#elif defined(Q_OS_TIZEN)
+    viewer.engine()->addImportPath(QLatin1String("../data/qml"));
 #else
     viewer.engine()->addImportPath(app.applicationDirPath() +
                                    QLatin1String("/../src/qml/"));
 #endif
 
+#ifdef Q_OS_TIZEN
+    viewer.setMainQmlFile(app.applicationDirPath() +
+                          QLatin1String("/../data/qml/main/mobile.qml"));
+#else
     viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
+#endif
 
     if (fullScreen)
         viewer.showFullScreen();
@@ -95,3 +102,13 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+
+#ifdef Q_OS_TIZEN
+extern "C" int OspMain(int argc, char *argv[])
+{
+#ifdef Q_OS_TIZEN_SIMULATOR
+    qputenv("QSG_RENDER_LOOP", "windows");
+#endif
+    return main(argc, argv);
+}
+#endif
