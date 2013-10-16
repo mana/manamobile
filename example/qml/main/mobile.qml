@@ -6,8 +6,10 @@ import QtQuick 2.0
 Client {
     id: client
 
-    height: 1280;
-    width: 720;
+    width: 1280
+    height: 720
+
+    contentOrientation: Qt.LandscapeOrientation
 
     MainWindow { anchors.fill: parent; }
 }

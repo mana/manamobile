@@ -1,11 +1,12 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.0
 import Mana 1.0
 
 /**
  * This is the base component of a QML based Mana client. It sets up the
  * account, chat and game clients and provides access to them.
  */
-Item {
+ApplicationWindow {
     id: client
 
     property string serverName: "ManaSource!";

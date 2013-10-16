@@ -19,12 +19,32 @@
 
 #include <QDebug>
 #include <QDir>
-#include <QGuiApplication>
-#include <QQmlContext>
-#include <QQmlEngine>
 #include <QFontDatabase>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickWindow>
+#include <QScreen>
 
-#include "qtquick2applicationviewer.h"
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_TIZEN)
+static QString adjustPath(const QString &path)
+{
+#if defined(Q_OS_MAC)
+    if (!QDir::isAbsolutePath(path))
+        return QString::fromLatin1("%1/../Resources/%2")
+                .arg(QCoreApplication::applicationDirPath(), path);
+#elif defined(Q_OS_QNX)
+    if (!QDir::isAbsolutePath(path))
+        return QString::fromLatin1("app/native/%1").arg(path);
+#elif defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID)
+    const QString pathInInstallDir =
+            QString::fromLatin1("%1/../%2").arg(QCoreApplication::applicationDirPath(), path);
+    if (QFileInfo(pathInInstallDir).exists())
+        return pathInInstallDir;
+#endif
+    return path;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -41,9 +61,7 @@ int main(int argc, char *argv[])
     QFontDatabase::addApplicationFont("://fonts/DejaVuSerifCondensed-BoldItalic.ttf");
     app.setFont(QFont("DejaVu Serif"));
 
-    QtQuick2ApplicationViewer viewer;
-    viewer.setTitle(app.applicationName());
-    viewer.setClearBeforeRendering(false);
+    QQmlApplicationEngine engine;
 
     QStringList arguments = app.arguments();
 
@@ -73,32 +91,47 @@ int main(int argc, char *argv[])
         }
     }
 
-    QQmlContext* context = viewer.rootContext();
+    QQmlContext *context = engine.rootContext();
     context->setContextProperty("customServerListPath", customServerListPath);
     context->setContextProperty("customServer", customServer);
     context->setContextProperty("customPort", customPort);
 
 #ifdef Q_OS_ANDROID
-    viewer.engine()->addImportPath(QLatin1String("assets:/qml"));
-    viewer.engine()->addPluginPath(QDir::homePath() + "/../lib");
+    engine.addImportPath(QLatin1String("assets:/qml"));
+    engine.addPluginPath(QDir::homePath() + "/../lib");
+    engine.load(QUrl(QLatin1String("assets:/qml/main/mobile.qml")));
 #elif defined(Q_OS_TIZEN)
-    viewer.engine()->addImportPath(QLatin1String("../data/qml"));
+    engine.addImportPath(QLatin1String("../data/qml"));
+    engine.load(app.applicationDirPath() +
+                QLatin1String("/../data/qml/main/mobile.qml"));
 #else
-    viewer.engine()->addImportPath(app.applicationDirPath() +
-                                   QLatin1String("/../src/qml/"));
+    engine.addImportPath(adjustPath(app.applicationDirPath() +
+                                    QLatin1String("/../src/qml/")));
+    engine.load(adjustPath(QLatin1String("qml/main/mobile.qml")));
 #endif
+
+    QQuickWindow *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
+    if (!window) {
+        qWarning() << "no window";
+        return -1;
+    }
+
+    window->setClearBeforeRendering(false);
 
 #ifdef Q_OS_TIZEN
-    viewer.setMainQmlFile(app.applicationDirPath() +
-                          QLatin1String("/../data/qml/main/mobile.qml"));
-#else
-    viewer.setMainQmlFile(QLatin1String("qml/main/mobile.qml"));
+    window->setProperty("contentFollowsContentOrientation", true);
+    window->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation |
+                                               Qt::InvertedLandscapeOrientation);
 #endif
 
+#if defined(Q_WS_SIMULATOR) || defined(Q_OS_QNX)
+    window->showFullScreen();
+#else
     if (fullScreen)
-        viewer.showFullScreen();
+        window->showFullScreen();
     else
-        viewer.showExpanded();
+        window->show();
+#endif
 
     return app.exec();
 }
