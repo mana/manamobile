@@ -42,7 +42,7 @@ Button {
                 id: label
                 text: control.text
                 anchors.centerIn: parent
-                font.pixelSize: 35
+                font.pixelSize: (button.height - 10) * 0.7;
                 opacity: 0.8;
             }
 
@@ -72,6 +72,6 @@ Button {
         id: sizeLabel
         visible: false
         text: button.text
-        font.pixelSize: 35
+        font.pixelSize: (button.height - 10) * 0.7;
     }
 }

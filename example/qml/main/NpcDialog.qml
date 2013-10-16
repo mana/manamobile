@@ -61,4 +61,53 @@ BorderImage {
             }
         }
     }
+
+    Row {
+        anchors.top: message.bottom;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+
+        height: 32;
+
+        visible: gameClient.npcState === GameClient.NpcAwaitNumberInput;
+
+        LineEdit {
+            id: numberInput
+            width: parent.width * 0.45;
+            height: parent.height;
+            inputMethodHints: Qt.ImhDigitsOnly;
+
+            Connections {
+                target: gameClient;
+                onNpcStateChanged: {
+                    if (gameClient.npcState === GameClient.NpcAwaitNumberInput) {
+                        numberInput.text = gameClient.npcDefaultNumber;
+                    }
+                }
+            }
+        }
+
+        Button {
+            width: parent.width * 0.25;
+            height: parent.height;
+            text: "Submit";
+            onClicked: {
+                var requireSecondClick = false;
+                var value = parseInt(numberInput.text.toLocaleLowerCase());
+                if (value > gameClient.npcMaximumNumber) {
+                    numberInput.text = gameClient.npcMaximumNumber;
+                    requireSecondClick = true;
+                }
+                if (value < gameClient.npcMinimumNumber) {
+                    numberInput.text = gameClient.npcMinimumNumber;
+                    requireSecondClick = true;
+                }
+
+                if (!requireSecondClick) {
+                    gameClient.sendNpcNumberInput(value);
+                    numberInput.text = "";
+                }
+            }
+        }
+    }
 }

@@ -51,6 +51,9 @@ GameClient::GameClient(QObject *parent)
     , mPlayerStartY(0)
     , mPlayerCharacter(0)
     , mNpcState(NoNpc)
+    , mNpcDefaultNumber(0)
+    , mNpcMinimumNumber(0)
+    , mNpcMaximumNumber(0)
     , mNpc(0)
     , mShopMode(NoShop)
     , mShopListModel(new ShopListModel(this))
@@ -191,6 +194,17 @@ void GameClient::chooseNpcOption(int choice)
     MessageOut message(Protocol::PGMSG_NPC_SELECT);
     message.writeInt16(mNpc->id());
     message.writeInt8(choice);
+    send(message);
+}
+
+void GameClient::sendNpcNumberInput(int number)
+{
+    SAFE_ASSERT(mNpcState == NpcAwaitNumberInput && mNpc, return);
+
+    MessageOut message(Protocol::PGMSG_NPC_NUMBER);
+
+    message.writeInt16(mNpc->id());
+    message.writeInt32(number);
     send(message);
 }
 
@@ -336,6 +350,10 @@ void GameClient::messageReceived(MessageIn &message)
     case Protocol::GPMSG_NPC_CLOSE:
         handleNpcClose(message);
         break;
+    case Protocol::GPMSG_NPC_NUMBER:
+        handleNpcNumber(message);
+        break;
+
     case Protocol::GPMSG_NPC_BUYSELL_RESPONSE:
         handleNpcBuySellResponse(message);
         break;
@@ -1018,6 +1036,17 @@ void GameClient::handleNpcClose(MessageIn &message)
     mNpc = 0;
     emit npcStateChanged();
     emit npcChanged();
+}
+
+void GameClient::handleNpcNumber(MessageIn &message)
+{
+    int id = message.readInt16();
+    mNpcMinimumNumber = message.readInt32();
+    mNpcMaximumNumber = message.readInt32();
+    mNpcDefaultNumber = message.readInt32();
+
+    mNpcState = NpcAwaitNumberInput;
+    emit npcStateChanged();
 }
 
 void GameClient::handleNpcBuySellResponse(MessageIn &message)

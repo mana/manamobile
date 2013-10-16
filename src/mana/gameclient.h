@@ -68,6 +68,9 @@ class GameClient : public ENetClient
 
     Q_PROPERTY(QString npcMessage READ npcMessage NOTIFY npcMessageChanged)
     Q_PROPERTY(QStringList npcChoices READ npcChoices NOTIFY npcChoicesChanged)
+    Q_PROPERTY(int npcDefaultNumber READ npcDefaultNumber NOTIFY npcStateChanged)
+    Q_PROPERTY(int npcMinimumNumber READ npcMinimumNumber NOTIFY npcStateChanged)
+    Q_PROPERTY(int npcMaximumNumber READ npcMaximumNumber NOTIFY npcStateChanged)
     Q_PROPERTY(Mana::NPC *npc READ npc NOTIFY npcChanged)
     Q_PROPERTY(NpcState npcState READ npcState NOTIFY npcStateChanged)
 
@@ -88,6 +91,7 @@ public:
         NoNpc,
         NpcAwaitNext,
         NpcAwaitChoice,
+        NpcAwaitNumberInput
     };
 
     enum ShopMode {
@@ -117,6 +121,9 @@ public:
 
     QString npcMessage() const { return mNpcMessage; }
     QStringList npcChoices() const { return mNpcChoices; }
+    int npcDefaultNumber() const;
+    int npcMinimumNumber() const;
+    int npcMaximumNumber() const;
     NPC *npc() const { return mNpc; }
     NpcState npcState() const { return mNpcState; }
 
@@ -135,6 +142,7 @@ public:
     Q_INVOKABLE void talkToNpc(Mana::Being *being);
     Q_INVOKABLE void nextNpcMessage();
     Q_INVOKABLE void chooseNpcOption(int choice);
+    Q_INVOKABLE void sendNpcNumberInput(int number);
     Q_INVOKABLE void buySell(int itemId, int amount);
 
     Q_INVOKABLE void useAbilityOnPoint(unsigned id, int x, int y);
@@ -220,6 +228,7 @@ private:
     void handleNpcBuy(MessageIn &message);
     void handleNpcSell(MessageIn &message);
     void handleNpcClose(MessageIn &message);
+    void handleNpcNumber(MessageIn &message);
     void handleNpcBuySellResponse(MessageIn &message);
 
     void handleBeingsDamage(MessageIn &message);
@@ -242,6 +251,9 @@ private:
     NpcState mNpcState;
     QString mNpcMessage;
     QStringList mNpcChoices;
+    int mNpcDefaultNumber;
+    int mNpcMinimumNumber;
+    int mNpcMaximumNumber;
     NPC *mNpc;
 
     ShopMode mShopMode;
@@ -258,6 +270,21 @@ private:
     LogicDriver *mLogicDriver;
 };
 
+
+inline int GameClient::npcDefaultNumber() const
+{
+    return mNpcDefaultNumber;
+}
+
+inline int GameClient::npcMinimumNumber() const
+{
+    return mNpcMinimumNumber;
+}
+
+inline int GameClient::npcMaximumNumber() const
+{
+    return mNpcMaximumNumber;
+}
 
 inline GameClient::ShopMode GameClient::shopMode() const
 {

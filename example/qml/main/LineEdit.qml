@@ -17,7 +17,7 @@ TextField {
             border.left: 20;
         }
 
-        font.pixelSize: 35;
+        font.pixelSize: (parent.height - 10) * 0.7;
 
         padding.right: 12
         padding.left: 12
