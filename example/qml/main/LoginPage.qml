@@ -145,7 +145,13 @@ Item {
             login();
     }
 
-    Keys.onReturnPressed: registerOrLogin();
+    Keys.onReturnPressed: {
+        console.log("LoginPage return pressed");
+        if (event.modifiers ===  Qt.NoModifier)
+            registerOrLogin();
+        else
+            event.accepted = false;
+    }
     Keys.onEnterPressed: registerOrLogin();
 
     Connections {

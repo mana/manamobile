@@ -4,7 +4,12 @@ import Mana 1.0
 FocusScope {
     id: chatBar;
 
-    Keys.onReturnPressed: sayText();
+    Keys.onReturnPressed: {
+        if (event.modifiers === Qt.NoModifier)
+            sayText();
+        else
+            event.accepted = false;
+    }
     Keys.onEnterPressed: sayText();
 
     function open() {

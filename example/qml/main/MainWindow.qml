@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Window 2.0
 import Mana 1.0
 
 Image {
@@ -184,6 +185,15 @@ Image {
         }
 
         return false;
+    }
+
+    Keys.onReturnPressed: {
+        if (event.modifiers & Qt.AltModifier) {
+            if (client.visibility === Window.FullScreen)
+                client.visibility = Window.AutomaticVisibility;
+            else
+                client.visibility = Window.FullScreen;
+        }
     }
 
     Keys.onPressed: {

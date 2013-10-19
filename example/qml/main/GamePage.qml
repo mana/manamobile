@@ -107,7 +107,12 @@ Item {
         }
     }
 
-    Keys.onReturnPressed: chatBar.open();
+    Keys.onReturnPressed: {
+        if (event.modifiers === Qt.NoModifier)
+            chatBar.open();
+        else
+            event.accepted = false;
+    }
     Keys.onEnterPressed: chatBar.open();
 
     onFocusChanged: {

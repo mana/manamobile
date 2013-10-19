@@ -34,7 +34,12 @@ Item {
         accountClient.deleteCharacter(characterList.currentIndex);
     }
 
-    Keys.onReturnPressed: chooseCharacter();
+    Keys.onReturnPressed: {
+        if (event.modifiers === Qt.NoModifier)
+            chooseCharacter();
+        else
+            event.accepted = false;
+    }
     Keys.onEnterPressed: chooseCharacter();
 
     ErrorLabel {
