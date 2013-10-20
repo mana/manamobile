@@ -71,7 +71,7 @@ class GameClient : public ENetClient
     Q_PROPERTY(int npcDefaultNumber READ npcDefaultNumber NOTIFY npcStateChanged)
     Q_PROPERTY(int npcMinimumNumber READ npcMinimumNumber NOTIFY npcStateChanged)
     Q_PROPERTY(int npcMaximumNumber READ npcMaximumNumber NOTIFY npcStateChanged)
-    Q_PROPERTY(Mana::NPC *npc READ npc NOTIFY npcChanged)
+    Q_PROPERTY(Mana::Being *npc READ npc NOTIFY npcChanged)
     Q_PROPERTY(NpcState npcState READ npcState NOTIFY npcStateChanged)
 
     Q_PROPERTY(ShopMode shopMode READ shopMode NOTIFY shopOpened)
@@ -124,7 +124,7 @@ public:
     int npcDefaultNumber() const;
     int npcMinimumNumber() const;
     int npcMaximumNumber() const;
-    NPC *npc() const { return mNpc; }
+    Being *npc() const { return mNpc; }
     NpcState npcState() const { return mNpcState; }
 
     ShopMode shopMode() const;
@@ -254,7 +254,7 @@ private:
     int mNpcDefaultNumber;
     int mNpcMinimumNumber;
     int mNpcMaximumNumber;
-    NPC *mNpc;
+    Being *mNpc;
 
     ShopMode mShopMode;
     ShopListModel *mShopListModel;

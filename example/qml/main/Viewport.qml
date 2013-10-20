@@ -117,9 +117,7 @@ Rectangle {
 
                 CompoundSprite {
                     id: sprite;
-                    sprites: model.being.spriteListModel;
-                    action: model.being.action;
-                    direction: model.being.spriteDirection;
+                    being: model.being
                 }
 
                 MouseArea {

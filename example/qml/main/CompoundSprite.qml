@@ -4,10 +4,12 @@ import Mana 1.0
 Item {
     id: spriteContainer;
 
+    property QtObject being: null
+
     property alias sprites: repeater.model;
 
-    property int direction;
-    property string action;
+    property int direction: being ? being.spriteDirection : Action.DIRECTION_DOWN
+    property string action: being ? being.action : "stand"
 
     property int maxHeight: childrenRect.height;
 
@@ -19,6 +21,8 @@ Item {
 
     Repeater {
         id: repeater;
+
+        model: being ? being.spriteListModel : null
 
         delegate: Sprite {
             id: element;

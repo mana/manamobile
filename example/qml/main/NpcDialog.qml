@@ -9,103 +9,125 @@ BorderImage {
     border.right: 34; border.bottom: 27;
     smooth: false;
 
+    height: contents.height + 50 + 15
+    Behavior on height {
+        NumberAnimation {
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    CompoundSprite {
+        id: sprite
+        x: 30
+        y: 30
+        being: gameClient.npc
+        direction: Action.DIRECTION_DOWN
+        action: "stand"
+    }
+
     Text {
-        id: message;
-        anchors.top: parent.top;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        anchors.margins: 10;
-        wrapMode: TextEdit.WordWrap;
-        text: gameClient.npcMessage;
-        font.pixelSize: 12;
+        text: gameClient.npc ? gameClient.npc.name : ""
+        font.pixelSize: 13
+        font.bold: true
+        x: 60
+        y: 15
     }
 
-    MouseArea {
-        anchors.fill: parent;
+    Item {
+        clip: true
+        anchors.fill: parent
+        anchors.bottomMargin: 8
 
-        onClicked: {
-            if (gameClient.npcState === GameClient.NpcAwaitNext)
-                gameClient.nextNpcMessage();
-        }
-    }
+        Column {
+            id: contents
 
-    ListView {
-        id: choices;
-        anchors.top: message.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        anchors.bottom: parent.bottom;
-        anchors.margins: 10;
+            spacing: 10
 
-        clip: true;
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: 50
+            anchors.leftMargin: 15
+            anchors.rightMargin: 15
 
-        model: gameClient.npcChoices;
-        visible: gameClient.npcState === GameClient.NpcAwaitChoice;
-
-        delegate: Item {
-            width: parent.width;
-            height: choice.height;
             Text {
-                id: choice;
-                color: mouseArea.containsMouse ? "white" : "black";
-                wrapMode:Text.WordWrap;
-                width: parent.width;
-                text: "> " + modelData;
-                font.pixelSize: 12;
+                id: message;
+                anchors.left: parent.left;
+                anchors.right: parent.right;
+                wrapMode: TextEdit.WordWrap;
+                text: gameClient.npcMessage;
+                font.pixelSize: 14
             }
-            MouseArea {
-                id: mouseArea;
-                anchors.fill: parent;
-                hoverEnabled: true;
-                onClicked: gameClient.chooseNpcOption(model.index + 1);
-            }
-        }
-    }
 
-    Row {
-        anchors.top: message.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
+            Column {
+                id: choices
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 5
 
-        height: 32;
+                Repeater {
+                    model: gameClient.npcState === GameClient.NpcAwaitChoice ? gameClient.npcChoices : null
 
-        visible: gameClient.npcState === GameClient.NpcAwaitNumberInput;
+                    delegate: BrownButton {
+                        anchors.left: choices.left
+                        anchors.right: choices.right
 
-        LineEdit {
-            id: numberInput
-            width: parent.width * 0.45;
-            height: parent.height;
-            inputMethodHints: Qt.ImhDigitsOnly;
-
-            Connections {
-                target: gameClient;
-                onNpcStateChanged: {
-                    if (gameClient.npcState === GameClient.NpcAwaitNumberInput) {
-                        numberInput.text = gameClient.npcDefaultNumber;
+                        text: modelData
+                        onClicked: gameClient.chooseNpcOption(model.index);
                     }
                 }
             }
-        }
 
-        Button {
-            width: parent.width * 0.25;
-            height: parent.height;
-            text: "Submit";
-            onClicked: {
-                var requireSecondClick = false;
-                var value = parseInt(numberInput.text.toLocaleLowerCase());
-                if (value > gameClient.npcMaximumNumber) {
-                    numberInput.text = gameClient.npcMaximumNumber;
-                    requireSecondClick = true;
-                }
-                if (value < gameClient.npcMinimumNumber) {
-                    numberInput.text = gameClient.npcMinimumNumber;
-                    requireSecondClick = true;
+            BrownButton {
+                iconSource: "images/icon_right.png"
+                anchors.right: parent.right
+                visible: gameClient.npcState === GameClient.NpcAwaitNext
+                onClicked: gameClient.nextNpcMessage()
+            }
+
+            Row {
+                anchors.left: parent.left;
+                anchors.right: parent.right;
+
+                height: 32;
+
+                visible: gameClient.npcState === GameClient.NpcAwaitNumberInput;
+
+                LineEdit {
+                    id: numberInput
+                    width: parent.width * 0.45;
+                    height: parent.height;
+                    inputMethodHints: Qt.ImhDigitsOnly;
+
+                    Connections {
+                        target: gameClient;
+                        onNpcStateChanged: {
+                            if (gameClient.npcState === GameClient.NpcAwaitNumberInput) {
+                                numberInput.text = gameClient.npcDefaultNumber;
+                            }
+                        }
+                    }
                 }
 
-                if (!requireSecondClick) {
-                    gameClient.sendNpcNumberInput(value);
-                    numberInput.text = "";
+                BrownButton {
+                    text: qsTr("OK")
+                    onClicked: {
+                        var requireSecondClick = false;
+                        var value = parseInt(numberInput.text.toLocaleLowerCase());
+                        if (value > gameClient.npcMaximumNumber) {
+                            numberInput.text = gameClient.npcMaximumNumber;
+                            requireSecondClick = true;
+                        }
+                        if (value < gameClient.npcMinimumNumber) {
+                            numberInput.text = gameClient.npcMinimumNumber;
+                            requireSecondClick = true;
+                        }
+
+                        if (!requireSecondClick) {
+                            gameClient.sendNpcNumberInput(value);
+                            numberInput.text = "";
+                        }
+                    }
                 }
             }
         }

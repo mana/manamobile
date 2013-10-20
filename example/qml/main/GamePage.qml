@@ -61,11 +61,13 @@ Item {
 
         NpcDialog {
             id: npcDialog;
-            width: Math.max(parent.width / 2, Math.min(300, parent.width - 20));
-            height: 100;
+
+            property bool narrow: viewport.width - 240 < 300
+
+            width: Math.max(300, narrow ? viewport.width * 0.8 : (viewport.width - 240) * 0.9)
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom;
-            anchors.bottomMargin: 5;
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: narrow ? 120 : 50
         }
         ShopWindow {
             anchors.centerIn: visibleArea

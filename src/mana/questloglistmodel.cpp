@@ -23,6 +23,7 @@ using namespace Mana;
 Quest::Quest(int id, QObject *parent)
     : QObject(parent)
     , mId(id)
+    , mState(OPEN)
 {
 }
 
@@ -80,9 +81,8 @@ QHash<int, QByteArray> QuestlogListModel::roleNames() const
 Quest *QuestlogListModel::createOrGetQuest(int id)
 {
     QMap<int, Quest *>::iterator it = mQuests.find(id);
-    if (it != mQuests.end()) {
+    if (it != mQuests.end())
         return it.value();
-    }
 
     beginInsertRows(QModelIndex(), mQuestList.size(),
                     mQuestList.size());

@@ -170,7 +170,7 @@ void GameClient::talkToNpc(Being *being)
 {
     SAFE_ASSERT(being->type() == OBJECT_NPC && !mNpc, return);
 
-    mNpc = static_cast<NPC *>(being);
+    mNpc = being;
     emit npcChanged();
 
     MessageOut message(Protocol::PGMSG_NPC_TALK);
@@ -193,7 +193,7 @@ void GameClient::chooseNpcOption(int choice)
 
     MessageOut message(Protocol::PGMSG_NPC_SELECT);
     message.writeInt16(mNpc->id());
-    message.writeInt8(choice);
+    message.writeInt8(choice + 1);
     send(message);
 }
 

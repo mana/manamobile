@@ -6,10 +6,13 @@ import QtQuick 2.0
 Text {
     property Text target;
 
+    property real offsetX: 1
+    property real offsetY: 1
+
     text: target.text;
     color: "black";
-    x: target.x + 1;
-    y: target.y + 1;
+    x: target.x + offsetX
+    y: target.y + offsetY
     width: target.width
     font: target.font;
     opacity: target.opacity;

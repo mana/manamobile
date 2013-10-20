@@ -146,7 +146,6 @@ Item {
     }
 
     Keys.onReturnPressed: {
-        console.log("LoginPage return pressed");
         if (event.modifiers ===  Qt.NoModifier)
             registerOrLogin();
         else
