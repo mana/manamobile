@@ -85,6 +85,7 @@ public:
     Q_INVOKABLE Mana::AttributeValue *attributeAt(int index) const;
 
     void setAttribute(int id, qreal base, qreal mod);
+    void clear();
 
     static qreal tpsToPixelsPerSecond(qreal speed);
 

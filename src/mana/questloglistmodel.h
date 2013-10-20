@@ -84,6 +84,7 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     Quest *createOrGetQuest(int id);
+    void clear();
 
 private:
     QMap<int, Quest *> mQuests;

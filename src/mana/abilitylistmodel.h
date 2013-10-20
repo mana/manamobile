@@ -64,6 +64,7 @@ public:
 
     void setAbilityStatus(unsigned id, unsigned remainingMilliseconds);
     void takeAbility(unsigned id);
+    void clear();
 
 protected:
     void timerEvent(QTimerEvent *event);

@@ -94,3 +94,15 @@ Quest *QuestlogListModel::createOrGetQuest(int id)
 
     return quest;
 }
+
+void QuestlogListModel::clear()
+{
+    if (mQuestList.isEmpty())
+        return;
+
+    beginRemoveRows(QModelIndex(), 0, mQuestList.size() - 1);
+    qDeleteAll(mQuestList);
+    mQuestList.clear();
+    mQuests.clear();
+    endRemoveRows();
+}

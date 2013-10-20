@@ -114,6 +114,18 @@ void AbilityListModel::takeAbility(unsigned id)
     endRemoveRows();
 }
 
+void AbilityListModel::clear()
+{
+    if (mAbilitiesList.isEmpty())
+        return;
+
+    beginRemoveRows(QModelIndex(), 0, mAbilitiesList.size() - 1);
+    qDeleteAll(mAbilitiesList);
+    mAbilitiesList.clear();
+    mAbilities.clear();
+    endRemoveRows();
+}
+
 void AbilityListModel::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);

@@ -540,10 +540,10 @@ void GameClient::reset()
     }
 
     mBeingListModel->clear();
-    // TODO: mAbilityListModel->clear();
-    // TODO: mAttributeListModel->clear();
+    mAbilityListModel->clear();
+    mAttributeListModel->clear();
     mInventoryListModel->removeAllItems();
-    // TODO: mQuestlogListModel->clear();
+    mQuestlogListModel->clear();
 }
 
 void GameClient::handleConnectResponse(MessageIn &message)

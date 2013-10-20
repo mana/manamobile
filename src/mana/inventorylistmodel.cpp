@@ -150,7 +150,7 @@ void InventoryListModel::removeAllItems()
     if (mItems.empty())
         return;
 
-    beginRemoveRows(QModelIndex(), 0, mItems.size());
+    beginRemoveRows(QModelIndex(), 0, mItems.size() - 1);
     qDeleteAll(mItems);
     mItems.clear();
     endRemoveRows();

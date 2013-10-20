@@ -91,3 +91,15 @@ void AttributeListModel::setAttribute(int id, qreal base, qreal mod)
         emit attributeAdded(id, value);
     }
 }
+
+void AttributeListModel::clear()
+{
+    if (mCachedAttributeList.isEmpty())
+        return;
+
+    beginRemoveRows(QModelIndex(), 0, mCachedAttributeList.size() - 1);
+    qDeleteAll(mCachedAttributeList);
+    mCachedAttributeList.clear();
+    mAttributeValues.clear();
+    endRemoveRows();
+}
