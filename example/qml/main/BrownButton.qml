@@ -8,7 +8,7 @@ import QtQuick.Controls.Styles 1.0
 Button {
     id: button
 
-    implicitWidth: Math.max(sizeLabel.width + 20, 67)
+    implicitHeight: Math.max(sizeLabel.height + 10, 30)
 
     style: ButtonStyle {
         background: BorderImage {
@@ -75,8 +75,13 @@ Button {
 
     Text {
         id: sizeLabel
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.rightMargin: 7
+        anchors.leftMargin: 7
         visible: false
         text: button.text
         font.pixelSize: 14
+        wrapMode: Text.WordWrap
     }
 }
