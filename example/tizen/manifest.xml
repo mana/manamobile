@@ -7,7 +7,7 @@
     <Apps>
         <ApiVersion>2.2</ApiVersion>
         <Privileges/>
-        <UiApp MenuIconVisible="True" Main="True" Name="manamobile" LaunchingHistoryVisible="True">
+        <UiApp MenuIconVisible="True" Main="True" Name="tales" LaunchingHistoryVisible="True">
             <UiScalability BaseScreenSize="Normal" LogicalCoordinate="720" CoordinateSystem="Logical"/>
             <UiTheme SystemTheme="White"/>
             <DisplayNames>

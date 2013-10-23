@@ -4,7 +4,7 @@ folder_main.target = qml
 DEPLOYMENTFOLDERS = folder_main
 
 SOURCES += main.cpp
-TARGET = manamobile
+TARGET = tales
 
 # Please do not modify the following two lines. Required for deployment.
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)

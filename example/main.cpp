@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    app.setApplicationName("Mana Mobile");
-    app.setOrganizationDomain("manasource.org");
-    app.setOrganizationName(QLatin1String("mana"));
+    app.setApplicationName("Source of Tales");
+    app.setOrganizationDomain("sourceoftales.org");
+    app.setOrganizationName(QLatin1String("tales"));
     app.setApplicationVersion("0.1");
 
     QFontDatabase::addApplicationFont("://fonts/DejaVuSerifCondensed.ttf");
