@@ -14,6 +14,19 @@ Item {
         Qt.inputMethod.hide();
     }
 
+    Item {
+        id: visibleArea
+
+        anchors.fill: parent
+        anchors.bottomMargin: Qt.inputMethod.visible ? 316 : registrationBar.height
+
+        Behavior on anchors.bottomMargin {
+            NumberAnimation {
+                easing.type: Easing.OutCubic
+            }
+        }
+    }
+
     function register() {
         if (passwordEdit.text != passwordConfirmEdit.text) {
             errorLabel.showError(qsTr("Passwords do not match"))
@@ -29,9 +42,7 @@ Item {
 
     Item {
         id: positioner;
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -50
+        anchors.centerIn: visibleArea
         width: Math.min(window.width - 100, 400);
         height: childrenRect.height
 

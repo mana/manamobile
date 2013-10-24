@@ -3,7 +3,9 @@
     <Id>E8pnCaJIZs</Id>
     <Version>1.0.0</Version>
     <Type>C++App</Type>
-    <Requirements/>
+    <Requirements>
+        <Feature Name="http://tizen.org/feature/screen.size.normal.720.1280">true</Feature>
+    </Requirements>
     <Apps>
         <ApiVersion>2.2</ApiVersion>
         <Privileges/>
