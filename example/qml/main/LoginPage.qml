@@ -40,23 +40,27 @@ Item {
                                       emailEdit.text, captchaResponse);
     }
 
+    Image {
+        source: "images/sourceoftales.png"
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: positioner.top
+
+        anchors.margins: 30
+        fillMode: Image.PreserveAspectFit
+    }
+
     Item {
         id: positioner;
         anchors.centerIn: visibleArea
         width: Math.min(window.width - 100, 400);
         height: childrenRect.height
 
-        Text {
-            id: serverNameDisplay;
-            anchors.horizontalCenter: nameEdit.horizontalCenter;
-            text: serverName;
-            font.pixelSize: 35;
-        }
         LineEdit {
             id: nameEdit;
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: serverNameDisplay.bottom;
             focus: true;
             placeholderText: qsTr("Username");
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase;

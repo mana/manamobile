@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1280"
+   height="720"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   inkscape:export-filename="/home/bjorn/projects/tales-client/example/source-of-tales.png"
+   inkscape:export-xdpi="135"
+   inkscape:export-ydpi="135"
+   sodipodi:docname="New document 1">
+  <defs
+     id="defs4">
+    <filter
+       inkscape:collect="always"
+       id="filter3819">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.5000304"
+         id="feGaussianBlur3821" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3834">
+      <text
+         sodipodi:linespacing="125%"
+         id="text3836"
+         y="546.15515"
+         x="109.73358"
+         style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffa209;fill-opacity:1;stroke:none;font-family:Gabriola;-inkscape-font-specification:Gabriola"
+         xml:space="preserve"><tspan
+           y="546.15515"
+           x="109.73358"
+           id="tspan3838"
+           sodipodi:role="line">Source of Tales</tspan></text>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3840">
+      <text
+         sodipodi:linespacing="125%"
+         id="text3842"
+         y="546.15515"
+         x="109.73358"
+         style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffa209;fill-opacity:1;stroke:none;font-family:Gabriola;-inkscape-font-specification:Gabriola"
+         xml:space="preserve"><tspan
+           y="546.15515"
+           x="109.73358"
+           id="tspan3844"
+           sodipodi:role="line">Source of Tales</tspan></text>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3846">
+      <text
+         sodipodi:linespacing="125%"
+         id="text3848"
+         y="546.15515"
+         x="109.73358"
+         style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffa209;fill-opacity:1;stroke:none;font-family:Gabriola;-inkscape-font-specification:Gabriola"
+         xml:space="preserve"><tspan
+           y="546.15515"
+           x="109.73358"
+           id="tspan3850"
+           sodipodi:role="line">Source of Tales</tspan></text>
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4148">
+      <rect
+         style="fill:#807202;fill-opacity:1;stroke:none"
+         id="rect4150"
+         width="1281.0714"
+         height="720.60266"
+         x="0"
+         y="1.4285711"
+         rx="1.3535876"
+         ry="2.4975312" />
+    </clipPath>
+    <filter
+       inkscape:collect="always"
+       id="filter4172">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.1000608"
+         id="feGaussianBlur4174" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter4184">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.4944147"
+         id="feGaussianBlur4186" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="634.63178"
+     inkscape:cy="282.56143"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     inkscape:window-width="1879"
+     inkscape:window-height="1056"
+     inkscape:window-x="41"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Background"
+     style="display:inline">
+    <image
+       y="-60.035267"
+       x="0"
+       id="image4138"
+       xlink:href="data:image/png;base64,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
+cpSd4/bCAAAAAElFTkSuQmCC
+"
+       height="853.92847"
+       width="1280.8927"
+       clip-path="url(#clipPath4148)" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-332.36218)"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.5;fill:none;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter4172);font-family:Gabriola;-inkscape-font-specification:Gabriola"
+       x="112.80501"
+       y="216.8644"
+       id="text4160"
+       sodipodi:linespacing="125%"
+       transform="translate(0,332.36218)"><tspan
+         sodipodi:role="line"
+         id="tspan4162"
+         x="112.80501"
+         y="216.8644">Source of Tales</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3757"
+       y="546.15515"
+       x="109.73358"
+       style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#453200;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Gabriola;-inkscape-font-specification:Gabriola"
+       xml:space="preserve"><tspan
+         y="546.15515"
+         x="109.73358"
+         id="tspan3759"
+         sodipodi:role="line">Source of Tales</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffbc09;fill-opacity:1;stroke:none;font-family:Gabriola;-inkscape-font-specification:Gabriola"
+       x="109.73358"
+       y="546.15515"
+       id="text2985"
+       sodipodi:linespacing="125%"
+       clip-path="url(#clipPath3846)"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="109.73358"
+         y="546.15515">Source of Tales</tspan></text>
+    <path
+       style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffe830;fill-opacity:1;stroke:none;filter:url(#filter4184);font-family:Gabriola;-inkscape-font-specification:Gabriola"
+       d="m 962.07312,396.51025 c -0.95505,1.5e-4 -1.88875,0.0665 -2.84375,0.25 -0.91832,0.18381 -1.75991,0.50235 -2.53125,0.90625 -0.73465,0.36747 -1.33501,0.87023 -1.8125,1.53125 -0.47753,0.62459 -0.74454,1.36859 -0.78125,2.25 -0.25714,3.85697 -0.54991,8.31164 -0.84375,13.34375 -0.29387,5.03237 -0.60693,10.40046 -0.9375,16.09375 -0.3306,5.65679 -0.63818,11.52764 -0.96875,17.625 -0.3306,6.06082 -0.64366,12.07532 -0.9375,18.0625 -0.29387,5.95061 -0.58664,11.72935 -0.84375,17.3125 -0.25714,5.58327 -0.49837,10.7359 -0.71875,15.4375 -0.18367,4.7017 -0.32732,8.81206 -0.4375,12.375 -0.11021,3.52627 -0.15626,6.24623 -0.15625,8.15625 -10e-6,5.25265 0.0718,9.7331 0.21875,13.40625 0.18365,3.63645 0.56853,6.59764 1.15625,8.875 0.52924,1.93021 1.22633,3.39957 2.125,4.40625 -0.0423,-0.14125 -0.0848,-0.25968 -0.125,-0.40625 -0.58772,-2.27736 -0.9726,-5.23855 -1.15625,-8.875 -0.14694,-3.67315 -0.21876,-8.1536 -0.21875,-13.40625 -10e-6,-1.91002 0.046,-4.62998 0.15625,-8.15625 0.11018,-3.56294 0.25383,-7.6733 0.4375,-12.375 0.22038,-4.7016 0.46161,-9.85423 0.71875,-15.4375 0.25711,-5.58315 0.54988,-11.36189 0.84375,-17.3125 0.29384,-5.98718 0.6069,-12.00168 0.9375,-18.0625 0.33057,-6.09736 0.63815,-11.96821 0.96875,-17.625 0.33057,-5.69329 0.64363,-11.06138 0.9375,-16.09375 0.29384,-5.03211 0.58661,-9.48678 0.84375,-13.34375 0.0367,-0.88141 0.30372,-1.62541 0.78125,-2.25 0.47749,-0.66102 1.07785,-1.16378 1.8125,-1.53125 0.77134,-0.4039 1.61293,-0.72244 2.53125,-0.90625 0.955,-0.18351 1.8887,-0.24985 2.84375,-0.25 1.48609,1e-4 3.03868,0.27809 4.625,0.8125 0.11702,-1.00308 0.22672,-2.0678 0.34375,-3.0625 -2.42432,-1.17527 -4.76488,-1.74985 -6.96875,-1.75 z m -216.0625,0.0312 c -2.42435,1.5e-4 -4.93432,0.31869 -7.46875,0.90625 -2.53454,0.55112 -5.00777,1.43877 -7.46875,2.6875 -2.46107,1.21229 -4.86796,2.7776 -7.21875,4.6875 -2.31413,1.91019 -4.47979,4.19372 -6.5,6.875 -1.98354,2.64481 -3.76431,5.7036 -5.34375,9.15625 -1.57949,3.41617 -2.88327,7.26501 -3.875,11.5625 -0.77139,3.30596 -1.39203,6.5084 -1.90625,9.59375 -0.51426,3.08556 -0.97645,6.16464 -1.34375,9.25 -0.3306,3.04882 -0.59213,6.15366 -0.8125,9.3125 -0.22041,3.12228 -0.41559,6.4223 -0.5625,9.875 -2.60796,0.11027 -4.98909,0.35151 -7.15625,0.71875 -2.13045,0.36739 -3.95728,0.81862 -5.5,1.40625 -1.506,0.58778 -2.68642,1.29121 -3.53125,2.0625 -0.84483,0.7347 -1.28125,1.52476 -1.28125,2.40625 0,0.36739 0.0718,0.73198 0.21875,1.0625 1.67026,-0.61856 3.71505,-1.05849 6.0625,-1.3125 0.17213,-0.0736 0.34949,-0.14781 0.53125,-0.21875 1.54272,-0.58763 3.36955,-1.03886 5.5,-1.40625 2.16716,-0.36724 4.54829,-0.60848 7.15625,-0.71875 0.14691,-3.4527 0.34209,-6.75272 0.5625,-9.875 0.22037,-3.15884 0.4819,-6.26368 0.8125,-9.3125 0.3673,-3.08536 0.82949,-6.16444 1.34375,-9.25 0.51422,-3.08535 1.13486,-6.28779 1.90625,-9.59375 0.99173,-4.29749 2.29551,-8.14633 3.875,-11.5625 1.57944,-3.45265 3.36021,-6.51144 5.34375,-9.15625 2.02021,-2.68128 4.18587,-4.96481 6.5,-6.875 2.35079,-1.9099 4.75768,-3.47521 7.21875,-4.6875 2.46098,-1.24873 4.93421,-2.13638 7.46875,-2.6875 2.53443,-0.58756 5.0444,-0.9061 7.46875,-0.90625 3.56291,1.5e-4 6.71381,0.48263 9.46875,1.4375 2.79154,0.91844 5.12113,2.14492 7.03125,3.6875 1.37737,1.06565 2.5069,2.26347 3.40625,3.53125 -0.24951,-0.80335 -0.54299,-1.61544 -0.96875,-2.40625 -0.99184,-1.90991 -2.4908,-3.61886 -4.4375,-5.125 -1.91012,-1.54258 -4.23971,-2.76906 -7.03125,-3.6875 -2.75494,-0.95487 -5.90584,-1.43735 -9.46875,-1.4375 z m 9.34375,13.84375 c 0.13839,0.66836 0.21872,1.39107 0.21875,2.15625 -7e-5,1.28574 -0.164,2.53799 -0.53125,3.75 -0.33065,1.21227 -0.86467,2.60268 -1.5625,4.21875 l 0.21875,0.625 c 0.93662,0.42248 1.85926,0.72629 2.75,0.9375 0.22472,-0.63104 0.44417,-1.23284 0.59375,-1.78125 0.36725,-1.21201 0.53118,-2.46426 0.53125,-3.75 -7e-5,-1.76299 -0.35919,-3.28224 -1.09375,-4.53125 -0.32348,-0.59577 -0.69898,-1.13174 -1.125,-1.625 z m -597.90625,6.15625 c -3.52629,1.3e-4 -6.99573,0.41078 -10.375,1.21875 -3.34262,0.77149 -6.49351,1.92615 -9.46875,3.46875 -2.93856,1.50612 -5.65852,3.35872 -8.15625,5.5625 -2.46104,2.20402 -4.57516,4.73427 -6.375,7.5625 -1.76313,2.79172 -3.1645,5.87079 -4.15625,9.25 -0.99176,3.34268 -1.46876,6.95029 -1.46875,10.84375 -1e-5,3.12228 0.35911,5.99137 1.09375,8.5625 0.76412,2.54718 1.79372,4.85427 3.0625,6.96875 -0.39206,-0.96028 -0.75316,-1.93756 -1.0625,-2.96875 -0.73464,-2.57113 -1.09376,-5.44022 -1.09375,-8.5625 -1e-5,-3.89346 0.47699,-7.50107 1.46875,-10.84375 0.99175,-3.37921 2.39312,-6.45828 4.15625,-9.25 1.79984,-2.82823 3.91396,-5.35848 6.375,-7.5625 2.49773,-2.20378 5.21769,-4.05638 8.15625,-5.5625 2.97524,-1.5426 6.12613,-2.69726 9.46875,-3.46875 3.37927,-0.80797 6.84871,-1.21862 10.375,-1.21875 1.61615,1.3e-4 3.35086,0.12349 5.1875,0.34375 1.83653,0.18379 3.66336,0.47108 5.5,0.875 1.83652,0.40418 3.56576,0.91242 5.21875,1.5 1.68959,0.5511 3.18307,1.17174 4.46875,1.90625 0.86694,0.49551 1.61687,1.03154 2.25,1.59375 2.7e-4,-0.0948 -10e-6,-0.25293 0,-0.34375 -7e-5,-0.99163 -0.38496,-1.93082 -1.15625,-2.8125 -0.77144,-0.88144 -1.80821,-1.70274 -3.09375,-2.4375 -1.28568,-0.73451 -2.77916,-1.35515 -4.46875,-1.90625 -1.65299,-0.58758 -3.38223,-1.09582 -5.21875,-1.5 -1.83664,-0.40392 -3.66347,-0.69121 -5.5,-0.875 -1.83664,-0.22026 -3.57135,-0.34362 -5.1875,-0.34375 z m 718.6875,2.28125 c -1.65302,0.29398 -3.29015,0.52974 -4.90625,0.75 -1.57955,0.18378 -3.31427,0.3532 -5.1875,0.5 -1.83667,0.14705 -3.8532,0.27041 -6.09375,0.34375 -2.24071,0.0736 -4.86856,0.11964 -7.84375,0.15625 -2.97534,0.0369 -6.36747,0.0884 -10.1875,0.125 -3.82016,1.3e-4 -8.2233,1.3e-4 -13.21875,0 -2.97531,1.3e-4 -6.05439,-0.0772 -9.25,-0.1875 -3.15896,-0.11007 -6.23804,-0.20218 -9.25,-0.3125 -3.01203,-0.11007 -5.87563,-0.23343 -8.59375,-0.34375 -2.71817,-0.11007 -5.12506,-0.15612 -7.21875,-0.15625 -3.30586,1.3e-4 -5.97977,0.38501 -8,1.15625 -1.98352,0.77149 -3.49729,1.9722 -4.5625,3.625 -1.02849,1.65305 -1.73192,3.77265 -2.0625,6.34375 -0.33059,2.5346 -0.5,5.59339 -0.5,9.15625 0,3.45288 0.0773,7.39931 0.1875,11.84375 l 1.9375,0.0625 c -0.0522,-2.84562 -0.125,-5.53017 -0.125,-7.90625 0,-3.56286 0.16941,-6.62165 0.5,-9.15625 0.33058,-2.5711 1.03401,-4.6907 2.0625,-6.34375 1.06521,-1.6528 2.57898,-2.85351 4.5625,-3.625 2.02023,-0.77124 4.69414,-1.15612 8,-1.15625 2.09369,1.3e-4 4.50058,0.0462 7.21875,0.15625 2.71812,0.11032 5.58172,0.23368 8.59375,0.34375 3.01196,0.11032 6.09104,0.20243 9.25,0.3125 3.19561,0.11032 6.27469,0.18763 9.25,0.1875 4.99545,1.3e-4 9.39859,1.3e-4 13.21875,0 3.82003,-0.0366 7.21216,-0.0881 10.1875,-0.125 2.97519,-0.0366 5.60304,-0.0827 7.84375,-0.15625 2.24055,-0.0733 4.25708,-0.1967 6.09375,-0.34375 1.87323,-0.1468 3.60795,-0.31622 5.1875,-0.5 1.26767,-0.17277 2.55337,-0.34437 3.84375,-0.5625 -0.0257,-1.11536 -0.33994,-2.4999 -0.9375,-4.1875 z m -56.3125,12.96875 c -0.0104,6.49694 -0.0328,12.7677 -0.0937,18.65625 -0.0735,7.05257 -0.1711,13.83684 -0.28125,20.375 -0.11024,6.53831 -0.25388,12.91741 -0.4375,19.125 -0.1837,6.17097 -0.40465,12.35489 -0.625,18.5625 -0.22043,6.20769 -0.46167,12.53525 -0.71875,19 -0.25716,6.42806 -0.51869,13.17175 -0.8125,20.1875 l 1,0.0937 1.15625,-0.15625 c 0.2288,-5.50955 0.45084,-10.99042 0.65625,-16.125 0.25708,-6.46475 0.49832,-12.79231 0.71875,-19 0.22035,-6.20761 0.4413,-12.39153 0.625,-18.5625 0.18362,-6.20759 0.32726,-12.58669 0.4375,-19.125 0.11015,-6.53816 0.20775,-13.32243 0.28125,-20.375 0.0734,-7.08911 0.0937,-14.62286 0.0937,-22.59375 -0.6569,-0.023 -1.33588,-0.0431 -2,-0.0625 z m -645.5625,4.875 c 1.06007,2.71876 1.59369,5.83959 1.59375,9.40625 -7e-5,1.21224 -0.0774,2.49026 -0.1875,3.8125 l 2.1875,0.125 c -0.006,-3.61011 -0.56077,-6.76103 -1.65625,-9.5 -0.53264,-1.39575 -1.17532,-2.6867 -1.9375,-3.84375 z m -41.25,22.625 c 0.63048,1.62165 1.40448,3.13945 2.34375,4.5625 1.24885,1.83667 2.71657,3.52533 4.40625,5.03125 1.68963,1.50608 3.54771,2.92226 5.53125,4.28125 1.98348,1.32242 4.07731,2.60043 6.28125,3.8125 2.20386,1.21222 4.41557,2.41292 6.65625,3.625 2.31405,1.21221 4.59758,2.46446 6.875,3.75 2.31404,1.28567 4.53124,2.6558 6.625,4.125 2.09364,1.4326 4.01806,3.02367 5.78125,4.75 1.79979,1.68971 3.33932,3.59385 4.625,5.6875 0.0992,0.15428 0.18538,0.31199 0.28125,0.46875 -0.62434,-1.58684 -1.38994,-3.08215 -2.28125,-4.46875 -1.28568,-2.09365 -2.82521,-3.99779 -4.625,-5.6875 -1.76319,-1.72633 -3.68761,-3.3174 -5.78125,-4.75 -2.09376,-1.4692 -4.31096,-2.83933 -6.625,-4.125 -2.27742,-1.28554 -4.56095,-2.53779 -6.875,-3.75 -2.24068,-1.21208 -4.45239,-2.41278 -6.65625,-3.625 -2.20394,-1.21207 -4.29777,-2.49008 -6.28125,-3.8125 -1.98354,-1.35899 -3.84162,-2.77517 -5.53125,-4.28125 -1.68968,-1.50592 -3.1574,-3.19458 -4.40625,-5.03125 -0.12181,-0.18455 -0.22713,-0.37461 -0.34375,-0.5625 z m 291.21875,6.75 c -3.96708,8e-5 -7.62622,1.32415 -10.96875,3.96875 -3.3059,2.60802 -6.36468,6.18986 -9.15625,10.78125 -2.75491,4.59152 -5.22815,10.00567 -7.46875,16.25 -1.13573,3.19896 -2.23134,6.5377 -3.25,10 -0.11708,1.42443 -0.21189,2.7664 -0.34375,4.25 -0.29388,3.26916 -0.57569,6.54341 -0.90625,9.8125 l 0.53125,0.0625 c 1.76309,-7.19938 3.76482,-13.9173 5.96875,-20.125 2.2406,-6.24433 4.71384,-11.65848 7.46875,-16.25 2.79157,-4.59139 5.85035,-8.17323 9.15625,-10.78125 3.34253,-2.6446 7.00167,-3.96867 10.96875,-3.96875 1.39574,8e-5 2.69404,0.21555 3.90625,0.65625 1.21208,0.44086 2.27462,1.06698 3.15625,1.875 0.24888,0.21781 0.46789,0.44335 0.6875,0.6875 -0.12671,-0.66569 -0.30579,-1.27839 -0.59375,-1.875 -0.51431,-1.10187 -1.21226,-2.04106 -2.09375,-2.8125 -0.88163,-0.80802 -1.94417,-1.43414 -3.15625,-1.875 -1.21221,-0.4407 -2.51051,-0.65617 -3.90625,-0.65625 z m 474.125,0.0312 c -2.09375,8e-5 -4.38277,0.24132 -6.84375,0.71875 -2.42433,0.44086 -4.85699,1.11852 -7.28125,2 -2.42432,0.84491 -4.75391,1.8762 -7.03125,3.125 -2.27739,1.24895 -4.30488,2.67061 -6.03125,4.25 -1.7264,1.57953 -3.12229,3.34002 -4.1875,5.25 -1.0285,1.91011 -1.53126,3.92664 -1.53125,6.09375 -10e-6,1.3224 0.21546,2.52859 0.65625,3.59375 0.39792,0.88773 0.898,1.65442 1.5,2.3125 -0.1102,-0.59689 -0.15626,-1.24505 -0.15625,-1.90625 -10e-6,-2.16711 0.50275,-4.18364 1.53125,-6.09375 1.06521,-1.90998 2.4611,-3.67047 4.1875,-5.25 1.72637,-1.57939 3.75386,-3.00105 6.03125,-4.25 2.27734,-1.2488 4.60693,-2.28009 7.03125,-3.125 2.42426,-0.88148 4.85692,-1.55914 7.28125,-2 2.46098,-0.47743 4.75,-0.71867 6.84375,-0.71875 3.85678,8e-5 7.12555,0.53409 9.84375,1.5625 2.75482,1.02856 4.96653,2.51656 6.65625,4.5 0.46244,0.52151 0.88733,1.10537 1.28125,1.6875 -0.77408,-2.17633 -1.85948,-4.08411 -3.28125,-5.6875 -1.68972,-1.98344 -3.90143,-3.47144 -6.65625,-4.5 -2.7182,-1.02841 -5.98697,-1.56242 -9.84375,-1.5625 z m -663.28125,0.0625 c -4.18745,8e-5 -8.06206,0.67226 -11.625,2.03125 -3.563,1.35915 -6.78572,3.21175 -9.6875,5.5625 -2.90182,2.3509 -5.47814,5.12239 -7.71875,8.28125 -2.20392,3.12225 -4.05651,6.4941 -5.5625,10.09375 -1.50601,3.56302 -2.63489,7.24245 -3.40625,11.0625 -0.77137,3.82013 -1.15626,7.57138 -1.15625,11.28125 -10e-6,4.33437 0.59487,8.59934 1.84375,12.75 0.86722,2.79992 2.02088,5.38249 3.40625,7.78125 -0.51855,-1.22107 -1.0009,-2.47253 -1.40625,-3.78125 -1.24888,-4.15066 -1.84376,-8.41563 -1.84375,-12.75 -10e-6,-3.70987 0.38488,-7.46112 1.15625,-11.28125 0.77136,-3.82005 1.90024,-7.49948 3.40625,-11.0625 1.50599,-3.59965 3.35858,-6.9715 5.5625,-10.09375 2.24061,-3.15886 4.81693,-5.93035 7.71875,-8.28125 2.90178,-2.35075 6.1245,-4.20335 9.6875,-5.5625 3.56294,-1.35899 7.43755,-2.03117 11.625,-2.03125 4.70161,8e-5 8.86899,0.98532 12.46875,2.96875 3.63638,1.98359 6.66391,4.60595 9.125,7.875 0.78469,1.03069 1.52603,2.12596 2.1875,3.25 -1.11273,-2.62106 -2.51491,-5.05306 -4.1875,-7.25 -2.46109,-3.26905 -5.48862,-5.89141 -9.125,-7.875 -3.59976,-1.98343 -7.76714,-2.96867 -12.46875,-2.96875 z m 416.53125,0 c -4.18745,8e-5 -8.06206,0.67226 -11.625,2.03125 -3.563,1.35915 -6.78572,3.21175 -9.6875,5.5625 -2.90182,2.3509 -5.47814,5.12239 -7.71875,8.28125 -2.20392,3.12225 -4.05651,6.4941 -5.5625,10.09375 -1.50601,3.56302 -2.63489,7.24245 -3.40625,11.0625 -0.77137,3.82013 -1.15626,7.57138 -1.15625,11.28125 -10e-6,4.33437 0.62612,8.59934 1.875,12.75 0.88164,2.84647 2.02033,5.47439 3.4375,7.90625 -0.53995,-1.25913 -1.0185,-2.55348 -1.4375,-3.90625 -1.24888,-4.15066 -1.87501,-8.41563 -1.875,-12.75 -10e-6,-3.70987 0.38488,-7.46112 1.15625,-11.28125 0.77136,-3.82005 1.90024,-7.49948 3.40625,-11.0625 1.50599,-3.59965 3.35858,-6.9715 5.5625,-10.09375 2.24061,-3.15886 4.81693,-5.93035 7.71875,-8.28125 2.90178,-2.35075 6.1245,-4.20335 9.6875,-5.5625 3.56294,-1.35899 7.43755,-2.03117 11.625,-2.03125 4.70161,8e-5 8.86899,0.98532 12.46875,2.96875 3.63638,1.98359 6.66391,4.60595 9.125,7.875 0.78469,1.03069 1.52603,2.12596 2.1875,3.25 -1.11273,-2.62106 -2.51491,-5.05306 -4.1875,-7.25 -2.46109,-3.26905 -5.48862,-5.89141 -9.125,-7.875 -3.59976,-1.98343 -7.76714,-2.96867 -12.46875,-2.96875 z m 435.84373,0 c -2.2774,8e-5 -4.6382,0.21555 -7.0624,0.65625 -2.3876,0.40413 -4.7227,1.05602 -7,1.9375 -2.2774,0.84491 -4.4173,1.90197 -6.4376,3.1875 -1.9835,1.28568 -3.7697,2.80493 -5.3124,4.53125 -1.5061,1.68973 -2.681,3.58838 -3.5626,5.71875 -0.8815,2.1305 -1.3125,4.46557 -1.3124,7 -10e-5,2.35088 0.3075,4.49077 0.9687,6.4375 0.5448,1.49115 1.2267,2.89788 2.0625,4.1875 -0.023,-0.0619 -0.04,-0.12529 -0.062,-0.1875 -0.6612,-1.94673 -0.9688,-4.08662 -0.9687,-6.4375 -10e-5,-2.53443 0.4309,-4.8695 1.3124,-7 0.8816,-2.13037 2.0565,-4.02902 3.5626,-5.71875 1.5427,-1.72632 3.3289,-3.24557 5.3124,-4.53125 2.0203,-1.28553 4.1602,-2.34259 6.4376,-3.1875 2.2773,-0.88148 4.6124,-1.53337 7,-1.9375 2.4242,-0.4407 4.785,-0.65617 7.0624,-0.65625 2.9385,8e-5 5.7046,0.33891 8.3126,1 2.6446,0.62452 4.9281,1.5637 6.875,2.8125 1.6827,1.02846 3.0502,2.26255 4.125,3.6875 -0.2885,-1.14365 -0.7699,-2.21726 -1.4376,-3.21875 -1.1387,-1.76305 -2.704,-3.25653 -4.6874,-4.46875 -1.9469,-1.2488 -4.2304,-2.18798 -6.875,-2.8125 -2.608,-0.66109 -5.3741,-0.99992 -8.3126,-1 z m -543.99998,0.15625 c -4.11399,8e-5 -7.96283,0.65197 -11.5625,1.9375 -3.563,1.28569 -6.86303,3.06646 -9.875,5.34375 -2.97529,2.2407 -5.61794,4.91461 -7.96875,8 -2.35084,3.04879 -4.34709,6.34333 -6,9.90625 -1.6162,3.56303 -2.86845,7.31976 -3.75,11.25 -0.84484,3.93033 -1.28126,7.85099 -1.28125,11.78125 -1e-5,4.81188 0.74948,9.33838 2.21875,13.5625 0.79713,2.21642 1.75885,4.26952 2.875,6.1875 -0.30782,-0.71891 -0.60404,-1.4341 -0.875,-2.1875 -1.46927,-4.22412 -2.21876,-8.75062 -2.21875,-13.5625 -1e-5,-3.93026 0.43641,-7.85092 1.28125,-11.78125 0.88155,-3.93024 2.1338,-7.68697 3.75,-11.25 1.65291,-3.56292 3.64916,-6.85746 6,-9.90625 2.35081,-3.08539 4.99346,-5.7593 7.96875,-8 3.01197,-2.27729 6.312,-4.05806 9.875,-5.34375 3.59967,-1.28553 7.44851,-1.93742 11.5625,-1.9375 2.7181,8e-5 5.32018,0.39045 7.78125,1.125 2.46097,0.73471 4.60086,1.79177 6.4375,3.1875 1.35489,0.98305 2.51732,2.1399 3.46875,3.46875 -0.25826,-0.83508 -0.58679,-1.64863 -1,-2.40625 -1.10201,-2.02017 -2.5955,-3.70335 -4.46875,-5.0625 -1.83664,-1.39573 -3.97653,-2.45279 -6.4375,-3.1875 -2.46107,-0.73455 -5.06315,-1.12492 -7.78125,-1.125 z m 481.65628,0 c -4.114,8e-5 -7.9628,0.65197 -11.5625,1.9375 -3.563,1.28569 -6.8318,3.06646 -9.8438,5.34375 -2.9752,2.2407 -5.64913,4.91461 -8.00003,8 -2.3508,3.04879 -4.347,6.34333 -6,9.90625 -1.6162,3.56303 -2.8684,7.31976 -3.75,11.25 -0.8448,3.93033 -1.2812,7.85099 -1.2812,11.78125 0,4.81188 0.7495,9.33838 2.2188,13.5625 0.7883,2.19197 1.7433,4.22492 2.8437,6.125 -0.2976,-0.69848 -0.5809,-1.39406 -0.8437,-2.125 -1.4693,-4.22412 -2.2188,-8.75062 -2.2188,-13.5625 0,-3.93026 0.4364,-7.85092 1.2812,-11.78125 0.8816,-3.93024 2.1338,-7.68697 3.75,-11.25 1.653,-3.56292 3.6492,-6.85746 6,-9.90625 2.35093,-3.08539 5.02483,-5.7593 8.00003,-8 3.012,-2.27729 6.2808,-4.05806 9.8438,-5.34375 3.5997,-1.28553 7.4485,-1.93742 11.5625,-1.9375 2.7181,8e-5 5.3202,0.39045 7.7813,1.125 2.4609,0.73471 4.6008,1.79177 6.4374,3.1875 1.3549,0.98305 2.5174,2.1399 3.4688,3.46875 -0.2583,-0.83508 -0.5868,-1.64863 -1,-2.40625 -1.102,-2.02017 -2.5955,-3.70335 -4.4688,-5.0625 -1.8366,-1.39573 -3.9765,-2.45279 -6.4374,-3.1875 -2.4611,-0.73455 -5.0632,-1.12492 -7.7813,-1.125 z m -551.25003,0.0625 c -4.04053,8e-5 -7.84331,0.67774 -11.40625,2 -3.563,1.28569 -6.80601,3.06098 -9.78125,5.375 -2.93856,2.27743 -5.58669,5.00287 -7.9375,8.125 -2.31411,3.08552 -4.31584,6.4316 -5.96875,10.03125 -1.6162,3.56302 -2.84268,7.26274 -3.6875,11.15625 -0.84484,3.85687 -1.25001,7.73696 -1.25,11.59375 -1e-5,2.8651 0.26152,5.70294 0.8125,8.53125 0.5877,2.79163 1.42929,5.46005 2.53125,8.03125 0.53469,1.19014 1.13316,2.35151 1.78125,3.46875 -0.99327,-2.40854 -1.76521,-4.9003 -2.3125,-7.5 -0.55098,-2.82831 -0.81251,-5.66615 -0.8125,-8.53125 -1e-5,-3.85679 0.40516,-7.73688 1.25,-11.59375 0.84482,-3.89351 2.0713,-7.59323 3.6875,-11.15625 1.65291,-3.59965 3.65464,-6.94573 5.96875,-10.03125 2.35081,-3.12213 4.99894,-5.84757 7.9375,-8.125 2.97524,-2.31402 6.21825,-4.08931 9.78125,-5.375 3.56294,-1.32226 7.36572,-1.99992 11.40625,-2 3.01195,8e-5 5.8295,0.3592 8.4375,1.09375 2.60789,0.73471 4.84537,1.79725 6.71875,3.15625 1.43249,0.99181 2.63641,2.14644 3.59375,3.46875 -0.2718,-0.91455 -0.63776,-1.79661 -1.125,-2.625 -1.06528,-1.90998 -2.55876,-3.52133 -4.46875,-4.84375 -1.87338,-1.359 -4.11086,-2.42154 -6.71875,-3.15625 -2.608,-0.73455 -5.42555,-1.09367 -8.4375,-1.09375 z m -181.1875,0.28125 c -0.66119,8e-5 -1.72374,0.11796 -3.15625,0.375 -1.39582,0.2572 -3.13054,0.64208 -5.1875,1.15625 -2.02026,0.51432 -4.32956,1.19198 -6.9375,2 -2.57122,0.77144 -5.363,1.68486 -8.375,2.75 l 0.84375,3.96875 c 1.55271,-0.43989 3.02543,-0.81267 4.46875,-1.125 1.75819,-0.58922 3.4728,-1.11679 5.0625,-1.59375 2.60794,-0.80802 4.91724,-1.48568 6.9375,-2 2.05696,-0.51417 3.79168,-0.89905 5.1875,-1.15625 1.43251,-0.25704 2.49506,-0.37492 3.15625,-0.375 1.32232,8e-5 2.40515,0.24132 3.25,0.71875 0.34967,0.19768 0.64445,0.44558 0.9375,0.71875 -0.19951,-0.9942 -0.48654,-1.87541 -0.90625,-2.625 -0.51427,-0.91821 -1.18645,-1.61616 -2.03125,-2.09375 -0.84485,-0.47743 -1.92768,-0.71867 -3.25,-0.71875 z m 93.9375,0.125 c -1.32236,8e-5 -3.8729,0.45679 -7.65625,1.375 -3.78338,0.88164 -8.7463,2.42117 -14.84375,4.625 l 0.84375,3.96875 c 1.32234,-0.33052 2.47699,-0.62329 3.46875,-0.84375 0.1859,-0.0465 0.3213,-0.0509 0.5,-0.0937 4.8075,-1.67216 8.85486,-2.91606 12.03125,-3.65625 3.78335,-0.91821 6.33389,-1.37492 7.65625,-1.375 1.95424,6e-5 3.45275,0.44414 4.5,1.375 -0.25643,-1.32859 -0.70859,-2.41765 -1.34375,-3.25 -1.02851,-1.43246 -2.73198,-2.12492 -5.15625,-2.125 z m -39.1875,0.375 -11.6875,1.4375 c -0.58777,9.32992 -1.90636,18.01284 -4,26.09375 -2.09377,8.04428 -4.64979,15.31651 -7.625,21.78125 -2.97532,6.4648 -6.07468,11.3707 -9.34375,14.75 -3.26916,3.3426 -6.47159,5.03126 -9.59375,5.03125 -2.65302,1e-5 -4.80649,-0.93892 -6.4375,-2.8125 0.41292,1.5385 1.00862,2.79876 1.8125,3.78125 1.6529,2.02025 3.87009,3.03126 6.625,3.03125 3.12216,1e-5 6.32459,-1.68865 9.59375,-5.03125 3.26907,-3.3793 6.36843,-8.2852 9.34375,-14.75 2.97521,-6.46474 5.53123,-13.73697 7.625,-21.78125 2.09364,-8.08091 3.41223,-16.76383 4,-26.09375 l 10.21875,-1.25 c 0.12141,-1.40341 0.21691,-2.78642 0.34375,-4.125 l -0.875,-0.0625 z m 395.65625,3.25 c -1.06527,0.11027 -2.33781,0.20238 -3.84375,0.3125 -1.50605,0.11027 -3.12289,0.18758 -4.8125,0.1875 -0.84488,8e-5 -1.8504,8e-5 -3.0625,0 -1.17546,-0.0367 -2.52529,-0.0624 -4.03125,-0.0625 -1.46931,-0.0367 -3.08615,-0.0882 -4.8125,-0.125 -0.99983,-0.0217 -2.07375,-0.0591 -3.125,-0.0937 -0.0462,1.31359 -0.11218,2.62391 -0.15625,3.9375 1.83655,0.0735 3.59156,0.11959 5.28125,0.15625 1.72635,0.0368 3.34319,0.0883 4.8125,0.125 1.50596,8e-5 2.85579,0.0258 4.03125,0.0625 1.2121,8e-5 2.21762,8e-5 3.0625,0 1.68961,8e-5 3.30645,-0.0772 4.8125,-0.1875 0.93033,-0.068 1.61285,-0.11941 2.375,-0.1875 0.0457,-0.25924 0.0625,-0.51623 0.0625,-0.8125 -6e-5,-0.80802 -0.18976,-1.91662 -0.59375,-3.3125 z m -456.8125,9.1875 c 0.0186,0.14547 0.0482,0.28526 0.0625,0.4375 0.11018,1.17548 0.15623,2.57137 0.15625,4.1875 -2e-5,4.00381 -0.14366,8.0736 -0.4375,12.1875 -0.29387,4.07726 -0.6327,8.04946 -1,11.90625 -0.3306,3.82013 -0.64366,7.42773 -0.9375,10.84375 -0.29387,3.37934 -0.43751,6.3663 -0.4375,8.9375 -1e-5,3.9303 0.43093,7.22485 1.3125,9.90625 0.61881,1.80697 1.39553,3.37884 2.28125,4.71875 -0.0904,-0.24016 -0.19597,-0.46972 -0.28125,-0.71875 -0.88157,-2.6814 -1.31251,-5.97595 -1.3125,-9.90625 -1e-5,-2.5712 0.14363,-5.55816 0.4375,-8.9375 0.29384,-3.41602 0.6069,-7.02362 0.9375,-10.84375 0.3673,-3.85679 0.70613,-7.82899 1,-11.90625 0.29384,-4.1139 0.43748,-8.18369 0.4375,-12.1875 -2e-5,-1.61613 -0.0461,-3.01202 -0.15625,-4.1875 -0.11021,-1.17535 -0.35145,-2.13482 -0.71875,-2.90625 -0.31304,-0.65729 -0.76398,-1.16729 -1.34375,-1.53125 z m 94.46875,0 c 0.09,0.92825 0.12498,1.99065 0.125,3.21875 -2e-5,1.65299 -0.0203,3.88499 -0.0937,6.75 -0.0368,2.86513 -0.13434,6.14486 -0.28125,9.78125 -0.11021,3.59975 -0.25386,7.46888 -0.4375,11.65625 -0.14694,4.15071 -0.34213,8.36415 -0.5625,12.625 -0.22041,4.22416 -0.46164,8.38606 -0.71875,12.5 -0.25714,4.11396 -0.51866,7.91674 -0.8125,11.40625 l 0.875,0.0625 1.46875,-0.1875 c 0.17437,-2.31982 0.30862,-4.71925 0.46875,-7.28125 0.25711,-4.11394 0.49834,-8.27584 0.71875,-12.5 0.22037,-4.26085 0.41556,-8.47429 0.5625,-12.625 0.18364,-4.18737 0.32729,-8.0565 0.4375,-11.65625 0.14691,-3.63639 0.2445,-6.91612 0.28125,-9.78125 0.0734,-2.86501 0.0937,-5.09701 0.0937,-6.75 -2e-5,-1.35901 -0.0461,-2.53943 -0.15625,-3.53125 -0.11021,-0.99169 -0.37722,-1.83876 -0.78125,-2.5 -0.28643,-0.51549 -0.67776,-0.89525 -1.1875,-1.1875 z m 324.5,0.71875 c -0.70586,0.008 -1.34688,0.0473 -2.03125,0.0625 -0.0804,9.56698 -0.21348,18.82014 -0.40625,27.65625 -0.18367,10.06451 -0.59433,19.45086 -1.21875,28.15625 -0.58772,8.66868 -1.42383,16.53578 -2.5625,23.625 -1.13869,7.0892 -2.72977,13.16071 -4.75,18.15625 -1.98352,5.0322 -4.46224,8.90681 -7.4375,11.625 -2.93853,2.75483 -6.52585,4.12495 -10.75,4.125 -1.61618,-5e-5 -3.20177,-0.221 -4.78125,-0.625 -1.57945,-0.4041 -3.12446,-1.02474 -4.59375,-1.90625 -1.46925,-0.84487 -2.83937,-1.95347 -4.125,-3.3125 -1.28558,-1.32238 -2.466,-2.93374 -3.53125,-4.84375 -1.13865,-4e-5 -2.16995,0.18966 -3.125,0.59375 -0.99172,0.44074 -1.83332,0.99504 -2.53125,1.65625 -0.7346,0.66113 -1.31467,1.40513 -1.71875,2.25 -0.40401,0.88152 -0.59371,1.77465 -0.59375,2.65625 4e-5,1.57942 0.5028,3.0729 1.53125,4.46875 0.16773,0.24226 0.37271,0.45574 0.5625,0.6875 -0.0643,-0.38338 -0.0937,-0.7614 -0.0937,-1.15625 4e-5,-0.8816 0.18974,-1.77473 0.59375,-2.65625 0.40408,-0.84487 0.98415,-1.58887 1.71875,-2.25 0.69793,-0.66121 1.53953,-1.21551 2.53125,-1.65625 0.95505,-0.40409 1.98635,-0.59379 3.125,-0.59375 1.06525,1.91001 2.24567,3.52137 3.53125,4.84375 1.28563,1.35903 2.65575,2.46763 4.125,3.3125 1.46929,0.88151 3.0143,1.50215 4.59375,1.90625 1.57948,0.404 3.16507,0.62495 4.78125,0.625 4.22415,-5e-5 7.81147,-1.37017 10.75,-4.125 2.97526,-2.71819 5.45398,-6.5928 7.4375,-11.625 2.02023,-4.99554 3.61131,-11.06705 4.75,-18.15625 1.13867,-7.08922 1.97478,-14.95632 2.5625,-23.625 0.62442,-8.70539 1.03508,-18.09174 1.21875,-28.15625 0.22037,-10.10117 0.36402,-20.66245 0.4375,-31.71875 z m 391.31253,0.21875 c 0.06,0.38797 0.085,0.79635 0.094,1.21875 -10e-5,0.84489 -0.1235,1.75831 -0.3438,2.75 -0.2204,0.99182 -0.5796,2.07465 -1.0938,3.25 l 0.1563,0.5625 c 0.9669,0.27329 1.9249,0.44562 2.8437,0.5625 0.03,-0.12069 0.068,-0.25691 0.094,-0.375 0.2203,-0.99169 0.3437,-1.90511 0.3438,-2.75 -0.037,-1.68959 -0.4678,-3.11125 -1.3126,-4.25 -0.2364,-0.34383 -0.5071,-0.66263 -0.7812,-0.96875 z m -614.68753,0.1875 c 0.21955,0.85764 0.34371,1.7515 0.34375,2.6875 -5e-5,2.09377 -0.53407,4.13607 -1.5625,6.15625 l 0.21875,0.625 c 0.84478,0.36737 1.68637,0.6289 2.53125,0.8125 0.0837,0.014 0.16692,0.0186 0.25,0.0312 0.3481,-1.1932 0.56247,-2.40689 0.5625,-3.625 -5e-5,-1.43247 -0.26706,-2.78231 -0.78125,-4.03125 -0.36833,-0.9915 -0.88833,-1.86132 -1.5625,-2.65625 z m 67.1875,0.40625 c 0.34918,1.17152 0.53121,2.41635 0.53125,3.71875 -5e-5,2.53455 -0.74405,4.7978 -2.25,6.78125 -1.50605,1.94683 -3.69747,3.63001 -6.5625,5.0625 -2.82838,1.39585 -6.31811,2.5505 -10.46875,3.46875 -3.40576,0.72984 -7.21408,1.2789 -11.375,1.65625 -0.26097,1.43042 -0.48413,2.8334 -0.625,4.21875 5.21588,-0.36727 9.88602,-0.99339 14,-1.875 4.15064,-0.91825 7.64037,-2.0729 10.46875,-3.46875 2.86503,-1.43249 5.05645,-3.11567 6.5625,-5.0625 1.50595,-1.98345 2.24995,-4.2467 2.25,-6.78125 -5e-5,-1.68959 -0.28734,-3.28067 -0.875,-4.75 -0.41327,-1.1019 -0.97444,-2.09405 -1.65625,-2.96875 z m 481.65623,0 c 0.3492,1.17152 0.5313,2.41635 0.5313,3.71875 -10e-5,2.53455 -0.7441,4.7978 -2.25,6.78125 -1.506,1.94683 -3.6975,3.63001 -6.5625,5.0625 -2.8284,1.39585 -6.3181,2.5505 -10.4688,3.46875 -3.4057,0.72984 -7.214,1.2789 -11.375,1.65625 -0.2609,1.43042 -0.4841,2.8334 -0.62503,4.21875 5.21593,-0.36727 9.88613,-0.99339 14.00003,-1.875 4.1507,-0.91825 7.6404,-2.0729 10.4688,-3.46875 2.865,-1.43249 5.0565,-3.11567 6.5625,-5.0625 1.5059,-1.98345 2.2499,-4.2467 2.25,-6.78125 -10e-5,-1.68959 -0.2873,-3.28067 -0.875,-4.75 -0.4133,-1.1019 -0.9744,-2.09405 -1.6563,-2.96875 z m -124.12498,2.21875 c 0.60261,1.81837 0.90621,3.88246 0.90625,6.1875 -5e-5,2.608 -0.0976,4.98913 -0.28125,7.15625 -0.14698,2.16722 -0.33668,4.4047 -0.59375,6.71875 -4.0038,4e-5 -7.92447,0.26705 -11.78125,0.78125 -3.85686,0.47755 -7.516,1.22155 -10.96875,2.25 -3.4528,0.99179 -6.65524,2.26981 -9.59375,3.8125 -2.93855,1.50603 -5.46333,3.28133 -7.59375,5.375 -2.09372,2.09373 -3.75661,4.48034 -4.96875,7.125 -1.17542,2.6447 -1.75001,5.58013 -1.75,8.8125 -10e-6,2.49777 0.3794,4.80707 1.1875,6.9375 0.4871,1.20719 1.08655,2.31974 1.78125,3.34375 -0.65289,-1.94833 -0.96875,-4.03614 -0.96875,-6.28125 -10e-6,-3.23237 0.57458,-6.1678 1.75,-8.8125 1.21214,-2.64466 2.87503,-5.03127 4.96875,-7.125 2.13042,-2.09367 4.6552,-3.86897 7.59375,-5.375 2.93851,-1.54269 6.14095,-2.82071 9.59375,-3.8125 3.45275,-1.02845 7.11189,-1.77245 10.96875,-2.25 3.85678,-0.5142 7.77745,-0.78121 11.78125,-0.78125 0.25707,-2.31405 0.44677,-4.55153 0.59375,-6.71875 0.18361,-2.16712 0.2812,-4.54825 0.28125,-7.15625 -5e-5,-2.90174 -0.48253,-5.432 -1.4375,-7.5625 -0.42853,-0.95587 -0.92193,-1.8244 -1.46875,-2.625 z m -659.03125,4.9375 c 0.36953,0.86737 0.72118,1.77148 1.03125,2.6875 0.80804,2.35088 1.38262,4.80383 1.75,7.375 0.40399,2.53453 0.62494,5.05931 0.625,7.59375 -6e-5,2.16721 -0.11794,4.55382 -0.375,7.125 -0.22045,2.57125 -0.6311,5.16785 -1.21875,7.8125 -0.58777,2.60797 -1.3833,5.13275 -2.375,7.59375 -0.95508,2.46104 -2.18156,4.65247 -3.6875,6.5625 -1.46932,1.91006 -3.22433,3.44959 -5.28125,4.625 -2.02029,1.13869 -4.38113,1.71875 -7.0625,1.71875 -2.46106,0 -4.72431,-0.43093 -6.78125,-1.3125 -2.02028,-0.88155 -3.8471,-2.11351 -5.5,-3.65625 -1.53904,-1.46905 -2.88989,-3.18962 -4.0625,-5.125 0.54973,1.28596 1.14392,2.52787 1.8125,3.71875 1.21212,2.05699 2.63378,3.86353 4.25,5.40625 1.6529,1.54274 3.47972,2.7747 5.5,3.65625 2.05694,0.88157 4.32019,1.3125 6.78125,1.3125 2.68137,0 5.04221,-0.58006 7.0625,-1.71875 2.05692,-1.17541 3.81193,-2.71494 5.28125,-4.625 1.50594,-1.91003 2.73242,-4.10146 3.6875,-6.5625 0.9917,-2.461 1.78723,-4.98578 2.375,-7.59375 0.58765,-2.64465 0.9983,-5.24125 1.21875,-7.8125 0.25706,-2.57118 0.37494,-4.95779 0.375,-7.125 -6e-5,-2.53444 -0.22101,-5.05922 -0.625,-7.59375 -0.36738,-2.57117 -0.94196,-5.02412 -1.75,-7.375 -0.80816,-2.3875 -1.81916,-4.63047 -3.03125,-6.6875 z m 416.625,0.15625 c 0.3441,0.81826 0.64597,1.66998 0.9375,2.53125 0.80804,2.35088 1.41387,4.80383 1.78125,7.375 0.40399,2.53453 0.59369,5.05931 0.59375,7.59375 -6e-5,2.16721 -0.11794,4.55382 -0.375,7.125 -0.22045,2.57125 -0.6311,5.16785 -1.21875,7.8125 -0.58777,2.60797 -1.3833,5.13275 -2.375,7.59375 -0.95508,2.46104 -2.18156,4.65247 -3.6875,6.5625 -1.46932,1.91006 -3.22433,3.44959 -5.28125,4.625 -2.02029,1.13869 -4.38113,1.71875 -7.0625,1.71875 -2.46106,0 -4.72431,-0.43093 -6.78125,-1.3125 -2.02028,-0.88155 -3.8471,-2.11351 -5.5,-3.65625 -1.53904,-1.46905 -2.88989,-3.18962 -4.0625,-5.125 0.54973,1.28596 1.14392,2.52787 1.8125,3.71875 1.21212,2.05699 2.63378,3.86353 4.25,5.40625 1.6529,1.54274 3.47972,2.7747 5.5,3.65625 2.05694,0.88157 4.32019,1.3125 6.78125,1.3125 2.68137,0 5.04221,-0.58006 7.0625,-1.71875 2.05692,-1.17541 3.81193,-2.71494 5.28125,-4.625 1.50594,-1.91003 2.73242,-4.10146 3.6875,-6.5625 0.9917,-2.461 1.78723,-4.98578 2.375,-7.59375 0.58765,-2.64465 0.9983,-5.24125 1.21875,-7.8125 0.25706,-2.57118 0.37494,-4.95779 0.375,-7.125 -6e-5,-2.53444 -0.18976,-5.05922 -0.59375,-7.59375 -0.36738,-2.57117 -0.97321,-5.02412 -1.78125,-7.375 -0.78792,-2.32773 -1.76562,-4.51765 -2.9375,-6.53125 z m 405.09383,2.8125 c 0.2563,1.10837 0.708,2.12931 1.3437,3.09375 1.0652,1.57952 2.4556,3.04723 4.2187,4.40625 1.7631,1.32239 3.7852,2.57463 6.0626,3.75 2.314,1.17546 4.7209,2.35588 7.2187,3.53125 2.7916,1.32238 5.5576,2.69251 8.3125,4.125 2.7548,1.39584 5.239,3.01268 7.4062,4.8125 1.7835,1.48121 3.2575,3.14568 4.4688,5 -0.3185,-0.98659 -0.7404,-1.91345 -1.25,-2.78125 -1.3224,-2.3508 -3.0516,-4.41886 -5.2188,-6.21875 -2.1672,-1.79982 -4.6514,-3.41666 -7.4062,-4.8125 -2.7549,-1.43249 -5.5209,-2.80262 -8.3125,-4.125 -2.4978,-1.17537 -4.9047,-2.35579 -7.2187,-3.53125 -2.2774,-1.17537 -4.2995,-2.42761 -6.0626,-3.75 -1.4185,-1.09343 -2.5957,-2.26383 -3.5624,-3.5 z m -189.28133,1.40625 c 0.0108,0.0317 0.0203,0.0621 0.0312,0.0937 0.20464,0.54575 0.4578,1.0863 0.71875,1.625 l 0.15625,-0.4375 c -0.31223,-0.4224 -0.63076,-0.85425 -0.90625,-1.28125 z m -543,11.5 c -0.93668,3.45738 -1.9076,6.71102 -2.90625,9.75 -0.10792,1.43142 -0.19048,2.84565 -0.25,4.15625 -0.0735,1.61622 -0.12506,3.20181 -0.125,4.78125 -6e-5,4.92206 0.45664,9.03791 1.375,12.34375 0.78549,2.7192 1.78555,4.98797 2.96875,6.8125 -0.34258,-0.87886 -0.67994,-1.81269 -0.96875,-2.8125 -0.91836,-3.30584 -1.37506,-7.42169 -1.375,-12.34375 -6e-5,-1.57944 0.0515,-3.16503 0.125,-4.78125 0.0734,-1.61616 0.16551,-3.32512 0.3125,-5.125 0.14686,-1.79982 0.34205,-3.72424 0.5625,-5.78125 0.25706,-2.09367 0.54435,-4.3772 0.875,-6.875 l -0.59375,-0.125 z m -166.71875,5.75 c 0.12761,0.34363 0.23191,0.70836 0.34375,1.0625 0.69784,2.05701 1.06244,4.31478 1.0625,6.8125 -6e-5,3.93032 -0.74954,7.39427 -2.21875,10.40625 -1.46933,2.97528 -3.4398,5.47977 -5.9375,7.5 -2.46107,2.02025 -5.32468,3.56527 -8.59375,4.59375 -3.26916,0.99176 -6.7386,1.46875 -10.375,1.46875 -3.63647,0 -6.90524,-0.41065 -9.84375,-1.21875 -2.90183,-0.84482 -5.40631,-2.16341 -7.5,-4 -1.07765,-0.96218 -2.01815,-2.0892 -2.84375,-3.34375 0.0255,0.0704 0.0364,0.14905 0.0625,0.21875 1.13867,2.90182 2.72426,5.28843 4.78125,7.125 2.09369,1.83659 4.59817,3.15518 7.5,4 2.93851,0.8081 6.20728,1.21875 9.84375,1.21875 3.6364,0 7.10584,-0.47699 10.375,-1.46875 3.26907,-1.02848 6.13268,-2.5735 8.59375,-4.59375 2.4977,-2.02023 4.46817,-4.52472 5.9375,-7.5 1.46921,-3.01198 2.21869,-6.47593 2.21875,-10.40625 -6e-5,-2.49772 -0.36466,-4.75549 -1.0625,-6.8125 -0.57547,-1.82212 -1.35105,-3.51854 -2.34375,-5.0625 z m 737.90625,2.0625 c -0.88888,0.024 -1.77131,0.10865 -2.65625,0.15625 -0.26526,1.18091 -0.6086,2.34276 -1,3.5 -0.80815,2.46105 -1.84492,4.82189 -3.09375,7.0625 -1.24892,2.24065 -2.63933,4.30872 -4.21875,6.21875 -1.54277,1.87333 -3.1799,3.51594 -4.90625,4.875 -1.68969,1.35908 -3.42441,2.41614 -5.1875,3.1875 -1.76315,0.77137 -3.4721,1.15626 -5.125,1.15625 -1.46929,1e-5 -2.74731,-0.29277 -3.8125,-0.84375 -0.77138,-0.44077 -1.44585,-0.98819 -2.03125,-1.65625 0.33021,1.23401 0.79805,2.35336 1.4375,3.3125 0.69788,0.99177 1.56524,1.75605 2.59375,2.34375 1.06519,0.55098 2.34321,0.84376 3.8125,0.84375 1.6529,1e-5 3.36185,-0.38488 5.125,-1.15625 1.76309,-0.77136 3.49781,-1.82842 5.1875,-3.1875 1.72635,-1.35906 3.36348,-3.00167 4.90625,-4.875 1.57942,-1.91003 2.96983,-3.9781 4.21875,-6.21875 1.24883,-2.24061 2.2856,-4.60145 3.09375,-7.0625 0.84478,-2.49772 1.39908,-5.04826 1.65625,-7.65625 z m -792.71875,1.53125 c -0.36732,6.31788 -0.62885,11.75231 -0.8125,16.34375 -0.14693,4.59147 -0.21875,8.13273 -0.21875,10.59375 0,1.09177 0.66594,2.16305 2,3.21875 0.0116,-2.41628 0.0846,-5.61952 0.21875,-9.8125 0.18365,-4.59144 0.44518,-10.02587 0.8125,-16.34375 l 3.3125,0.15625 c 0.009,-0.45133 0.0107,-0.8924 0.0312,-1.34375 0.0367,-0.80807 0.10854,-1.68091 0.21875,-2.5625 l -5.5625,-0.25 z m 947.59378,12.375 c -1.2856,0.0367 -2.5636,0.23193 -3.8125,0.5625 -1.2122,0.29387 -2.3208,0.75058 -3.3125,1.375 -0.9918,0.62446 -1.8131,1.44576 -2.4375,2.4375 -0.5877,0.99177 -0.875,2.19248 -0.875,3.625 0,1.65294 0.3904,3.1667 1.125,4.5625 0.3287,0.5792 0.7029,1.14833 1.125,1.6875 -0.1641,-0.72385 -0.25,-1.4687 -0.25,-2.25 0,-1.43252 0.2873,-2.63323 0.875,-3.625 0.6244,-0.99174 1.4457,-1.81304 2.4375,-2.4375 0.9917,-0.62442 2.1003,-1.08113 3.3125,-1.375 0.9567,-0.25323 1.928,-0.41919 2.9063,-0.5 -0.3316,-1.14115 -0.5355,-2.34488 -0.6563,-3.65625 l -0.4375,-0.40625 z m -155.00003,1.4375 c -0.63622,1.27241 -1.31161,2.52076 -2.03125,3.78125 0.13089,2.42081 0.51245,4.59999 1.15625,6.53125 0.56625,1.69886 1.29652,3.19798 2.1875,4.5 -0.0611,-0.16904 -0.12978,-0.32684 -0.1875,-0.5 -0.80815,-2.42428 -1.2188,-5.24183 -1.21875,-8.4375 -5e-5,-0.95501 0.0257,-1.91996 0.0625,-2.875 0.0734,-0.955 0.19129,-1.93476 0.375,-3 l -0.34375,0 z m 189.96883,0.46875 c 0.1746,0.75817 0.2812,1.55728 0.2812,2.40625 0,1.87333 -0.431,3.55651 -1.3125,5.0625 -0.8449,1.50601 -2.005,2.78402 -3.4375,3.8125 -1.4326,1.02849 -3.0642,1.82403 -4.9375,2.375 -1.8734,0.55098 -3.8235,0.8125 -5.8437,0.8125 -2.1673,0 -4.3587,-0.31306 -6.5626,-0.9375 -2.1671,-0.62443 -4.1689,-1.58938 -5.9687,-2.875 -1.5282,-1.09153 -2.8378,-2.44137 -3.9687,-4.0625 0.3588,1.12094 0.836,2.17473 1.4062,3.125 1.2489,2.02025 2.7626,3.6519 4.5625,4.9375 1.7998,1.28562 3.8016,2.25057 5.9687,2.875 2.2039,0.62444 4.3953,0.9375 6.5626,0.9375 2.0202,0 3.9703,-0.26152 5.8437,-0.8125 1.8733,-0.55097 3.5049,-1.34651 4.9375,-2.375 1.4325,-1.02848 2.5926,-2.30649 3.4375,-3.8125 0.8815,-1.50599 1.3125,-3.18917 1.3125,-5.0625 0,-1.94676 -0.4568,-3.65571 -1.375,-5.125 -0.271,-0.4336 -0.5809,-0.87004 -0.9062,-1.28125 z m -577.00008,0.40625 c 1.02229,2.43785 2.24914,4.64473 3.6875,6.5625 2.09368,2.75489 4.54663,4.89478 7.375,6.4375 2.8283,1.54274 5.88709,2.31251 9.15625,2.3125 3.30581,1e-5 6.67217,-0.8213 10.125,-2.4375 3.48946,-1.65292 6.99947,-4.29557 10.5625,-7.96875 0.0253,0.0126 0.067,0.0484 0.0937,0.0625 0.2312,-0.30745 0.46033,-0.62109 0.6875,-0.9375 0.11013,-0.14691 0.15618,-0.29056 0.15625,-0.4375 -7e-5,-0.25711 -0.12343,-0.52411 -0.34375,-0.78125 -0.22046,-0.29384 -0.45621,-0.52959 -0.75,-0.75 -0.29392,-0.25711 -0.63275,-0.47258 -1,-0.65625 -0.33065,-0.22037 -0.62342,-0.38979 -0.84375,-0.5 -3.56303,3.67318 -7.07304,6.31583 -10.5625,7.96875 -3.45283,1.6162 -6.81919,2.43751 -10.125,2.4375 -3.26916,1e-5 -6.32795,-0.76976 -9.15625,-2.3125 -2.82837,-1.54272 -5.28132,-3.68261 -7.375,-6.4375 -0.59956,-0.7994 -1.16023,-1.67274 -1.6875,-2.5625 z m 481.68748,0.0937 c 1.0151,2.40303 2.2349,4.5736 3.6563,6.46875 2.0937,2.75489 4.5466,4.89478 7.375,6.4375 2.8283,1.54274 5.8871,2.31251 9.1563,2.3125 3.3058,1e-5 6.6721,-0.8213 10.125,-2.4375 3.4894,-1.65292 7.0307,-4.29557 10.5937,-7.96875 0.016,0.008 0.046,0.0226 0.062,0.0312 0.2262,-0.30106 0.4652,-0.59661 0.6875,-0.90625 0.1101,-0.14691 0.1562,-0.29056 0.1563,-0.4375 -10e-5,-0.25711 -0.092,-0.52411 -0.3126,-0.78125 -0.2204,-0.29384 -0.4874,-0.52959 -0.7812,-0.75 -0.2939,-0.25711 -0.6327,-0.47258 -1,-0.65625 -0.3306,-0.22037 -0.5922,-0.38979 -0.8125,-0.5 -3.563,3.67318 -7.1043,6.31583 -10.5937,7.96875 -3.4529,1.6162 -6.8192,2.43751 -10.125,2.4375 -3.2692,10e-6 -6.328,-0.76976 -9.1563,-2.3125 -2.8284,-1.54272 -5.2813,-3.68261 -7.375,-6.4375 -0.5808,-0.77435 -1.1433,-1.60961 -1.6563,-2.46875 z m -550.93748,0.125 c 1.06682,2.54155 2.34264,4.80614 3.84375,6.78125 2.09368,2.71816 4.52086,4.80651 7.3125,6.3125 2.79157,1.50601 5.77854,2.28126 8.9375,2.28125 3.34254,1e-5 6.7089,-0.86735 10.125,-2.59375 3.45272,-1.76311 6.7988,-4.60643 10.03125,-8.5 0.0409,0.0205 0.11151,0.0695 0.15625,0.0937 0.20168,-0.31041 0.39647,-0.61819 0.59375,-0.9375 l 0.125,-0.21875 c 0.0367,-0.0367 0.0624,-0.13431 0.0625,-0.28125 -6e-5,-0.22038 -0.12342,-0.46161 -0.34375,-0.71875 -0.22045,-0.25711 -0.48746,-0.52411 -0.78125,-0.78125 -0.29392,-0.25711 -0.6015,-0.47257 -0.96875,-0.65625 -0.33065,-0.22037 -0.62342,-0.38979 -0.84375,-0.5 -3.23245,3.89357 -6.57853,6.73689 -10.03125,8.5 -3.4161,1.7264 -6.78246,2.59376 -10.125,2.59375 -3.15896,10e-6 -6.14593,-0.77524 -8.9375,-2.28125 -2.79164,-1.50599 -5.21882,-3.59434 -7.3125,-6.3125 -0.6569,-0.86433 -1.27001,-1.80844 -1.84375,-2.78125 z m 527.46875,7.9375 c -2.0937,0.95503 -4.16182,1.73028 -6.21875,2.28125 -2.02028,0.51425 -3.92441,0.75001 -5.6875,0.75 -0.95506,1e-5 -1.77088,-0.0663 -2.46875,-0.25 -0.50969,-0.16094 -0.99454,-0.4244 -1.40625,-0.78125 0.0841,0.36406 0.15725,0.72212 0.25,1.03125 0.36729,1.10196 0.79823,1.94355 1.3125,2.53125 0.51422,0.58771 1.14582,0.99837 1.84375,1.21875 0.69787,0.18367 1.51369,0.25001 2.46875,0.25 1.73485,1e-5 3.60988,-0.22084 5.59375,-0.71875 0.11317,-0.0619 0.23129,-0.12502 0.34375,-0.1875 2.02025,-1.10195 3.67765,-2.18478 5.00005,-3.25 l -1.0313,-2.875 z m -628.40625,1.09375 c 0.28672,0.77603 0.58523,1.51425 0.90625,2.15625 1.10187,2.16718 2.35411,3.65518 3.75,4.5 1.43245,0.8081 2.87988,1.21875 4.3125,1.21875 0.84474,0 1.66056,-0.12335 2.46875,-0.34375 0.24771,-0.0646 0.4805,-0.11656 0.71875,-0.1875 0.47933,-0.29512 0.9439,-0.61263 1.40625,-0.9375 1.35898,-0.99175 2.59093,-2.02304 3.65625,-3.125 l -1.84375,-2.53125 c -0.44088,0.29386 -0.96941,0.60144 -1.59375,0.96875 -0.5878,0.36732 -1.23421,0.73192 -1.96875,1.0625 -0.73473,0.29386 -1.53026,0.52962 -2.375,0.75 -0.80819,0.2204 -1.62401,0.34375 -2.46875,0.34375 -1.43262,0 -2.88005,-0.41065 -4.3125,-1.21875 -0.95199,-0.57617 -1.84101,-1.46502 -2.65625,-2.65625 z m 570.09375,0.46875 c 0.46587,1.47344 1.07172,2.74918 1.84375,3.8125 1.98344,2.64469 4.58552,3.96875 7.78125,3.96875 1.18517,0 2.41746,-0.19485 3.71875,-0.5625 1.88239,-1.13142 3.6661,-2.5099 5.34375,-4.1875 l -1.59375,-2.375 c -3.48959,2.09371 -6.64049,3.125 -9.46875,3.125 -3.11583,0 -5.66159,-1.26714 -7.625,-3.78125 z"
+       id="text3761"
+       inkscape:connector-curvature="0"
+       clip-path="url(#clipPath3840)" />
+    <path
+       style="font-size:225.67950439px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3819);font-family:Gabriola;-inkscape-font-specification:Gabriola"
+       d="m 966.93642,397.39001 c -0.69168,5.89737 -1.40213,11.90359 -2.09375,18.09375 -0.69793,6.53836 -1.37011,13.18447 -2.03125,19.90625 -0.62447,6.68527 -1.2303,13.39771 -1.78125,20.15625 -0.551,6.75871 -1.00223,13.4251 -1.40625,20 -0.40407,6.5383 -0.71714,12.96345 -0.9375,19.28125 -0.22042,6.31789 -0.34378,12.38393 -0.34375,18.1875 -3e-5,3.63646 0.0515,6.76707 0.125,9.375 0.11017,2.60797 0.25382,4.79391 0.4375,6.59375 0.22036,1.79987 0.48189,3.27306 0.8125,4.375 0.36729,1.10196 0.79823,1.94355 1.3125,2.53125 0.38566,0.44079 0.8235,0.76584 1.3125,1 -0.23871,-0.4425 -0.4284,-0.9414 -0.625,-1.53125 -0.33061,-1.10194 -0.59214,-2.57513 -0.8125,-4.375 -0.18368,-1.79984 -0.32733,-3.98578 -0.4375,-6.59375 -0.0735,-2.60793 -0.12503,-5.73854 -0.125,-9.375 -3e-5,-5.80357 0.12333,-11.86961 0.34375,-18.1875 0.22036,-6.3178 0.53343,-12.74295 0.9375,-19.28125 0.40402,-6.5749 0.85525,-13.24129 1.40625,-20 0.55095,-6.75854 1.15678,-13.47098 1.78125,-20.15625 0.66114,-6.72178 1.33332,-13.36789 2.03125,-19.90625 0.7346,-6.57484 1.48408,-12.97422 2.21875,-19.21875 -0.7142,-0.34623 -1.42993,-0.63076 -2.125,-0.875 z m -225.28125,3.15625 c -4.114,1.4e-4 -7.60373,0.94481 -10.46875,2.78125 -2.82838,1.83672 -5.21499,4.3615 -7.125,7.59375 -1.87335,3.19579 -3.36684,6.97281 -4.46875,11.34375 -1.10198,4.33446 -1.94358,9.03037 -2.53125,14.0625 -0.55101,5.03234 -0.96166,10.30284 -1.21875,15.8125 -0.22042,5.47311 -0.41012,10.93331 -0.59375,16.40625 0.71725,0.0287 1.36765,0.0394 2.0625,0.0625 0.16578,-4.82672 0.33686,-9.6419 0.53125,-14.46875 0.25709,-5.50966 0.66774,-10.78016 1.21875,-15.8125 0.58767,-5.03213 1.42927,-9.72804 2.53125,-14.0625 1.10191,-4.37094 2.5954,-8.14796 4.46875,-11.34375 1.91001,-3.23225 4.29662,-5.75703 7.125,-7.59375 2.86502,-1.83644 6.35475,-2.78111 10.46875,-2.78125 1.39575,1.4e-4 2.79164,0.19533 4.1875,0.5625 1.43247,0.36746 2.705,0.94204 3.84375,1.75 0.055,0.0378 0.1023,0.0861 0.15625,0.125 -0.59557,-0.81957 -1.31768,-1.54835 -2.15625,-2.125 -1.13875,-0.80796 -2.41128,-1.38254 -3.84375,-1.75 -1.39586,-0.36717 -2.79175,-0.56236 -4.1875,-0.5625 z m 21.625,1.78125 c 0.64688,0.78369 1.20608,1.60188 1.65625,2.46875 1.02841,1.91019 1.56242,3.86037 1.5625,5.84375 -8e-5,1.54286 -0.26709,2.91298 -0.78125,4.125 -0.47759,1.21227 -1.14977,2.24905 -2.03125,3.09375 -0.84491,0.80822 -1.83015,1.43434 -2.96875,1.875 -1.13876,0.4409 -2.37071,0.65637 -3.65625,0.65625 -1.07094,8e-5 -2.16784,-0.19186 -3.3125,-0.53125 -0.0923,0.22289 -0.15019,0.4251 -0.25,0.65625 l 0.21875,0.625 c 1.87325,0.84495 3.65402,1.25012 5.34375,1.25 1.28554,1.2e-4 2.51749,-0.21535 3.65625,-0.65625 1.1386,-0.44066 2.12384,-1.06678 2.96875,-1.875 0.88148,-0.8447 1.55366,-1.88148 2.03125,-3.09375 0.51416,-1.21202 0.78117,-2.58214 0.78125,-4.125 -8e-5,-1.98338 -0.53409,-3.93356 -1.5625,-5.84375 -0.85582,-1.648 -2.08949,-3.12137 -3.65625,-4.46875 z m 112.875,16.5 c -0.44975,0.08 -0.89674,0.14422 -1.34375,0.21875 0.18197,0.79667 0.2812,1.51037 0.28125,2.125 -10e-5,2.42441 -1.03687,4.27701 -3.09375,5.5625 -2.02034,1.28573 -5.02759,1.93762 -9.03125,1.9375 -3.78345,1.2e-4 -8.23264,-0.2466 -13.375,-0.6875 -5.10577,-0.4774 -10.88452,-0.9341 -17.3125,-1.375 -0.11025,5.4364 -0.2539,11.26668 -0.4375,17.4375 -0.14698,6.17102 -0.3164,12.54463 -0.5,19.15625 -0.18371,6.57505 -0.37341,13.31326 -0.59375,20.21875 -0.18371,6.86888 -0.40466,13.75074 -0.625,20.65625 -0.22044,6.86886 -0.43591,13.6789 -0.65625,20.4375 -0.18371,6.75864 -0.37889,13.30716 -0.5625,19.625 l -11.9375,1.53125 c -0.0288,0.69053 -0.0646,1.30368 -0.0937,2 l 1,0.125 13.03125,-1.65625 c 0.18361,-6.31784 0.37879,-12.86636 0.5625,-19.625 0.22034,-6.7586 0.43581,-13.56864 0.65625,-20.4375 0.22034,-6.90551 0.44129,-13.78737 0.625,-20.65625 0.22034,-6.90549 0.41004,-13.6437 0.59375,-20.21875 0.1836,-6.61162 0.35302,-12.98523 0.5,-19.15625 0.1836,-6.17082 0.32725,-12.0011 0.4375,-17.4375 6.42798,0.4409 12.20673,0.8976 17.3125,1.375 5.14236,0.4409 9.59155,0.68762 13.375,0.6875 4.00366,1.2e-4 7.01091,-0.65177 9.03125,-1.9375 2.05688,-1.28549 3.09365,-3.13809 3.09375,-5.5625 -10e-5,-1.13856 -0.31316,-2.5805 -0.9375,-4.34375 z m -724.8125,3.09375 c -3.37936,1.2e-4 -6.5615,0.58019 -9.5,1.71875 -2.90183,1.10207 -5.40084,2.66737 -7.53125,4.6875 -2.13046,1.98363 -3.81913,4.33898 -5.03125,7.09375 -1.21217,2.75498 -1.81252,5.788 -1.8125,9.09375 -2e-5,2.68151 0.36458,5.13994 1.0625,7.34375 0.69788,2.16726 1.63158,4.1635 2.84375,6 1.24885,1.83667 2.71657,3.49408 4.40625,5 -0.86679,-0.94917 -1.68607,-1.94083 -2.40625,-3 -1.21217,-1.8365 -2.14587,-3.83274 -2.84375,-6 -0.69792,-2.20381 -1.06252,-4.66224 -1.0625,-7.34375 -2e-5,-3.30575 0.60033,-6.33877 1.8125,-9.09375 1.21212,-2.75477 2.90079,-5.11012 5.03125,-7.09375 2.13041,-2.02013 4.62942,-3.58543 7.53125,-4.6875 2.9385,-1.13856 6.12064,-1.71863 9.5,-1.71875 3.37927,1.2e-4 6.43257,0.4826 9.1875,1.4375 2.5126,0.82664 4.67173,2.05611 6.5,3.65625 -0.43848,-0.51885 -0.91039,-1.00958 -1.40625,-1.46875 -1.94684,-1.8732 -4.3022,-3.26909 -7.09375,-4.1875 -2.75493,-0.9549 -5.80823,-1.43738 -9.1875,-1.4375 z m 28.03125,0.25 c 0.47418,0.70992 0.71869,1.47248 0.71875,2.25 -7e-5,1.06534 -0.0258,2.41517 -0.0625,4.03125 -0.0368,1.57958 -0.0829,3.38064 -0.15625,5.4375 -0.0368,2.02035 -0.10863,4.23206 -0.21875,6.65625 -0.11027,2.38766 -0.25939,4.94369 -0.40625,7.625 l -3.4375,-0.1875 c -0.0275,0.62388 -0.0708,1.25575 -0.125,1.90625 l 5.5625,0.28125 c 0.14686,-2.68131 0.29598,-5.23734 0.40625,-7.625 0.11012,-2.42419 0.18195,-4.6359 0.21875,-6.65625 0.0734,-2.05686 0.11945,-3.85792 0.15625,-5.4375 0.0367,-1.61608 0.0624,-2.96591 0.0625,-4.03125 -7e-5,-0.99163 -0.38496,-1.93082 -1.15625,-2.8125 -0.43597,-0.49813 -0.96234,-0.98621 -1.5625,-1.4375 z m 625.46875,3.40625 c -2.24066,1.2e-4 -4.33449,0.0204 -6.28125,0.0937 -1.9468,0.0736 -3.72757,0.34059 -5.34375,0.78125 -1.61621,0.4409 -3.05815,1.13884 -4.34375,2.09375 -1.28562,0.91841 -2.36845,2.24247 -3.25,3.96875 -0.88157,1.68977 -1.585,3.85543 -2.0625,6.5 -0.44079,2.64478 -0.65626,5.8675 -0.65625,9.6875 l 0,1.28125 -3.46875,-0.0937 c 0.0143,0.65867 0.0143,1.25548 0.0312,1.9375 l 5.4375,0.15625 0,-1.28125 c -10e-6,-3.82 0.21546,-7.04272 0.65625,-9.6875 0.4775,-2.64457 1.18093,-4.81023 2.0625,-6.5 0.88155,-1.72628 1.96438,-3.05034 3.25,-3.96875 1.2856,-0.95491 2.72754,-1.65285 4.34375,-2.09375 1.61618,-0.44066 3.39695,-0.70767 5.34375,-0.78125 1.94676,-0.0733 4.04059,-0.0936 6.28125,-0.0937 2.2406,1.2e-4 4.42655,0.0204 6.59375,0.0937 1.49053,0.0254 2.95044,0.0824 4.40625,0.125 5.1e-4,-0.65811 0,-1.27326 0,-1.9375 -2.09375,-0.0734 -4.23912,-0.15065 -6.40625,-0.1875 -2.1672,-0.0733 -4.35315,-0.0936 -6.59375,-0.0937 z m -457.40625,41.5625 -1.3125,0.15625 c -0.26046,2.87891 -0.51345,5.86666 -0.75,9.03125 -0.2572,3.89362 -0.49844,7.78852 -0.71875,11.71875 -0.22047,3.89361 -0.38988,7.72217 -0.5,11.46875 -0.11027,3.74667 -0.15633,7.18486 -0.15625,10.34375 -8e-5,5.98729 0.36452,10.89868 1.0625,14.71875 0.69782,3.78338 1.58547,6.79611 2.6875,9 1.01318,1.99275 2.14448,3.40656 3.40625,4.28125 -0.49566,-0.66177 -0.95902,-1.40164 -1.40625,-2.28125 -1.10203,-2.20389 -1.98968,-5.21662 -2.6875,-9 -0.69798,-3.82007 -1.06258,-8.73146 -1.0625,-14.71875 -8e-5,-3.15889 0.046,-6.59708 0.15625,-10.34375 0.11012,-3.74658 0.27953,-7.57514 0.5,-11.46875 0.22031,-3.93023 0.46155,-7.82513 0.71875,-11.71875 0.29378,-3.93022 0.60684,-7.63541 0.9375,-11.125 l -0.875,-0.0625 z m -51.53125,0.1875 c 0.0232,0.0395 0.0399,0.0846 0.0625,0.125 0.51422,0.91837 0.84756,2.02697 1.03125,3.3125 0.22036,1.28568 0.34372,2.75339 0.34375,4.40625 -3e-5,2.49782 -0.0976,5.16624 -0.28125,8.03125 -0.14696,2.8284 -0.33666,5.71777 -0.59375,8.65625 -0.22042,2.93858 -0.48742,5.87401 -0.78125,8.8125 -0.25715,2.90184 -0.52416,5.64209 -0.78125,8.25 -0.22042,2.60798 -0.41012,5.01488 -0.59375,7.21875 -0.14695,2.1672 -0.21878,3.99951 -0.21875,5.46875 -3e-5,4.37109 0.8158,7.57352 2.46875,9.59375 0.50877,0.62184 1.07433,1.13206 1.6875,1.5625 -1.43579,-2.03184 -2.15627,-5.08239 -2.15625,-9.15625 -3e-5,-1.46924 0.0718,-3.30155 0.21875,-5.46875 0.18363,-2.20387 0.37333,-4.61077 0.59375,-7.21875 0.25709,-2.60791 0.5241,-5.34816 0.78125,-8.25 0.29383,-2.93849 0.56083,-5.87392 0.78125,-8.8125 0.25709,-2.93848 0.44679,-5.82785 0.59375,-8.65625 0.18363,-2.86501 0.28122,-5.53343 0.28125,-8.03125 -3e-5,-1.65286 -0.12339,-3.12057 -0.34375,-4.40625 -0.18369,-1.28553 -0.51703,-2.39413 -1.03125,-3.3125 -0.51427,-0.91821 -1.18645,-1.61616 -2.03125,-2.09375 -0.0116,-0.007 -0.0196,-0.0248 -0.0312,-0.0312 z m 94.28125,0.1875 c 0.79289,1.36956 1.18747,3.24781 1.1875,5.65625 -3e-5,0.25719 -0.0203,1.00119 -0.0937,2.25 -0.0735,1.24894 -0.19685,2.88607 -0.34375,4.90625 -0.11022,1.98357 -0.25387,4.32413 -0.4375,6.96875 -0.18369,2.64474 -0.39916,5.48257 -0.65625,8.53125 -0.22042,3.01204 -0.48742,6.16294 -0.78125,9.46875 -0.29388,3.26916 -0.60694,6.54341 -0.9375,9.8125 l 0.5625,0.0625 c 0.78237,-3.1947 1.63083,-6.28182 2.5,-9.28125 0.24088,-2.77743 0.46858,-5.49802 0.65625,-8.0625 0.25709,-3.04868 0.47256,-5.88651 0.65625,-8.53125 0.18363,-2.64462 0.32728,-4.98518 0.4375,-6.96875 0.1469,-2.02018 0.27026,-3.65731 0.34375,-4.90625 0.0734,-1.24881 0.0937,-1.99281 0.0937,-2.25 -3e-5,-2.79153 -0.52856,-4.88537 -1.59375,-6.28125 -0.41723,-0.5811 -0.94683,-1.02962 -1.59375,-1.375 z m 40.34375,0.40625 c 0.32728,0.44896 0.59937,0.94518 0.84375,1.46875 0.51417,1.06529 0.78118,2.21446 0.78125,3.5 -7e-5,1.653 -0.35919,3.26984 -1.09375,4.8125 -0.69797,1.50606 -1.83234,2.82465 -3.375,4 l -0.4375,0 c -1.54279,-1.28555 -3.01051,-2.19896 -4.40625,-2.75 -1.35913,-0.58764 -2.80108,-0.87493 -4.34375,-0.875 -1.65298,7e-5 -3.23857,0.31313 -4.78125,0.9375 -1.54278,0.6245 -2.96444,1.51215 -4.25,2.6875 -2.09375,1.91011 -4.04394,4.46613 -5.84375,7.625 -1.79989,3.12225 -3.46279,6.5862 -4.96875,10.40625 -1.4693,3.82014 -2.81914,7.83839 -4.03125,12.0625 -1.17545,4.18744 -2.18097,8.27752 -3.0625,12.28125 -0.84486,3.96704 -1.5428,7.72377 -2.09375,11.25 -0.51427,3.48952 -0.90464,6.42494 -1.125,8.8125 l -10.21875,1.28125 c -0.0549,0.69089 -0.1,1.42574 -0.15625,2.09375 l 0.875,0.0625 11.5,-1.4375 c 0.22036,-2.38756 0.61073,-5.32298 1.125,-8.8125 0.55095,-3.52623 1.24889,-7.28296 2.09375,-11.25 0.88153,-4.00373 1.88705,-8.09381 3.0625,-12.28125 1.21211,-4.22411 2.56195,-8.24236 4.03125,-12.0625 1.50596,-3.82005 3.16886,-7.284 4.96875,-10.40625 1.79981,-3.15887 3.75,-5.71489 5.84375,-7.625 1.28556,-1.17535 2.70722,-2.063 4.25,-2.6875 1.54268,-0.62437 3.12827,-0.93743 4.78125,-0.9375 1.54267,7e-5 2.98462,0.28736 4.34375,0.875 1.39574,0.55104 2.86346,1.46445 4.40625,2.75 l 0.4375,0 c 1.54266,-1.17535 2.67703,-2.49394 3.375,-4 0.73456,-1.54266 1.09368,-3.1595 1.09375,-4.8125 -7e-5,-1.28554 -0.26708,-2.43471 -0.78125,-3.5 -0.51431,-1.10187 -1.21226,-2.04106 -2.09375,-2.8125 -0.2416,-0.22143 -0.48358,-0.46239 -0.75,-0.65625 z m 482.5,2.4375 c 1.63542,1.90803 2.8488,4.21053 3.59375,6.90625 0.80803,2.79167 1.21868,5.94257 1.21875,9.46875 -7e-5,2.42435 -0.0922,5.09825 -0.3125,8 -0.18372,2.90185 -0.43044,5.92939 -0.6875,9.125 -0.25719,3.15896 -0.49842,6.43322 -0.71875,9.8125 -0.18372,3.37934 -0.25006,6.75119 -0.25,10.09375 -6e-5,5.28938 0.95941,9.2561 2.90625,11.9375 0.64163,0.85553 1.35651,1.57748 2.125,2.15625 -0.0412,-0.0531 -0.0844,-0.10206 -0.125,-0.15625 -1.94684,-2.6814 -2.90631,-6.64812 -2.90625,-11.9375 -6e-5,-3.34256 0.0663,-6.71441 0.25,-10.09375 0.22033,-3.37928 0.46156,-6.65354 0.71875,-9.8125 0.25706,-3.19561 0.50378,-6.22315 0.6875,-9.125 0.22033,-2.90175 0.31243,-5.57565 0.3125,-8 -7e-5,-3.52618 -0.41072,-6.67708 -1.21875,-9.46875 -0.77143,-2.79154 -2.02367,-5.17815 -3.75,-7.125 -0.55431,-0.65066 -1.17482,-1.23335 -1.84375,-1.78125 z m -169.9375,0.0312 c -0.41579,0.043 -1.01708,0.082 -1.5,0.125 0.0702,0.43873 0.0937,0.85082 0.0937,1.1875 -6e-5,1.61627 -0.67223,2.67333 -2.03125,3.1875 -1.32239,0.51431 -3.24682,0.78132 -5.78125,0.78125 -2.53453,7e-5 -5.3466,-0.14906 -8.46875,-0.40625 -3.12223,-0.29378 -6.5659,-0.55531 -10.3125,-0.8125 -0.14696,4.37114 -0.34214,9.10762 -0.5625,14.25 -0.22042,5.14249 -0.50771,10.49029 -0.875,16 -0.33061,5.50979 -0.76703,11.08787 -1.28125,16.78125 -0.51427,5.6567 -1.13491,11.1942 -1.90625,16.59375 -0.73466,5.39956 -1.62779,10.55218 -2.65625,15.4375 -1.02851,4.92203 -2.2347,9.37123 -3.59375,13.375 -2.16719,6.28109 -4.59437,11.5313 -7.3125,15.71875 -2.71815,4.2241 -5.63329,7.59047 -8.71875,10.125 -3.04873,2.57117 -6.19963,4.40348 -9.46875,5.46875 -3.30584,1.1019 -6.57462,1.65619 -9.84375,1.65625 -2.82832,-6e-5 -5.45617,-0.31312 -7.84375,-0.9375 -2.42427,-0.62449 -4.5181,-1.46608 -6.28125,-2.53125 -0.62702,-0.37885 -1.18928,-0.79345 -1.71875,-1.21875 0.95121,1.20927 2.18017,2.28913 3.71875,3.21875 1.76315,1.06517 3.85698,1.90676 6.28125,2.53125 2.38758,0.62438 5.01543,0.93744 7.84375,0.9375 3.26913,-6e-5 6.53791,-0.55435 9.84375,-1.65625 3.26912,-1.06527 6.42002,-2.89758 9.46875,-5.46875 3.08546,-2.53453 6.0006,-5.9009 8.71875,-10.125 2.71813,-4.18745 5.14531,-9.43766 7.3125,-15.71875 1.35905,-4.00377 2.56524,-8.45297 3.59375,-13.375 1.02846,-4.88532 1.92159,-10.03794 2.65625,-15.4375 0.77134,-5.39955 1.39198,-10.93705 1.90625,-16.59375 0.51422,-5.69338 0.95064,-11.27146 1.28125,-16.78125 0.36729,-5.50971 0.65458,-10.85751 0.875,-16 0.22036,-5.14238 0.41554,-9.87886 0.5625,-14.25 3.7466,0.25719 7.19027,0.51872 10.3125,0.8125 3.12215,0.25719 5.93422,0.40632 8.46875,0.40625 2.53443,7e-5 4.45886,-0.26694 5.78125,-0.78125 1.35902,-0.51417 2.03119,-1.57123 2.03125,-3.1875 -6e-5,-0.80802 -0.18976,-1.91662 -0.59375,-3.3125 z m 338.50003,0.15625 c -2.608,7e-5 -4.9431,0.33342 -7,1.03125 -2.057,0.69797 -3.7862,1.63716 -5.2187,2.8125 -1.3959,1.13875 -2.4787,2.43705 -3.25,3.90625 -0.7347,1.46933 -1.1251,3.01435 -1.125,4.59375 -10e-5,2.0203 0.5597,3.82136 1.625,5.4375 0.8534,1.26555 1.9172,2.46975 3.2187,3.59375 -0.4516,-0.51967 -0.8505,-1.04773 -1.2187,-1.59375 -1.0653,-1.61614 -1.6251,-3.4172 -1.625,-5.4375 -10e-5,-1.5794 0.3903,-3.12442 1.125,-4.59375 0.7713,-1.4692 1.8541,-2.7675 3.25,-3.90625 1.4325,-1.17534 3.1617,-2.11453 5.2187,-2.8125 2.0569,-0.69783 4.392,-1.03118 7,-1.03125 1.4692,7e-5 2.9627,0.13824 4.4687,0.46875 1.5427,0.33066 2.9386,0.89044 4.1876,1.625 0.3122,0.18368 0.6215,0.38253 0.9062,0.59375 -0.7789,-1.05961 -1.7487,-1.91274 -2.9062,-2.59375 -1.249,-0.73456 -2.6449,-1.29434 -4.1876,-1.625 -1.506,-0.33051 -2.9995,-0.46868 -4.4687,-0.46875 z m -192.34378,0.15625 c -2.60798,7e-5 -4.82518,0.2616 -6.625,0.8125 -1.79988,0.55105 -3.26759,1.3263 -4.40625,2.28125 -1.10198,0.95509 -1.89203,2.08398 -2.40625,3.40625 -0.47753,1.28567 -0.71877,2.68156 -0.71875,4.1875 -2e-5,1.76318 0.31304,3.54396 0.9375,5.34375 0.66115,1.76318 1.6261,3.4979 2.875,5.1875 l -0.21875,0.59375 c -2.09373,1.02854 -4.21333,1.5313 -6.34375,1.53125 -1.2489,5e-5 -2.42932,-0.16388 -3.53125,-0.53125 -0.70258,-0.26646 -1.34678,-0.62093 -1.9375,-1.03125 0.32786,0.48596 0.71351,0.92064 1.125,1.3125 0.80808,0.73469 1.74727,1.31475 2.8125,1.71875 1.10193,0.36737 2.28235,0.5313 3.53125,0.53125 2.13042,5e-5 4.25002,-0.50271 6.34375,-1.53125 l 0.21875,-0.59375 c -1.2489,-1.6896 -2.21385,-3.42432 -2.875,-5.1875 -0.62446,-1.79979 -0.93752,-3.58057 -0.9375,-5.34375 -2e-5,-1.50594 0.24122,-2.90183 0.71875,-4.1875 0.51422,-1.32227 1.30427,-2.45116 2.40625,-3.40625 1.13866,-0.95495 2.60637,-1.7302 4.40625,-2.28125 1.79982,-0.5509 4.01702,-0.81243 6.625,-0.8125 1.94674,7e-5 3.89693,0.3389 5.84375,1 1.77007,0.60124 3.34515,1.5094 4.78125,2.6875 -0.48415,-0.59773 -1.00031,-1.16095 -1.5625,-1.65625 -1.54278,-1.359 -3.27201,-2.37001 -5.21875,-3.03125 -1.94682,-0.6611 -3.89701,-0.99993 -5.84375,-1 z m -353,0.0625 c -2.3876,7e-5 -4.55326,0.40524 -6.5,1.25 -1.94681,0.8449 -3.7073,1.99955 -5.25,3.46875 -1.54276,1.4326 -2.88711,3.11579 -4.0625,5.0625 -1.17544,1.91011 -2.18644,3.95789 -3.03125,6.125 -0.80812,2.16723 -1.48578,4.41019 -2,6.6875 -0.51426,2.27741 -0.87338,4.48913 -1.09375,6.65625 0.78064,-0.055 1.52529,-0.15226 2.28125,-0.21875 0.21201,-1.46549 0.47057,-2.92325 0.8125,-4.4375 0.51422,-2.27731 1.19188,-4.52027 2,-6.6875 0.84481,-2.16711 1.85581,-4.21489 3.03125,-6.125 1.17539,-1.94671 2.51974,-3.6299 4.0625,-5.0625 1.5427,-1.4692 3.30319,-2.62385 5.25,-3.46875 1.94674,-0.84476 4.1124,-1.24993 6.5,-1.25 1.61615,7e-5 3.10415,0.31313 4.5,0.9375 0.83107,0.37185 1.59339,0.80266 2.28125,1.34375 -0.21507,-0.27227 -0.44613,-0.53123 -0.6875,-0.78125 -0.9918,-1.10188 -2.19799,-1.93799 -3.59375,-2.5625 -1.39585,-0.62437 -2.88385,-0.93743 -4.5,-0.9375 z m 481.65628,0 c -2.3876,7e-5 -4.5533,0.40524 -6.5,1.25 -1.9468,0.8449 -3.7073,1.99955 -5.25,3.46875 -1.5428,1.4326 -2.8871,3.11579 -4.0625,5.0625 -1.1754,1.91011 -2.18643,3.95789 -3.03133,6.125 -0.8081,2.16723 -1.4857,4.41019 -2,6.6875 -0.5142,2.27741 -0.8733,4.48913 -1.0937,6.65625 0.7806,-0.055 1.5253,-0.15226 2.2813,-0.21875 0.212,-1.46549 0.4705,-2.92325 0.8124,-4.4375 0.5143,-2.27731 1.19193,-4.52027 2.00003,-6.6875 0.8449,-2.16711 1.8559,-4.21489 3.0313,-6.125 1.1754,-1.94671 2.5197,-3.6299 4.0625,-5.0625 1.5427,-1.4692 3.3032,-2.62385 5.25,-3.46875 1.9467,-0.84476 4.1124,-1.24993 6.5,-1.25 1.6162,7e-5 3.1042,0.31313 4.5,0.9375 0.8043,0.35988 1.5486,0.7941 2.2188,1.3125 -0.2034,-0.25415 -0.3986,-0.51543 -0.625,-0.75 -0.9919,-1.10188 -2.198,-1.93799 -3.5938,-2.5625 -1.3958,-0.62437 -2.8838,-0.93743 -4.5,-0.9375 z m -549.59378,0.0312 c -2.86511,7e-5 -5.44142,0.53409 -7.71875,1.5625 -2.2774,0.99183 -4.29941,2.36195 -6.0625,4.125 -1.72642,1.76319 -3.2199,3.81097 -4.46875,6.125 -1.21217,2.31416 -2.22317,4.79288 -3.03125,7.4375 -0.77139,2.64473 -1.3202,5.36469 -1.6875,8.15625 -0.36734,2.75492 -0.56252,5.44911 -0.5625,8.09375 -2e-5,4.73842 0.60033,9.04397 1.8125,12.9375 1.24886,3.85685 2.93752,7.18264 5.03125,9.9375 0.98876,1.28368 2.04307,2.39292 3.1875,3.40625 -0.40925,-0.45947 -0.80192,-0.90567 -1.1875,-1.40625 -2.09373,-2.75486 -3.78239,-6.08065 -5.03125,-9.9375 -1.21217,-3.89353 -1.81252,-8.19908 -1.8125,-12.9375 -2e-5,-2.64464 0.19516,-5.33883 0.5625,-8.09375 0.3673,-2.79156 0.91611,-5.51152 1.6875,-8.15625 0.80808,-2.64462 1.81908,-5.12334 3.03125,-7.4375 1.24885,-2.31403 2.74233,-4.36181 4.46875,-6.125 1.76309,-1.76305 3.7851,-3.13317 6.0625,-4.125 2.27733,-1.02841 4.85364,-1.56243 7.71875,-1.5625 1.98347,7e-5 3.71819,0.31862 5.1875,0.90625 1.03534,0.37884 1.92642,0.85039 2.71875,1.4375 -0.29619,-0.39793 -0.63364,-0.77217 -1,-1.125 -0.99181,-0.99168 -2.2128,-1.76145 -3.71875,-2.3125 -1.46931,-0.58763 -3.20403,-0.90618 -5.1875,-0.90625 z m 90.1875,0.4375 c 0.62439,0.75294 1.17745,1.55978 1.65625,2.4375 1.10188,2.02031 1.65618,4.30385 1.65625,6.875 -7e-5,3.74669 -1.22654,7.02095 -3.6875,9.8125 -2.42435,2.79166 -5.7962,5.17827 -10.09375,7.125 -4.29766,1.94682 -9.37845,3.50665 -15.21875,4.71875 -5.80364,1.17545 -12.08514,2.06858 -18.84375,2.65625 l 0,0.9375 c -2e-5,4.70169 0.60582,9.01272 1.78125,12.90625 1.21212,3.89358 2.87502,7.20841 4.96875,10 0.986,1.29739 2.03856,2.47145 3.1875,3.5 -0.41594,-0.47154 -0.7971,-0.98631 -1.1875,-1.5 -2.09373,-2.79159 -3.75663,-6.10642 -4.96875,-10 -1.17543,-3.89353 -1.78127,-8.20456 -1.78125,-12.90625 l 0,-0.9375 c 6.75861,-0.58767 13.04011,-1.4808 18.84375,-2.65625 5.8403,-1.2121 10.92109,-2.77193 15.21875,-4.71875 4.29755,-1.94673 7.6694,-4.33334 10.09375,-7.125 2.46096,-2.79155 3.68743,-6.06581 3.6875,-9.8125 -7e-5,-2.57115 -0.55437,-4.85469 -1.65625,-6.875 -0.93717,-1.71799 -2.16131,-3.19757 -3.65625,-4.4375 z m 481.65628,0 c 0.6244,0.75294 1.1774,1.55978 1.6562,2.4375 1.1019,2.02031 1.6562,4.30385 1.6563,6.875 -10e-5,3.74669 -1.2265,7.02095 -3.6875,9.8125 -2.4244,2.79166 -5.7962,5.17827 -10.0938,7.125 -4.2976,1.94682 -9.3472,3.50665 -15.1874,4.71875 -5.8037,1.17545 -12.0852,2.06858 -18.84383,2.65625 l 0,0.9375 c 0,4.70169 0.5746,9.01272 1.75,12.90625 1.2121,3.89358 2.87503,7.20841 4.96883,10 0.9859,1.29739 2.0385,2.47145 3.1874,3.5 -0.4159,-0.47154 -0.7971,-0.98631 -1.1874,-1.5 -2.0938,-2.79159 -3.7567,-6.10642 -4.96883,-10 -1.1754,-3.89353 -1.75,-8.20456 -1.75,-12.90625 l 0,-0.9375 c 6.75863,-0.58767 13.04013,-1.4808 18.84383,-2.65625 5.8402,-1.2121 10.8898,-2.77193 15.1874,-4.71875 4.2976,-1.94673 7.6694,-4.33334 10.0938,-7.125 2.461,-2.79155 3.6874,-6.06581 3.6875,-9.8125 -10e-5,-2.57115 -0.5544,-4.85469 -1.6563,-6.875 -0.9371,-1.71799 -2.1613,-3.19757 -3.6562,-4.4375 z m 64.3438,0.0625 c 0.2935,0.36338 0.5916,0.73462 0.8437,1.125 1.1754,1.76319 1.7499,3.73367 1.75,5.9375 -10e-5,0.84489 -0.1437,1.75831 -0.4375,2.75 -0.2939,0.99182 -0.7709,1.931 -1.4688,2.8125 -0.6979,0.84489 -1.6113,1.5686 -2.75,2.15625 -1.1387,0.58776 -2.5346,0.90083 -4.1874,0.9375 -0.8589,3e-5 -1.7519,-0.10201 -2.6563,-0.25 -0.1233,0.32206 -0.2275,0.63158 -0.375,0.96875 l 0.1563,0.5625 c 1.6896,0.47757 3.3322,0.71881 4.875,0.71875 1.6528,-0.0367 3.0487,-0.34974 4.1874,-0.9375 1.1387,-0.58765 2.0521,-1.31136 2.75,-2.15625 0.6979,-0.8815 1.1749,-1.82068 1.4688,-2.8125 0.2938,-0.99169 0.4374,-1.90511 0.4375,-2.75 -10e-5,-2.20383 -0.5746,-4.17431 -1.75,-5.9375 -0.7518,-1.16392 -1.7238,-2.20115 -2.8437,-3.125 z m -614.43758,0.0937 c 0.53537,0.64828 1.02735,1.32713 1.4375,2.0625 1.10188,1.87339 1.65618,3.96722 1.65625,6.28125 -7e-5,1.50606 -0.2413,2.8559 -0.71875,4.03125 -0.44085,1.13874 -1.09274,2.12398 -1.9375,2.96875 -0.80816,0.80815 -1.76763,1.43428 -2.90625,1.875 -1.10201,0.4041 -2.30272,0.5938 -3.625,0.59375 -0.80815,5e-5 -1.681,-0.0718 -2.5625,-0.21875 -0.14826,-0.0322 -0.28924,-0.0871 -0.4375,-0.125 -0.10421,0.23211 -0.19483,0.45635 -0.3125,0.6875 l 0.21875,0.625 c 0.84478,0.36737 1.68637,0.6289 2.53125,0.8125 0.8815,0.14698 1.75435,0.2188 2.5625,0.21875 1.32228,5e-5 2.52299,-0.18965 3.625,-0.59375 1.13862,-0.44072 2.09809,-1.06685 2.90625,-1.875 0.84476,-0.84477 1.49665,-1.83001 1.9375,-2.96875 0.47745,-1.17535 0.71868,-2.52519 0.71875,-4.03125 -7e-5,-2.31403 -0.55437,-4.40786 -1.65625,-6.28125 -0.86482,-1.55055 -2.01598,-2.89918 -3.4375,-4.0625 z m -262.96875,0.53125 c -2.68145,7e-5 -5.06806,0.54889 -7.125,1.6875 -2.02027,1.13875 -3.77528,2.68377 -5.28125,4.59375 -1.46929,1.91011 -2.69577,4.07029 -3.6875,6.53125 -0.95505,2.46108 -1.72481,5.0171 -2.3125,7.625 -0.58773,2.608 -1.02415,5.2046 -1.28125,7.8125 -0.22041,2.57126 -0.31252,4.9321 -0.3125,7.0625 -2e-5,2.49779 0.16391,5.02256 0.53125,7.59375 0.40403,2.57125 1.03563,5.04996 1.84375,7.4375 0.80807,2.38758 1.79331,4.62506 2.96875,6.71875 1.21212,2.05699 2.63378,3.86353 4.25,5.40625 0.18723,0.17475 0.37056,0.33373 0.5625,0.5 -1.03614,-1.18008 -1.97109,-2.47836 -2.8125,-3.90625 -1.17544,-2.09369 -2.16068,-4.33117 -2.96875,-6.71875 -0.80812,-2.38754 -1.43972,-4.86625 -1.84375,-7.4375 -0.36734,-2.57119 -0.53127,-5.09596 -0.53125,-7.59375 -2e-5,-2.1304 0.0921,-4.49124 0.3125,-7.0625 0.2571,-2.6079 0.69352,-5.2045 1.28125,-7.8125 0.58769,-2.6079 1.35745,-5.16392 2.3125,-7.625 0.99173,-2.46096 2.21821,-4.62114 3.6875,-6.53125 1.50597,-1.90998 3.26098,-3.455 5.28125,-4.59375 2.05694,-1.13861 4.44355,-1.68743 7.125,-1.6875 2.46098,7e-5 4.69846,0.43101 6.71875,1.3125 1.86489,0.79932 3.5286,1.87607 5.03125,3.21875 -0.48939,-0.55524 -0.99083,-1.10133 -1.53125,-1.59375 -1.61624,-1.54266 -3.44307,-2.74337 -5.5,-3.625 -2.02029,-0.88149 -4.25777,-1.31243 -6.71875,-1.3125 z m 416.53125,0 c -2.68145,7e-5 -5.03681,0.54889 -7.09375,1.6875 -2.02027,1.13875 -3.80653,2.68377 -5.3125,4.59375 -1.46929,1.91011 -2.69577,4.07029 -3.6875,6.53125 -0.95505,2.46108 -1.72481,5.0171 -2.3125,7.625 -0.58773,2.608 -0.9929,5.2046 -1.25,7.8125 -0.22041,2.57126 -0.34377,4.9321 -0.34375,7.0625 -2e-5,2.49779 0.19516,5.02256 0.5625,7.59375 0.40403,2.57125 1.00438,5.04996 1.8125,7.4375 0.80807,2.38758 1.79331,4.62506 2.96875,6.71875 1.21212,2.05699 2.63378,3.86353 4.25,5.40625 0.17376,0.16218 0.35343,0.31387 0.53125,0.46875 -1.02456,-1.17128 -1.94776,-2.46056 -2.78125,-3.875 -1.17544,-2.09369 -2.16068,-4.33117 -2.96875,-6.71875 -0.80812,-2.38754 -1.40847,-4.86625 -1.8125,-7.4375 -0.36734,-2.57119 -0.56252,-5.09596 -0.5625,-7.59375 -2e-5,-2.1304 0.12334,-4.49124 0.34375,-7.0625 0.2571,-2.6079 0.66227,-5.2045 1.25,-7.8125 0.58769,-2.6079 1.35745,-5.16392 2.3125,-7.625 0.99173,-2.46096 2.21821,-4.62114 3.6875,-6.53125 1.50597,-1.90998 3.29223,-3.455 5.3125,-4.59375 2.05694,-1.13861 4.4123,-1.68743 7.09375,-1.6875 2.46098,7e-5 4.69846,0.43101 6.71875,1.3125 1.89947,0.81414 3.60133,1.9034 5.125,3.28125 -0.50778,-0.58141 -1.06178,-1.14306 -1.625,-1.65625 -1.61624,-1.54266 -3.44307,-2.74337 -5.5,-3.625 -2.02029,-0.88149 -4.25777,-1.31243 -6.71875,-1.3125 z m -364.59375,0.9375 c -1.24889,7e-5 -2.85477,0.164 -4.875,0.53125 -1.52035,0.2816 -3.13142,0.66117 -4.78125,1.09375 l 0.5,2.40625 c 2.2039,-0.62437 4.29773,-1.13261 6.28125,-1.5 2.02023,-0.36725 3.62611,-0.53118 4.875,-0.53125 1.09569,6e-5 1.98465,0.15481 2.65625,0.4375 -0.0255,-0.0587 -0.0356,-0.13097 -0.0625,-0.1875 -0.36733,-0.7713 -0.92163,-1.35136 -1.65625,-1.71875 -0.69792,-0.36725 -1.68863,-0.53118 -2.9375,-0.53125 z m 94.28125,0 c -0.62445,7e-5 -1.27634,0.0204 -1.9375,0.0937 -0.66118,0.0735 -1.37941,0.19689 -2.1875,0.34375 -0.8081,0.147 -1.72152,0.3367 -2.75,0.59375 -0.56222,0.12498 -1.30029,0.3084 -1.96875,0.46875 l 0.5,2.375 c 1.32234,-0.33052 2.47699,-0.62329 3.46875,-0.84375 1.02848,-0.25705 1.9419,-0.44675 2.75,-0.59375 0.80809,-0.14686 1.52632,-0.27022 2.1875,-0.34375 0.66116,-0.0734 1.31305,-0.0937 1.9375,-0.0937 1.21426,7e-5 2.1781,0.12505 2.90625,0.4375 -0.0826,-0.18596 -0.18024,-0.36594 -0.28125,-0.53125 -0.36733,-0.6611 -0.92163,-1.14358 -1.65625,-1.4375 -0.73465,-0.33051 -1.71989,-0.46868 -2.96875,-0.46875 z m -120.25,0.15625 c 0.57286,0.63369 1.10467,1.2776 1.625,1.96875 2.46095,3.23245 4.31355,6.94313 5.5625,11.09375 1.28554,4.15073 1.93743,8.38446 1.9375,12.71875 -7e-5,3.70994 -0.38496,7.46119 -1.15625,11.28125 -0.77144,3.82013 -1.92609,7.55657 -3.46875,11.15625 -1.50607,3.56299 -3.38443,6.90359 -5.625,10.0625 -2.20396,3.1222 -4.75451,5.86793 -7.65625,8.21875 -2.90186,2.35083 -6.12458,4.20343 -9.6875,5.5625 -3.56302,1.35907 -7.43763,2.03125 -11.625,2.03125 -4.70169,0 -8.89484,-0.98524 -12.53125,-2.96875 -2.02134,-1.11379 -3.83771,-2.42992 -5.5,-3.9375 2.14716,2.37752 4.62798,4.35497 7.5,5.9375 3.63641,1.98351 7.82956,2.96875 12.53125,2.96875 4.18737,0 8.06198,-0.67218 11.625,-2.03125 3.56292,-1.35907 6.78564,-3.21167 9.6875,-5.5625 2.90174,-2.35082 5.45229,-5.09655 7.65625,-8.21875 2.24057,-3.15891 4.11893,-6.49951 5.625,-10.0625 1.54266,-3.59968 2.69731,-7.33612 3.46875,-11.15625 0.77129,-3.82006 1.15618,-7.57131 1.15625,-11.28125 -7e-5,-4.33429 -0.65196,-8.56802 -1.9375,-12.71875 -1.24895,-4.15062 -3.10155,-7.8613 -5.5625,-11.09375 -1.09476,-1.45416 -2.29769,-2.76894 -3.625,-3.96875 z m 416.53125,0 c 0.57286,0.63369 1.10467,1.2776 1.625,1.96875 2.46095,3.23245 4.31355,6.94313 5.5625,11.09375 1.28554,4.15073 1.93743,8.38446 1.9375,12.71875 -7e-5,3.70994 -0.38496,7.46119 -1.15625,11.28125 -0.77144,3.82013 -1.92609,7.55657 -3.46875,11.15625 -1.50607,3.56299 -3.38443,6.90359 -5.625,10.0625 -2.20396,3.1222 -4.75451,5.86793 -7.65625,8.21875 -2.90186,2.35083 -6.12458,4.20343 -9.6875,5.5625 -3.56302,1.35907 -7.43763,2.03125 -11.625,2.03125 -4.70169,0 -8.86359,-0.98524 -12.5,-2.96875 -2.02134,-1.11379 -3.86896,-2.42992 -5.53125,-3.9375 2.14716,2.37752 4.65923,4.35497 7.53125,5.9375 3.63641,1.98351 7.79831,2.96875 12.5,2.96875 4.18737,0 8.06198,-0.67218 11.625,-2.03125 3.56292,-1.35907 6.78564,-3.21167 9.6875,-5.5625 2.90174,-2.35082 5.45229,-5.09655 7.65625,-8.21875 2.24057,-3.15891 4.11893,-6.49951 5.625,-10.0625 1.54266,-3.59968 2.69731,-7.33612 3.46875,-11.15625 0.77129,-3.82006 1.15618,-7.57131 1.15625,-11.28125 -7e-5,-4.33429 -0.65196,-8.56802 -1.9375,-12.71875 -1.24895,-4.15062 -3.10155,-7.8613 -5.5625,-11.09375 -1.09476,-1.45416 -2.29769,-2.76894 -3.625,-3.96875 z m 31.65625,1.25 c -3.45279,0.0368 -6.65522,0.18593 -9.59375,0.40625 -1.88782,0.14163 -3.53759,0.39619 -5.03125,0.75 -0.36423,0.51551 -0.5625,1.04621 -0.5625,1.625 0,0.36739 0.0718,0.73198 0.21875,1.0625 1.98351,-0.73457 4.43646,-1.21704 7.375,-1.4375 2.3378,-0.17528 4.89921,-0.28462 7.5625,-0.34375 0.005,-0.69784 0.0266,-1.36081 0.0312,-2.0625 z m -576.21875,0.2814 c 0.42012,0.46373 0.86253,0.90299 1.3125,1.34375 1.79983,1.72646 3.75002,3.33782 5.84375,4.84375 2.09368,1.50606 4.25386,2.92772 6.53125,4.25 2.31407,1.3224 4.62337,2.59493 6.9375,3.84375 2.20386,1.2122 4.40077,2.44416 6.53125,3.65625 2.13039,1.17547 4.12116,2.42771 6.03125,3.75 1.94673,1.28566 3.7275,2.65578 5.34375,4.125 -0.62448,-0.68892 -1.28658,-1.36581 -2,-2 -1.61625,-1.46922 -3.39702,-2.83934 -5.34375,-4.125 -1.91009,-1.32229 -3.90086,-2.57453 -6.03125,-3.75 -2.13048,-1.21209 -4.32739,-2.44405 -6.53125,-3.65625 -2.31413,-1.24882 -4.62343,-2.52135 -6.9375,-3.84375 -2.27739,-1.32228 -4.43757,-2.74394 -6.53125,-4.25 -1.82904,-1.31556 -3.55149,-2.70365 -5.15625,-4.1875 z m 49.96875,14.1875 c 1.18495,1.29261 2.23516,2.65631 3.15625,4.15625 1.32227,2.05702 2.35904,4.34604 3.09375,6.84375 0.77129,2.4978 1.15618,5.26381 1.15625,8.3125 -7e-5,5.03227 -0.69802,9.51272 -2.09375,13.40625 -1.35914,3.89358 -3.18597,7.28571 -5.5,10.1875 -2.31416,2.86508 -4.98806,5.29775 -8,7.28125 -2.97532,1.98351 -6.08016,3.56911 -9.3125,4.78125 -3.23244,1.21215 -6.45515,2.0795 -9.6875,2.59375 -3.23243,0.55097 -6.24516,0.8125 -9,0.8125 -3.63646,0 -7.05437,-0.23576 -10.25,-0.75 -3.19567,-0.47751 -5.98197,-1.1294 -8.40625,-1.9375 -2.16947,-0.73428 -3.93064,-1.5525 -5.28125,-2.46875 0.33851,0.57531 0.87291,1.15377 1.59375,1.71875 1.3958,1.02849 3.29993,1.9419 5.6875,2.75 2.42428,0.8081 5.21058,1.45999 8.40625,1.9375 3.19563,0.51424 6.61354,0.75 10.25,0.75 2.75484,0 5.76757,-0.26153 9,-0.8125 3.23235,-0.51425 6.45506,-1.3816 9.6875,-2.59375 3.23234,-1.21214 6.33718,-2.79774 9.3125,-4.78125 3.01194,-1.9835 5.68584,-4.41617 8,-7.28125 2.31403,-2.90179 4.14086,-6.29392 5.5,-10.1875 1.39573,-3.89353 2.09368,-8.37398 2.09375,-13.40625 -7e-5,-3.04869 -0.38496,-5.8147 -1.15625,-8.3125 -0.73471,-2.49771 -1.77148,-4.78673 -3.09375,-6.84375 -1.28568,-2.09365 -2.82521,-3.96654 -4.625,-5.65625 -0.1732,-0.16958 -0.35486,-0.33326 -0.53125,-0.5 z m 158,9.40625 c -2.49782,9.21969 -5.21777,16.94314 -8.15625,23.1875 -2.90186,6.2444 -5.91459,11.27367 -9,15.09375 -3.04878,3.8201 -6.10208,6.54006 -9.1875,8.15625 -3.0855,1.65292 -6.02092,2.5 -8.8125,2.5 -2.09373,0 -4.11575,-0.39037 -6.0625,-1.125 -1.34566,-0.49168 -2.6049,-1.20879 -3.75,-2.15625 0.1956,0.24619 0.41834,0.46068 0.625,0.6875 1.50598,1.61619 3.21493,2.77085 5.125,3.46875 1.94675,0.73463 3.96877,1.125 6.0625,1.125 2.79158,0 5.727,-0.84708 8.8125,-2.5 3.08542,-1.61619 6.13872,-4.33615 9.1875,-8.15625 3.08541,-3.82008 6.09814,-8.84935 9,-15.09375 1.92528,-4.09129 3.76389,-8.81895 5.5,-14.1875 0.11727,-1.2997 0.22252,-2.57726 0.375,-4 0.25706,-2.09367 0.54435,-4.40845 0.875,-6.90625 l -0.59375,-0.0937 z m 728.71878,4.09375 c 0.9201,1.01737 1.9338,1.9818 3.0313,2.875 1.6161,1.28565 3.3508,2.46059 5.1874,3.5625 1.8366,1.10199 3.7095,2.13876 5.6563,3.09375 1.9835,0.91833 3.9594,1.83174 5.9063,2.75 2.2038,1.06525 4.3234,2.12779 6.3437,3.15625 2.0569,1.02851 3.8635,2.13163 5.4063,3.34375 0.1842,0.14475 0.3559,0.28909 0.5312,0.4375 -0.7248,-0.86714 -1.5579,-1.67269 -2.5312,-2.4375 -1.5428,-1.21212 -3.3494,-2.31524 -5.4063,-3.34375 -2.0203,-1.02846 -4.1399,-2.091 -6.3437,-3.15625 -1.9469,-0.91826 -3.9228,-1.83167 -5.9063,-2.75 -1.9468,-0.95499 -3.8197,-1.99176 -5.6563,-3.09375 -1.8366,-1.10191 -3.5713,-2.27685 -5.1874,-3.5625 -0.3494,-0.28432 -0.6999,-0.5781 -1.0313,-0.875 z m -157.53128,3.71875 c -2.71819,0.0735 -5.41238,0.26868 -8.09375,0.5625 -2.68145,0.25716 -5.232,0.66233 -7.65625,1.25 -2.38759,0.58774 -4.63056,1.35751 -6.6875,2.3125 -2.057,0.95506 -3.83778,2.16125 -5.34375,3.59375 -1.46929,1.39583 -2.62394,3.0845 -3.46875,5.03125 -0.84485,1.91007 -1.25002,4.12178 -1.25,6.65625 -2e-5,1.43255 0.14363,2.80268 0.4375,4.125 0.33057,1.28562 0.80756,2.41451 1.46875,3.40625 0.55935,0.7949 1.22825,1.46467 2,2 -0.66119,-0.99174 -1.13818,-2.12063 -1.46875,-3.40625 -0.29387,-1.32232 -0.43752,-2.69245 -0.4375,-4.125 -2e-5,-2.53447 0.40515,-4.74618 1.25,-6.65625 0.84481,-1.94675 1.99946,-3.63542 3.46875,-5.03125 1.50597,-1.4325 3.28675,-2.63869 5.34375,-3.59375 2.05694,-0.95499 4.29991,-1.72476 6.6875,-2.3125 2.42425,-0.58767 4.9748,-0.99284 7.65625,-1.25 1.9287,-0.21134 3.86475,-0.3714 5.8125,-0.46875 0.1103,-0.68735 0.2127,-1.39857 0.28125,-2.09375 z m 198.28128,5.5625 c 0.9912,1.13275 1.8615,2.3546 2.5937,3.65625 1.3591,2.31412 2.0312,5.0286 2.0313,8.1875 -10e-5,3.78338 -0.8417,7.15523 -2.5313,10.09375 -1.6529,2.93854 -3.8646,5.41726 -6.6562,7.4375 -2.7917,2.02024 -6.0199,3.53401 -9.6562,4.5625 -3.5998,1.06522 -7.3253,1.625 -11.2188,1.625 -1.9468,0 -3.9688,-0.1749 -6.0625,-0.46875 -2.057,-0.29386 -4.0532,-0.72479 -6,-1.3125 -1.9468,-0.58771 -3.7994,-1.31142 -5.5625,-2.15625 -1.6093,-0.82175 -3.0543,-1.73675 -4.3125,-2.75 0.5142,0.62444 1.0759,1.21191 1.7187,1.78125 1.3224,1.10195 2.8674,2.08719 4.5938,2.96875 1.7631,0.84483 3.6157,1.56854 5.5625,2.15625 1.9468,0.58771 3.943,1.01864 6,1.3125 2.0937,0.29385 4.1157,0.46875 6.0625,0.46875 3.8935,0 7.619,-0.55978 11.2188,-1.625 3.6363,-1.02849 6.8645,-2.54226 9.6562,-4.5625 2.7916,-2.02024 5.0033,-4.49896 6.6562,-7.4375 1.6896,-2.93852 2.5312,-6.31037 2.5313,-10.09375 -10e-5,-3.1589 -0.6722,-5.87338 -2.0313,-8.1875 -1.1853,-2.10714 -2.7297,-3.99174 -4.5937,-5.65625 z m -983.59378,2.125 c -0.0143,0.21241 -0.0531,0.41744 -0.0625,0.625 -0.0367,0.80813 -0.0313,1.62943 -0.0312,2.4375 -1e-5,4.18744 0.52304,7.74898 1.625,10.6875 1.13867,2.90182 2.75551,5.28843 4.8125,7.125 0.11738,0.10297 0.25508,0.1814 0.375,0.28125 -1.29069,-1.53418 -2.37007,-3.32309 -3.1875,-5.40625 -1.10196,-2.93852 -1.62501,-6.50006 -1.625,-10.6875 -1e-5,-0.80807 -0.005,-1.62937 0.0312,-2.4375 0.0367,-0.80807 0.10854,-1.64966 0.21875,-2.53125 l -2.15625,-0.0937 z m 785.1875,7.625 c -1.57951,3.15895 -3.40634,6.28955 -5.5,9.375 -2.05702,3.04874 -4.34604,5.79447 -6.84375,8.21875 -2.46106,2.38756 -5.10919,4.31198 -7.9375,5.78125 -2.79164,1.506 -5.72706,2.25 -8.8125,2.25 -2.53451,0 -4.84381,-0.43094 -6.9375,-1.3125 -1.52016,-0.64006 -2.88342,-1.4489 -4.09375,-2.4375 0.22753,0.27243 0.44262,0.55538 0.6875,0.8125 1.50599,1.54273 3.31253,2.74344 5.40625,3.625 2.09369,0.88156 4.40299,1.3125 6.9375,1.3125 3.08544,0 6.02086,-0.744 8.8125,-2.25 2.82831,-1.46927 5.47644,-3.39369 7.9375,-5.78125 2.49771,-2.42428 4.78673,-5.17001 6.84375,-8.21875 1.22856,-1.81054 2.35473,-3.6329 3.40625,-5.46875 -5e-5,-0.95501 0.0257,-1.91996 0.0625,-2.875 0.0734,-0.955 0.19129,-1.96601 0.375,-3.03125 l -0.34375,0 z m 158.96878,4.59375 c -0.4349,0.0124 -0.8506,0.0477 -1.2812,0.0937 0.3618,2.07366 0.9812,3.93761 1.9374,5.53125 1.021,1.65158 2.2358,3.02691 3.625,4.1875 -0.5756,-0.68029 -1.1343,-1.39383 -1.625,-2.1875 -1.2121,-2.02023 -1.9303,-4.42712 -2.1874,-7.21875 l -0.4688,-0.40625 z m -572.12503,3.34375 c 0.007,0.0418 0.0312,0.0845 0.0312,0.125 -6e-5,0.14694 0.005,0.24453 -0.0312,0.28125 l -0.125,0.21875 c -3.56304,5.76688 -7.8483,10.07243 -12.84375,12.9375 -4.99556,2.86507 -10.45576,4.3125 -16.40625,4.3125 -3.23242,0 -6.21938,-0.48796 -8.9375,-1.40625 -2.71817,-0.88156 -5.17112,-2.10804 -7.375,-3.6875 -0.88866,-0.65167 -1.72621,-1.35249 -2.53125,-2.09375 1.36366,1.52207 2.87831,2.88161 4.53125,4.09375 2.20388,1.57946 4.65683,2.80594 7.375,3.6875 2.71812,0.91829 5.70508,1.40625 8.9375,1.40625 5.95049,0 11.41069,-1.44743 16.40625,-4.3125 4.99545,-2.86507 9.28071,-7.17062 12.84375,-12.9375 l 0.125,-0.21875 c 0.0367,-0.0367 0.0312,-0.13431 0.0312,-0.28125 -6e-5,-0.22038 -0.0922,-0.46161 -0.3125,-0.71875 -0.22045,-0.25711 -0.48746,-0.52411 -0.78125,-0.78125 -0.27729,-0.24256 -0.59493,-0.44779 -0.9375,-0.625 z m 69.90625,0.375 c 0.0143,0.0655 0.0625,0.12196 0.0625,0.1875 -7e-5,0.14694 -0.0461,0.29059 -0.15625,0.4375 -2.05704,2.86508 -4.3,5.36957 -6.6875,7.5 -2.35088,2.09371 -4.80384,3.84872 -7.375,5.28125 -2.53454,1.3958 -5.13661,2.43258 -7.78125,3.09375 -2.64472,0.6979 -5.24132,1.03125 -7.8125,1.03125 -4.40783,0 -8.45186,-0.88765 -12.125,-2.6875 -2.4984,-1.22421 -4.75868,-2.75778 -6.78125,-4.59375 2.49731,2.74797 5.42551,4.94945 8.78125,6.59375 3.67314,1.79985 7.71717,2.6875 12.125,2.6875 2.57118,0 5.16778,-0.33335 7.8125,-1.03125 2.64464,-0.66117 5.24671,-1.69795 7.78125,-3.09375 2.57116,-1.43253 5.02412,-3.18754 7.375,-5.28125 2.3875,-2.13043 4.63046,-4.63492 6.6875,-7.5 0.11013,-0.14691 0.15618,-0.29056 0.15625,-0.4375 -7e-5,-0.25711 -0.12343,-0.52411 -0.34375,-0.78125 -0.22046,-0.29384 -0.45621,-0.52959 -0.75,-0.75 -0.28372,-0.24818 -0.6167,-0.47649 -0.96875,-0.65625 z m 481.65628,0 c 0.014,0.0655 0.062,0.12196 0.062,0.1875 -10e-5,0.14694 -0.046,0.29059 -0.1562,0.4375 -2.0571,2.86508 -4.3001,5.36957 -6.6876,7.5 -2.3508,2.09371 -4.8038,3.84872 -7.375,5.28125 -2.5345,1.3958 -5.1053,2.43258 -7.75,3.09375 -2.6447,0.6979 -5.2725,1.03125 -7.8437,1.03125 -4.4078,0 -8.4519,-0.88765 -12.125,-2.6875 -2.48073,-1.21554 -4.70723,-2.74383 -6.71873,-4.5625 2.4898,2.73052 5.3782,4.92565 8.71873,6.5625 3.6731,1.79985 7.7172,2.6875 12.125,2.6875 2.5712,0 5.199,-0.33335 7.8437,-1.03125 2.6447,-0.66117 5.2155,-1.69795 7.75,-3.09375 2.5712,-1.43253 5.0242,-3.18754 7.375,-5.28125 2.3875,-2.13043 4.6305,-4.63492 6.6876,-7.5 0.1101,-0.14691 0.1561,-0.29056 0.1562,-0.4375 -10e-5,-0.25711 -0.1234,-0.52411 -0.3438,-0.78125 -0.2204,-0.29384 -0.4562,-0.52959 -0.75,-0.75 -0.2837,-0.24818 -0.6166,-0.47649 -0.9687,-0.65625 z m -63.21878,6.75 c -0.36872,0.16819 -0.72617,0.34434 -1.09375,0.5 l 0.125,0.375 c -1.32238,1.06522 -2.9798,2.14805 -5,3.25 -1.98355,1.10195 -4.07738,2.11296 -6.28125,3.03125 -2.20393,0.91829 -4.36959,1.63652 -6.5,2.1875 -2.09373,0.5877 -3.92604,0.90625 -5.46875,0.90625 -1.54615,0 -2.85113,-0.31258 -3.90625,-0.9375 0.35469,0.5527 0.76049,1.00309 1.1875,1.375 1.1754,1.02849 2.73522,1.5625 4.71875,1.5625 1.54271,0 3.37502,-0.31855 5.46875,-0.90625 2.13041,-0.55098 4.29607,-1.26921 6.5,-2.1875 2.20387,-0.91829 4.2977,-1.9293 6.28125,-3.03125 2.0202,-1.10195 3.67762,-2.18478 5,-3.25 l -1.03125,-2.875 z m -613.03125,1.8125 c -0.11177,0.0745 -0.28269,0.17078 -0.40625,0.25 l 0.21875,0.3125 c -1.06532,1.10196 -2.26602,2.13325 -3.625,3.125 -1.35917,0.95503 -2.77534,1.77085 -4.28125,2.46875 -1.50609,0.73463 -3.09716,1.3147 -4.75,1.71875 -1.65301,0.40405 -3.34167,0.59375 -5.03125,0.59375 -2.13052,0 -4.19858,-0.40517 -6.21875,-1.25 -0.99179,-0.42241 -1.93094,-0.98042 -2.8125,-1.6875 1.43025,1.68797 3.02365,2.92561 4.8125,3.6875 2.02017,0.84483 4.08823,1.25 6.21875,1.25 1.68958,0 3.37824,-0.1897 5.03125,-0.59375 1.65284,-0.40405 3.24391,-0.98412 4.75,-1.71875 1.50591,-0.6979 2.92208,-1.51372 4.28125,-2.46875 1.35898,-0.99175 2.55968,-2.02304 3.625,-3.125 l -1.8125,-2.5625 z m 571.8125,0.40625 c -0.16224,0.0973 -0.30794,0.18843 -0.46875,0.28125 l 0.0625,0.0937 c -2.46111,2.46103 -5.12953,4.30814 -8.03125,5.59375 -2.90188,1.28561 -5.96066,1.9375 -9.15625,1.9375 -2.38763,0 -4.60482,-0.41065 -6.625,-1.21875 -1.38743,-0.55496 -2.62248,-1.30001 -3.75,-2.21875 0.17768,0.22073 0.34268,0.44883 0.53125,0.65625 1.46921,1.57946 3.19845,2.7544 5.21875,3.5625 2.02018,0.8081 4.23737,1.21875 6.625,1.21875 3.19559,0 6.25437,-0.65189 9.15625,-1.9375 2.90172,-1.28561 5.57014,-3.13272 8.03125,-5.59375 l -1.59375,-2.375 z m -278.96875,44.46875 c -0.24255,-10e-6 -0.48453,0.0129 -0.71875,0.0312 0.71021,1.04139 1.45568,1.99544 2.25,2.8125 0.46881,0.49558 0.94427,0.94779 1.4375,1.375 -1.06703,-1.20045 -2.06153,-2.59208 -2.96875,-4.21875 z"
+       id="text3770"
+       inkscape:connector-curvature="0"
+       clip-path="url(#clipPath3834)"
+       transform="translate(51.216572,791.75611)" />
+  </g>
+</svg>
