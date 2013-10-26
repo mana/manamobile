@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest package="org.qtproject.example.manamobile" android:versionCode="1" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0">
-    <application android:name="org.qtproject.qt5.android.bindings.QtApplication" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:label="@string/app_name">
+<manifest package="org.sourceoftales.client" android:versionCode="1" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0">
+    <application android:name="org.qtproject.qt5.android.bindings.QtApplication" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name="org.qtproject.qt5.android.bindings.QtActivity" android:configChanges="orientation|locale|fontScale|keyboard|keyboardHidden" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -10,7 +10,7 @@
             <meta-data android:name="android.app.repository" android:value="@string/repository"/>
             <meta-data android:name="android.app.qt_libs_resource_id" android:resource="@array/qt_libs"/>
             <meta-data android:name="android.app.bundled_libs_resource_id" android:resource="@array/bundled_libs"/>
-            <meta-data android:name="android.app.lib_name" android:value="manamobile"/>
+            <meta-data android:name="android.app.lib_name" android:value="tales"/>
             <!-- Deploy Qt libs as part of package -->
             <meta-data android:name="android.app.bundle_local_qt_libs" android:value="1"/>
             <meta-data android:name="android.app.bundled_in_lib_resource_id" android:resource="@array/bundled_in_lib"/>
