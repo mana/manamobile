@@ -365,10 +365,10 @@ void AccountClient::handleCharacterCreateResponse(MessageIn &message)
         emit createCharacterFailed(error, createCharacterErrorMessage(error));
         return;
     }
-    emit createCharacterSucceeded();
     readCharacterInfo(message);
-
     mCharacterListModel->setCharacters(mCharacters);
+
+    emit createCharacterSucceeded(mCharacters.size() - 1);
 }
 
 void AccountClient::handleCharacterDeleteResponse(MessageIn &message)
@@ -395,9 +395,8 @@ void AccountClient::handleCharacterInfo(MessageIn &message)
 {
     mCharacters.clear();
 
-    while (message.unreadData()) {
+    while (message.unreadData())
         readCharacterInfo(message);
-    }
 
     mCharacterListModel->setCharacters(mCharacters);
 

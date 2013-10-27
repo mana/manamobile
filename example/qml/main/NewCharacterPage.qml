@@ -4,7 +4,9 @@ import Mana 1.0
 Item {
     readonly property real characterScale: window.backgroundScale;
     readonly property int numHairStyles: hairDB.hairs.length
+
     property int hairIndex: 0
+    property bool creatingCharacter: false
 
     function nextHairStyle() {
         hairIndex = (hairIndex + 1) % numHairStyles;
@@ -23,6 +25,7 @@ Item {
             return;
 
         errorLabel.clear();
+        creatingCharacter = true;
         accountClient.createCharacter(name,
                                       character.gender,
                                       character.hairStyle,
@@ -93,14 +96,25 @@ Item {
         text: qsTr("Create")
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        enabled: nameEdit.text != ""
+        enabled: nameEdit.text != "" && !creatingCharacter
         onClicked: createCharacter()
     }
 
     Connections {
         target: accountClient
-        onCreateCharacterSucceeded: window.state = "chooseCharacter"
-        onCreateCharacterFailed: errorLabel.showError(errorMessage)
+        onCreateCharacterSucceeded: {
+            window.characterChosen = true;
+            accountClient.chooseCharacter(index);
+        }
+        onCreateCharacterFailed: {
+            errorLabel.showError(errorMessage)
+            creatingCharacter = false;
+        }
+        onChooseCharacterFailed: {
+            errorLabel.showError(errorMessage);
+            window.characterChosen = false;
+            creatingCharacter = false;
+        }
     }
 
     Component.onCompleted: {

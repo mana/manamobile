@@ -122,7 +122,7 @@ signals:
 
     void loggedOut();
 
-    void createCharacterSucceeded();
+    void createCharacterSucceeded(int index);
     void createCharacterFailed(int error, const QString &errorMessage);
 
     void deleteCharacterSucceeded();
