@@ -156,6 +156,7 @@ Rectangle {
                         anchors.topMargin: 12
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: model.being.name;
+                        textFormat: Text.PlainText
                         font.pixelSize: 12;
                         color: {
                             if (model.being.type === Being.OBJECT_NPC)

@@ -38,12 +38,14 @@ Item {
                 font.bold: true
                 font.pixelSize: 12
                 text: "<" + model.name + ">"
+                textFormat: Text.PlainText
             }
             Text {
                 id: messageLabel
                 color: "beige"
                 font.pixelSize: 12
                 text: model.message
+                textFormat: Text.PlainText
                 wrapMode: Text.Wrap
                 anchors.left: nameLabel.right
                 anchors.right: parent.right

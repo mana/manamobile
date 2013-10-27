@@ -106,6 +106,7 @@ Item {
             Text {
                 id: name;
                 text: model.character.name;
+                textFormat: Text.PlainText
                 color: "beige"
                 anchors.top: parent.bottom
                 anchors.topMargin: 12

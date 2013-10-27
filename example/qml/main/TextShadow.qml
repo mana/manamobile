@@ -10,6 +10,7 @@ Text {
     property real offsetY: 1
 
     text: target.text;
+    textFormat: target.textFormat
     color: "black";
     x: target.x + offsetX
     y: target.y + offsetY

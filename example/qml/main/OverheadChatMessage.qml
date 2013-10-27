@@ -24,6 +24,7 @@ Item {
     TextShadow { target: chat; }
     Text {
         id: chat;
+        textFormat: Text.PlainText
         anchors.bottom: parent.bottom;
         anchors.horizontalCenter: parent.horizontalCenter;
         color: "white";
