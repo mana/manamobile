@@ -5,10 +5,13 @@ DEPLOYMENTFOLDERS = folder_main
 
 SOURCES += main.cpp
 TARGET = tales
+QT += qml quick
 
-# Please do not modify the following two lines. Required for deployment.
-include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
-!tizen:qtcAddDeployment()
+!tizen {
+    # Please do not modify the following two lines. Required for deployment.
+    include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
+    qtcAddDeployment()
+}
 
 OTHER_FILES += \
     tizen/manifest.xml
