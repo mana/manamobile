@@ -3,7 +3,7 @@
 ui_*.h
 moc_*.cpp
 Makefile*
-manamobile
+example/tales
 /qml/
 
 # Qt Creator artifacts
@@ -19,6 +19,7 @@ android/assets/
 android/bin/
 android/gen/
 android/libs/
+android/qml/
 
 # eclipse files
 .project
