@@ -329,10 +329,13 @@ void AccountClient::handleLoginResponse(MessageIn &message)
 
     if (error == ERRMSG_OK) {
         readServerInfo(message);
+        handleCharacterInfo(message);
+
         if (mUsername != mPendingUsername) {
             mUsername = mPendingUsername;
             emit usernameChanged();
         }
+
         emit loginSucceeded();
     } else {
         emit loginFailed(error, loginErrorMessage(error));

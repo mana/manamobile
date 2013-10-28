@@ -161,9 +161,5 @@ Item {
             console.log(errorMessage);
         }
         onDeleteCharacterSucceeded: deletingCharacter = false;
-        onCharacterDataReceived: {
-            if (accountClient.connected && characterList.count == 0)
-                window.state = "createCharacter";
-        }
     }
 }
