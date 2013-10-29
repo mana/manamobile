@@ -73,16 +73,46 @@ BorderImage {
                         anchors.right: choices.right
 
                         text: modelData
-                        onClicked: gameClient.chooseNpcOption(model.index);
+                        onClicked: {
+                            gameClient.chooseNpcOption(model.index);
+                            waitForChoiceIndicator.running = true;
+                        }
+
+                        ProgressIndicator {
+                            id: waitForChoiceIndicator;
+
+                            height: parent.height;
+                            width: height;
+                            anchors.right: parent.right;
+                        }
                     }
                 }
             }
 
             BrownButton {
-                iconSource: "images/icon_right.png"
+                id: nextButton;
+
+                property bool waitingForReply: false
+                iconSource: waitingForReply ? "" : "images/icon_right.png"
+
                 anchors.right: parent.right
                 visible: gameClient.npcState === GameClient.NpcAwaitNext
-                onClicked: gameClient.nextNpcMessage()
+                onClicked: {
+                    gameClient.nextNpcMessage();
+                    waitingForReply = true;
+                }
+
+                ProgressIndicator {
+                    id: waitForNextIndicator;
+
+                    anchors.centerIn: parent;
+
+                    running: parent.waitingForReply;
+
+                    height: parent.height;
+                    width: height;
+                    anchors.right: parent.right;
+                }
             }
 
             Row {
@@ -102,6 +132,7 @@ BorderImage {
                     Connections {
                         target: gameClient;
                         onNpcStateChanged: {
+                            nextButton.waitingForReply = false;
                             if (gameClient.npcState === GameClient.NpcAwaitNumberInput) {
                                 numberInput.text = gameClient.npcDefaultNumber;
                             }
