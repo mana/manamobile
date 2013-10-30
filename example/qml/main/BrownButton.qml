@@ -10,10 +10,12 @@ Button {
 
     implicitHeight: Math.max(sizeLabel.height + 10, 30)
 
+    property bool keepPressed: false
+
     style: ButtonStyle {
         background: BorderImage {
             source: {
-                if (control.pressed)
+                if (control.pressed || button.keepPressed)
                     "images/scroll_button_pressed.png"
                 else
                     "images/scroll_button.png"

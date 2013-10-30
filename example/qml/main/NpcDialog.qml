@@ -72,14 +72,19 @@ BorderImage {
                         anchors.left: choices.left
                         anchors.right: choices.right
 
+                        property bool waitingForReply: false
+                        keepPressed: waitingForReply;
+
                         text: modelData
                         onClicked: {
                             gameClient.chooseNpcOption(model.index);
-                            waitForChoiceIndicator.running = true;
+                            waitingForReply = true;
                         }
 
                         ProgressIndicator {
                             id: waitForChoiceIndicator;
+
+                            running: waitingForReply;
 
                             height: parent.height;
                             width: height;
@@ -94,6 +99,7 @@ BorderImage {
 
                 property bool waitingForReply: false
                 iconSource: waitingForReply ? "" : "images/icon_right.png"
+                keepPressed: waitingForReply;
 
                 anchors.right: parent.right
                 visible: gameClient.npcState === GameClient.NpcAwaitNext
