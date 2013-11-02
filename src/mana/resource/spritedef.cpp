@@ -30,13 +30,18 @@
 
 using namespace Mana;
 
-SpriteReference::SpriteReference(QObject *parent, QString sprite, int variant)
+SpriteReference::SpriteReference(QObject *parent)
     : QObject(parent)
-    , sprite(sprite)
-    , variant(variant)
+    , mVariant(0)
 {
 }
 
+SpriteReference::SpriteReference(QObject *parent, QString sprite, int variant)
+    : QObject(parent)
+    , mSprite(sprite)
+    , mVariant(variant)
+{
+}
 
 
 SpriteReference *SpriteReference::readSprite(XmlReader &xml, QObject *parent)

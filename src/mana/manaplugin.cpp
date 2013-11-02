@@ -106,7 +106,7 @@ void ManaPlugin::registerTypes(const char *uri)
     qmlRegisterType<Mana::Character>(uri, 1, 0, "Character");
 
     qmlRegisterType<Mana::SpriteListModel>();
-    qmlRegisterType<const Mana::SpriteReference>();
+    qmlRegisterType<Mana::SpriteReference>(uri, 1, 0, "SpriteReference");
 
     qmlRegisterType<Mana::AbilityListModel>();
 
