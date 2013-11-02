@@ -35,7 +35,7 @@ int SpriteListModel::rowCount(const QModelIndex &parent) const
 QVariant SpriteListModel::data(const QModelIndex &index, int role) const
 {
     if (role == SpriteRole) {
-        const SpriteReference *spriteRef = mSprites.at(index.row()).second;
+        SpriteReference *spriteRef = mSprites.at(index.row()).second;
         return QVariant::fromValue(spriteRef);
     } else if (role == SlotRole) {
         return QVariant::fromValue(mSprites.at(index.row()).first);
@@ -49,15 +49,15 @@ QHash<int, QByteArray> SpriteListModel::roleNames() const
     return mRoleNames;
 }
 
-void SpriteListModel::addSprite(int slot, const SpriteReference *spriteRef)
+void SpriteListModel::addSprite(int slot, SpriteReference *spriteRef)
 {
     Q_ASSERT(spriteRef);
     beginInsertRows(QModelIndex(), mSprites.size(), mSprites.size());
-    mSprites.append(QPair<int, const SpriteReference *>(slot, spriteRef));
+    mSprites.append(QPair<int, SpriteReference *>(slot, spriteRef));
     endInsertRows();
 }
 
-void SpriteListModel::setSprite(int slot, const SpriteReference *spriteRef)
+void SpriteListModel::setSprite(int slot, SpriteReference *spriteRef)
 {
     removeSprite(slot);
     addSprite(slot, spriteRef);
@@ -71,7 +71,7 @@ void SpriteListModel::setSprites(const QList<SpriteReference *> &sprites)
     beginResetModel();
     mSprites.clear();
     for (int i = 0; i < sprites.length(); ++i) {
-        const SpriteReference *spriteRef = sprites.at(i);
+        SpriteReference *spriteRef = sprites.at(i);
         mSprites.append(qMakePair(i, spriteRef));
     }
     endResetModel();

@@ -31,7 +31,7 @@ class SpriteItem : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(const Mana::SpriteReference *spriteReference READ spriteRef WRITE setSpriteRef NOTIFY spriteRefChanged)
+    Q_PROPERTY(Mana::SpriteReference *spriteReference READ spriteRef WRITE setSpriteRef NOTIFY spriteRefChanged)
     Q_PROPERTY(QString action READ action WRITE setAction NOTIFY actionChanged)
     Q_PROPERTY(Mana::Action::SpriteDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
@@ -42,8 +42,8 @@ public:
 
     void reset();
 
-    void setSpriteRef(const SpriteReference *sprite);
-    const SpriteReference *spriteRef() const { return mSpriteRef; }
+    void setSpriteRef(SpriteReference *sprite);
+    SpriteReference *spriteRef() const { return mSpriteRef; }
 
     void setAction(const QString &actionName);
     QString action() const { return mActionName; }
@@ -68,7 +68,7 @@ private:
     void playAnimation(const Action *action);
     void updateSize();
 
-    const SpriteReference *mSpriteRef;
+    SpriteReference *mSpriteRef;
     QString mActionName;
     Action::SpriteDirection mDirection;
 

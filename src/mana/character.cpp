@@ -105,7 +105,7 @@ void Character::setHairStyle(int style, int color)
 
     if (HairDB::instance()->isLoaded()) {
         if (const HairInfo *info = HairDB::instance()->getInfo(style))
-            if (const SpriteReference *sprite = info->sprite(mGender))
+            if (SpriteReference *sprite = info->sprite(mGender))
                 mSpriteList->setSprite(SLOT_HAIR, sprite);
     }
 }
@@ -122,13 +122,13 @@ void Character::rebuildSprites()
 
     if (HairDB::instance()->isLoaded()) {
         if (const HairInfo *hairInfo = HairDB::instance()->getInfo(mHairStyle))
-            if (const SpriteReference *sprite = hairInfo->sprite(mGender))
+            if (SpriteReference *sprite = hairInfo->sprite(mGender))
                 mSpriteList->addSprite(SLOT_HAIR, sprite);
     }
 
     if (RaceDB::instance()->isLoaded()) {
         const RaceInfo *raceInfo = RaceDB::instance()->races().at(0);
-        if (const SpriteReference *sprite = raceInfo->sprite(mGender))
+        if (SpriteReference *sprite = raceInfo->sprite(mGender))
             mSpriteList->addSprite(SLOT_RACE, sprite);
     }
 

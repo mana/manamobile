@@ -43,14 +43,14 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void addSprite(int slot, const SpriteReference *spriteRef);
-    void setSprite(int slot, const SpriteReference *spriteRef);
+    void addSprite(int slot, SpriteReference *spriteRef);
+    void setSprite(int slot, SpriteReference *spriteRef);
     void setSprites(const QList<SpriteReference*> &sprites);
     void removeSprite(int slot);
     void removeAll();
 
 private:
-    QVector< QPair<int, const SpriteReference *> > mSprites;
+    QVector< QPair<int, SpriteReference *> > mSprites;
     QHash<int, QByteArray> mRoleNames;
 };
 
