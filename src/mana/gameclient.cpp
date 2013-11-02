@@ -806,8 +806,10 @@ void GameClient::handleBeingDirChange(MessageIn &message)
     const int id = message.readInt16();
     const BeingDirection dir = static_cast<BeingDirection>(message.readInt8());
 
-    if (Being *being = mBeingListModel->beingById(id))
-        being->setDirection(dir);
+    if (Being *being = mBeingListModel->beingById(id)) {
+        if (being != mPlayerCharacter)
+            being->setDirection(dir);
+    }
 }
 
 void GameClient::handleBeingsMove(MessageIn &message)
