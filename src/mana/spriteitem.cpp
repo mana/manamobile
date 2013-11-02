@@ -112,7 +112,7 @@ SpriteItem::~SpriteItem()
         mSprite->decRef();
 }
 
-void SpriteItem::setSpriteRef(const SpriteReference *sprite)
+void SpriteItem::setSpriteRef(SpriteReference *sprite)
 {
     if (sprite == mSpriteRef)
         return;
@@ -124,7 +124,7 @@ void SpriteItem::setSpriteRef(const SpriteReference *sprite)
 
     if (sprite) {
         mSprite = ResourceManager::instance()->requestSpriteDefinition(
-                    sprite->sprite, sprite->variant);
+                    sprite->sprite(), sprite->variant());
 
         if (mSprite->status() == Resource::Loading) {
             connect(mSprite, SIGNAL(statusChanged(Resource::Status)),

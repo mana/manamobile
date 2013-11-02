@@ -42,13 +42,28 @@ class SpriteReference : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString sprite READ sprite WRITE setSprite NOTIFY spriteChanged)
+    Q_PROPERTY(int variant READ variant WRITE setVariant NOTIFY variantChanged)
+
 public:
     static SpriteReference *readSprite(XmlReader &xml, QObject *parent = 0);
 
+    explicit SpriteReference(QObject *parent = 0);
     SpriteReference(QObject *parent, QString sprite = QString(), int variant = 0);
 
-    QString sprite;
-    int variant;
+    void setSprite(const QString &spritePath);
+    const QString &sprite() const;
+
+    void setVariant(int variant);
+    int variant() const;
+
+signals:
+    void spriteChanged();
+    void variantChanged();
+
+private:
+    QString mSprite;
+    int mVariant;
 };
 
 struct SpriteDisplay
@@ -154,6 +169,33 @@ private:
     // Keep track of loaded files to prevent cycle includes
     QSet<QUrl> mProcessedFiles;
 };
+
+
+inline void SpriteReference::setSprite(const QString &spritePath)
+{
+    if (mSprite != spritePath) {
+        mSprite = spritePath;
+        emit spriteChanged();
+    }
+}
+
+inline const QString &SpriteReference::sprite() const
+{
+    return mSprite;
+}
+
+inline void SpriteReference::setVariant(int variant)
+{
+    if (mVariant != variant) {
+        mVariant = variant;
+        emit variantChanged();
+    }
+}
+
+inline int SpriteReference::variant() const
+{
+    return mVariant;
+}
 
 } // namespace Mana
 
