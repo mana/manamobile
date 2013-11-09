@@ -58,7 +58,10 @@ Item {
 
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
 
-                onClicked: {
+                onPressedChanged: {
+                    if (!pressed)
+                        return;
+
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
                         gameClient.useAbilityOnDirection(model.ability.id);
                     } else {
