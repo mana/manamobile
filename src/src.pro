@@ -16,7 +16,7 @@ INCLUDEPATH += src
 DEFINES += TILED_LIBRARY
 
 win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
-else:LIBS += -lz
+LIBS += -lz
 
 !win32-msvc2010 {
     # Silence compile warnings in ENet code
