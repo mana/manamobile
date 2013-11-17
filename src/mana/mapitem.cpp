@@ -28,6 +28,8 @@
 
 #include "mana/resource/mapresource.h"
 
+#include <cmath>
+
 using namespace Mana;
 
 MapItem::MapItem(QQuickItem *parent)
@@ -35,6 +37,7 @@ MapItem::MapItem(QQuickItem *parent)
     , mMapResource(0)
     , mHideCollisionLayer(true)
     , mRenderer(0)
+    , mFringeLayer(0)
 {
 }
 
@@ -67,6 +70,38 @@ void MapItem::setVisibleArea(const QRectF &visibleArea)
 {
     mVisibleArea = visibleArea;
     emit visibleAreaChanged();
+
+    updateFringeLayer();
+}
+
+/**
+ * Determines the rectangle of visible tiles of the given tile \a layer, based
+ * on the visible area of this MapItem instance.
+ *
+ * Only works for orthogonal maps.
+ */
+QRect MapItem::visibleTileArea(const Tiled::TileLayer *layer) const
+{
+    const Tiled::Map *map = mMapResource->map();
+
+    const int tileWidth = map->tileWidth();
+    const int tileHeight = map->tileHeight();
+
+    QMargins drawMargins = layer->drawMargins();
+    drawMargins.setTop(drawMargins.top() - tileHeight);
+    drawMargins.setRight(drawMargins.right() - tileWidth);
+
+    QRectF rect = visibleArea().adjusted(-drawMargins.right(),
+                                         -drawMargins.bottom(),
+                                         drawMargins.left(),
+                                         drawMargins.top());
+
+    int startX = qMax((int) rect.x() / tileWidth, 0);
+    int startY = qMax((int) rect.y() / tileHeight, 0);
+    int endX = qMin((int) std::ceil(rect.right()) / tileWidth + 1, layer->width());
+    int endY = qMin((int) std::ceil(rect.bottom()) / tileHeight + 1, layer->height());
+
+    return QRect(QPoint(startX, startY), QPoint(endX, endY));
 }
 
 void MapItem::setHideCollisionLayer(bool hideCollisionLayer)
@@ -111,6 +146,12 @@ void MapItem::refresh()
     // Clean up ourselves (maybe wait until the map is available?)
     qDeleteAll(mTileLayerItems);
     mTileLayerItems.clear();
+
+    qDeleteAll(mTileItems);
+    mTileItems.clear();
+    mFringeLayer = 0;
+    mVisibleFringeTiles = QRect();
+
     delete mRenderer;
     mRenderer = 0;
 
@@ -128,22 +169,60 @@ void MapItem::refresh()
         break;
     }
 
-    bool seenFringe = false;
     foreach (Tiled::Layer *layer, map->layers()) {
         if (Tiled::TileLayer *tl = layer->asTileLayer()) {
             if (mHideCollisionLayer)
                 if (tl->name().compare(QLatin1String("collision"), Qt::CaseInsensitive) == 0)
                     continue;
 
+            if (!mFringeLayer) {
+                if (tl->name().compare(QLatin1String("fringe"), Qt::CaseInsensitive) == 0) {
+                    mFringeLayer = tl;
+                    continue;
+                }
+            }
+
             TileLayerItem *layerItem = new TileLayerItem(tl, mRenderer, this);
-            if (seenFringe)
+            if (mFringeLayer)
                 layerItem->setZ(65536);
-            else if (tl->name().compare(QLatin1String("fringe"), Qt::CaseInsensitive) == 0)
-                seenFringe = true;
             mTileLayerItems.append(layerItem);
         }
     }
 
+    updateFringeLayer();
+
     const QSize size = mRenderer->mapSize();
     setImplicitSize(size.width(), size.height());
+}
+
+void MapItem::updateFringeLayer()
+{
+    if (!mFringeLayer)
+        return;
+
+    const QRect tileArea = visibleTileArea(mFringeLayer);
+    if (mVisibleFringeTiles == tileArea)
+        return;
+
+    // Remove no longer visible fringe tiles
+    for (int i = mTileItems.size() - 1; i >= 0; --i) {
+        if (!tileArea.contains(mTileItems.at(i)->position())) {
+            delete mTileItems.at(i);
+            mTileItems.removeAt(i);
+        }
+    }
+
+    // Create tile items for the newly visible area
+    const QRegion n = QRegion(tileArea).subtracted(mVisibleFringeTiles);
+    foreach (const QRect &r, n.rects()) {
+        for (int y = r.top(); y <= r.bottom(); ++y) {
+            for (int x = r.left(); x <= r.right(); ++x) {
+                const Tiled::Cell &cell = mFringeLayer->cellAt(x, y);
+                if (!cell.isEmpty())
+                    mTileItems.append(new TileItem(cell, QPoint(x, y), this));
+            }
+        }
+    }
+
+    mVisibleFringeTiles = tileArea;
 }

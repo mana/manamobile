@@ -26,153 +26,12 @@
 #include "mana/mapitem.h"
 #include "mana/resource/imageresource.h"
 #include "mana/resource/mapresource.h"
-
-#include <QSGGeometryNode>
-#include <QSGTextureMaterial>
-
-#include <cmath>
+#include "mana/tilesnode.h"
 
 using namespace Tiled;
 using namespace Mana;
 
 namespace {
-
-struct TileData {
-    float x;
-    float y;
-    float width;
-    float height;
-    float tx;
-    float ty;
-};
-
-class TilesNode : public QSGGeometryNode
-{
-public:
-    TilesNode(QSGTexture *texture, const QVector<TileData> &tileData);
-
-    QSGTexture *texture() const;
-
-private:
-    void processTileData(const QVector<TileData> &tileData);
-
-    QSGGeometry mGeometry;
-    QSGTextureMaterial mMaterial;
-    QSGOpaqueTextureMaterial mOpaqueMaterial;
-};
-
-TilesNode::TilesNode(QSGTexture *texture, const QVector<TileData> &tileData)
-    : mGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 0)
-{
-    setFlag(QSGNode::OwnedByParent);
-
-    mMaterial.setTexture(texture);
-    mOpaqueMaterial.setTexture(texture);
-
-    mGeometry.setDrawingMode(GL_TRIANGLES);
-
-    // TODO: Using StaticPattern would make sense since the data is never
-    // being modified, however this is causing issues on the Raspberry Pi.
-    //mGeometry.setVertexDataPattern(QSGGeometry::StaticPattern);
-
-    processTileData(tileData);
-
-    setGeometry(&mGeometry);
-    setMaterial(&mMaterial);
-    setOpaqueMaterial(&mOpaqueMaterial);
-}
-
-inline QSGTexture *TilesNode::texture() const
-{
-    return mMaterial.texture();
-}
-
-void TilesNode::processTileData(const QVector<TileData> &tileData)
-{
-    const QSize s = mMaterial.texture()->textureSize();
-    const QRectF r = mMaterial.texture()->normalizedTextureSubRect();
-
-    const float s_x = r.width() / s.width();
-    const float s_y = r.height() / s.height();
-
-    // TODO: By using indices the memory usage could be reduced by 25%, at the
-    // cost of an additional indirection:
-    //
-    // Currently each tile takes:   6 * 16         = 96 bytes
-    // With indices it would take:  4 * 16 + 4 * 2 = 72 bytes
-
-    // Two triangles to draw each tile
-    mGeometry.allocate(tileData.size() * 6);
-    QSGGeometry::TexturedPoint2D *v = mGeometry.vertexDataAsTexturedPoint2D();
-
-    foreach (const TileData &data, tileData) {
-        // Taking into account the normalized texture subrectancle
-        const float s_width = data.width * s_x;
-        const float s_height = data.height * s_y;
-        const float s_tx = r.x() + data.tx * s_x;
-        const float s_ty = r.y() + data.ty * s_y;
-
-        // TopLeft                      // TopRight
-        v[0].x = data.x;                v[2].x = data.x + data.width;
-        v[0].y = data.y;                v[2].y = data.y;
-        v[0].tx = s_tx;                 v[2].tx = s_tx + s_width;
-        v[0].ty = s_ty;                 v[2].ty = s_ty;
-
-        // BottomLeft
-        v[1].x = data.x;
-        v[1].y = data.y + data.height;
-        v[1].tx = s_tx;
-        v[1].ty = s_ty + s_height;
-
-
-                                        // TopRight
-                                        v[5].x = data.x + data.width;
-                                        v[5].y = data.y;
-                                        v[5].tx = s_tx + s_width;
-                                        v[5].ty = s_ty;
-
-        // BottomLeft                   // BottomRight
-        v[3].x = data.x;                v[4].x = data.x + data.width;
-        v[3].y = data.y + data.height;  v[4].y = data.y + data.height;
-        v[3].tx = s_tx;                 v[4].tx = s_tx + s_width;
-        v[3].ty = s_ty + s_height;      v[4].ty = s_ty + s_height;
-
-        v += 6;
-    }
-
-    markDirty(DirtyGeometry);
-}
-
-/**
- * Determines the rectangle of visible tiles of the given tile \a layer, based
- * on the visible area of a \a mapItem.
- *
- * Only works for orthogonal maps.
- */
-static QRect visibleTiles(const TileLayer *layer,
-                          const MapItem *mapItem)
-{
-    const Map *map = mapItem->mapResource()->map();
-
-    const int tileWidth = map->tileWidth();
-    const int tileHeight = map->tileHeight();
-
-    QMargins drawMargins = layer->drawMargins();
-    drawMargins.setTop(drawMargins.top() - tileHeight);
-    drawMargins.setRight(drawMargins.right() - tileWidth);
-
-    QRectF rect = mapItem->visibleArea().adjusted(-drawMargins.right(),
-                                                  -drawMargins.bottom(),
-                                                  drawMargins.left(),
-                                                  drawMargins.top());
-
-    int startX = qMax((int) rect.x() / tileWidth, 0);
-    int startY = qMax((int) rect.y() / tileHeight, 0);
-    int endX = qMin((int) std::ceil(rect.right()) / tileWidth + 1, layer->width());
-    int endY = qMin((int) std::ceil(rect.bottom()) / tileHeight + 1, layer->height());
-
-    return QRect(QPoint(startX, startY), QPoint(endX, endY));
-}
 
 /**
  * Returns the texture of a given tileset, or 0 if the image has not been
@@ -311,7 +170,7 @@ TileLayerItem::TileLayerItem(TileLayer *layer, MapRenderer *renderer,
     : QQuickItem(parent)
     , mLayer(layer)
     , mRenderer(renderer)
-    , mVisibleTiles(visibleTiles(layer, parent))
+    , mVisibleTiles(parent->visibleTileArea(layer))
 {
     setFlag(ItemHasContents);
 
@@ -349,10 +208,52 @@ QSGNode *TileLayerItem::updatePaintNode(QSGNode *node,
 void TileLayerItem::updateVisibleTiles()
 {
     const MapItem *mapItem = static_cast<MapItem*>(parentItem());
-    const QRect rect = visibleTiles(mLayer, mapItem);
+    const QRect rect = mapItem->visibleTileArea(mLayer);
 
     if (mVisibleTiles != rect) {
         mVisibleTiles = rect;
         update();
     }
+}
+
+
+TileItem::TileItem(const Cell &cell, QPoint position, MapItem *parent)
+    : QQuickItem(parent)
+    , mCell(cell)
+    , mPosition(position)
+{
+    setFlag(ItemHasContents);
+    setZ(position.y() * parent->mapResource()->map()->tileHeight());
+}
+
+QSGNode *TileItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *)
+{
+    if (!node) {
+        const MapItem *mapItem = static_cast<MapItem*>(parent());
+
+        TilesetHelper helper(mapItem);
+        Tileset *tileset = mCell.tile->tileset();
+        helper.setTileset(tileset);
+
+        if (!helper.texture())
+            return 0;
+
+        const Map *map = mapItem->mapResource()->map();
+        const int tileWidth = map->tileWidth();
+        const int tileHeight = map->tileHeight();
+
+        const QSize size = mCell.tile->size();
+        const QPoint offset = tileset->tileOffset();
+
+        QVector<TileData> data(1);
+        data[0].x = mPosition.x() * tileWidth + offset.x();
+        data[0].y = (mPosition.y() + 1) * tileHeight - tileset->tileHeight() + offset.y();
+        data[0].width = size.width();
+        data[0].height = size.height();
+        helper.setTextureCoordinates(data[0], mCell);
+
+        node = new TilesNode(helper.texture(), data);
+    }
+
+    return node;
 }

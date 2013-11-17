@@ -119,6 +119,8 @@ DynamicLibrary {
             "mana/spritelistmodel.h",
             "mana/tilelayeritem.cpp",
             "mana/tilelayeritem.h",
+            "mana/tilesnode.cpp",
+            "mana/tilesnode.h",
             "mana/xmlreader.h",
             "safeassert.h",
             "tiled/compression.cpp",

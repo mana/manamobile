@@ -28,12 +28,14 @@ namespace Tiled {
 class Map;
 class MapRenderer;
 class Tileset;
+class TileLayer;
 } // namespace Tiled
 
 namespace Mana {
 
 class ImageResource;
 class MapResource;
+class TileItem;
 class TileLayerItem;
 
 /**
@@ -66,6 +68,7 @@ public:
 
     const QRectF &visibleArea() const;
     void setVisibleArea(const QRectF &visibleArea);
+    QRect visibleTileArea(const Tiled::TileLayer *layer) const;
 
     bool hideCollisionLayer() const;
     void setHideCollisionLayer(bool hideCollisionLayer);
@@ -86,13 +89,17 @@ private slots:
 private:
     void setStatus(Status status);
     void refresh();
+    void updateFringeLayer();
 
     MapResource *mMapResource;
     QRectF mVisibleArea;
+    QRect mVisibleFringeTiles;
     bool mHideCollisionLayer;
 
     Tiled::MapRenderer *mRenderer;
+    Tiled::TileLayer *mFringeLayer;
     QList<TileLayerItem*> mTileLayerItems;
+    QList<TileItem*> mTileItems;
 };
 
 inline const QRectF &MapItem::visibleArea() const

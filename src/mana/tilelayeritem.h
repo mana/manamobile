@@ -21,8 +21,9 @@
 
 #include <QQuickItem>
 
+#include "tiled/tilelayer.h"
+
 namespace Tiled {
-class TileLayer;
 class MapRenderer;
 }
 
@@ -31,7 +32,7 @@ namespace Mana {
 class MapItem;
 
 /**
- * A graphics item displaying a tile layer in a QGraphicsView.
+ * A graphical item displaying a tile layer in a Qt Quick scene.
  */
 class TileLayerItem : public QQuickItem
 {
@@ -67,6 +68,30 @@ private:
     Tiled::MapRenderer *mRenderer;
     QRect mVisibleTiles;
 };
+
+/**
+ * A graphical item displaying a single tile in a Qt Quick scene.
+ */
+class TileItem : public QQuickItem
+{
+    Q_OBJECT
+
+public:
+    TileItem(const Tiled::Cell &cell, QPoint position, MapItem *parent);
+
+    QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
+
+    QPoint position() const;
+
+private:
+    Tiled::Cell mCell;
+    QPoint mPosition;
+};
+
+inline QPoint TileItem::position() const
+{
+    return mPosition;
+}
 
 } // namespace Mana
 

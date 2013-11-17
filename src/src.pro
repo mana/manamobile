@@ -73,6 +73,7 @@ SOURCES += \
     mana/spriteitem.cpp \
     mana/spritelistmodel.cpp \
     mana/tilelayeritem.cpp \
+    mana/tilesnode.cpp \
     tiled/compression.cpp \
     tiled/gidmapper.cpp \
     tiled/imagelayer.cpp \
@@ -136,6 +137,7 @@ HEADERS += \
     mana/spriteitem.h \
     mana/spritelistmodel.h \
     mana/tilelayeritem.h \
+    mana/tilesnode.h \
     mana/xmlreader.h \
     safeassert.h \
     tiled/compression.h \
