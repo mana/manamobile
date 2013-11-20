@@ -92,8 +92,12 @@ Item {
         }
 
         delegate: Item {
+            id: characterDelegate
+
             scale: PathView.characterScale
             z: PathView.characterScale
+
+            property string name: model.character.name
 
             CompoundSprite {
                 id: sprite
@@ -102,10 +106,10 @@ Item {
                 direction: Action.DIRECTION_DOWN;
             }
 
-            TextShadow { target: name }
+            TextShadow { target: nameLabel }
             Text {
-                id: name;
-                text: model.character.name;
+                id: nameLabel
+                text: characterDelegate.name
                 textFormat: Text.PlainText
                 color: "beige"
                 anchors.top: parent.bottom
@@ -133,7 +137,7 @@ Item {
 
         Button {
             text: qsTr("Delete")
-            onClicked: deleteCharacter()
+            onClicked: confirmDialog.visible = true
             enabled: characterList.currentIndex >= 0 && !characterChosen
         }
         Button {
@@ -146,6 +150,16 @@ Item {
             onClicked: chooseCharacter()
             enabled: characterList.currentIndex >= 0 && !characterChosen
         }
+    }
+
+    MessageDialog {
+        id: confirmDialog
+        scale: 2
+        title: qsTr("Delete Character")
+        message: qsTr("Are you sure you want to delete this character? This cannot be undone!")
+        confirmText: qsTr("Delete Character")
+        visible: false
+        onConfirmed: deleteCharacter()
     }
 
     Connections {
