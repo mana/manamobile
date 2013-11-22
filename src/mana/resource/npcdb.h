@@ -62,8 +62,6 @@ private:
 
     bool mLoaded;
 
-    ~NpcDB() { unload(); }
-
     QMap<int, QList<SpriteReference *> > mNpcs;
 };
 

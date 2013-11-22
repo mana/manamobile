@@ -68,7 +68,6 @@ private:
     static HairDB *mInstance;
 
     bool mLoaded;
-    ~HairDB() { unload(); }
 
     QMap<int, HairInfo *> mHairMap;
     QList<HairInfo *> mHairList;

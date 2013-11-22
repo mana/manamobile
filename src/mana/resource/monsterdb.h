@@ -92,7 +92,11 @@ public:
     { return mSprites; }
 
 protected:
-    MonsterInfo(int id, QString name) : mId(id), mName(name) {}
+    MonsterInfo(int id, QString name, QObject *parent)
+        : QObject(parent)
+        , mId(id)
+        , mName(name)
+    {}
 
     int mId;
     QString mName;

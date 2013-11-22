@@ -89,7 +89,7 @@ void MonsterDB::fileReady()
             return;
         }
 
-        MonsterInfo *info = new MonsterInfo(id, name);
+        MonsterInfo *info = new MonsterInfo(id, name, this);
 
         while (xml.readNextStartElement()) {
             if (xml.name() == "sprite") {

@@ -88,9 +88,6 @@ public:
     Q_INVOKABLE Mana::AbilityInfo *getInfo(int id) const
     { return mAbilities[id]; }
 
-    void setInfo(int id, AbilityInfo *info)
-    { mAbilities[id] = info; }
-
     QMap<unsigned, AbilityInfo *> abilities() { return mAbilities; }
 
     static AbilityDB *instance() { return mInstance; }
@@ -106,7 +103,6 @@ private:
     static AbilityDB *mInstance;
 
     bool mLoaded;
-    ~AbilityDB() { unload(); }
 
     QMap<unsigned, AbilityInfo *> mAbilities;
 };

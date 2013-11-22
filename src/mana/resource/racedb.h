@@ -66,7 +66,6 @@ private:
     static RaceDB *mInstance;
 
     bool mLoaded;
-    ~RaceDB() { unload(); }
 
     QMap<int, RaceInfo *> mRaces;
 };
