@@ -38,7 +38,7 @@ Item {
     Item {
         id: dot
 
-        function joystickPosition() {
+        readonly property vector2d joystickPosition: {
             var maxDistance = 40;
             var moveVector = Qt.vector2d(targetX - centerX, targetY - centerY);
             var newMoveVector = moveVector.normalized().times(maxDistance);
@@ -48,8 +48,8 @@ Item {
             return moveVector.plus(Qt.vector2d(centerX, centerY));
         }
 
-        x: joystickPosition().x;
-        y: joystickPosition().y;
+        x: joystickPosition.x
+        y: joystickPosition.y
 
         Image {
             source: "images/joystick.png";
