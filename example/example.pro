@@ -1,8 +1,10 @@
 # Add more folders to ship with the application, here
 folder_main.source = qml/main
-folder_main.target = qml
+linux*:folder_main.target = ../share/tales-client/qml
+else:folder_main.target = qml
 DEPLOYMENTFOLDERS = folder_main
 
+linux*:DESTDIR=../bin/
 SOURCES += main.cpp
 TARGET = tales
 QT += qml quick

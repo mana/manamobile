@@ -30,7 +30,7 @@ Rectangle {
             property real mapY: viewport.centerY - smoothPlayerY;
 
             Behavior on smoothPlayerX { SpringAnimation { spring: 3; damping: 1 } }
-            Behavior on smoothPlayerY { SpringAnimation { spring: 3; damping: 1 } }
+            Behavior on smoothPlayerY { SpringAnimation { spring: 3; damping: 11}}//spring: 3; damping: 1 } }
 
             // Math.floor is used to avoid tile drawing glitches
             property QtObject bindingX: Binding {

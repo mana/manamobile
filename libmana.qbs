@@ -32,6 +32,14 @@ DynamicLibrary {
     }
 
     Group {
+        name: "qml Files"
+        qbs.install: true
+        qbs.installDir: "lib/libmana/qml/Mana"
+        files: ["ServerListModel.qml"]
+        prefix: ["src/mana/qml/Mana/"]
+    }
+
+    Group {
         name: "Manamobile C++ code"
         files: [
             "mana/abilitylistmodel.cpp",

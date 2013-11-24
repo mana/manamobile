@@ -27,7 +27,7 @@
 #include <QScreen>
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_TIZEN)
-static QString adjustPath(const QString &path)
+static QString adjustSharePath(const QString &path)
 {
 #if defined(Q_OS_MAC)
     if (!QDir::isAbsolutePath(path))
@@ -38,7 +38,7 @@ static QString adjustPath(const QString &path)
         return QString::fromLatin1("app/native/%1").arg(path);
 #elif defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID)
     const QString pathInInstallDir =
-            QString::fromLatin1("%1/../%2").arg(QCoreApplication::applicationDirPath(), path);
+            QString::fromLatin1("%1/../share/tales-client/%2").arg(QCoreApplication::applicationDirPath(), path);
     if (QFileInfo(pathInInstallDir).exists())
         return pathInInstallDir;
 #endif
@@ -105,9 +105,9 @@ int main(int argc, char *argv[])
     engine.load(app.applicationDirPath() +
                 QLatin1String("/../data/qml/main/mobile.qml"));
 #else
-    engine.addImportPath(adjustPath(app.applicationDirPath() +
-                                    QLatin1String("/../src/qml/")));
-    engine.load(adjustPath(QLatin1String("qml/main/mobile.qml")));
+    engine.addImportPath(adjustSharePath(app.applicationDirPath() +
+                                         QLatin1String("/../lib/libmana/qml/")));
+    engine.load(adjustSharePath(QLatin1String("qml/main/mobile.qml")));
 #endif
 
     QQuickWindow *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
