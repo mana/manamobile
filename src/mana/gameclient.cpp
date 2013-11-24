@@ -57,6 +57,8 @@ GameClient::GameClient(QObject *parent)
     , mNpc(0)
     , mShopMode(NoShop)
     , mShopListModel(new ShopListModel(this))
+    , mAttributePoints(0)
+    , mCorrectionPoints(0)
     , mAbilityListModel(new AbilityListModel(this))
     , mAttributeListModel(new AttributeListModel(this))
     , mBeingListModel(new BeingListModel(this))
@@ -542,6 +544,11 @@ void GameClient::reset()
         emit mapChanged(QString(), 0, 0);
     }
 
+    mAttributePoints = 0;
+    mCorrectionPoints = 0;
+    emit attributePointsChanged();
+    emit correctionPointsChanged();
+
     mBeingListModel->clear();
     mAbilityListModel->clear();
     mAttributeListModel->clear();
@@ -651,8 +658,8 @@ void GameClient::handlePlayerAttributeChange(MessageIn &message)
 {
     while (message.unreadData()) {
         const int id = message.readInt16();
-        const qreal base = message.readInt32() / 256;
-        const qreal mod = message.readInt32() / 256;
+        const qreal base = message.readInt32() / qreal(256);
+        const qreal mod = message.readInt32() / qreal(256);
 
         if (id == ATTR_MOVE_SPEED_TPS)
             player()->setWalkSpeed(AttributeListModel::tpsToPixelsPerSecond(base));
@@ -679,10 +686,10 @@ void GameClient::handleAttributePointsStatus(MessageIn &message)
 
 static void handleHair(Character *ch, MessageIn &message)
 {
-    int hairstyle = message.readInt8();
-    int haircolor = message.readInt8();
+    const int hairStyle = message.readInt8();
+    const int hairColor = message.readInt8();
 
-    ch->setHairStyle(hairstyle, haircolor);
+    ch->setHairStyle(hairStyle, hairColor);
 }
 
 static void handleLooks(Character *ch, MessageIn &message)
