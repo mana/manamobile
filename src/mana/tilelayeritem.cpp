@@ -124,8 +124,8 @@ static void drawTileLayer(QSGNode *parent,
 
     QVector<TileData> tileData;
 
-    for (int y = rect.top(); y < rect.bottom(); ++y) {
-        for (int x = rect.left(); x < rect.right(); ++x) {
+    for (int y = rect.top(); y <= rect.bottom(); ++y) {
+        for (int x = rect.left(); x <= rect.right(); ++x) {
             const Cell &cell = layer->cellAt(x, y);
             if (cell.isEmpty())
                 continue;

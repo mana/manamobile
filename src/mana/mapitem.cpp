@@ -98,8 +98,8 @@ QRect MapItem::visibleTileArea(const Tiled::TileLayer *layer) const
 
     int startX = qMax((int) rect.x() / tileWidth, 0);
     int startY = qMax((int) rect.y() / tileHeight, 0);
-    int endX = qMin((int) std::ceil(rect.right()) / tileWidth + 1, layer->width());
-    int endY = qMin((int) std::ceil(rect.bottom()) / tileHeight + 1, layer->height());
+    int endX = qMin((int) std::ceil(rect.right()) / tileWidth, layer->width() - 1);
+    int endY = qMin((int) std::ceil(rect.bottom()) / tileHeight, layer->height() - 1);
 
     return QRect(QPoint(startX, startY), QPoint(endX, endY));
 }
