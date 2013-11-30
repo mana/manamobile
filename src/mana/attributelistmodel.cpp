@@ -81,7 +81,7 @@ void AttributeListModel::setAttribute(int id, qreal base, qreal mod)
         beginInsertRows(QModelIndex(), mAttributeValues.size(),
                         mAttributeValues.size());
         value = mAttributeValues[id] = new AttributeValue(id, this);
-        mCachedAttributeList.push_back(value);
+        mCachedAttributeList.append(value);
     }
     value->setBase(base);
     value->setModified(mod);

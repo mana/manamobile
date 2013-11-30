@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.1
 
 Item {
     id: statusPanel;
@@ -7,6 +8,11 @@ Item {
 
     function toggle() {
         state = state === "closed" ? "open" : "closed";
+    }
+
+    function limitPrecision(number, precision) {
+        var p = Math.pow(10, precision);
+        return Math.round(number * p) / p;
     }
 
     Image {
@@ -57,11 +63,122 @@ Item {
 
         anchors.fill: parent
         anchors.topMargin: 12
+        anchors.rightMargin: 28
         anchors.bottomMargin: 7
-        anchors.rightMargin: 25
 
-        clip: true
+        GridLayout {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 5
 
+            columns: 2
+            rowSpacing: 5
+            columnSpacing: 5
+
+            AttributeLabel {
+                name: qsTr("Strength")
+                value: playerAttributes.strength
+                Layout.row: 0
+                Layout.column: 0
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Damage")
+                value: {
+                    var base = playerAttributes.damage;
+                    var min = Math.round(base);
+                    var max = Math.round(base + playerAttributes.damageDelta);
+                    return min + "-" + max;
+                }
+                Layout.row: 0
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+
+            AttributeLabel {
+                name: qsTr("Agility")
+                value: playerAttributes.agility
+                Layout.row: 1
+                Layout.column: 0
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Movement speed")
+                value: limitPrecision(playerAttributes.movementSpeed, 1)
+                Layout.row: 1
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Dodge")
+                value: limitPrecision(playerAttributes.dodge, 1)
+                Layout.row: 2
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+
+            AttributeLabel {
+                name: qsTr("Dexterity")
+                value: playerAttributes.dexterity
+                Layout.row: 3
+                Layout.column: 0
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Hit chance")
+                value: limitPrecision(playerAttributes.hitChance, 1)
+                Layout.row: 3
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+
+            AttributeLabel {
+                name: qsTr("Vitality")
+                value: playerAttributes.vitality
+                Layout.row: 4
+                Layout.column: 0
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Health")
+                value: playerAttributes.maxHealth
+                Layout.row: 4
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Regeneration")
+                value: limitPrecision(playerAttributes.healthRegeneration / 10, 2) + "/s"
+                Layout.row: 5
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+            AttributeLabel {
+                name: qsTr("Defense")
+                value: limitPrecision(playerAttributes.defense, 1)
+                Layout.row: 6
+                Layout.column: 1
+                Layout.fillWidth: true
+            }
+
+            AttributeLabel {
+                name: qsTr("Intelligence")
+                value: playerAttributes.intelligence
+                Layout.row: 7
+                Layout.column: 0
+                Layout.fillWidth: true
+            }
+
+            AttributeLabel {
+                name: qsTr("Willpower")
+                value: playerAttributes.willpower
+                Layout.row: 8
+                Layout.column: 0
+                Layout.fillWidth: true
+            }
+        }
+/*
         ListView {
             anchors.fill: parent;
             anchors.leftMargin: 5
@@ -95,6 +212,7 @@ Item {
                 }
             }
         }
+*/
     }
 
     states: [
