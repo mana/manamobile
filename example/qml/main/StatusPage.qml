@@ -1,7 +1,7 @@
 import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.0
 
-Item {
+MouseArea {
     id: statusPanel;
 
     state: "closed"
@@ -14,6 +14,19 @@ Item {
         var p = Math.pow(10, precision);
         return Math.round(number * p) / p;
     }
+
+    function openOrClose() {
+        var open = -statusPanel.x < statusPanel.width / 2;
+        statusPanel.state = ""  // hack to make sure to trigger transition
+        statusPanel.state = open ? "open" : "closed";
+    }
+
+    drag.target: statusPanel;
+    drag.axis: Drag.XAxis;
+    drag.minimumX: -statusPanel.width;
+    drag.maximumX: 0;
+    drag.filterChildren: true
+    onReleased: openOrClose();
 
     Image {
         id: tab
@@ -40,11 +53,7 @@ Item {
         drag.maximumX: 0;
 
         onClicked: toggle();
-        onReleased: {
-            var open = -statusPanel.x < statusPanel.width / 2;
-            statusPanel.state = ""  // hack to make sure to trigger transition
-            statusPanel.state = open ? "open" : "closed";
-        }
+        onReleased: openOrClose();
     }
 
     BorderImage {

@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Item {
+MouseArea {
     id: rightPanel
 
     state: "closed"
@@ -19,6 +19,19 @@ Item {
             state = "closed";
         }
     }
+
+    function openOrClose() {
+        var open = rightPanel.x < rightPanel.parent.width - rightPanel.width / 2;
+        rightPanel.state = ""  // hack to make sure to trigger transition
+        rightPanel.state = open ? "open" : "closed";
+    }
+
+    drag.target: rightPanel
+    drag.axis: Drag.XAxis
+    drag.minimumX: rightPanel.parent.width - rightPanel.width
+    drag.maximumX: rightPanel.parent.width
+    drag.filterChildren: true
+    onReleased: openOrClose();
 
     Image {
         id: inventoryTab
@@ -50,11 +63,7 @@ Item {
                 page = "inventory";
             }
             onClicked: if (toggleOnClick) toggle("inventory");
-            onReleased: {
-                var open = rightPanel.x < rightPanel.parent.width - rightPanel.width / 2;
-                rightPanel.state = ""  // hack to make sure to trigger transition
-                rightPanel.state = open ? "open" : "closed";
-            }
+            onReleased: openOrClose();
         }
     }
 
