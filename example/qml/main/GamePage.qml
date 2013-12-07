@@ -77,6 +77,7 @@ Item {
             id: statusPage
             anchors.top: parent.top
             anchors.bottom: chatLog.top
+            anchors.topMargin: 3
             width: viewport.width / 2 - 22 - 32
         }
 
@@ -84,6 +85,7 @@ Item {
             id: rightPanel
             anchors.top: parent.top
             anchors.bottom: chatLog.top
+            anchors.topMargin: 3
             width: viewport.width / 2 - 22 - 32
         }
 

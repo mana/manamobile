@@ -6,7 +6,7 @@ ListView {
     anchors.leftMargin: 5
     anchors.rightMargin: 5
 
-    topMargin: 5
+    topMargin: 10
     bottomMargin: 5
 
     model: gameClient.questlogListModel

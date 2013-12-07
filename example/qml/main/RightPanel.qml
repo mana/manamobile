@@ -135,6 +135,11 @@ MouseArea {
         }
     }
 
+    ScrollTitle {
+        text: page == "quest" ? qsTr("Quests") : qsTr("Inventory")
+        anchors.horizontalCenterOffset: 14
+    }
+
     states: [
         State {
             name: "open";

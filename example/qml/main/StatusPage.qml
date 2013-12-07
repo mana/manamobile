@@ -71,7 +71,7 @@ MouseArea {
         id: contents
 
         anchors.fill: parent
-        anchors.topMargin: 12
+        anchors.topMargin: 22
         anchors.rightMargin: 28
         anchors.bottomMargin: 7
 
@@ -80,7 +80,7 @@ MouseArea {
         Flickable {
             id: flickable
 
-            anchors.top: titleBackground.bottom
+            anchors.top: headerOrnamental.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
@@ -204,11 +204,13 @@ MouseArea {
         }
 
         Image {
-            id: titleBackground
+            id: headerOrnamental
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: 5
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+            anchors.bottomMargin: 5
             source: "images/header_ornamental.png"
             fillMode: Image.TileHorizontally
             horizontalAlignment: Image.AlignLeft
@@ -228,7 +230,7 @@ MouseArea {
 
         Text {
             id: levelLabel
-            anchors.bottom: titleBackground.bottom
+            anchors.bottom: headerOrnamental.bottom
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.bottomMargin: 1
@@ -274,6 +276,11 @@ MouseArea {
             }
         }
 */
+    }
+
+    ScrollTitle {
+        text: qsTr("Character")
+        anchors.horizontalCenterOffset: -14
     }
 
     states: [
