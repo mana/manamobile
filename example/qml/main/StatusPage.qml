@@ -231,7 +231,8 @@ MouseArea {
             anchors.bottom: titleBackground.bottom
             anchors.right: parent.right
             anchors.rightMargin: 8
-            text: 'Level <font size="+1">' + Math.floor(playerAttributes.level) + "</font>"
+            anchors.bottomMargin: 1
+            text: 'Level ' + Math.floor(playerAttributes.level)
             font.pixelSize: 12
             color: "#3F2B25"
         }
