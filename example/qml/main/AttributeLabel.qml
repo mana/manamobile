@@ -28,10 +28,15 @@ Item {
     Text {
         id: nameLabel
         font.pixelSize: 10
+        color: "#3F2B25"
+        elide: Text.ElideRight
+        anchors.left: parent.left
+        anchors.right: valueLabelBackground.left
     }
     Text {
         id: valueLabel
         anchors.centerIn: valueLabelBackground
+        color: "#3F2B25"
         font.pixelSize: 12
         scale: Math.min(1, (valueLabelBackground.width - 4) / contentWidth)
     }

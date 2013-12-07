@@ -1,6 +1,8 @@
 Art used:
 example/qml/main/images/bigroundbutton.png: Erik Schilling & Thorbjørn Lindeijer, CC0
 example/qml/main/images/bigroundbutton_pressed.png: Erik Schilling & Thorbjørn Lindeijer, CC0
+example/qml/main/images/frame_with_title.png: Liberated Pixel Cup Asset, GPLv3 and CC-BY-SA 3.0
+example/qml/main/images/header_ornamental.png: Thorbjørn Lindeijer, GPLv3 and CC-BY-SA 3.0
 example/qml/main/images/joystick.png: Erik Schilling, CC0
 example/qml/main/images/joystick_frame.png: Erik Schilling, CC0
 example/qml/main/images/roundbutton.png: Erik Schilling, CC0
@@ -9,4 +11,3 @@ example/qml/main/images/star.png: Thorbjørn Lindeijer & Stephen "Redshrike" Cha
 example/qml/main/images/tab_icon_character.png: Thorbjørn Lindeijer, GPLv3 and CC-BY-SA 3.0
 example/qml/main/images/tab_icon_inventory.png: Thorbjørn Lindeijer, GPLv3 and CC-BY-SA 3.0
 example/qml/main/images/tab_icon_questlog.png: Erik Schilling, GPLv3 and CC-BY-SA 3.0
-example/qml/main/images/frame_with_title.png: Liberated Pixel Cup Asset, GPLv3 and CC-BY-SA 3.0
