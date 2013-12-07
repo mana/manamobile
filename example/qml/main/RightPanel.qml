@@ -9,6 +9,8 @@ MouseArea {
 
     property bool toggleOnClick: false
 
+    readonly property bool partlyVisible: x < parent.width
+
     function toggle(_page) {
         if (state == "closed") {
             page = _page;
@@ -113,6 +115,7 @@ MouseArea {
         border.left: 40; border.top: 31
         border.right: 38; border.bottom: 32
         smooth: false
+        visible: partlyVisible
     }
 
     Item {
@@ -124,6 +127,7 @@ MouseArea {
         anchors.leftMargin: 26
 
         clip: true
+        visible: partlyVisible
 
         InventoryPanel {
             id: inventoryPanel
@@ -138,6 +142,7 @@ MouseArea {
     ScrollTitle {
         text: page == "quest" ? qsTr("Quests") : qsTr("Inventory")
         anchors.horizontalCenterOffset: 14
+        visible: partlyVisible
     }
 
     states: [

@@ -6,6 +6,8 @@ MouseArea {
 
     state: "closed"
 
+    readonly property bool partlyVisible: x > -width
+
     function toggle() {
         state = state === "closed" ? "open" : "closed";
     }
@@ -65,6 +67,7 @@ MouseArea {
         border.left: 40; border.top: 31
         border.right: 38; border.bottom: 32
         smooth: false
+        visible: partlyVisible
     }
 
     Item {
@@ -76,6 +79,7 @@ MouseArea {
         anchors.bottomMargin: 7
 
         clip: flickable.interactive
+        visible: partlyVisible
 
         Flickable {
             id: flickable
@@ -281,6 +285,7 @@ MouseArea {
     ScrollTitle {
         text: qsTr("Character")
         anchors.horizontalCenterOffset: -14
+        visible: partlyVisible
     }
 
     states: [
