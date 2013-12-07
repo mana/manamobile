@@ -58,11 +58,18 @@ Item {
 
                 property variant abilityInfo: abilityDB.getInfo(model.ability.id);
 
+                function faceNearestMonster()
+                {
+                    var closestBeing = gameClient.beingListModel.closestBeingAround(gameClient.player);
+                    gameClient.lookAt(closestBeing.x, closestBeing.y);
+                }
+
                 onPressedChanged: {
                     if (!pressed)
                         return;
 
                     if (abilityInfo.targetType === AbilityInfo.TARGET_DIRECTION) {
+                        faceNearestMonster();
                         gameClient.useAbilityOnDirection(model.ability.id);
                     } else {
                         if (selectedAbilityId === model.ability.id)

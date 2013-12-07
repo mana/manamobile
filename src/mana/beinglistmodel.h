@@ -44,6 +44,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
+    Q_INVOKABLE Mana::Being *closestBeingAround(Mana::Being *center) const;
+
     Being *beingById(int id) const;
     void addBeing(Being *being);
     void removeBeing(int id);

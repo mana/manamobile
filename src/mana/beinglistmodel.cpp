@@ -23,6 +23,8 @@
 
 #include <safeassert.h>
 
+#include <QtMath>
+
 using namespace Mana;
 
 BeingListModel::BeingListModel(QObject *parent)
@@ -49,6 +51,22 @@ QVariant BeingListModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> BeingListModel::roleNames() const
 {
     return mRoleNames;
+}
+
+Being *BeingListModel::closestBeingAround(Being *center) const
+{
+    Being *closest = 0;
+    int minSquaredDistance = 0;
+
+    foreach (Being *being, mBeings) {
+        int squaredDistance = qPow(center->x() - being->x(), 2) + qPow(center->y() - being->y(), 2);
+        if (being != center && (!closest || minSquaredDistance > squaredDistance)) {
+            closest = being;
+            minSquaredDistance = squaredDistance;
+        }
+    }
+
+    return closest;
 }
 
 void BeingListModel::clear()
