@@ -53,7 +53,7 @@ Button {
             states: [
                 State {
                     name: "pressed"
-                    when: control.pressed
+                    when: control.pressed || button.keepPressed
                     PropertyChanges {
                         target: label
                         anchors.verticalCenterOffset: 1
