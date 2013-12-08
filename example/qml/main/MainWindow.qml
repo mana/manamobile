@@ -29,12 +29,6 @@ Image {
 
     property bool characterChosen: false
 
-    ConnectionStatus {
-        z: 1;
-        anchors.top: parent.top;
-        anchors.right: parent.right;
-    }
-
     function switchToChooseCharacter() {
         if (client.accountClient.numberOfCharacters > 0)
             state = "chooseCharacter";

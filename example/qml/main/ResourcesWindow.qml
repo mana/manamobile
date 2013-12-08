@@ -9,6 +9,12 @@ Window {
     title: "Resources";
     visible: true;
 
+    ConnectionStatus {
+        z: 1;
+        anchors.top: parent.top;
+        anchors.right: parent.right;
+    }
+
     ListView {
         focus: true;
 
