@@ -98,7 +98,7 @@ BorderImage {
                 id: nextButton;
 
                 property bool waitingForReply: false
-                iconSource: waitingForReply ? "" : "images/icon_right.png"
+                iconSource: "images/icon_right.png"
                 keepPressed: waitingForReply;
 
                 anchors.right: parent.right
