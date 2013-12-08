@@ -6,6 +6,7 @@ ListView {
     anchors.leftMargin: 5
     anchors.rightMargin: 5
 
+    clip: true
     topMargin: 10
     bottomMargin: 5
 

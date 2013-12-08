@@ -126,7 +126,6 @@ MouseArea {
         anchors.bottomMargin: 7
         anchors.leftMargin: 26
 
-        clip: true
         visible: partlyVisible
 
         InventoryPanel {
