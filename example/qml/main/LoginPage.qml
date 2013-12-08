@@ -120,6 +120,7 @@ Item {
         Item {
             id: buttons;
             width: loginButton.width + loginButton.x;
+            height: loginButton.height;
             anchors.top: passwordConfirmEdit.bottom;
             anchors.topMargin: 20;
             anchors.horizontalCenter: passwordEdit.horizontalCenter;
@@ -150,6 +151,7 @@ Item {
             id: errorLabel;
             anchors.top: buttons.bottom;
             anchors.horizontalCenter: nameEdit.horizontalCenter;
+            font.pixelSize: 22;
         }
     }
 
@@ -203,7 +205,6 @@ Item {
             enabled: accountClient.state == AccountClient.Connected &&
                      !loggingIn && !loggedIn && accountClient.registrationAllowed;
         }
-
         states: [
             State {
                 name: "visible";
