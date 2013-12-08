@@ -27,8 +27,8 @@ Item {
         }
 
         HealthBar {
-            y: 5;
             anchors.horizontalCenter: visibleArea.horizontalCenter;
+            width: Math.min(200, visibleArea.width)
         }
 
         MouseArea {
