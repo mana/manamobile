@@ -2,7 +2,6 @@ import QtQuick 2.0
 import Mana 1.0
 
 Item {
-    clip: true
     property int maxHeight;
     height: 100
 
@@ -16,16 +15,28 @@ Item {
         }
     }
 
-    Rectangle {
+    BorderImage {
         anchors.fill: parent
-        color: Qt.rgba(0, 0, 0, 0.25)
+        anchors.leftMargin: -9
+        anchors.rightMargin: -9
+        border.bottom: 11
+        border.top: 8
+        border.right: 17
+        border.left: 17
+        source: "images/bottom_frame.png"
+        smooth: false
     }
     ListView {
+        clip: true
         id: chatView
         model: chatModel
         anchors.fill: parent
+        anchors.topMargin: 2
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+        topMargin: 3
+        bottomMargin: 5
         verticalLayoutDirection: ListView.BottomToTop
-        anchors.margins: 5
         delegate: Item {
             height: messageLabel.height
             anchors.left: parent.left
