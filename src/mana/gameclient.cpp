@@ -69,6 +69,8 @@ GameClient::GameClient(QObject *parent)
 {
     QObject::connect(mLogicDriver, &LogicDriver::update,
                      this, &GameClient::update);
+    QObject::connect(this, &ENetClient::disconnected,
+                     this, &GameClient::reset);
     mPickupTimer.start();
 }
 

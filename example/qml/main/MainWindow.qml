@@ -19,6 +19,8 @@ Image {
             serverName = customServer;
             client.connect(customServer, customPort);
         }
+
+        characterChosen = false;
     }
 
     readonly property real gameScale: Math.ceil(Math.max(width / 959, height / 959))
@@ -164,6 +166,18 @@ Image {
                 property: "scale";
                 from: 1.1; to: 1;
                 easing.type: Easing.OutQuad;
+            }
+        }
+    }
+
+    Connections {
+        target: gameClient
+
+        onStateChanged: {
+            if (gameClient.state === ENetClient.Disconnected) {
+                accountClient.disconnect();
+                chatClient.disconnect();
+                window.initialize();
             }
         }
     }
