@@ -126,6 +126,7 @@ Item {
         anchors.topMargin: parent.height / 10
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTr("Choose your character...")
+        font.pixelSize: 22
         color: "beige"
     }
 
