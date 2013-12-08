@@ -98,9 +98,9 @@ Item {
         ImageButton {
             imagePath: "images/chat_icon.png";
             anchors.bottom: parent.bottom;
-            anchors.bottomMargin: 16;
+            anchors.bottomMargin: 5
             anchors.right: actionBar.left;
-            anchors.rightMargin: 64;
+            anchors.rightMargin: 6
             onClicked: chatBar.open();
         }
 

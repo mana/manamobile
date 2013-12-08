@@ -33,7 +33,7 @@ Item {
         anchors.fill: parent
         anchors.topMargin: 2
         anchors.leftMargin: 5
-        anchors.rightMargin: 5
+        anchors.rightMargin: 40
         topMargin: 3
         bottomMargin: 5
         verticalLayoutDirection: ListView.BottomToTop
