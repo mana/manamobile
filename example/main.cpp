@@ -26,7 +26,7 @@
 #include <QQuickWindow>
 #include <QScreen>
 
-#if !defined(Q_OS_ANDROID) && !defined(Q_OS_TIZEN)
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_LINUX_TIZEN)
 static QString adjustSharePath(const QString &path)
 {
 #if defined(Q_OS_MAC)
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     engine.addImportPath(QLatin1String("assets:/qml"));
     engine.addPluginPath(QDir::homePath() + "/../lib");
     engine.load(QUrl(QLatin1String("assets:/qml/main/mobile.qml")));
-#elif defined(Q_OS_TIZEN)
+#elif defined(Q_OS_LINUX_TIZEN)
     engine.addImportPath(QLatin1String("../data/qml"));
     engine.load(app.applicationDirPath() +
                 QLatin1String("/../data/qml/main/mobile.qml"));
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 
     window->setClearBeforeRendering(false);
 
-#ifdef Q_OS_TIZEN
+#ifdef Q_OS_LINUX_TIZEN
     window->setProperty("contentFollowsContentOrientation", true);
     window->screen()->setOrientationUpdateMask(Qt::LandscapeOrientation |
                                                Qt::InvertedLandscapeOrientation);
@@ -136,10 +136,10 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-#ifdef Q_OS_TIZEN
+#ifdef Q_OS_LINUX_TIZEN
 extern "C" int OspMain(int argc, char *argv[])
 {
-#ifdef Q_OS_TIZEN_SIMULATOR
+#ifdef Q_OS_LINUX_TIZEN_SIMULATOR
     qputenv("QSG_RENDER_LOOP", "windows");
 #endif
     return main(argc, argv);
