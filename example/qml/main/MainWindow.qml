@@ -68,15 +68,22 @@ Image {
         }
     }
 
-    ProgressIndicator {
+    Item {
         anchors.right: window.right
         anchors.bottom: window.bottom
-        anchors.margins: 10
-        running: accountClient.state === AccountClient.HostLookup ||
-                 accountClient.state === AccountClient.Connecting ||
-                 loggingIn ||
-                 (characterChosen && window.state != "game");
-        z: 1;
+        anchors.margins: 20
+        scale: 2
+        z: 1
+
+        ProgressIndicator {
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            running: accountClient.state === AccountClient.HostLookup ||
+                     accountClient.state === AccountClient.Connecting ||
+                     loggingIn ||
+                     (characterChosen && window.state != "game");
+        }
     }
 
     property Item currentPage;
