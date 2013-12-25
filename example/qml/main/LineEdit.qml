@@ -8,6 +8,8 @@ import QtQuick.Controls.Styles 1.0
 TextField {
     anchors.margins: 5;
 
+    font.pixelSize: (height - 10) * 0.7;
+
     style: TextFieldStyle {
         background: BorderImage {
             source: "images/lineedit.png"
@@ -16,8 +18,6 @@ TextField {
             border.right: 20;
             border.left: 20;
         }
-
-        font.pixelSize: (parent.height - 10) * 0.7;
 
         padding.right: 12
         padding.left: 12
