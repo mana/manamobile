@@ -47,6 +47,7 @@ namespace Mana {
 GameClient::GameClient(QObject *parent)
     : ENetClient(parent)
     , mAuthenticated(false)
+    , mMapResource(0)
     , mPlayerStartX(0)
     , mPlayerStartY(0)
     , mPlayerCharacter(0)
