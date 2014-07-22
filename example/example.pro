@@ -1,10 +1,10 @@
 # Add more folders to ship with the application, here
 folder_main.source = qml/main
-linux*:!tizen:!android:folder_main.target = ../share/tales-client/qml
+win*|linux*:!tizen:!android:folder_main.target = ../share/tales-client/qml
 else:folder_main.target = qml
 DEPLOYMENTFOLDERS = folder_main
 
-linux*:!tizen:!android:DESTDIR=../bin/
+win*|linux*:!tizen:!android:DESTDIR=../bin/
 SOURCES += main.cpp
 TARGET = tales
 QT += qml quick
