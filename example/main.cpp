@@ -36,7 +36,7 @@ static QString adjustSharePath(const QString &path)
 #elif defined(Q_OS_QNX)
     if (!QDir::isAbsolutePath(path))
         return QString::fromLatin1("app/native/%1").arg(path);
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID)
+#elif (defined(Q_OS_UNIX) || defined(Q_OS_WIN)) && !defined(Q_OS_ANDROID)
     const QString pathInInstallDir =
             QString::fromLatin1("%1/../share/tales-client/%2").arg(QCoreApplication::applicationDirPath(), path);
     if (QFileInfo(pathInInstallDir).exists())
