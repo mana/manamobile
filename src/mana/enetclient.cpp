@@ -25,6 +25,8 @@
 #include <QHostInfo>
 #include <QtEndian>
 
+#include <enet/enet.h>
+
 enum {
 
 #ifdef DEBUG_NETWORK

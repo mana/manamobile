@@ -21,9 +21,10 @@
 
 #include <QObject>
 
-#include <enet/enet.h>
-
 class QHostInfo;
+
+typedef struct _ENetHost ENetHost;
+typedef struct _ENetPeer ENetPeer;
 
 namespace Mana {
 

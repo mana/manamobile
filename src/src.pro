@@ -16,10 +16,9 @@ INCLUDEPATH += src
 # mark the Tiled classes as being imported.
 DEFINES += TILED_LIBRARY
 
-win32:INCLUDEPATH += $$(QTDIR)/src/3rdparty/zlib
-LIBS += -lz
+!win32:LIBS += -lz
 
-!win32-msvc2010 {
+!win32-msvc* {
     # Silence compile warnings in ENet code
     # (this effectively excludes those types of warnings for C code)
     CONFIG += warn_off

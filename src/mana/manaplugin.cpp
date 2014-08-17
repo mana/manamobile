@@ -50,6 +50,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include <enet/enet.h>
+
 ManaPlugin::ManaPlugin(QObject *parent) :
     QQmlExtensionPlugin(parent)
 {
